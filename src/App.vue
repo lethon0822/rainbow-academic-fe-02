@@ -1,12 +1,17 @@
 <script setup>
-import CourseEvaluation from "@/components/CourseEvaluation.vue";
-import GradeInquiry from "./components/GradeInquiry.vue";
+import { ref, onMounted } from "vue";
+import { getGrades } from "@/services/GradeService.js";
+import GradeTable from "@/components/GradeTable.vue";
+
+const grades = ref([]);
+
+onMounted(async () => {
+  const response = await getGrades({});
+  grades.value = response.data;
+  console.log("받은 성적 데이터:", grades.value);
+});
 </script>
 
 <template>
-  <!-- 둘 중 하나 또는 둘 다 넣어서 화면에 출력 -->
-  <GradeInquiry />
-  <!-- <CourseEvaluation /> -->
+  <GradeTable :grades="grades" />
 </template>
-
-<style scoped></style>
