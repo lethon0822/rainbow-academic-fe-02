@@ -1,43 +1,109 @@
 <script setup>
-import { onMounted } from "vue";
-import $ from "jquery";
+import { onMounted, ref, nextTick } from "vue";
+
+const accordian = ref(null);
+
+const slideUp = (element) => {
+  element.style.height = element.scrollHeight + "px";
+  element.offsetHeight; // force reflow
+  element.style.transition = "height 0.3s ease";
+  element.style.height = "0px";
+  element.style.overflow = "hidden";
+
+  setTimeout(() => {
+    element.style.display = "none";
+    element.style.height = "";
+    element.style.overflow = "";
+    element.style.transition = "";
+  }, 300);
+};
+
+const slideDown = (element) => {
+  element.style.display = "block";
+  element.style.height = "0px";
+  element.style.overflow = "hidden";
+  element.style.transition = "height 0.3s ease";
+
+  nextTick(() => {
+    element.style.height = element.scrollHeight + "px";
+
+    setTimeout(() => {
+      element.style.height = "";
+      element.style.overflow = "";
+      element.style.transition = "";
+    }, 300);
+  });
+};
+
+const handleMenuClick = (event) => {
+  event.preventDefault();
+
+  const link = event.target;
+  const closestLi = link.closest("li");
+  const closestUl = closestLi.parentElement;
+
+  if (closestLi.classList.contains("active")) {
+    // 이미 활성화된 메뉴면 닫기
+    closestLi.classList.remove("active");
+    const subMenu = closestLi.querySelector("ul");
+    if (subMenu) {
+      slideUp(subMenu);
+      subMenu.classList.remove("show-dropdown");
+    }
+  } else {
+    // 같은 레벨의 활성화 메뉴 모두 닫기
+    const activeItems = closestUl.querySelectorAll("li.active");
+    activeItems.forEach((item) => {
+      item.classList.remove("active");
+      const subMenu = item.querySelector("ul");
+      if (subMenu) {
+        slideUp(subMenu);
+        subMenu.classList.remove("show-dropdown");
+      }
+    });
+
+    // 클릭한 메뉴 열기
+    closestLi.classList.add("active");
+    const subMenu = closestLi.querySelector("ul");
+    if (subMenu) {
+      slideDown(subMenu);
+      subMenu.classList.add("show-dropdown");
+    }
+  }
+};
 
 onMounted(() => {
-  $("#accordian a").click(function () {
-    const link = $(this);
-    const closest_li = link.closest("li");
-    const closest_ul = closest_li.parent();
-
-    if (closest_li.hasClass("active")) {
-      // 이미 활성화된 메뉴면 닫기
-      closest_li.removeClass("active");
-      closest_li.children("ul").slideUp().removeClass("show-dropdown");
-    } else {
-      // 같은 레벨의 활성화 메뉴 모두 닫기
-      closest_ul
-        .children("li.active")
-        .removeClass("active")
-        .children("ul")
-        .slideUp()
-        .removeClass("show-dropdown");
-
-      // 클릭한 메뉴 열기
-      closest_li.addClass("active");
-      closest_li.children("ul").slideDown().addClass("show-dropdown");
-    }
+  // 메뉴 클릭 이벤트 추가
+  const menuLinks = accordian.value.querySelectorAll("a");
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", handleMenuClick);
   });
 
   // 페이지 로드시 현재 경로에 맞는 메뉴 활성화
   let path = window.location.pathname.split("/").pop();
   if (path === "") path = "index.html";
-  const target = $(`#accordian li a[href="${path}"]`);
-  target.parents("li").addClass("active");
-  target.parents("ul").addClass("show-dropdown");
+
+  const target = accordian.value.querySelector(`li a[href="${path}"]`);
+  if (target) {
+    // 상위 메뉴들 활성화
+    let parent = target.parentElement;
+    while (parent && parent !== accordian.value) {
+      if (parent.tagName === "LI") {
+        parent.classList.add("active");
+        const subMenu = parent.querySelector("ul");
+        if (subMenu) {
+          subMenu.classList.add("show-dropdown");
+          subMenu.style.display = "block";
+        }
+      }
+      parent = parent.parentElement;
+    }
+  }
 });
 </script>
 
 <template>
-  <div id="accordian">
+  <div id="accordian" ref="accordian">
     <ul>
       <li class="menu-sugang">
         <a href="javascript:void(0);"> 수강정보 </a>

@@ -8,13 +8,11 @@ import Tab from "@/components/Tab.vue";
 
 const grades = ref([]);
 
-/*
 onMounted(async () => {
   const response = await getGrades({});
   grades.value = response.data;
   console.log("받은 성적 데이터:", grades.value);
 });
-*/
 
 onMounted(() => {
   document.body.style.backgroundColor = "#dee2e5";
@@ -22,7 +20,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- <GradeTable :grades="grades" /> -->
+  <GradeTable :grades="grades" />
   <div>
     <!-- 헤더 -->
     <Header />

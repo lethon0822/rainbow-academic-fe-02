@@ -1,57 +1,94 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import $ from "jquery";
 import GradeTable from "@/components/GradeTable.vue";
 
-const grades = ref([
-  { subject: "수학", score: 95, status: "통과" },
-  { subject: "영어", score: 88, status: "통과" },
-  { subject: "과학", score: 76, status: "통과" },
-]);
+const handleTabClick = (event) => {
+  event.preventDefault();
 
-onMounted(() => {
-  $(".tabgroup > div").hide();
-  $(".tabgroup").each(function () {
-    $(this).children("div:first-of-type").show();
-  });
+  const link = event.target;
+  const tabgroup = "#" + link.closest(".tabs").dataset.tabgroup;
+  const siblings = link.closest("li").parentElement.querySelectorAll("a");
+  const target = link.getAttribute("href");
 
-  $(".tabs").on("click", "a", function (e) {
-    e.preventDefault();
-    const $this = $(this);
-    const tabgroup = "#" + $this.parents(".tabs").data("tabgroup");
-    const others = $this.closest("li").siblings().children("a");
-    const target = $this.attr("href");
+  // 다른 탭들 비활성화
+  siblings.forEach((sibling) => sibling.classList.remove("active"));
 
-    others.removeClass("active");
-    $this.addClass("active");
-    $(tabgroup).children("div").hide();
-    $(target).show();
-  });
+  // 현재 탭 활성화
+  link.classList.add("active");
 
-  $(".tabs").on("click", ".tab-close", function (e) {
-    e.stopPropagation();
+  // 모든 탭 콘텐츠 숨기기
+  const tabGroupElement = document.querySelector(tabgroup);
+  const allContents = tabGroupElement.querySelectorAll("div");
+  allContents.forEach((content) => (content.style.display = "none"));
 
-    const $li = $(this).closest("li");
-    const $a = $li.find("a");
-    const targetId = $a.attr("href");
-    const $content = $(targetId);
-    const $tabGroup = $content.closest(".tabgroup");
+  // 선택된 탭 콘텐츠만 보이기
+  const targetContent = document.querySelector(target);
+  if (targetContent) {
+    targetContent.style.display = "block";
+  }
+};
 
-    const isActive = $a.hasClass("active");
+const handleTabClose = (event) => {
+  event.stopPropagation();
 
-    $li.remove();
-    $content.remove();
+  const closeBtn = event.target;
+  const li = closeBtn.closest("li");
+  const link = li.querySelector("a");
+  const targetId = link.getAttribute("href");
+  const content = document.querySelector(targetId);
+  const tabGroup = content.closest(".tabgroup");
 
-    if (isActive) {
-      // 현재 탭 그룹 안에서 활성 탭 찾기
-      const $next = $tabGroup.prev(".tabs").find("a").first();
-      if ($next.length) {
-        $next.addClass("active");
-        const nextTarget = $next.attr("href");
-        $tabGroup.children("div").hide();
-        $(nextTarget).show();
+  const isActive = link.classList.contains("active");
+
+  // 탭과 콘텐츠 제거
+  li.remove();
+  content.remove();
+
+  // 활성 탭이 제거된 경우 다른 탭 활성화
+  if (isActive) {
+    const tabsContainer = tabGroup.previousElementSibling;
+    const nextTab = tabsContainer.querySelector("a");
+    if (nextTab) {
+      nextTab.classList.add("active");
+      const nextTarget = nextTab.getAttribute("href");
+
+      // 모든 콘텐츠 숨기기
+      const allContents = tabGroup.querySelectorAll("div");
+      allContents.forEach((content) => (content.style.display = "none"));
+
+      // 다음 탭 콘텐츠 보이기
+      const nextContent = document.querySelector(nextTarget);
+      if (nextContent) {
+        nextContent.style.display = "block";
       }
     }
+  }
+};
+
+onMounted(() => {
+  // 모든 탭 콘텐츠 숨기기
+  const allTabContents = document.querySelectorAll(".tabgroup > div");
+  allTabContents.forEach((content) => (content.style.display = "none"));
+
+  // 각 탭 그룹의 첫 번째 콘텐츠만 보이기
+  const tabGroups = document.querySelectorAll(".tabgroup");
+  tabGroups.forEach((group) => {
+    const firstContent = group.querySelector("div:first-of-type");
+    if (firstContent) {
+      firstContent.style.display = "block";
+    }
+  });
+
+  // 탭 클릭 이벤트 추가
+  const tabLinks = document.querySelectorAll(".tabs a");
+  tabLinks.forEach((link) => {
+    link.addEventListener("click", handleTabClick);
+  });
+
+  // 탭 닫기 이벤트 추가
+  const closeButtons = document.querySelectorAll(".tab-close");
+  closeButtons.forEach((btn) => {
+    btn.addEventListener("click", handleTabClose);
   });
 });
 </script>
