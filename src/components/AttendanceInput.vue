@@ -112,7 +112,7 @@ const saveAttendance = async () => {
         @click="saveAttendance"
         class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
     >
-    저장
+    저장!
     </button>
   </div>
 </template>
