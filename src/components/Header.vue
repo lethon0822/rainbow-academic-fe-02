@@ -51,6 +51,7 @@ import logo from "@/assets/logoW.svg";
   background-color: #364157;
   padding: 10px 20px;
   height: 60px;
+  min-width: 1024px;
 }
 
 body,

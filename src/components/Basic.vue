@@ -148,13 +148,15 @@ watch(
 <template>
   <div id="accordian" ref="accordian">
     <ul>
+
+      <!-- 학적 -->
       <li class="menu-hakjeok">
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/grade/all" class="router-link"
-              >학적기본사항관리</router-link
-            >
+            <router-link to="/grade/all" class="router-link">
+              학적기본사항관리
+            </router-link>
           </li>
 
           <li><a href="javascript:void(0);">학적변동관리</a></li>
@@ -166,6 +168,17 @@ watch(
         <ul>
           <li><a href="javascript:void(0);">수강조회</a></li>
           <li><a href="javascript:void(0);">수강신청관리</a></li>
+        </ul>
+      </li>
+
+      <!-- 추후 v-if설정 해야함 -->
+      <li class="menu-gangui">
+        <a href="javascript:void(0);">강의</a>
+        <ul>
+          <li>
+          <router-link to="/registration/course" class="router-link">강의등록</router-link>
+          </li>
+          <li><a href="javascript:void(0);">강의관리</a></li>
         </ul>
       </li>
 
@@ -250,6 +263,7 @@ body {
 /* 상위 메뉴 노란색 배경 */
 #accordian li.menu-sugang > a,
 #accordian li.menu-hakjeok > a,
+#accordian li.menu-gangui > a,
 #accordian li.menu-etc > a {
   background-color: #febe3a;
   color: #364157;
@@ -307,7 +321,7 @@ body {
 }
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-#accordian li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc).active > a {
+#accordian li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui).active > a {
   background-color: transparent;
   color: inherit;
   box-shadow: none;
