@@ -103,45 +103,9 @@ onMounted(() => {
 
 <template>
   <div class="wrapper">
-    <ul class="tabs clearfix" data-tabgroup="tab-group-1">
-      <li>
-        <a href="#tab1-1" class="active">Tab 1</a
-        ><span class="tab-close">×</span>
-      </li>
-      <li><a href="#tab2-1">Tab 2</a><span class="tab-close">×</span></li>
-      <li><a href="#tab3-1">Tab 3</a><span class="tab-close">×</span></li>
-      <li><a href="#tab4-1">Tab 4</a><span class="tab-close">×</span></li>
-      <li><a href="#tab5-1">Tab 5</a><span class="tab-close">×</span></li>
-    </ul>
-
-    <section id="tab-group-1" class="tabgroup">
-      <div id="tab1-1">
-        <GradeTable :grades="grades" />
-      </div>
-
-      <div id="tab2-1">
-        <h2>Heading 2</h2>
-        <p>Tab 2 content...</p>
-      </div>
-      <div id="tab3-1">
-        <h2>Heading 3</h2>
-        <p>Tab 3 content...</p>
-      </div>
-      <div id="tab4-1">
-        <h2>Heading 4</h2>
-        <p>Tab 4 content...</p>
-      </div>
-      <div id="tab5-1">
-        <h2>Heading 5</h2>
-        <p>Tab 5 content...</p>
-      </div>
-    </section>
-  </div>
-
-  <div class="wrapper">
     <ul class="tabs clearfix" data-tabgroup="tab-group-2">
       <li>
-        <a href="#tab1-2" class="active">Tab 1</a>
+        <a href="#tab1-2" class="active">성적조회</a>
       </li>
       <li><a href="#tab2-2">Tab 2</a></li>
       <li><a href="#tab3-2">Tab 3</a></li>

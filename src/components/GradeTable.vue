@@ -1,4 +1,8 @@
 <script setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 const props = defineProps({
   grades: {
     type: Array,
@@ -10,6 +14,13 @@ function formatDate(dateStr) {
   if (!dateStr) return "-";
   const date = new Date(dateStr);
   return date.toLocaleDateString();
+}
+
+function handleButtonClick(grade) {
+  router.push({
+    path: "/course/survey",
+    query: { courseId: grade.courseId },
+  });
 }
 </script>
 
@@ -24,6 +35,8 @@ function formatDate(dateStr) {
         <th>학점</th>
         <th>등급</th>
         <th>성적등록날짜</th>
+        <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -35,6 +48,12 @@ function formatDate(dateStr) {
         <td>{{ grade.credit }}</td>
         <td>{{ grade.grade }}</td>
         <td>{{ formatDate(grade.createdAt) }}</td>
+        <td>
+          <button class="btn btn-primary" @click="handleButtonClick(grade)">
+            강의평가
+          </button>
+        </td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -58,7 +77,7 @@ function formatDate(dateStr) {
 
 .fixed_headers th,
 .fixed_headers td {
-  padding: 6px 10px;
+  padding: 6px 20px;
   white-space: nowrap;
   text-align: center;
   vertical-align: middle;
@@ -66,6 +85,12 @@ function formatDate(dateStr) {
 
 .fixed_headers td {
   border-bottom: 1px solid #c8c8c8;
+}
+
+.fixed_headers td:nth-child(9),
+.fixed_headers th:nth-child(9) {
+  padding-left: 3px;
+  padding-right: 5px;
 }
 
 .fixed_headers tbody tr:nth-child(even) {
