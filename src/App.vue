@@ -1,17 +1,6 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { getGrades } from "@/services/GradeService.js";
 import Header from "@/components/Header.vue";
 import Basic from "@/components/Basic.vue";
-import Tab from "@/components/Tab.vue";
-
-const grades = ref([]);
-
-onMounted(async () => {
-  const response = await getGrades();
-  grades.value = response.data;
-  document.body.style.backgroundColor = "#dee2e5";
-});
 </script>
 
 <template>
@@ -20,16 +9,26 @@ onMounted(async () => {
     <Basic />
   </div>
   <div class="content">
-    <Tab :grades="grades" />
+    <router-view />
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  background-color: #dee2e5;
+  overflow-x: hidden;
+}
+
 .content {
   position: relative;
   top: 65px;
   left: 150px;
 }
+
 .sidebar {
   position: absolute;
   left: 0;

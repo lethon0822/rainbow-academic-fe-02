@@ -1,7 +1,9 @@
 <script setup>
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const accordian = ref(null);
+const route = useRoute();
 
 const slideUp = (element) => {
   element.style.height = element.scrollHeight + "px";
@@ -73,7 +75,7 @@ const handleMenuClick = (event) => {
     link.tagName.toLowerCase() === "a" &&
     link.classList.contains("router-link")
   ) {
-    // router-link 클릭 시 기본 라우팅은 유지하고 메뉴 토글만 수행
+    // router-link 클릭 시 기본 라우팅 유지하며 메뉴 토글만 수행
     const li = link.closest("li");
     if (li) toggleMenu(li);
     return;
@@ -86,20 +88,29 @@ const handleMenuClick = (event) => {
   }
 };
 
-onMounted(() => {
-  const menuLinks = accordian.value.querySelectorAll("a");
+const openMenuByRoute = () => {
+  if (!accordian.value) return;
 
-  menuLinks.forEach((link) => {
-    link.addEventListener("click", handleMenuClick);
+  // 기존 활성화 상태 초기화
+  const activeItems = accordian.value.querySelectorAll("li.active");
+  activeItems.forEach((item) => {
+    item.classList.remove("active");
+  });
+  const shownSubMenus = accordian.value.querySelectorAll("ul.show-dropdown");
+  shownSubMenus.forEach((ul) => {
+    ul.classList.remove("show-dropdown");
+    ul.style.display = "none";
   });
 
-  // **아래 현재 경로 메뉴 자동 열기 코드 삭제해서
-  //  페이지 로드 시 메뉴는 모두 닫힌 상태가 됨**
-  /*
-  let path = window.location.pathname;
-  if (path.endsWith("/")) path += "index.html";
+  // 현재 라우터 경로
+  let path = route.path;
 
+  // path 조정 필요 시 여기서 처리 (예: index.html 붙이기 등)
+  // path가 router-link to 값과 일치해야 찾을 수 있습니다.
+
+  // 경로에 맞는 <a> 태그 찾기
   const target = accordian.value.querySelector(`li a[href="${path}"]`);
+
   if (target) {
     let parent = target.parentElement;
     while (parent && parent !== accordian.value) {
@@ -114,17 +125,38 @@ onMounted(() => {
       parent = parent.parentElement;
     }
   }
-  */
+};
+
+onMounted(() => {
+  const menuLinks = accordian.value.querySelectorAll("a");
+
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", handleMenuClick);
+  });
+
+  openMenuByRoute();
 });
+
+watch(
+  () => route.path,
+  () => {
+    openMenuByRoute();
+  }
+);
 </script>
 
 <template>
   <div id="accordian" ref="accordian">
     <ul>
-      <li class="menu-components">
+      <li class="menu-hakjeok">
         <a href="javascript:void(0);">학적</a>
         <ul>
-          <li><a href="javascript:void(0);">학적기본사항관리</a></li>
+          <li>
+            <router-link to="/grade/all" class="router-link"
+              >학적기본사항관리</router-link
+            >
+          </li>
+
           <li><a href="javascript:void(0);">학적변동관리</a></li>
         </ul>
       </li>
@@ -132,16 +164,12 @@ onMounted(() => {
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
-          <li>
-            <router-link to="/grade/all" class="router-link"
-              >수강조회</router-link
-            >
-          </li>
+          <li><a href="javascript:void(0);">수강조회</a></li>
           <li><a href="javascript:void(0);">수강신청관리</a></li>
         </ul>
       </li>
 
-      <li>
+      <li class="menu-etc">
         <a href="javascript:void(0);">기타 다른 메뉴</a>
         <ul>
           <li><a href="javascript:void(0);">Search</a></li>
@@ -216,12 +244,13 @@ body {
   position: relative;
   width: 100%;
   box-sizing: border-box;
+  cursor: pointer; /* 클릭 커서 추가 */
 }
 
 /* 상위 메뉴 노란색 배경 */
 #accordian li.menu-sugang > a,
-#accordian li.menu-components > a,
-#accordian li.menu-calendar > a {
+#accordian li.menu-hakjeok > a,
+#accordian li.menu-etc > a {
   background-color: #febe3a;
   color: #364157;
   border: 1px solid #febe3a;
@@ -247,8 +276,9 @@ body {
   background-color: #ffffff !important;
   color: #333;
   border: 1px solid #ddd;
-  margin-top: 1px;
+  margin-top: -2px;
   padding-left: 15px;
+  cursor: pointer; /* 클릭 커서 추가 */
 }
 
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */
@@ -277,9 +307,7 @@ body {
 }
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-#accordian
-  li:not(.menu-sugang):not(.menu-components):not(.menu-calendar).active
-  > a {
+#accordian li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc).active > a {
   background-color: transparent;
   color: inherit;
   box-shadow: none;

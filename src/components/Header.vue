@@ -13,9 +13,11 @@ import logo from "@/assets/logoW.svg";
         class="container-fluid d-flex justify-content-between align-items-center px-4"
       >
         <!-- 로고 왼쪽 -->
-        <div class="logo d-flex align-items-center">
+        <div class="logo d-flex align-items-center" @click="$router.push('/')">
           <img :src="logo" alt="로고 아이콘" height="40" />
-          <span class="systemText">학사관리시스템</span>
+          <span class="systemText" @click="$router.push('/')"
+            >학사관리시스템</span
+          >
         </div>
 
         <!-- 메뉴 오른쪽 -->
@@ -62,11 +64,14 @@ main,
   left: -20px;
   display: block;
   height: 45px;
+  cursor: pointer;
 }
 
 .menus {
+  position: relative;
+  top: -2px;
   display: flex;
-  gap: 20px; /* 메뉴 간 간격 */
+  gap: 20px;
 }
 
 .menus a {
@@ -82,8 +87,10 @@ main,
 
 .systemText {
   position: relative;
-  left: -6px;
+  top: -2px;
+  left: -12px;
   font-size: 22px;
   font-weight: 500;
+  cursor: pointer;
 }
 </style>

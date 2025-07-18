@@ -105,7 +105,7 @@ onMounted(() => {
   <div class="wrapper">
     <ul class="tabs clearfix" data-tabgroup="tab-group-1">
       <li>
-        <a href="#tab1-1" class="active">수업/성적</a
+        <a href="#tab1-1" class="active">Tab 1</a
         ><span class="tab-close">×</span>
       </li>
       <li><a href="#tab2-1">Tab 2</a><span class="tab-close">×</span></li>
@@ -141,7 +141,7 @@ onMounted(() => {
   <div class="wrapper">
     <ul class="tabs clearfix" data-tabgroup="tab-group-2">
       <li>
-        <a href="#tab1-2" class="active">수업/성적</a>
+        <a href="#tab1-2" class="active">Tab 1</a>
       </li>
       <li><a href="#tab2-2">Tab 2</a></li>
       <li><a href="#tab3-2">Tab 3</a></li>
