@@ -1,5 +1,7 @@
 import axios from "axios";
 
-export const API_PATH = "/api/grades";
+const instance = axios.create({
+  baseURL: "/api", // 프록시와 맞춤
+});
 
-export default axios;
+export default instance;

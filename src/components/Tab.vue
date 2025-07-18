@@ -1,6 +1,14 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 import GradeTable from "@/components/GradeTable.vue";
+
+// 상위 컴포넌트에서 props로 전달받음
+const props = defineProps({
+  grades: {
+    type: Array,
+    required: true,
+  },
+});
 
 const handleTabClick = (event) => {
   event.preventDefault();
@@ -110,6 +118,7 @@ onMounted(() => {
       <div id="tab1-1">
         <GradeTable :grades="grades" />
       </div>
+
       <div id="tab2-1">
         <h2>Heading 2</h2>
         <p>Tab 2 content...</p>
@@ -164,11 +173,10 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .wrapper {
   margin: 30px auto;
   width: 80%;
-  font-family: sans-serif;
   color: #555;
   font-size: 14px;
   line-height: 24px;

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, nextTick } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 
 const accordian = ref(null);
 
@@ -35,24 +35,19 @@ const slideDown = (element) => {
   });
 };
 
-const handleMenuClick = (event) => {
-  event.preventDefault();
+const toggleMenu = (liElement) => {
+  const parentUl = liElement.parentElement;
 
-  const link = event.target;
-  const closestLi = link.closest("li");
-  const closestUl = closestLi.parentElement;
-
-  if (closestLi.classList.contains("active")) {
-    // 이미 활성화된 메뉴면 닫기
-    closestLi.classList.remove("active");
-    const subMenu = closestLi.querySelector("ul");
+  if (liElement.classList.contains("active")) {
+    liElement.classList.remove("active");
+    const subMenu = liElement.querySelector("ul");
     if (subMenu) {
       slideUp(subMenu);
       subMenu.classList.remove("show-dropdown");
     }
   } else {
     // 같은 레벨의 활성화 메뉴 모두 닫기
-    const activeItems = closestUl.querySelectorAll("li.active");
+    const activeItems = parentUl.querySelectorAll("li.active");
     activeItems.forEach((item) => {
       item.classList.remove("active");
       const subMenu = item.querySelector("ul");
@@ -62,9 +57,8 @@ const handleMenuClick = (event) => {
       }
     });
 
-    // 클릭한 메뉴 열기
-    closestLi.classList.add("active");
-    const subMenu = closestLi.querySelector("ul");
+    liElement.classList.add("active");
+    const subMenu = liElement.querySelector("ul");
     if (subMenu) {
       slideDown(subMenu);
       subMenu.classList.add("show-dropdown");
@@ -72,20 +66,41 @@ const handleMenuClick = (event) => {
   }
 };
 
+const handleMenuClick = (event) => {
+  const link = event.target;
+
+  if (
+    link.tagName.toLowerCase() === "a" &&
+    link.classList.contains("router-link")
+  ) {
+    // router-link 클릭 시 기본 라우팅은 유지하고 메뉴 토글만 수행
+    const li = link.closest("li");
+    if (li) toggleMenu(li);
+    return;
+  }
+
+  if (link.tagName.toLowerCase() === "a") {
+    event.preventDefault();
+    const li = link.closest("li");
+    if (li) toggleMenu(li);
+  }
+};
+
 onMounted(() => {
-  // 메뉴 클릭 이벤트 추가
   const menuLinks = accordian.value.querySelectorAll("a");
+
   menuLinks.forEach((link) => {
     link.addEventListener("click", handleMenuClick);
   });
 
-  // 페이지 로드시 현재 경로에 맞는 메뉴 활성화
-  let path = window.location.pathname.split("/").pop();
-  if (path === "") path = "index.html";
+  // **아래 현재 경로 메뉴 자동 열기 코드 삭제해서
+  //  페이지 로드 시 메뉴는 모두 닫힌 상태가 됨**
+  /*
+  let path = window.location.pathname;
+  if (path.endsWith("/")) path += "index.html";
 
   const target = accordian.value.querySelector(`li a[href="${path}"]`);
   if (target) {
-    // 상위 메뉴들 활성화
     let parent = target.parentElement;
     while (parent && parent !== accordian.value) {
       if (parent.tagName === "LI") {
@@ -99,84 +114,38 @@ onMounted(() => {
       parent = parent.parentElement;
     }
   }
+  */
 });
 </script>
 
 <template>
   <div id="accordian" ref="accordian">
     <ul>
-      <li class="menu-sugang">
-        <a href="javascript:void(0);"> 수강정보 </a>
+      <li class="menu-components">
+        <a href="javascript:void(0);">학적</a>
         <ul>
-          <li><a href="javascript:void(0);">수강조회</a></li>
+          <li><a href="javascript:void(0);">학적기본사항관리</a></li>
+          <li><a href="javascript:void(0);">학적변동관리</a></li>
+        </ul>
+      </li>
+
+      <li class="menu-sugang">
+        <a href="javascript:void(0);">수강</a>
+        <ul>
+          <li>
+            <router-link to="/grade/all" class="router-link"
+              >수강조회</router-link
+            >
+          </li>
+          <li><a href="javascript:void(0);">수강신청관리</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="javascript:void(0);">기타 다른 메뉴</a>
+        <ul>
           <li><a href="javascript:void(0);">Search</a></li>
           <li><a href="javascript:void(0);">Graphs</a></li>
-          <li><a href="javascript:void(0);">Settings</a></li>
-        </ul>
-      </li>
-      <li class="menu-components">
-        <a href="javascript:void(0);"> Components </a>
-        <ul>
-          <li><a href="javascript:void(0);">Today's tasks</a></li>
-          <li>
-            <a href="javascript:void(0);">DrillDown (active)</a>
-            <ul>
-              <li><a href="javascript:void(0);">Today's tasks</a></li>
-              <li><a href="javascript:void(0);">Urgent</a></li>
-              <li>
-                <a href="javascript:void(0);">Overdues</a>
-                <ul>
-                  <li><a href="javascript:void(0);">Today's tasks</a></li>
-                  <li><a href="javascript:void(0);">Urgent</a></li>
-                  <li><a href="javascript:void(0);">Overdues</a></li>
-                  <li><a href="javascript:void(0);">Recurring</a></li>
-                  <li>
-                    <a href="javascript:void(0);">Calendar</a>
-                    <ul>
-                      <li><a href="javascript:void(0);">Current Month</a></li>
-                      <li><a href="javascript:void(0);">Current Week</a></li>
-                      <li><a href="javascript:void(0);">Previous Month</a></li>
-                      <li><a href="javascript:void(0);">Previous Week</a></li>
-                      <li><a href="javascript:void(0);">Next Month</a></li>
-                      <li><a href="javascript:void(0);">Next Week</a></li>
-                      <li><a href="javascript:void(0);">Team Calendar</a></li>
-                      <li>
-                        <a href="javascript:void(0);">Private Calendar</a>
-                      </li>
-                      <li><a href="javascript:void(0);">Settings</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li><a href="javascript:void(0);">Recurring</a></li>
-              <li><a href="javascript:void(0);">Settings</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="javascript:void(0);">Overdues</a>
-            <ul>
-              <li><a href="javascript:void(0);">Today's tasks</a></li>
-              <li><a href="javascript:void(0);">Urgent</a></li>
-              <li><a href="javascript:void(0);">Overdues</a></li>
-              <li><a href="javascript:void(0);">Recurring</a></li>
-              <li><a href="javascript:void(0);">Settings</a></li>
-            </ul>
-          </li>
-          <li><a href="javascript:void(0);">Recurring</a></li>
-          <li><a href="javascript:void(0);">Settings</a></li>
-        </ul>
-      </li>
-      <li class="menu-calendar">
-        <a href="javascript:void(0);"> Calendar </a>
-        <ul>
-          <li><a href="javascript:void(0);">Current Month</a></li>
-          <li><a href="javascript:void(0);">Current Week</a></li>
-          <li><a href="javascript:void(0);">Previous Month</a></li>
-          <li><a href="javascript:void(0);">Previous Week</a></li>
-          <li><a href="javascript:void(0);">Next Month</a></li>
-          <li><a href="javascript:void(0);">Next Week</a></li>
-          <li><a href="javascript:void(0);">Team Calendar</a></li>
-          <li><a href="javascript:void(0);">Private Calendar</a></li>
           <li><a href="javascript:void(0);">Settings</a></li>
         </ul>
       </li>
@@ -184,7 +153,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 * {
   margin: 0;
   padding: 0;
@@ -192,9 +161,8 @@ onMounted(() => {
 }
 
 body {
-  background-color: #dee2e5;
-  font-family: "Noto Sans KR", Arial, Verdana, sans-serif;
   font-weight: 700;
+  background-color: #dee2e5;
 }
 
 #accordian {
@@ -244,7 +212,6 @@ body {
   border: 1px solid #ddd;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 1px;
-  font-family: "Noto Sans KR", Arial, Verdana, sans-serif;
   font-weight: 700;
   position: relative;
   width: 100%;
@@ -266,8 +233,8 @@ body {
   display: none;
   margin: 0;
   position: relative;
-  padding-left: 0; /* 들여쓰기 제거 */
-  width: 100%; /* 상위 메뉴와 같은 너비 */
+  padding-left: 0;
+  width: 100%;
 }
 
 /* 활성화된 하위 메뉴 보이기 */
@@ -277,11 +244,11 @@ body {
 
 /* 하위 메뉴 링크 스타일 */
 #accordian ul li ul li a {
-  background-color: #ffffff !important; /* 항상 흰색 유지 */
+  background-color: #ffffff !important;
   color: #333;
   border: 1px solid #ddd;
   margin-top: 1px;
-  padding-left: 15px; /* 필요시 조절 가능 */
+  padding-left: 15px;
 }
 
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */

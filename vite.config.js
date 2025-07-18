@@ -1,8 +1,9 @@
-import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
+  base: "/",
   plugins: [vue()],
   resolve: {
     alias: {
@@ -14,6 +15,7 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
+        // rewrite는 필요 시 추가
       },
     },
   },

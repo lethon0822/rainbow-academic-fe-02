@@ -1,13 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue";
+import GradeAll from "@/views/GradeAll.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
-      path: "/",
-      name: "home",
-      component: Home,
+      path: "/grade/all",
+      component: GradeAll,
     },
   ],
 });

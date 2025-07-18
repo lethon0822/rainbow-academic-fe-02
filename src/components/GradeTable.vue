@@ -40,7 +40,7 @@ function formatDate(dateStr) {
   </table>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .fixed_headers {
   width: 100%;
   overflow-x: auto;

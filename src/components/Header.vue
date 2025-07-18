@@ -36,7 +36,7 @@ import logo from "@/assets/logoW.svg";
   </header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .navbar {
   position: fixed;
   top: 0;
