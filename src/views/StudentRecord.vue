@@ -1,9 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getGrades } from "@/services/GradeService.js";
-import Header from "@/components/Header.vue";
-import Basic from "@/components/Basic.vue";
-import Tab from "@/components/Tab.vue";
+import StudentRecordTab from "@/components/StudentRecordTab.vue";
 
 const grades = ref([]);
 
@@ -15,12 +13,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Header />
-  <div class="sidebar">
-    <Basic />
-  </div>
   <div class="content">
-    <Tab :grades="grades" />
+    <StudentRecordTab :grades="grades" />
   </div>
 </template>
 
