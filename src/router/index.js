@@ -1,12 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue";
+import StudentRecord from "@/views/StudentRecord.vue";
+import Home from "@/views/Home.vue"; // 메인
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
+      path: "/grade/all",
+      component: StudentRecord,
+    },
+    {
       path: "/",
-      name: "home",
       component: Home,
     },
   ],

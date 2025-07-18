@@ -1,12 +1,38 @@
 <script setup>
-import CourseEvaluation from "@/components/CourseEvaluation.vue";
-import GradeInquiry from "./components/GradeInquiry.vue";
+import Header from "@/components/Header.vue";
+import Basic from "@/components/Basic.vue";
 </script>
 
 <template>
-  <!-- 둘 중 하나 또는 둘 다 넣어서 화면에 출력 -->
-  <GradeInquiry />
-  <!-- <CourseEvaluation /> -->
+  <Header />
+  <div class="sidebar">
+    <Basic />
+  </div>
+  <div class="content">
+    <router-view />
+  </div>
 </template>
 
-<style scoped></style>
+<style lang="scss">
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  background-color: #dee2e5;
+  overflow-x: hidden;
+}
+
+.content {
+  position: relative;
+  top: 65px;
+  left: 150px;
+}
+
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 65px;
+  width: 140px;
+}
+</style>
