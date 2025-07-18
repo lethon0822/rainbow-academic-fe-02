@@ -13,6 +13,11 @@ const router = createRouter({
       path: "/",
       component: Home,
     },
+    {
+      path: "/registration/course",
+      component: () => import('@/views/RegistrationCourse.vue')
+    },
+    
   ],
 });
 
