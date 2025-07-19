@@ -24,6 +24,10 @@ const router = createRouter({
     {
       path: '/renewal',
       component: () => import('@/views/Renewal.vue')
+    },
+    {
+      path: '/enrollment',
+      component: () => import('@/views/Enrollment.vue')
     }
   ],
 });
