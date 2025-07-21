@@ -11,19 +11,36 @@ const state = reactive ({
     form: {
         loginId: '',
         password: ''
+    },
+    data: {
+        userId: '',
+        password: '',
+        userName: '',
+        userRole: ''
     }
 });
+
+
+
 const submit = async () => {
     const res = await login(state.form);
-    console.log("로그인",res);
+    state.data = res.data;
+    const json = JSON.stringify(state.data);
     switch(res.status) {
         case 200 :
-            await router.push('/');
+            await router.push({
+                path: '/',
+                state: {
+                    data:json
+                }
+            });
+        
             break;
         case 404 :
             alert('아이디/비밀번호를 확인해주세요.');
             break;
     }
+
 }
 </script>
 

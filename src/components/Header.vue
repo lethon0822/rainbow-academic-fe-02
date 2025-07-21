@@ -2,7 +2,16 @@
 import logo from "@/assets/logoW.svg";
 import { useAccountStore } from '@/stores/account';
 import { logout } from '@/services/accountService';
+import { reactive, onMounted } from "vue";
 
+const state = reactive({
+  data : {
+    userId: 0,
+    password: '',
+    userName: '',
+    userRole: ''
+  }
+})
 
 const account = useAccountStore();
 //로그아웃
@@ -15,6 +24,14 @@ const logoutAccount = async () => {
     }
     account.setLoggedIn(false);
 }
+
+onMounted(()=>{
+  const passJson = history.state.data;
+   if (passJson) {
+      //passJson을 객체로 바꿔서
+      state.data = JSON.parse(passJson);
+    }
+})
 
 </script>
 
@@ -36,7 +53,7 @@ const logoutAccount = async () => {
         <!-- 메뉴 오른쪽 -->
         <template v-if="account.state.loggedIn">
           <div class="menus d-flex align-items-center gap-3">
-            <span>{{ 이름땡겨와 }}님 반갑습니다</span>
+            <span>{{ state.data.userName }}님 반갑습니다</span>
             <span class="divider">|</span>
             <a @click="logoutAccount()">로그아웃</a>
         </div>
