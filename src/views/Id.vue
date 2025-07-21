@@ -19,7 +19,6 @@ const state = reactive({
 
 const submit = async () => {
     const res = await findId(state.form);
-    console.log("데이터",res);
     state.data = res.data;
 //   try {
 //     const res = await findId(state.form);
