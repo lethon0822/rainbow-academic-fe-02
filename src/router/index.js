@@ -21,9 +21,22 @@ const router = createRouter({
     {
       path: "/course/survey",
       component: CourseEvaluation,
-
+    },
+    {
       path: "/professor/course/registration",
       component: () => import("@/views/RegistrationCourse.vue"),
+    },
+    {
+      path: "/professor/course/management",
+      component: () => import("@/views/CourseManagement.vue"),
+    },
+    {
+      path: "/professor/course/students",
+      component: () => import("@/components/CourseStudents.vue"),
+    },
+    {
+      path: "/course/detail",
+      component: () => import("@/components/CourseDetail.vue"),
     },
     {
       path: "/login",
@@ -42,16 +55,12 @@ const router = createRouter({
       component: () => import("@/views/Enrollment.vue"),
     },
     {
-      path: "/professor/course/management",
-      component: () => import("@/views/CourseManagement.vue"),
+      path: "/attendance",
+      component: () => import("@/components/AttendanceInput.vue"),
     },
     {
-      path: "/professor/course/students",
-      component: () => import("@/components/CourseStudents.vue"),
-    },
-    {
-      path: "/course/detail",
-      component: () => import("@/components/CourseDetail.vue"),
+      path: "/gradeinput",
+      component: () => import("@/components/AttendanceInput.vue"),
     },
   ],
 });
