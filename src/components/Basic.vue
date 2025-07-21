@@ -164,7 +164,7 @@ watch(
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
-          <li><a href="javascript:void(0);">수강조회</a></li>
+          <li><a href="javascript:void(0);">수강전체조회</a></li>
           <li><a href="javascript:void(0);">수강신청관리</a></li>
         </ul>
       </li>
