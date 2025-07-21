@@ -42,20 +42,23 @@ watch(
   </template>
   <template v-else>서버 통신 오류</template>
 </template>
+
 <style lang="scss">
 html,
 body,
 #app {
   height: 100%;
   margin: 0;
-  background-color: #DEE2E5;
+  background-color: #dee2e5;
   overflow-x: hidden;
 }
+
 .content {
   position: relative;
   top: 65px;
   left: 150px;
 }
+
 .sidebar {
   position: absolute;
   left: 0;
