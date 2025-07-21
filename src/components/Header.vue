@@ -1,6 +1,42 @@
 <script setup>
-import lockIcon from "@/assets/lock-fill.svg";
 import logo from "@/assets/logoW.svg";
+import { useAccountStore } from '@/stores/account';
+import { logout } from '@/services/accountService';
+import { reactive, onMounted } from "vue";
+import { useUserStore } from '@/stores/account'
+
+const state = reactive({
+  data : {
+    userId: 0,
+    password: '',
+    userName: '',
+    userRole: ''
+  }
+})
+
+const userStore = useUserStore();
+
+
+const account = useAccountStore();
+//로그아웃
+const logoutAccount = async () => {
+    if (!confirm('로그아웃 하시겠습니까?'));
+    const res = await logout();
+    console.log("로그아웃",res)
+    if(res === undefined || res.status !== 200) {
+        return;
+    }
+    account.setLoggedIn(false);
+}
+
+// onMounted(()=>{
+//   const passJson = history.state.data;
+//    if (passJson) {
+//       //passJson을 객체로 바꿔서
+//       state.data = JSON.parse(passJson);
+//     }
+//     console.log("악",state.data)
+// })
 </script>
 
 <template>
@@ -15,24 +51,22 @@ import logo from "@/assets/logoW.svg";
         <!-- 로고 왼쪽 -->
         <div class="logo d-flex align-items-center" @click="$router.push('/')">
           <img :src="logo" alt="로고 아이콘" height="40" />
-          <span class="systemText" @click="$router.push('/')"
-            >학사관리시스템</span
-          >
+          <span class="systemText" @click="$router.push('/')">학사관리시스템</span>
         </div>
 
         <!-- 메뉴 오른쪽 -->
-        <div class="menus d-flex align-items-center gap-3">
-          <span>님 반갑습니다</span>
-          <span class="divider">|</span>
-          <img
-            :src="lockIcon"
-            alt="로그인 아이콘"
-            width="20"
-            height="20"
-            style="filter: invert(1)"
-          />
-          <a href="#" class="text-white text-decoration-none">로그인</a>
+        <template v-if="account.state.loggedIn">
+          <div class="menus d-flex align-items-center gap-3">
+            <span>{{ userStore.userName }}님 반갑습니다</span>
+            <span class="divider">|</span>
+            <a @click="logoutAccount()">로그아웃</a>
         </div>
+        </template>
+        <template v-else>
+          <router-link to="/login">
+              <a href="#" class="text-white text-decoration-none">로그인</a>
+          </router-link>
+        </template>      
       </div>
     </div>
   </header>
@@ -51,6 +85,7 @@ import logo from "@/assets/logoW.svg";
   background-color: #364157;
   padding: 10px 20px;
   height: 60px;
+  min-width: 1024px;
 }
 
 body,

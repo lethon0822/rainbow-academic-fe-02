@@ -2,6 +2,7 @@
 import { reactive} from 'vue';
 import { findId } from '@/services/accountService';
 
+
 const state = reactive({
   form: {
     email: '',
@@ -18,7 +19,6 @@ const state = reactive({
 
 const submit = async () => {
     const res = await findId(state.form);
-    console.log("데이터",res);
     state.data = res.data;
 //   try {
 //     const res = await findId(state.form);
@@ -52,8 +52,7 @@ const submit = async () => {
             type="text"
             class="form-control"
             v-model="state.form.phone"
-            placeholder="010-1234-5678"
-            pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+            placeholder="'-'를 제외하고 입력해주세요."
             required
           />
         </div>
@@ -71,5 +70,13 @@ const submit = async () => {
 .findId {
   max-width: 400px;
   margin: auto;
+}
+h1 {
+  display: flex;
+  justify-content: center;
+}
+.showId {
+  display: flex;
+  justify-content: center;
 }
 </style>

@@ -1,22 +1,10 @@
 <script setup>
-const props = defineProps({
-  grades: {
-    type: Array,
-    default: () => [],
-  },
-  creditByCategory: {
-    type: Array,
-    default: () => [],
-  },
-  semesterGrades: {
-    type: Array,
-    default: () => [],
-  },
-  requestedCreditsBySemester: {
-    type: Object,
-    default: () => ({}),
-  },
+const { grades, creditByCategory, semesterGrades } = defineProps({
+  grades: Array,
+  creditByCategory: Array,
+  semesterGrades: Array,
 });
+console.log("✅ [PutAllGrades] grades:", grades);
 </script>
 
 <template>
@@ -36,21 +24,21 @@ const props = defineProps({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(grade, index) in props.grades" :key="index">
+      <tr v-for="(grade, index) in grades" :key="index">
         <td>{{ index + 1 }}</td>
         <td>{{ grade.grade }}</td>
         <td>{{ grade.semester }}</td>
         <td>{{ grade.courseId }}</td>
         <td>{{ grade.title }}</td>
         <td>{{ grade.credit }}</td>
-        <td>{{ grade.rank }}</td>
+        <td>{{ grade.rank || "-" }}</td>
         <td>{{ grade.type }}</td>
       </tr>
     </tbody>
   </table>
 
   <!-- 이수구분별 취득학점 테이블 -->
-  <h2>이수구분별 취득학점</h2>
+  <h2>이수구분별 취득학점 (학기별)</h2>
   <table class="fixed_headers">
     <thead>
       <tr>
@@ -63,7 +51,7 @@ const props = defineProps({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(record, index) in props.creditByCategory" :key="index">
+      <tr v-for="(record, index) in creditByCategory" :key="index">
         <td>{{ index + 1 }}</td>
         <td>{{ record.grade }}</td>
         <td>{{ record.semester }}</td>
@@ -91,7 +79,7 @@ const props = defineProps({
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(semesterGrade, index) in props.semesterGrades" :key="index">
+      <tr v-for="(semesterGrade, index) in semesterGrades" :key="index">
         <td>{{ index + 1 }}</td>
         <td>{{ semesterGrade.grade }}</td>
         <td>{{ semesterGrade.semester }}</td>
@@ -132,12 +120,6 @@ const props = defineProps({
 
 .fixed_headers td {
   border-bottom: 1px solid #c8c8c8;
-}
-
-.fixed_headers td:nth-child(9),
-.fixed_headers th:nth-child(9) {
-  padding-left: 3px;
-  padding-right: 5px;
 }
 
 .fixed_headers tbody tr:nth-child(even) {

@@ -1,4 +1,4 @@
-import axios from "./HttpService";
+import axios from "./httpRequester";
 
 //성적 조회 간소
 export const getGrades = (params) => {
