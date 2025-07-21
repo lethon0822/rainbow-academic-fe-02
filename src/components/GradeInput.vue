@@ -1,3 +1,4 @@
+<!-- 성적 기입 -->
 <script setup>
 import { ref, watchEffect } from 'vue';
 import axios from 'axios';

@@ -40,6 +40,8 @@ defineProps({
 }
 .line {
   border-bottom: 2px solid #1f2c5a;
-  margin-bottom: 10px;
+  margin-bottom: 50px;
 }
+
+
 </style>
