@@ -14,7 +14,8 @@ const router = createRouter({
       component: Home,
     },
     {
-      path: "/registration/course",
+      path: "/professor/course/registration",
+      
       component: () => import('@/views/RegistrationCourse.vue')
     },
     {
@@ -32,7 +33,20 @@ const router = createRouter({
     {
       path: '/enrollment',
       component: () => import('@/views/Enrollment.vue')
+    },
+    {
+      path: '/professor/course/management',
+      component: () => import('@/views/CourseManagement.vue')
+    },
+    {
+      path: '/professor/course/students',
+      component: () =>import('@/components/CourseStudents.vue')
+    },
+    {
+      path: '/course/detail',
+      component: () =>import('@/components/CourseDetail.vue')
     }
+
   ],
 });
 

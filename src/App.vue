@@ -9,10 +9,9 @@ const route = useRoute();
 const account = useAccountStore();
 //로그인 여부 확인
 const checkAccount = async () => {
-  console.log('로그인 체크');
+
   const res = await check();
-  console.log('gsdfgsdfgsdfg', res);
-  if (res === 200 || res.status != 200) {
+  if (res === undefined || res.status != 200) {
     account.setChecked(false);
     return;
   }
@@ -36,7 +35,7 @@ watch(
       <Basic />
     </div>
     <div class="content">
-      <router-view />
+      <router-view></router-view>
     </div>
     <Footer />
   </template>

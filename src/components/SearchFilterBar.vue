@@ -1,28 +1,12 @@
 <template>
     <div class="filter-bar">
-      <label>이수구분:</label>
+      <label>연도:</label>
       <select v-model="filters.type">
         <option value="">전체</option>
-        <option value="전공">전공</option>
-        <option value="교양">교양</option>
+        <option>2025</option>
+        <option>교양</option>
       </select>
-  
-      <label>학과:</label>
-      <select v-model="filters.department">
-        <option value="">전체</option>
-        <option value="컴퓨터공학과">컴퓨터공학과</option>
-        <option value="경영학과">경영학과</option>
-      </select>
-  
-      <label>학년:</label>
-      <select v-model="filters.grade">
-        <option value="">전체</option>
-        <option value="1">1학년</option>
-        <option value="2">2학년</option>
-        <option value="2">3학년</option>
-        <option value="2">4학년</option>
-      </select>
-  
+
       <label>학기:</label>
       <select v-model="filters.semester">
         <option value="">전체</option>
@@ -30,10 +14,38 @@
         <option value="2">2학기</option>
       </select>
   
-      <label>교과목명:</label>
-      <input type="text" v-model="filters.keyword" placeholder="교과목명을 입력하세요." />
+      <div v-if="props.state">
+        <label>이수구분:</label>
+        <select v-model="filters.type">
+          <option value="">전체</option>
+          <option value="전공">전공</option>
+          <option value="교양">교양</option>
+        </select>
+    
+        <label>학과:</label>
+        <select v-model="filters.department">
+          <option value="">전체</option>
+          <option value="컴퓨터공학과">컴퓨터공학과</option>
+          <option value="경영학과">경영학과</option>
+        </select>
+    
+        <label>학년:</label>
+        <select v-model="filters.grade">
+          <option value="">전체</option>
+          <option value="1">1학년</option>
+          <option value="2">2학년</option>
+          <option value="2">3학년</option>
+          <option value="2">4학년</option>
+        </select>
+    
+        <label>교과목명:</label>
+        <input type="text" v-model="filters.keyword" placeholder="교과목명을 입력하세요." />
+      </div>
+
+      
+        <button @click="onSearch">조회</button>
+      
   
-      <button @click="onSearch">조회</button>
     </div>
   </template>
   
@@ -41,6 +53,10 @@
   import { reactive } from 'vue'
   
   const emit = defineEmits(['search'])
+
+  const props = defineProps({
+    state:Boolean
+  })
   
   const filters = reactive({
     type: '',
@@ -78,6 +94,9 @@
     color: white;
     border: none;
     border-radius: 4px;
+    
   }
+
+  
   </style>
   

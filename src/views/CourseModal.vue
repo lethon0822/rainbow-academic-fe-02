@@ -1,89 +1,59 @@
 <script setup>
 import { reactive } from 'vue';
-import { saveCourse } from '@/services/professor';
-import { useRouter } from 'vue-router';
-import WhiteBox from '@/components/WhiteBox.vue';
 
 const state = reactive({
   form:{
-    classroom:'',
-    type:'전공',
-    semester: 1,
-    time: '',
-    title: '',
-    credit: null,
-    weekPlan:'',
-    textBook:'',
-    goal: '',
-    maxStd: null
+
   }
 })
 
-
-const router = useRouter();
-
-const submit = async() =>{
-  console.log('시작할게')
-  
-  const res = await saveCourse(state.form);
-  console.log('알이에스:',res)
-
-  if(res === undefined || res.status !== 200){
-    alert('오류 발생. 잠시 후 다시 실행해주십시오.')
-    return;
-  }
-  console.log('성공했나?')
-  router.push('/professor/course/management')
-
-
-}
 </script>
 
 <template>
-  <WhiteBox :title="'강의등록'">
+
   <div class="container">
+    <h2 class="title">강의등록</h2>
     
     <div class="d-flex top last">
         <div class="table-title">교수번호</div>
-        
-        
+        <div class="table-content">
+          <input type="text">
+        </div>
     </div>
     
-    <form @submit="submit">
+    <form>
       <p>개설신청</p>
       <div class="table d-flex top">
         <div class="table-title">교과목명</div>
         <div class="table-content">
-          <input type="text" name="title" v-model="state.form.title" required>
+          <input type="text">
         </div>
       </div>
 
       <div class="table d-flex">
         <div class="table-title">교과구분</div>
         <div class="table-content">
-          <select v-model="state.form.type" required>
+          <select>
             <option>전공</option>
             <option>교양</option>
           </select>
         </div>
         <div class="table-title">학과명</div>
         <div class="table-content">
-          <span v-if="state.form.type === '교양'">
-            교양학부
-          </span>
+          <input type="text">
         </div>
       </div>
 
       <div class="table d-flex">
         <div class="table-title">이수학점</div>
         <div class="table-content">
-          <input type="number" v-model="state.form.credit" required>
+          <input type="text">
         </div>
         <div class="table-title">학기</div>
         <div class="table-content">
-          <select v-model="state.form.semester" required>
-            <option value="1">1학기</option>
-            <option value="2">2학기</option>
+          <select>
+            <option>1</option>
+            <option>2</option>
           </select>
         </div>
       </div>
@@ -91,18 +61,18 @@ const submit = async() =>{
       <div class="table d-flex">
         <div class="table-title">강의시간</div>
         <div class="table-content">
-          <input type="text" v-model="state.form.time" required>
+          <input type="text">
         </div>
       </div>
 
       <div class="table d-flex last">
         <div class="table-title">수강인원</div>
         <div class="table-content">
-          <input type="number" v-model="state.form.maxStd" required>
+          <input type="text">
         </div>
         <div class="table-title">강의실</div>
         <div class="table-content">
-          <input type="text" v-model="state.form.classroom" required>
+          <input type="text">
         </div>
       </div>
 
@@ -111,28 +81,28 @@ const submit = async() =>{
       <div class="table d-flex top">
         <div class="table-title">교재</div>
         <div class="table-content">
-          <input type="text" v-model="state.form.textBook">
+          <input type="text">
         </div>
       </div>
       <div class="table d-flex detail">
         <div class="table-title">강의목표</div>
         <div class="table-content">
-          <input type="text" v-model="state.form.goal">
+          <input type="text">
         </div>
       </div>
       <div class="table d-flex detail last">
         <div class="table-title">주차별계획</div>
         <div class="table-content">
-          <input type="text" v-model="state.form.weekPlan">
+          <input type="text">
         </div>
       </div>
 
       <div class="button">
-        <button class="btn btn-primary mt-3">제출</button>
+        <button class="btn btn-primary mt-3">저장</button>
       </div>
     </form>
   </div>
-</WhiteBox>
+
 </template>
 
 <style scoped lang="scss">
