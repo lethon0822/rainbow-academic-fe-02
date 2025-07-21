@@ -164,6 +164,8 @@ watch(
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
+          <li><router-link to="/attendance" class="router-link">출결입력</router-link></li>
+          <li><router-link to="/gradeinput" class="router-link">성적입력</router-link></li>
           <li><a href="javascript:void(0);">수강조회</a></li>
           <li><router-link to="/enrollment" class="router-link"
               >수강신청 관리</router-link></li>
