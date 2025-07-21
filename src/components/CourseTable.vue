@@ -13,6 +13,7 @@ defineProps({
       remSeats: false,
       enroll: false,
       cancel: false,
+      setting: false,
     }),
   },
 });
@@ -58,6 +59,11 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
           <td v-else-if="show.cancel">
             <button class="cancel-btn" @click="$emit('cancel', course)">
               수강취소
+            </button>
+          </td>
+          <td v-else-if="show.setting">
+            <button class="cancel-btn">
+              <router-link>학생관리</router-link>
             </button>
           </td>
         </tr>

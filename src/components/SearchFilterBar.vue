@@ -1,10 +1,10 @@
 <template>
     <div class="filter-bar">
       <label>연도:</label>
-      <select v-model="filters.type">
-        <option value="">전체</option>
+      <select v-model="filters.year">
         <option>2025</option>
-        <option>교양</option>
+        <option>2024</option>
+        <option>2023</option>
       </select>
 
       <label>학기:</label>
@@ -14,7 +14,7 @@
         <option value="2">2학기</option>
       </select>
   
-      <div v-if="props.state">
+      <div v-if="props.state === true">
         <label>이수구분:</label>
         <select v-model="filters.type">
           <option value="">전체</option>
@@ -59,10 +59,11 @@
   })
   
   const filters = reactive({
+    year:2025,
     type: '',
     department: '',
     grade: '',
-    semester: '',
+    semester: 1,
     keyword: ''
   })
   
@@ -94,6 +95,7 @@
     color: white;
     border: none;
     border-radius: 4px;
+    margin-left: auto;
     
   }
 

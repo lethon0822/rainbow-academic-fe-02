@@ -37,7 +37,6 @@ watch(
     <div class="content">
       <router-view></router-view>
     </div>
-    <Footer />
   </template>
   <template v-else>서버 통신 오류</template>
 </template>
