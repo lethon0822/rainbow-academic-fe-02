@@ -14,7 +14,7 @@ const state = reactive({
   <div class="container">
     <h2 class="title">강의등록</h2>
     
-    <div class="d-flex top last">
+    <div class="d-flex top">
         <div class="table-title">교수번호</div>
         <div class="table-content">
           <input type="text">
@@ -90,7 +90,7 @@ const state = reactive({
           <input type="text">
         </div>
       </div>
-      <div class="table d-flex detail last">
+      <div class="table d-flex detail">
         <div class="table-title">주차별계획</div>
         <div class="table-content">
           <input type="text">
@@ -157,7 +157,7 @@ select{
 border-top: 3px solid #000;
 }
 .last{
-  border-bottom: 1px solid #B7B7B7;
+  border-bottom: 1px;
 }
 
 .table-title{
