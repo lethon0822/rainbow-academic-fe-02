@@ -37,11 +37,13 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
           <th>정원</th>
           <th v-if="show.remSeats">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
+          <th v-if="show.setting"> </th>
+          
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
-          <td>{{ course.id }}</td>
+          <td>{{ course.courseId }}</td>
           <td>{{ course.title }}</td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
@@ -62,8 +64,9 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
             </button>
           </td>
           <td v-else-if="show.setting">
-            <button class="cancel-btn">
-              <router-link>학생관리</router-link>
+            <button class="enroll-btn">
+              <!-- 학생관리 라우팅 처리해야함 -->
+              <router-link class="setting">학생관리</router-link>
             </button>
           </td>
         </tr>
@@ -127,7 +130,7 @@ button {
 
 button.enroll-btn {
   background-color: #2460ce;
-
+  color: #fff;
   &:hover {
     background-color: #1f53b5;
   }
@@ -140,5 +143,11 @@ button.cancel-btn {
   &:hover {
     background-color: #d32f2f;
   }
+}
+
+.setting{
+  padding-top: 1px;
+  text-decoration: none;
+  color: #fff;
 }
 </style>
