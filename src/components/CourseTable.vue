@@ -72,6 +72,7 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
   border-radius: 5px;
   max-width: 1430px;
   overflow-y: auto; // 세로 스크롤
+  scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
 }
 
 table {
