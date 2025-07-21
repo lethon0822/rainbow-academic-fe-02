@@ -6,11 +6,11 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/grade/all",
+      path: '/grade/all',
       component: StudentRecord,
     },
     {
-      path: "/",
+      path: '/',
       component: Home,
     },
     {
@@ -20,19 +20,27 @@ const router = createRouter({
     },
     {
       path: '/login',
-      component: () => import('@/views/Login.vue')
+      component: () => import('@/views/Login.vue'),
     },
     {
       path: '/id',
-      component: () => import('@/views/Id.vue')
+      component: () => import('@/views/Id.vue'),
     },
     {
       path: '/renewal',
-      component: () => import('@/views/Renewal.vue')
+      component: () => import('@/views/Renewal.vue'),
     },
     {
       path: '/enrollment',
-      component: () => import('@/views/Enrollment.vue')
+      component: () => import('@/views/Enrollment.vue'),
+    },
+    {
+      path: '/attendance',
+      component: () => import('@/components/AttendanceInput.vue'),
+    },
+    {
+      path: '/gradeinput',
+      component: () => import('@/components/GradeInput.vue'),
     },
     {
       path: '/professor/course/management',
@@ -46,7 +54,6 @@ const router = createRouter({
       path: '/course/detail',
       component: () =>import('@/components/CourseDetail.vue')
     }
-
   ],
 });
 
