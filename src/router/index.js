@@ -34,6 +34,14 @@ const router = createRouter({
       component: () => import('@/views/Enrollment.vue'),
     },
     {
+      path: '/attendance',
+      component: () => import('@/components/AttendanceInput.vue'),
+    },
+    {
+      path: '/gradeinput',
+      component: () => import('@/components/GradeInput.vue'),
+    },
+    {
       path: '/professor/course/management',
       component: () => import('@/views/CourseManagement.vue'),
     },
