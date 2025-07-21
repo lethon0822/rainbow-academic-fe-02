@@ -31,7 +31,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <h1>아이디 찾기</h1>
+  <h2 class="title">아이디 찾기</h2>
   <div class="findId">
     <div class="container">
       <form class="py-5 d-flex flex-column gap-3" @submit.prevent="submit">
@@ -70,9 +70,11 @@ const submit = async () => {
   max-width: 400px;
   margin: auto;
 }
-h1 {
-  display: flex;
-  justify-content: center;
+.title{
+    text-align: center;
+    margin: 50px 0;
+    font-weight: 600;
+    
 }
 .showId {
   display: flex;
