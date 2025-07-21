@@ -2,8 +2,7 @@
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '@/services/accountService';
-
-
+import { useUserStore } from '@/stores/account'
 
 const router = useRouter();
 
@@ -11,28 +10,27 @@ const state = reactive ({
     form: {
         loginId: '',
         password: ''
-    },
-    data: {
-        userId: '',
-        password: '',
-        userName: '',
-        userRole: ''
     }
+    // data: {
+    //     userId: '',
+    //     password: '',
+    //     userName: '',
+    //     userRole: ''
+    // }
 });
-
-
 
 const submit = async () => {
     const res = await login(state.form);
-    state.data = res.data;
-    const json = JSON.stringify(state.data);
+    
+    // state.data = res.data;
+    // const json = JSON.stringify(state.data);
     switch(res.status) {
         case 200 :
             await router.push({
                 path: '/',
-                state: {
-                    data:json
-                }
+                // state: {
+                //     data:json
+                // }
             });
         
             break;
@@ -40,7 +38,9 @@ const submit = async () => {
             alert('아이디/비밀번호를 확인해주세요.');
             break;
     }
-
+    const userStore = useUserStore();
+    userStore.userName = res.data.userName;
+    
 }
 </script>
 

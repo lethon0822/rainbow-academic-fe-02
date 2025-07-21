@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 
+
 export const useAccountStore = defineStore("account", () => {
 
     const state = reactive({
@@ -13,3 +14,11 @@ export const useAccountStore = defineStore("account", () => {
 
     return { state, setChecked, setLoggedIn };
 });
+export const useUserStore = defineStore('user', {
+    state: () => ({
+      userName: '',
+      userId: '',
+      userRole: ''
+    }),
+    persist: true // 옵션: 새로고침 후에도 유지하고 싶으면
+  })
