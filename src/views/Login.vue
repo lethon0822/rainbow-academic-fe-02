@@ -47,6 +47,7 @@ const submit = async () => {
 <template>
 
     <div class="login">
+       
         <div class="container">
             <h2 class="title">로그인</h2>
             <form class="py-5 d-flex flex-column gap-3" @submit.prevent="submit">
@@ -70,6 +71,7 @@ const submit = async () => {
 
         </div>
     </div>
+
 </template>
 
 <style scoped>
