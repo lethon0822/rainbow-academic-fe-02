@@ -1,24 +1,59 @@
-import { createRouter, createWebHistory } from "vue-router";
-import StudentRecord from "@/views/StudentRecord.vue";
-import Home from "@/views/Home.vue"; // 메인
-import UserInfo from "@/views/UserInfo.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import StudentRecord from '@/views/StudentRecord.vue';
+import Home from '@/views/Home.vue'; // 메인
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/grade/all",
+      path: '/grade/all',
       component: StudentRecord,
     },
     {
-      path: "/",
+      path: '/',
       component: Home,
     },
     {
-      path: "/user/info", // 개인정보 확인 경로 추가
-      component: UserInfo,
+      path: '/professor/course/registration',
+      component: () => import('@/views/RegistrationCourse.vue'),
     },
-    
+    {
+      path: '/login',
+      component: () => import('@/views/Login.vue'),
+    },
+    {
+      path: '/id',
+      component: () => import('@/views/Id.vue'),
+    },
+    {
+      path: '/renewal',
+      component: () => import('@/views/Renewal.vue'),
+    },
+    {
+      path: '/enrollment',
+      component: () => import('@/views/Enrollment.vue'),
+    },
+    {
+      path: '/attendance',
+      component: () => import('@/components/AttendanceInput.vue'),
+    },
+    {
+      path: '/gradeinput',
+      component: () => import('@/components/GradeInput.vue'),
+    },
+    {
+      path: '/professor/course/management',
+      component: () => import('@/views/CourseManagement.vue'),
+    },
+    {
+      path: '/professor/course/students',
+      component: () => import('@/components/CourseStudents.vue'),
+    },
+    {
+      path: '/course/detail',
+      component: () => import('@/components/CourseDetail.vue'),
+    },
   ],
 });
 
