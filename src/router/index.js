@@ -35,10 +35,10 @@ const router = createRouter({
     },
     {
       path: '/attendance',
-      component: () => import('@/components/AttendanceInput.vue'),
+      component: () => import('@/components/Attendance.vue'),
     },
     {
-      path: '/gradeinput',
+      path: '/enrollmentgrade',
       component: () => import('@/components/EnrollmentGrade.vue'),
     },
     {

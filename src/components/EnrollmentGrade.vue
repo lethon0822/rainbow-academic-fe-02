@@ -100,7 +100,7 @@ watchEffect(() => {
 const saveGrades = async () => {
   try {
     for (const s of students.value) {
-      const gradereq = {
+      const enrollmentgradeputreq = {
         enrollmentId: s.enrollmentId,
         score: s.totalScore,
         grade: s.grade
