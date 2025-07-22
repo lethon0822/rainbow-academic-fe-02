@@ -7,9 +7,9 @@ import WhiteBox from './WhiteBox.vue';
 
 const students = ref([
   {
-    enrollmentId: 1,
+    enrollmentId: 30,
     major: '컴퓨터공학과',
-    studentId: '20257945',
+    courseId: '5',
     name: '유아린',
     attendanceScore: 90,
     midtermScore: 80,
@@ -19,9 +19,9 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 2,
+    enrollmentId: 31,
     major: '전자공학과',
-    studentId: '20257946',
+    courseId: '9',
     name: '홍길동',
     attendanceScore: 80,
     midtermScore: 75,
@@ -31,9 +31,9 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 3,
+    enrollmentId: 32,
     major: '전자공학과',
-    studentId: '20257946',
+    courseId: '7',
     name: '남효정',
     attendanceScore: 80,
     midtermScore: 75,
@@ -43,9 +43,9 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 4,
+    enrollmentId: 33,
     major: '경영학과',
-    studentId: '20257946',
+    courseId: '29',
     name: '김효정',
     attendanceScore: 80,
     midtermScore: 75,
@@ -55,9 +55,9 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 5,
+    enrollmentId: 34,
     major: '일본어학과',
-    studentId: '20257946',
+    courseId: '28',
     name: '조효정',
     attendanceScore: 80,
     midtermScore: 75,
