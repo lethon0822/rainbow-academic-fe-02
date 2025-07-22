@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      vue: "vue/dist/vue.esm-bundler.js",
     },
   },
   server: {
@@ -15,7 +16,14 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        // rewrite는 필요 시 추가
+      },
+      "/student": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/account": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
       },
     },
   },

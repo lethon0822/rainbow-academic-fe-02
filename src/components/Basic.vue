@@ -1,17 +1,14 @@
 <script setup>
 import { ref, nextTick, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
-
 const accordian = ref(null);
 const route = useRoute();
-
 const slideUp = (element) => {
   element.style.height = element.scrollHeight + "px";
   element.offsetHeight; // force reflow
   element.style.transition = "height 0.3s ease";
   element.style.height = "0px";
   element.style.overflow = "hidden";
-
   setTimeout(() => {
     element.style.display = "none";
     element.style.height = "";
@@ -19,16 +16,13 @@ const slideUp = (element) => {
     element.style.transition = "";
   }, 300);
 };
-
 const slideDown = (element) => {
   element.style.display = "block";
   element.style.height = "0px";
   element.style.overflow = "hidden";
   element.style.transition = "height 0.3s ease";
-
   nextTick(() => {
     element.style.height = element.scrollHeight + "px";
-
     setTimeout(() => {
       element.style.height = "";
       element.style.overflow = "";
@@ -36,10 +30,8 @@ const slideDown = (element) => {
     }, 300);
   });
 };
-
 const toggleMenu = (liElement) => {
   const parentUl = liElement.parentElement;
-
   if (liElement.classList.contains("active")) {
     liElement.classList.remove("active");
     const subMenu = liElement.querySelector("ul");
@@ -58,7 +50,6 @@ const toggleMenu = (liElement) => {
         subMenu.classList.remove("show-dropdown");
       }
     });
-
     liElement.classList.add("active");
     const subMenu = liElement.querySelector("ul");
     if (subMenu) {
@@ -67,10 +58,8 @@ const toggleMenu = (liElement) => {
     }
   }
 };
-
 const handleMenuClick = (event) => {
   const link = event.target;
-
   if (
     link.tagName.toLowerCase() === "a" &&
     link.classList.contains("router-link")
@@ -80,17 +69,14 @@ const handleMenuClick = (event) => {
     if (li) toggleMenu(li);
     return;
   }
-
   if (link.tagName.toLowerCase() === "a") {
     event.preventDefault();
     const li = link.closest("li");
     if (li) toggleMenu(li);
   }
 };
-
 const openMenuByRoute = () => {
   if (!accordian.value) return;
-
   // 기존 활성화 상태 초기화
   const activeItems = accordian.value.querySelectorAll("li.active");
   activeItems.forEach((item) => {
@@ -101,16 +87,12 @@ const openMenuByRoute = () => {
     ul.classList.remove("show-dropdown");
     ul.style.display = "none";
   });
-
   // 현재 라우터 경로
   let path = route.path;
-
   // path 조정 필요 시 여기서 처리 (예: index.html 붙이기 등)
   // path가 router-link to 값과 일치해야 찾을 수 있습니다.
-
   // 경로에 맞는 <a> 태그 찾기
   const target = accordian.value.querySelector(`li a[href="${path}"]`);
-
   if (target) {
     let parent = target.parentElement;
     while (parent && parent !== accordian.value) {
@@ -126,17 +108,13 @@ const openMenuByRoute = () => {
     }
   }
 };
-
 onMounted(() => {
   const menuLinks = accordian.value.querySelectorAll("a");
-
   menuLinks.forEach((link) => {
     link.addEventListener("click", handleMenuClick);
   });
-
   openMenuByRoute();
 });
-
 watch(
   () => route.path,
   () => {
@@ -144,32 +122,62 @@ watch(
   }
 );
 </script>
-
 <template>
   <div id="accordian" ref="accordian">
     <ul>
+      <!-- 학적 -->
       <li class="menu-hakjeok">
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/grade/all" class="router-link"
-              >학적기본사항관리</router-link
-            >
+            <router-link to="/rank" class="router-link">
+              학적기본사항관리
+            </router-link>
           </li>
-
-          <li><a href="javascript:void(0);">학적변동관리</a></li>
+          <li>
+            <router-link to="/grade/all" class="router-link">
+              학적변동관리
+            </router-link>
+          </li>
         </ul>
       </li>
-
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
+          <li>
+            <router-link to="/attendance" class="router-link"
+              >출결입력</router-link
+            >
+          </li>
+          <li>
+            <router-link to="/gradeinput" class="router-link"
+              >성적입력</router-link
+            >
+          </li>
           <li><a href="javascript:void(0);">수강조회</a></li>
-          <li><router-link to="/enrollment" class="router-link"
-              >수강신청 관리</router-link></li>
+          <li>
+            <router-link to="/enrollment" class="router-link"
+              >수강신청 관리</router-link
+            >
+          </li>
         </ul>
       </li>
-
+      <!-- 추후 v-if설정 해야함 -->
+      <li class="menu-gangui">
+        <a href="javascript:void(0);">강의</a>
+        <ul>
+          <li>
+            <router-link to="/professor/course/registration" class="router-link"
+              >강의등록</router-link
+            >
+          </li>
+          <li>
+            <router-link to="/professor/course/management"
+              >강의관리</router-link
+            >
+          </li>
+        </ul>
+      </li>
       <li class="menu-etc">
         <a href="javascript:void(0);">기타 다른 메뉴</a>
         <ul>
@@ -181,19 +189,16 @@ watch(
     </ul>
   </div>
 </template>
-
 <style lang="scss" scoped>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-weight: 700;
   background-color: #dee2e5;
 }
-
 #accordian {
   position: fixed;
   top: 60px;
@@ -204,7 +209,6 @@ body {
   overflow-y: auto;
   z-index: 999;
 }
-
 /* 스크롤바 */
 #accordian::-webkit-scrollbar {
   width: 5px;
@@ -220,17 +224,14 @@ body {
 #accordian::-webkit-scrollbar-thumb:hover {
   background: #d5b14c;
 }
-
 /* 메뉴 기본 스타일 */
 #accordian ul {
   list-style: none;
 }
-
 #accordian ul li {
   list-style: none;
   position: relative;
 }
-
 #accordian ul li > a {
   color: #333;
   background-color: white;
@@ -247,17 +248,16 @@ body {
   box-sizing: border-box;
   cursor: pointer; /* 클릭 커서 추가 */
 }
-
 /* 상위 메뉴 노란색 배경 */
 #accordian li.menu-sugang > a,
 #accordian li.menu-hakjeok > a,
+#accordian li.menu-gangui > a,
 #accordian li.menu-etc > a {
   background-color: #febe3a;
   color: #364157;
   border: 1px solid #febe3a;
   font-weight: bold;
 }
-
 /* 하위 메뉴 */
 #accordian ul li ul {
   display: none;
@@ -266,12 +266,10 @@ body {
   padding-left: 0;
   width: 100%;
 }
-
 /* 활성화된 하위 메뉴 보이기 */
 #accordian ul li.active > ul.show-dropdown {
   display: block;
 }
-
 /* 하위 메뉴 링크 스타일 */
 #accordian ul li ul li a {
   background-color: #ffffff !important;
@@ -281,7 +279,6 @@ body {
   padding-left: 15px;
   cursor: pointer; /* 클릭 커서 추가 */
 }
-
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */
 #accordian ul li ul li.active > a,
 #accordian ul li ul li > a.active {
@@ -289,7 +286,6 @@ body {
   color: inherit !important;
   box-shadow: none !important;
 }
-
 /* 메뉴 화살표 */
 #accordian a:not(:only-child):after {
   content: "\f105";
@@ -301,19 +297,20 @@ body {
   font-size: 20px;
   transition: 0.3s;
 }
-
 /* 활성 메뉴 화살표 회전 */
 #accordian li.active > a:not(:only-child):after {
   transform: rotate(90deg);
 }
-
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-#accordian li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc).active > a {
+#accordian
+  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(
+    .menu-gangui
+  ).active
+  > a {
   background-color: transparent;
   color: inherit;
   box-shadow: none;
 }
-
 /* 하위 메뉴 링크 포커스, 호버 시 배경색 유지 */
 #accordian ul li ul li a:hover,
 #accordian ul li ul li a:focus {
