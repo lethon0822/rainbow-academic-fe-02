@@ -104,6 +104,7 @@ const saveGrades = async () => {
         </thead>
         <tbody>
           <tr v-for="s in students" :key="s.enrollmentId">
+
             <td class="border px-2 py-1">{{ s.major }}</td>
             <td class="border px-2 py-1">{{ s.studentId }}</td>
             <td class="border px-2 py-1">{{ s.name }}</td>
@@ -131,8 +132,7 @@ const saveGrades = async () => {
                 v-model="s.finalScore"
                 min="0"
                 max="100"
-                class="w-16 border rounded text-center"
-              />
+                class="w-16 border rounded text-center" />
             </td>
             <td class="border px-2 py-1">
               <input

@@ -1,3 +1,27 @@
+<script setup>
+import { reactive } from 'vue';
+
+const emit = defineEmits(['search']);
+
+const props = defineProps({ //학과와 연도만 받아오고 나머지는 하드코딩임. 
+  state: Boolean,
+  departments: Array,
+  years: Array});
+
+const filters = reactive({ 
+  year: '',
+  type: '',
+  departmentName: '',
+  grade: '',
+  semester: '',
+  keyword: '',
+});
+
+function onSearch() {
+  emit('search', { ...filters });
+}
+</script>
+
 <template>
   <div class="filter-bar">
     <label>연도:</label>
@@ -20,6 +44,7 @@
         <option value="">전체</option>
         <option value="전공">전공</option>
         <option value="교양">교양</option>
+
       </select>
 
       <label>학과:</label>
