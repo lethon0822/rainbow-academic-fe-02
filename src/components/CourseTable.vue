@@ -9,8 +9,8 @@ defineProps({
     //
     type: Object,
     default: () => ({
-      professor: false,
-      remSeats: false,
+      professorName: false,
+      remStd: false,
       enroll: false,
       cancel: false,
     }),
@@ -29,27 +29,27 @@ defineEmits(["enroll", "cancel"]);
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
-          <th v-if="show.professor">담당교수</th>
+          <th v-if="show.professorName">담당교수</th>
           <th>학년</th>
           <th>강의시간</th>
           <th>학점</th>
           <th>정원</th>
-          <th v-if="show.remSeats">잔여</th>
+          <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
-          <td>{{ course.id }}</td>
+          <td>{{ course.courseId }}</td>
           <td>{{ course.title }}</td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
-          <td v-if="show.professor">{{ course.professor }}</td>
+          <td v-if="show.professorName">{{ course.professorName }}</td>
           <td>{{ course.grade }}</td>
           <td>{{ course.time }}</td>
           <td>{{ course.credit }}</td>
           <td>{{ course.maxStd }}</td>
-          <td v-if="show.remSeats">{{ course.remSeats }}</td>
+          <td v-if="show.remStd">{{ course.remStd }}</td>
           <td v-if="show.enroll">
             <button class="enroll-btn" @click="$emit('enroll', course)">
               수강신청
@@ -70,8 +70,10 @@ defineEmits(["enroll", "cancel"]);
 .table-container {
   margin: 20px;
   border-radius: 5px;
+  width: 100%;
   max-width: 1430px;
   overflow-y: auto; // 세로 스크롤
+  scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
 }
 
 table {

@@ -28,7 +28,7 @@ watch(
 );
 </script>
 <template>
-  <template v-if="account.state.checked">
+  <!-- <template v-if="account.state.checked"> -->
     <Header />
     <div class="sidebar">
       <Basic />
@@ -38,7 +38,6 @@ watch(
     </div>
   </template>
   <template v-else>서버 통신 오류</template>
-</template>
 
 <style lang="scss">
 html,
