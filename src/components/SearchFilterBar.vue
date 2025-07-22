@@ -94,6 +94,7 @@ function onSearch() {
   border: 2px solid #ccc;
   padding: 2px 10px;
   border-radius: 6px;
+  min-width: 1350px;
 }
 .filter-bar label {
   font-size: 20px;

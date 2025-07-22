@@ -1,8 +1,7 @@
 <script setup>
 import WhiteBox from './WhiteBox.vue';
-import CourseDetail from './CourseDetail.vue';
-
 import { ref } from 'vue';
+
 const link = ref('/course/detail');
 const state = {
   data: {

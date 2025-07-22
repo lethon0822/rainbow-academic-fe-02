@@ -24,35 +24,30 @@ const state = reactive({
     textBook: "",
     goal: "",
     maxStd: null,
-    grade: 1
+    grade: 1,
   },
 });
 
 onMounted(async () => {
-
   if (props.id) {
     state.courseId = props.id;
     const res = await loadCourse(props.id);
-    console.log('계획표 수정 가보자')
-    state.form = res.data
+    console.log("계획표 수정 가보자");
+    state.form = res.data;
   }
 });
 
 const router = useRouter();
 
-
 const submit = async () => {
   let data = null;
-  if(state.form.courseId > 0){
-    const res = await modify(state.form)
-    console.log("이곳은 강의등록창입니다(수정):",res.data)
-    data = res
-  }
-  else{
+  if (state.form.courseId > 0) {
+    const res = await modify(state.form);
+    console.log("이곳은 강의등록창입니다(수정):", res.data);
+    data = res;
+  } else {
     const res = await saveCourse(state.form);
-    console.log('알 간다', res)
-    data = res
-    
+    data = res;
   }
 
   if (data === undefined || data.status !== 200) {
@@ -60,7 +55,6 @@ const submit = async () => {
     return;
   }
   router.push("/professor/course/status");
-  
 };
 </script>
 
@@ -96,7 +90,7 @@ const submit = async () => {
           <div class="table-title">학과명</div>
           <div class="table-content">
             <span v-if="state.form.type === '교양'"> 교양학부 </span>
-            <input v-else type="text"/>
+            <input v-else type="text" />
           </div>
         </div>
 
@@ -123,7 +117,6 @@ const submit = async () => {
           <div class="table-content">
             <input type="text" v-model="state.form.classroom" required />
           </div>
-          
         </div>
 
         <div class="table d-flex last">
@@ -163,7 +156,9 @@ const submit = async () => {
         </div>
 
         <div class="button">
-          <button class="btn btn-primary mt-3">{{props.id > 0 ? '수정' : '제출'}}</button>
+          <button class="btn btn-primary mt-3">
+            {{ props.id > 0 ? "수정" : "제출" }}
+          </button>
         </div>
       </form>
     </div>

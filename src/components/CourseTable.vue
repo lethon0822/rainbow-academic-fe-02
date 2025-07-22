@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   courseList: Array,
   maxHeight: {
@@ -33,6 +35,14 @@ const change = (status) =>{
   return "red"
 
 }
+
+
+// 강의계획서 새 창 띄우기
+const link = ref('/course/detail');
+const openLink = () => {
+  window.open(link.value, '_blank', 'width=700px,height=800px,scrollbars=yes');
+};
+
 </script>
 
 <template>
@@ -61,7 +71,10 @@ const change = (status) =>{
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
           <td>{{ course.deptName }}</td>
-          <td>{{ course.title }}</td>
+          <td>
+            <div v-if="show.modify">{{ course.title }}</div>
+            <div v-else @click="openLink" class="link">{{ course.title }}</div>
+          </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
           <td v-if="show.professor">{{ course.professor }}</td>
@@ -84,7 +97,7 @@ const change = (status) =>{
           <td v-else-if="show.setting">
             <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link class="setting">관리</router-link>
+              <router-link to="/professor/course/students" class="setting">관리</router-link>
             </button>
           </td>
           <td v-else-if="show.modify">
@@ -172,6 +185,10 @@ button.cancel-btn {
   &:hover {
     background-color: #d32f2f;
   }
+}
+.link{
+  color:#2460ce;
+  cursor: pointer;
 }
 
 

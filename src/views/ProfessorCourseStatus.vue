@@ -24,18 +24,22 @@ const myCourse = async (filters) => {
 <template>
   <WhiteBox :title="'강의신청현황조회'">
     <SearchFilterBar @search="myCourse" />
-    <CourseTable :course-list="state.item" :show="{ modify: true }" class="some"/>
+    <CourseTable
+      :course-list="state.item"
+      :show="{ modify: true }"
+      class="some"
+    />
     <div>
       <button class="enroll-btn">
-        <router-link to="/professor/course/registration" class="move">개설신청</router-link>
+        <router-link to="/professor/course/registration" class="move"
+          >개설신청</router-link
+        >
       </button>
     </div>
-    
   </WhiteBox>
 </template>
 
 <style lang="scss" scoped>
-
 button {
   display: flex;
   margin-right: 40px;
@@ -53,8 +57,8 @@ button.enroll-btn {
   color: #fff;
   margin-left: auto;
 }
-.move{
-  padding-top:2px;
+.move {
+  padding-top: 2px;
   text-decoration: none;
   color: #fff;
   justify-content: flex-end;
