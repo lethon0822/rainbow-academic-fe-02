@@ -177,6 +177,15 @@ watch(
           <li><a href="javascript:void(0);">Settings</a></li>
         </ul>
       </li>
+
+      <li class="menu-infoma">
+        <a href="javascript:void(0);">개인정보확인</a>
+        <ul>
+          <li><a href="javascript:void(0);">교수</a></li>
+          <li><a href="javascript:void(0);">학생</a></li>
+        </ul>
+        
+      </li>
     </ul>
   </div>
 </template>
