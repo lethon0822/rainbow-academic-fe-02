@@ -11,9 +11,11 @@ const departments = ref([]);
 const years = ref([]);
 
 onMounted(async () => {
+
   const departmentRes = await getDepartments();
   console.log(departmentRes.data);
   departments.value = departmentRes.data;
+
 
   const yearRes = await getYears();
   console.log(yearRes.data);
@@ -38,7 +40,7 @@ const handleEnroll = async (course) => {
   try{
     const sugangRes = await postEnrollCourse(sugangReq);
     console.log('sugangRes: ', sugangRes);
-    sugang.value = sugangRes.data;
+    mySugangList.value.push(sugangRes.data);
 
     if(sugangRes.status === 200){
       alert('수강신청 완료!');
@@ -68,7 +70,7 @@ const handleEnroll = async (course) => {
 };
 
 const courseList = ref([]);
-const sugang = ref({});
+const mySugangList = ref([]);
 </script>
 
 <template>
@@ -80,6 +82,7 @@ const sugang = ref({});
       @search="handleSearch"
     ></SearchFilterBar>
 
+    <!-- 개설 과목 테이블  -->
     <h5 class="fw-bold mt-3">개설 과목 목록</h5>
     <CourseTable
       :courseList="courseList"
@@ -94,7 +97,9 @@ const sugang = ref({});
       @cancel="handleCancel"
     ></CourseTable>
 
+    <!-- 나의 수강신청 내역 -->
     <h5 class="fw-bold mt-3">신청 내역</h5>
+
     <CourseTable
       :courseList="mySugangList"
       maxHeight="500px"
