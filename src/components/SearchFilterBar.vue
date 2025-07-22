@@ -28,6 +28,8 @@ function onSearch() {
     <select v-model="filters.type">
       <option value="">전체</option>
       <option>2025</option>
+      <option>2024</option>
+      <option>2023</option>
       <option>교양</option>
     </select>
 
@@ -44,25 +46,24 @@ function onSearch() {
         <option value="">전체</option>
         <option value="전공">전공</option>
         <option value="교양">교양</option>
-
-      </select>
-
+     </select>
+<!-- 
       <label>학과:</label>
       <select v-model="filters.department">
         <option value="">전체</option>
         <option value="컴퓨터공학과">컴퓨터공학과</option>
         <option value="경영학과">경영학과</option>
-      </select>
-
-      <label>학년:</label>
-      <select v-model="filters.grade">
-        <option value="">전체</option>
-        <option value="1">1학년</option>
-        <option value="2">2학년</option>
-        <option value="2">3학년</option>
-        <option value="2">4학년</option>
-      </select>
-
+      </select> -->
+  
+        <label>학년:</label>
+        <select v-model="filters.grade">
+          <option value="">전체</option>
+          <option value="1">1학년</option>
+          <option value="2">2학년</option>
+          <option value="2">3학년</option>
+          <option value="2">4학년</option>
+        </select>
+    
       <label>교과목명:</label>
       <input
         type="text"
@@ -70,32 +71,9 @@ function onSearch() {
         placeholder="교과목명을 입력하세요."
       />
     </div>
-
     <button @click="onSearch">조회</button>
   </div>
 </template>
-
-<script setup>
-import { reactive } from "vue";
-
-const emit = defineEmits(["search"]);
-
-const props = defineProps({
-  state: Boolean,
-});
-
-const filters = reactive({
-  type: "",
-  department: "",
-  grade: "",
-  semester: "",
-  keyword: "",
-});
-
-function onSearch() {
-  emit("search", { ...filters });
-}
-</script>
 
 <style scoped>
 .filter-bar {

@@ -1,20 +1,20 @@
 <script setup>
-import { reactive } from "vue";
-import { saveCourse } from "@/services/professor";
-import { useRouter } from "vue-router";
-import WhiteBox from "@/components/WhiteBox.vue";
+import { reactive } from 'vue';
+import { saveCourse } from '@/services/professor';
+import { useRouter } from 'vue-router';
+import WhiteBox from '@/components/WhiteBox.vue';
 
 const state = reactive({
   form: {
-    classroom: "",
-    type: "전공",
+    classroom: '',
+    type: '전공',
     semester: 1,
-    time: "",
-    title: "",
+    time: '',
+    title: '',
     credit: null,
-    weekPlan: "",
-    textBook: "",
-    goal: "",
+    weekPlan: '',
+    textBook: '',
+    goal: '',
     maxStd: null,
   },
 });
@@ -22,107 +22,108 @@ const state = reactive({
 const router = useRouter();
 
 const submit = async () => {
-  console.log("시작할게");
+  console.log('시작할게');
 
   const res = await saveCourse(state.form);
-  console.log("알이에스:", res);
+  console.log('알이에스:', res);
 
   if (res === undefined || res.status !== 200) {
-    alert("오류 발생. 잠시 후 다시 실행해주십시오.");
+    alert('오류 발생. 잠시 후 다시 실행해주십시오.');
     return;
   }
-  console.log("성공했나?");
-  router.push("/professor/course/management");
+  console.log('성공했나?');
+  router.push('/professor/course/management');
 };
 </script>
 
 <template>
-  <div class="container">
-    <p>강의</p>
-    <div class="table d-flex top">
-      <div class="table-title">교과목명</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
-
-    <div class="table d-flex">
-      <div class="table-title">교과구분</div>
-      <div class="table-content">
-        <!-- 입력 -->
+  <WhiteBox>
+    <div class="container">
+      <p>강의</p>
+      <div class="table d-flex top">
+        <div class="table-title">교과목명</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
 
-      <div class="table-title">학과명</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
+      <div class="table d-flex">
+        <div class="table-title">교과구분</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
 
-    <div class="table d-flex">
-      <div class="table-title">이수학점</div>
-      <div class="table-content">
-        <!-- 입력 -->
+        <div class="table-title">학과명</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-      <div class="table-title">학기</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <div class="table d-flex">
-      <div class="table-title">강의시간</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">이수학점</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+        <div class="table-title">학기</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-    </div>
 
-    <div class="table d-flex last">
-      <div class="table-title">수강인원</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">강의시간</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-      <div class="table-title">강의실</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <p>강의 계획서</p>
-    <div class="table d-flex top">
-      <div class="table-title">교재</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex last">
+        <div class="table-title">수강인원</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+        <div class="table-title">강의실</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-    </div>
-    <div class="table d-flex detail">
-      <div class="table-title">강의목표</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
-    <div class="table d-flex detail last">
-      <div class="table-title">주차별계획</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <p>평가방법</p>
-
-    <div class="score">
-      <div class="title">
-        <div>출석</div>
-        <div>중간고사</div>
-        <div>기말고사</div>
+      <p>강의 계획서</p>
+      <div class="table d-flex top">
+        <div class="table-title">교재</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-      <div class="per">
-        <div>20%</div>
-        <div class="middle"><span>40%</span></div>
-        <div>40%</div>
+      <div class="table d-flex detail">
+        <div class="table-title">강의목표</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+      </div>
+      <div class="table d-flex detail last">
+        <div class="table-title">주차별계획</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+      </div>
+
+      <p>평가방법</p>
+
+      <div class="score">
+        <div class="title">
+          <div>출석</div>
+          <div>중간고사</div>
+          <div>기말고사</div>
+        </div>
+        <div class="per">
+          <div><span>20%</span></div>
+          <div class="middle"><span>40%</span></div>
+          <div><span> 40%</span></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="empty"></div>
+  </WhiteBox>
 </template>
 
 <style scoped lang="scss">
@@ -159,7 +160,13 @@ const submit = async () => {
     flex: 1;
     text-align: center;
     font-size: 20px;
-    align-items: center;
+
+    span {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
 .middle {

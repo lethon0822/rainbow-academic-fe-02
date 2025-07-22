@@ -1,9 +1,7 @@
-
-import { createRouter, createWebHashHistory } from "vue-router";
-import StudentRecord from "@/views/StudentRecord.vue";
-import Home from "@/views/Home.vue"; // 메인
-import CourseEvaluation from "@/views/CourseEvaluation.vue";
-
+import { createRouter, createWebHashHistory } from 'vue-router';
+import StudentRecord from '@/views/StudentRecord.vue';
+import Home from '@/views/Home.vue'; // 메인
+import CourseEvaluation from '@/views/CourseEvaluation.vue';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -46,11 +44,11 @@ const router = createRouter({
     },
     {
       path: '/professor/course/management',
-      component: () => import('@/views/CourseManagement.vue'),
+      component: () => import('@/views/MyCourseManagement.vue'),
     },
     {
       path: '/professor/course/students',
-      component: () => import('@/components/CourseStudents.vue'),
+      component: () => import('@/components/CourseStudentsList.vue'),
     },
     {
       path: '/course/detail',

@@ -1,10 +1,10 @@
 <script setup>
-import Header from "@/components/Header.vue";
-import Basic from "@/components/Basic.vue";
-import { check } from "@/services/accountService";
-import { watch, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { useAccountStore } from "@/stores/account";
+import Header from '@/components/Header.vue';
+import Basic from '@/components/Basic.vue';
+import { check } from '@/services/accountService';
+import { watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAccountStore } from '@/stores/account';
 const route = useRoute();
 const account = useAccountStore();
 //로그인 여부 확인
@@ -29,13 +29,13 @@ watch(
 </script>
 <template>
   <!-- <template v-if="account.state.checked"> -->
-    <Header />
-    <div class="sidebar">
-      <Basic />
-    </div>
-    <div class="content">
-      <router-view></router-view>
-    </div>
+  <Header />
+  <div class="sidebar">
+    <Basic />
+  </div>
+  <div class="content">
+    <router-view></router-view>
+  </div>
   <!-- </template>
   <template v-else>서버 통신 오류</template> -->
 </template>
