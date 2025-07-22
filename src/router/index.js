@@ -1,60 +1,66 @@
-
 import { createRouter, createWebHashHistory } from "vue-router";
 import StudentRecord from "@/views/StudentRecord.vue";
 import Home from "@/views/Home.vue"; // 메인
 import CourseEvaluation from "@/views/CourseEvaluation.vue";
 
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: '/grade/all',
+      path: "/grade/all",
       component: StudentRecord,
     },
     {
-      path: '/',
+      path: "/",
       component: Home,
     },
     {
-      path: '/professor/course/registration',
-      component: () => import('@/views/RegistrationCourse.vue'),
+      path: "/professor/course/registration",
+      component: () => import("@/views/RegistrationCourse.vue"),
     },
     {
-      path: '/login',
-      component: () => import('@/views/Login.vue'),
+      path: "/login",
+      component: () => import("@/views/Login.vue"),
     },
     {
-      path: '/id',
-      component: () => import('@/views/Id.vue'),
+      path: "/id",
+      component: () => import("@/views/Id.vue"),
     },
     {
-      path: '/renewal',
-      component: () => import('@/views/Renewal.vue'),
+      path: "/renewal",
+      component: () => import("@/views/Renewal.vue"),
     },
     {
-      path: '/enrollment',
-      component: () => import('@/views/Enrollment.vue'),
+      path: "/enrollment",
+      component: () => import("@/views/Enrollment.vue"),
     },
     {
-      path: '/attendance',
-      component: () => import('@/components/AttendanceInput.vue'),
+      path: "/attendance",
+      component: () => import("@/components/AttendanceInput.vue"),
     },
     {
-      path: '/gradeinput',
-      component: () => import('@/components/GradeInput.vue'),
+      path: "/gradeinput",
+      component: () => import("@/components/GradeInput.vue"),
     },
     {
-      path: '/professor/course/management',
-      component: () => import('@/views/CourseManagement.vue'),
+      path: "/professor/course/management",
+      component: () => import("@/views/CourseManagement.vue"),
     },
     {
-      path: '/professor/course/students',
-      component: () => import('@/components/CourseStudents.vue'),
+      path: "/professor/course/students",
+      component: () => import("@/components/CourseStudents.vue"),
     },
     {
-      path: '/course/detail',
-      component: () => import('@/components/CourseDetail.vue'),
+      path: "/course/detail",
+      component: () => import("@/components/CourseDetail.vue"),
+    },
+    {
+      path: "/rank",
+      component: () => import("@/views/GetAllGrades.vue"),
+    },
+    {
+      path: "/course/survey",
+      component: () => import("@/views/CourseEvaluation.vue"),
     },
   ],
 });

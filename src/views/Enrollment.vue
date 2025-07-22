@@ -179,7 +179,12 @@ const courseList = ref([
 
 <template>
   <WhiteBox title="수강 신청">
-    <SearchFilterBar :state="true" :departments="departments" :years="[{ year: 2025 }]"   @search="handleSearch"></SearchFilterBar>
+    <SearchFilterBar
+      :state="true"
+      :departments="departments"
+      :years="[{ year: 2025 }]"
+      @search="handleSearch"
+    ></SearchFilterBar>
 
     <h5 class="fw-bold mt-3">개설 과목 목록</h5>
     <CourseTable

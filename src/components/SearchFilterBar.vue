@@ -1,24 +1,26 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(["search"]);
 
-const props = defineProps({ //학과와 연도만 받아오고 나머지는 하드코딩임. 
+const props = defineProps({
+  //학과와 연도만 받아오고 나머지는 하드코딩임.
   state: Boolean,
   departments: Array,
-  years: Array});
+  years: Array,
+});
 
-const filters = reactive({ 
-  year: '',
-  type: '',
-  departmentName: '',
-  grade: '',
-  semester: '',
-  keyword: '',
+const filters = reactive({
+  year: "",
+  type: "",
+  departmentName: "",
+  grade: "",
+  semester: "",
+  keyword: "",
 });
 
 function onSearch() {
-  emit('search', { ...filters });
+  emit("search", { ...filters });
 }
 </script>
 
@@ -44,7 +46,6 @@ function onSearch() {
         <option value="">전체</option>
         <option value="전공">전공</option>
         <option value="교양">교양</option>
-
       </select>
 
       <label>학과:</label>
@@ -74,28 +75,6 @@ function onSearch() {
     <button @click="onSearch">조회</button>
   </div>
 </template>
-
-<script setup>
-import { reactive } from "vue";
-
-const emit = defineEmits(["search"]);
-
-const props = defineProps({
-  state: Boolean,
-});
-
-const filters = reactive({
-  type: "",
-  department: "",
-  grade: "",
-  semester: "",
-  keyword: "",
-});
-
-function onSearch() {
-  emit("search", { ...filters });
-}
-</script>
 
 <style scoped>
 .filter-bar {
