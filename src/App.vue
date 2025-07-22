@@ -14,7 +14,7 @@ const checkAccount = async () => {
   console.log('로그인 체크');
   const res = await check();
   console.log('gsdfgsdfgsdfg', res);
-  if (res === 200 || res.status != 200) {
+  if (res === undefined || res.status != 200) {
     account.setChecked(false);
     return;
   }
