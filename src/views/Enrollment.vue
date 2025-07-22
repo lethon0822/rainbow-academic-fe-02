@@ -1,35 +1,180 @@
 <script setup>
-import WhiteBox from '@/components/WhiteBox.vue';
-import SearchFilterBar from '@/components/SearchFilterBar.vue';
-import CourseTable from '@/components/CourseTable.vue';
-import { getDepartments, getYears } from '@/services/CourseService';
-import { ref, onMounted } from 'vue';
-import { getCourseListByFilter } from '@/services/CourseService';
+import WhiteBox from "@/components/WhiteBox.vue";
+import SearchFilterBar from "@/components/SearchFilterBar.vue";
+import CourseTable from "@/components/CourseTable.vue";
+import { ref } from "vue";
 
-const departments = ref([]);
-const years = ref([]);
+const courseList = ref([
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
 
-onMounted(async () => {
-  const departmentRes = await getDepartments();
-  console.log(departmentRes.data);
-  departments.value = departmentRes.data;
-
-  const yearRes = await getYears();
-  console.log(yearRes.data);
-  years.value = yearRes.data;
-})
-
-const handleSearch = async(filters) => {
-  console.log(' 받은 필터:', filters);
-
-  const courseListRes = await getCourseListByFilter(filters);
-  console.log('courseListRes: ', courseListRes);
-  courseList.value = courseListRes.data;
-
-}
-
-const courseList = ref([]);
-
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+  {
+    id: "SUB101",
+    title: "자료구조",
+    classroom: "IT101",
+    type: "전공",
+    professor: "김성배",
+    grade: 1,
+    time: "화3수3",
+    credit: 3,
+    maxStd: 50,
+    remSeats: 47,
+  },
+]);
 </script>
 
 <template>
@@ -39,7 +184,7 @@ const courseList = ref([]);
     <h5 class="fw-bold mt-3">개설 과목 목록</h5>
     <CourseTable
       :courseList="courseList"
-      maxHeight="400px"
+      maxHeight="500px"
       :show="{
         professorName: true,
         remStd: true,

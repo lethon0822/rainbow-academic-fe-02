@@ -1,6 +1,6 @@
 <script setup>
-import SearchFilterBar from '@/components/SearchFilterBar.vue';
-import WhiteBox from '@/components/WhiteBox.vue';
+import SearchFilterBar from "@/components/SearchFilterBar.vue";
+import WhiteBox from "@/components/WhiteBox.vue";
 </script>
 
 <template>
@@ -11,6 +11,4 @@ import WhiteBox from '@/components/WhiteBox.vue';
   </WhiteBox>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
