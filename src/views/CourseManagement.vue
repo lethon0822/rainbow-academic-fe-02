@@ -11,6 +11,4 @@ import WhiteBox from '@/components/WhiteBox.vue';
   </WhiteBox>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -9,7 +9,6 @@ const route = useRoute();
 const account = useAccountStore();
 //로그인 여부 확인
 const checkAccount = async () => {
-
   const res = await check();
   if (res === undefined || res.status != 200) {
     account.setChecked(false);
@@ -30,14 +29,13 @@ watch(
 </script>
 <template>
   <!-- <template v-if="account.state.checked"> -->
-    <Header />
-    <div class="sidebar">
-      <Basic />
-    </div>
-    <div class="content">
-      <router-view></router-view>
-    </div>
-    <Footer />
+  <Header />
+  <div class="sidebar">
+    <Basic />
+  </div>
+  <div class="content">
+    <router-view></router-view>
+  </div>
   <!-- </template>
   <template v-else>서버 통신 오류</template> -->
 </template>
