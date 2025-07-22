@@ -46,7 +46,7 @@ const students = ref([
     enrollmentId: 4,
     major: '경영학과',
     studentId: '20257946',
-    name: '김정신',
+    name: '김효정',
     attendanceScore: 80,
     midtermScore: 75,
     finalScore: 60,
@@ -58,7 +58,7 @@ const students = ref([
     enrollmentId: 5,
     major: '일본어학과',
     studentId: '20257946',
-    name: '체리',
+    name: '조효정',
     attendanceScore: 80,
     midtermScore: 75,
     finalScore: 60,
@@ -105,7 +105,7 @@ const saveGrades = async () => {
         score: s.totalScore,
         grade: s.grade
     };
-    await axios.put('http://localhost:8080/api/professor/course/enrollmentgrade', enrollmentgradeputreq);
+    await axios.put('http://localhost:8080/api/professor/course/grade', enrollmentgradeputreq);
     }
     alert('성적 저장 완료!');
     } catch (e) {

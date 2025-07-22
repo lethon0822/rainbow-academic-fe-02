@@ -1,58 +1,46 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import WhiteBox from './WhiteBox.vue';
 
+const router = useRouter();
 const attendDate = ref('');
 
 // 임시 하드코딩 학생 데이터
 const students = ref([
   {
-    enrollmentId: 1,
+    enrollmentId: 30,
     name: 'lily',
     studentId: '20257945',
     status: '',
     note: '',
   },
   {
-    enrollmentId: 2,
+    enrollmentId: 31,
     name: 'Andy',
     studentId: '20257946',
     status: '',
     note: '',
   },
-   {
-    enrollmentId: 3,
+  {
+    enrollmentId: 32,
     name: 'Hannah',
     studentId: '20257947',
     status: '',
     note: '',
   },
-   {
-    enrollmentId: 4,
+  {
+    enrollmentId: 33,
     name: 'Jacob',
     studentId: '20257948',
     status: '',
     note: '',
   },
-   {
-    enrollmentId: 5,
+  {
+    enrollmentId: 34,
     name: 'lucy',
     studentId: '20257949',
-    status: '',
-    note: '',
-  },
-   {
-    enrollmentId: 6,
-    name: 'Julie',
-    studentId: '20257950',
-    status: '',
-    note: '',
-  },
-   {
-    enrollmentId: 7,
-    name: 'Susanna',
-    studentId: '20257951',
     status: '',
     note: '',
   },
@@ -71,7 +59,7 @@ const saveAttendance = async () => {
         return;
       }
 
-      const payload = {
+      const data = {
         attendDate: attendDate.value,
         enrollmentId: s.enrollmentId,
         status: s.status,
@@ -79,13 +67,13 @@ const saveAttendance = async () => {
       };
 
       const { data: exists } = await axios.post(
-        '/api/professor/course/check/exist',
-        payload
+        '/professor/course/check/exist',
+        data
       );
       if (exists === 0) {
-        await axios.post('/api/professor/course/check', payload);
+        await axios.post('/professor/course/check', data);
       } else {
-        await axios.put('/api/professor/course/check', payload);
+        await axios.put('/professor/course/check', data);
       }
     }
 
@@ -99,60 +87,60 @@ const saveAttendance = async () => {
 </script>
 
 <template>
-   <WhiteBox title="출결 관리">
+  <WhiteBox title="출결 관리">
     <div class="attendance-wrapper">
-    <div class="attendance-box"></div>    
+      <div class="attendance-box"></div>
       <h2 class="text-xl font-bold mb-4 text-center">출결 입력창</h2>
       <label class="block mb-2">출결일자</label>
-    <input
-      type="date"
-      v-model="attendDate"
-      class="mb-4 border px-2 py-1 rounded"
-    />
+      <input
+        type="date"
+        v-model="attendDate"
+        class="mb-4 border px-2 py-1 rounded"
+      />
 
-    <table class="table-auto w-full border">
-      <thead>
-        <tr>
+      <table class="table-auto w-full border">
+        <thead>
+          <tr>
             <th class="border px-2 py-1">이름</th>
             <th class="border px-2 py-1">학번</th>
             <th class="border px-2 py-1">출결 상태</th>
             <th class="border px-2 py-1">비고</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="s in students" :key="s.enrollmentId">
+          <tr v-for="s in students" :key="s.enrollmentId">
             <td class="border px-2 py-1">{{ s.name }}</td>
             <td class="border px-2 py-1">{{ s.studentId }}</td>
             <td class="border px-2 py-1">
-            <select v-model="s.status" class="border px-1 py-1 rounded">
+              <select v-model="s.status" class="border px-1 py-1 rounded">
                 <option disabled value="">선택</option>
                 <option value="출석">출석</option>
                 <option value="지각">지각</option>
                 <option value="결석">결석</option>
                 <option value="병가">병가</option>
                 <option value="경조사">경조사</option>
-            </select>
-        </td>
-        <td class="border px-2 py-1">
-            <input
+              </select>
+            </td>
+            <td class="border px-2 py-1">
+              <input
                 v-model="s.note"
                 :disabled="!['지각', '병가', '경조사'].includes(s.status)"
                 class="border px-1 py-1 rounded w-full"
                 placeholder="사유 입력"
-            />
-        </td>
-        </tr>
-    </tbody>
-    </table>
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <button
+      <button
         @click="saveAttendance"
         class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-    >
-    저장!
-    </button>
-  </div>
-   </WhiteBox>
+      >
+        저장!
+      </button>
+    </div>
+  </WhiteBox>
 </template>
 
 <style scoped lang="scss">
@@ -173,7 +161,7 @@ const saveAttendance = async () => {
 //   box-shadow: 0 0 10px rgba(0,0,0,0.08);
 
 //   /* 중앙보다는 약간 오른쪽으로 밀고 싶으면 margin-left 조절 */
-//   margin-left: 80px; 
+//   margin-left: 80px;
 // }
 
 .title {
@@ -181,7 +169,6 @@ const saveAttendance = async () => {
   font-weight: bold;
   margin-bottom: 16px;
   text-align: left;
-  
 }
 
 .form-group {
