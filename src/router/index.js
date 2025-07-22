@@ -30,7 +30,7 @@ const router = createRouter({
     },
     {
       path: '/renewal',
-      component: () => import('@/views/Renewal.vue'),
+      component: () => import('@/views/RenewalPwd.vue'),
     },
     {
       path: '/enrollment',
