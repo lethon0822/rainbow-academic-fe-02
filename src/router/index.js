@@ -42,9 +42,24 @@ const router = createRouter({
       path: '/gradeinput',
       component: () => import('@/components/GradeInput.vue'),
     },
+   {
+      path: '/professor/course/registration',
+      name: 'RegistrationCourse',
+      component: () => import('@/components/RegistrationCourse.vue'),
+    },
+    {
+      path: '/professor/course/registration/:id',
+      name: 'ModifyCourse',
+      component: () => import('@/components/RegistrationCourse.vue'),
+      props: true
+    },
+    {
+      path: '/professor/course/status',
+      component: () => import('@/views/ProfessorCourseStatus.vue'),
+    },
     {
       path: '/professor/course/management',
-      component: () => import('@/views/MyCourseManagement.vue'),
+      component: () => import('@/views/ProfessorCourseManagement.vue'),
     },
     {
       path: '/professor/course/students',
@@ -56,5 +71,4 @@ const router = createRouter({
     },
   ],
 });
-
 export default router;
