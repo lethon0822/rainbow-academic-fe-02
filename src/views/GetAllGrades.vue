@@ -128,7 +128,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <WhiteBox title="수강 신청">
+  <WhiteBox title="학적변동관리">
     <div class="content">
       <PutAllGrades
         :grades="grades"

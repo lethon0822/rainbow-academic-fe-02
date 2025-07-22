@@ -60,7 +60,7 @@ const router = createRouter({
     },
     {
       path: "/gradeinput",
-      component: () => import("@/components/AttendanceInput.vue"),
+      component: () => import("@/components/GradeInput.vue"),
     },
   ],
 });

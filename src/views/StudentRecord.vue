@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { getGrades } from "@/services/GradeService.js";
 import StudentRecordTab from "@/components/StudentRecordTab.vue";
+import Profile from "@/components/Profile.vue";
 
 const grades = ref([]);
 
@@ -13,6 +14,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <Profile />
   <div class="content">
     <StudentRecordTab :grades="grades" />
   </div>

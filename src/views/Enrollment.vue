@@ -1,6 +1,7 @@
 <script setup>
 import WhiteBox from "@/components/WhiteBox.vue";
 import SearchFilterBar from "@/components/SearchFilterBar.vue";
+import CourseTable from "@/components/CourseTable.vue";
 import { ref } from "vue";
 
 const courseList = ref([
@@ -178,9 +179,20 @@ const courseList = ref([
 
 <template>
   <WhiteBox title="수강 신청">
-    <SearchFilterBar @search="handleSearch" />
-    <p>개설 과목 목록</p>
+    <SearchFilterBar @search="handleSearch"></SearchFilterBar>
+    <CourseTable
+      :courseList="courseList"
+      maxHeight="500px"
+      :show="{
+        professor: true,
+        remSeats: true,
+        enroll: true,
+        cancel: false,
+      }"
+      @enroll="handleEnroll"
+      @cancel="handleCancel"
+    ></CourseTable>
   </WhiteBox>
 </template>
 
-<style scoped></style>
+<style lang="scss"></style>

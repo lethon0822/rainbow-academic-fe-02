@@ -41,6 +41,4 @@ defineProps({
   border-bottom: 2px solid #1f2c5a;
   margin-bottom: 50px;
 }
-
-
 </style>

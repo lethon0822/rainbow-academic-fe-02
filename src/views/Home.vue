@@ -2,7 +2,7 @@
 import Header from "@/components/Header.vue";
 import Basic from "@/components/Basic.vue";
 </script>
-``
+
 <template>
   <Header />
   <div class="sidebar">

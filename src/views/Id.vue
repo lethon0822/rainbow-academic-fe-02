@@ -1,34 +1,29 @@
 <script setup>
-import { reactive} from 'vue';
-import { findId } from '@/services/accountService';
-
+import { reactive } from "vue";
+import { findId } from "@/services/accountService";
 
 const state = reactive({
   form: {
-    email: '',
-    phone: ''
+    email: "",
+    phone: "",
   },
   data: {
-    name: '',
-    loginId:''
-  }
+    name: "",
+    loginId: "",
+  },
 });
 
-
-
-
 const submit = async () => {
-    const res = await findId(state.form);
-    state.data = res.data;
-//   try {
-//     const res = await findId(state.form);
-//     foundId.value = res.id || '아이디를 찾을 수 없습니다.';
-//   } catch (err) {
-//     console.error('아이디 찾기 실패:', err);
-//     foundId.value = '조회 중 오류가 발생했습니다.';
-//   }
+  const res = await findId(state.form);
+  state.data = res.data;
+  //   try {
+  //     const res = await findId(state.form);
+  //     foundId.value = res.id || '아이디를 찾을 수 없습니다.';
+  //   } catch (err) {
+  //     console.error('아이디 찾기 실패:', err);
+  //     foundId.value = '조회 중 오류가 발생했습니다.';
+  //   }
 };
-
 </script>
 
 <template>
@@ -61,7 +56,13 @@ const submit = async () => {
     </div>
   </div>
   <div class="showId mt-3" v-if="state.data">
-    <p>🔐 찾은 아이디: <strong>이름:{{ state.data.userName }}, 아이디: {{ state.data.loginId }}</strong></p>
+    <p>
+      🔐 찾은 아이디:
+      <strong
+        >이름:{{ state.data.userName }}, 아이디:
+        {{ state.data.loginId }}</strong
+      >
+    </p>
   </div>
 </template>
 
