@@ -64,9 +64,9 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
             </button>
           </td>
           <td v-else-if="show.setting">
-            <button class="enroll-btn">
+            <button class="setting-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link class="setting">학생관리</router-link>
+              <router-link class="setting">관리</router-link>
             </button>
           </td>
         </tr>
@@ -145,9 +145,27 @@ button.cancel-btn {
   }
 }
 
-.setting{
-  padding-top: 1px;
-  text-decoration: none;
-  color: #fff;
+button.setting-btn {
+  
+  background-color: #e4e4e4;
+  
+
+  &:hover {
+    background-color: #a3a3a3;
+    color:  #f8f8f8 ;
+
+  }
+  .setting{
+    padding-top: 1px;
+    text-decoration: none;
+    color: #5c5c5c;
+    
+    &:hover {
+      color: #f8f8f8;
+
+    }
 }
+}
+
+
 </style>
