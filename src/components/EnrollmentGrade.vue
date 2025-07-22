@@ -1,4 +1,5 @@
 <!-- 성적 기입 -->
+
 <script setup>
 import { ref, watchEffect } from 'vue';
 import axios from 'axios';
@@ -22,6 +23,42 @@ const students = ref([
     major: '전자공학과',
     studentId: '20257946',
     name: '홍길동',
+    attendanceScore: 80,
+    midtermScore: 75,
+    finalScore: 60,
+    assignmentScore: 90,
+    totalScore: 0,
+    grade: ''
+  },
+  {
+    enrollmentId: 3,
+    major: '전자공학과',
+    studentId: '20257946',
+    name: '남효정',
+    attendanceScore: 80,
+    midtermScore: 75,
+    finalScore: 60,
+    assignmentScore: 90,
+    totalScore: 0,
+    grade: ''
+  },
+  {
+    enrollmentId: 4,
+    major: '경영학과',
+    studentId: '20257946',
+    name: '김정신',
+    attendanceScore: 80,
+    midtermScore: 75,
+    finalScore: 60,
+    assignmentScore: 90,
+    totalScore: 0,
+    grade: ''
+  },
+  {
+    enrollmentId: 5,
+    major: '일본어학과',
+    studentId: '20257946',
+    name: '체리',
     attendanceScore: 80,
     midtermScore: 75,
     finalScore: 60,
@@ -68,7 +105,7 @@ const saveGrades = async () => {
         score: s.totalScore,
         grade: s.grade
     };
-    await axios.put('http://localhost:8080/api/professor/course/grade', gradereq);
+    await axios.put('http://localhost:8080/api/professor/course/enrollmentgrade', enrollmentgradeputreq);
     }
     alert('성적 저장 완료!');
     } catch (e) {
