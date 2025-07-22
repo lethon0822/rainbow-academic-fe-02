@@ -167,7 +167,7 @@ watch(
         <a href="javascript:void(0);">강의</a>
         <ul>
           <li>
-            <router-link to="/professor/course/registration" class="router-link"
+            <router-link to="/professor/course/status" class="router-link"
               >강의등록</router-link
             >
           </li>
