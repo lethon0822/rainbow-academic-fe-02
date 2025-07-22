@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watchEffect } from "vue";
-import WhiteBox from "@/components/WhiteBox.vue";
+import AllGradesWhiteBox from "@/components/AllGradesWhiteBox.vue";
 import PutAllGrades from "@/components/PutAllGrades.vue";
 import { GradesbyCourse } from "@/services/GradeService.js";
 
@@ -128,7 +128,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <WhiteBox title="학적변동관리">
+  <AllGradesWhiteBox title="학적변동관리">
     <div class="content">
       <PutAllGrades
         :grades="grades"
@@ -136,7 +136,7 @@ watchEffect(() => {
         :semesterGrades="mergedSemesterGrades"
       />
     </div>
-  </WhiteBox>
+  </AllGradesWhiteBox>
 </template>
 
 <style scoped>
