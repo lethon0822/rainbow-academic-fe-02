@@ -13,12 +13,26 @@ defineProps({
       remSeats: false,
       enroll: false,
       cancel: false,
-      setting: false,
+      setting: false, //학생관리
+      modify: false, // 강의 신청 조회시 수정 버튼 활성화
+
     }),
   },
 });
 
+
 defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,취소 할 떄 쓸 부분. 다른 분들은 무시하셔도 돼요.
+
+// 승인여부 css 변경
+const change = (status) =>{
+  if(status === '거부'){
+    return "gray"
+  }else if(status === '승인'){
+    return "blue"
+  }
+  return "red"
+
+}
 </script>
 
 <template>
@@ -27,6 +41,7 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
       <thead>
         <tr>
           <th>과목코드</th>
+          <th v-if="show.setting || show.modify">학과</th>
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
@@ -37,21 +52,24 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
           <th>정원</th>
           <th v-if="show.remSeats">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
-          <th v-if="show.setting"> </th>
+          <th v-if="show.modify">승인여부</th>
+          <th v-if="show.setting || show.modify"> </th>
           
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
+          <td>{{ course.deptName }}</td>
           <td>{{ course.title }}</td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
           <td v-if="show.professor">{{ course.professor }}</td>
-          <td>{{ course.grade }}</td>
+          <td>{{ course.grade }}학년</td>
           <td>{{ course.time }}</td>
           <td>{{ course.credit }}</td>
           <td>{{ course.maxStd }}</td>
+          <td v-if="show.modify" class="status" :class="change(course.status)">{{ course.status }}</td> <!-- 승인여부 뜨기 -->
           <td v-if="show.remSeats">{{ course.remSeats }}</td>
           <td v-if="show.enroll">
             <button class="enroll-btn" @click="$emit('enroll', course)">
@@ -64,23 +82,34 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
             </button>
           </td>
           <td v-else-if="show.setting">
-            <button class="setting-btn">
+            <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
               <router-link class="setting">관리</router-link>
             </button>
           </td>
+          <td v-else-if="show.modify">
+            <button class="enroll-btn">
+              <!-- 강의 수정 라우팅 처리해야함 -->
+              <!-- <router-link to="/professor/course/registration">수정</router-link> -->
+              <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >수정</router-link>
+            </button>
+            
+          </td>
         </tr>
       </tbody>
     </table>
+    
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .table-container {
   margin: 20px;
   border-radius: 5px;
   max-width: 1430px;
+  min-width: 1350px;
   overflow-y: auto; // 세로 스크롤
+  scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
 }
 
 table {
@@ -145,26 +174,25 @@ button.cancel-btn {
   }
 }
 
-button.setting-btn {
-  
-  background-color: #e4e4e4;
-  
 
-  &:hover {
-    background-color: #a3a3a3;
-    color:  #f8f8f8 ;
-
-  }
-  .setting{
-    padding-top: 1px;
-    text-decoration: none;
-    color: #5c5c5c;
-    
-    &:hover {
-      color: #f8f8f8;
-
-    }
+.setting{
+  padding-top: 2px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color:#fff;
+  font-weight: 4
 }
+
+.red{
+  color:#d61421;
+}
+.gray{
+  color:#28292b;
+}
+.blue{
+  color:#2460ce;
+  font-weight: 700;
 }
 
 
