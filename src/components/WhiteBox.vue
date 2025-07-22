@@ -11,7 +11,6 @@ defineProps({
       <h2 class="title">{{ title }}</h2>
       <div class="line"></div>
       <slot></slot>
-      
     </div>
   </div>
 </template>
@@ -42,6 +41,4 @@ defineProps({
   border-bottom: 2px solid #1f2c5a;
   margin-bottom: 50px;
 }
-
-
 </style>

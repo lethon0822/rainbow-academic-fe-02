@@ -1,8 +1,13 @@
 <script setup>
-import WhiteBox from './WhiteBox.vue';
-import CourseDetail from './CourseDetail.vue';
+import WhiteBox from "./WhiteBox.vue";
+import CourseDetail from "./CourseDetail.vue";
 
-import { ref } from 'vue';
+
+import { ref } from "vue";
+const link = ref("/course/detail");
+
+const openLink = () => {
+  window.open(link.value, "_blank", "width=700px,height=800px,scrollbars=yes");
 const link = ref('/course/detail');
 const state = {
   data: {
@@ -15,13 +20,12 @@ const state = {
   }
 }
 
-const openLink = () => {
-  window.open(link.value, '_blank', 'width=700px,height=800px,scrollbars=yes');
 };
 </script>
 
 <template>
   <WhiteBox :title="'학생조회'">
+
     <div class="table-title">
       <div class="width-1">no</div>
       <div class="width-1">학번</div>
@@ -56,6 +60,7 @@ const openLink = () => {
     </button>
   </WhiteBox>
 </template>
+
 
 <style scoped>
 .table-title{
