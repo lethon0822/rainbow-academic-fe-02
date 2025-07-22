@@ -11,7 +11,7 @@ const props = defineProps({ //학과와 연도만 받아오고 나머지는 하�
 const filters = reactive({ 
   year: '',
   type: '',
-  department: '',
+  departmentName: '',
   grade: '',
   semester: '',
   keyword: '',
@@ -52,7 +52,7 @@ function onSearch() {
       </select>
 
       <label>학과:</label>
-      <select v-model="filters.department">
+      <select v-model="filters.departmentName">
         <option value="">전체</option>
         <option
           v-for="d in props.departments"
@@ -68,8 +68,8 @@ function onSearch() {
         <option value="">전체</option>
         <option value="1">1학년</option>
         <option value="2">2학년</option>
-        <option value="2">3학년</option>
-        <option value="2">4학년</option>
+        <option value="3">3학년</option>
+        <option value="4">4학년</option>
       </select>
 
       <label>교과목명:</label>
