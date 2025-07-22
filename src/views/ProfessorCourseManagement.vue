@@ -22,7 +22,7 @@ const myCourse = async (filters) => {
   state.item = res.data;
 
   const result = state.item.filter((item) => {
-    return item.status === "완료";
+    return item.status === "승인";
   });
   state.resultItem = result;
 
