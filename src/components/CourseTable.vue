@@ -46,7 +46,6 @@ defineEmits(["enroll", "cancel"]);
           <td>{{ course.courseId }}</td>
           <td>
             <router-link to="/course/detail">{{ course.title }}</router-link>
-            
           </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>

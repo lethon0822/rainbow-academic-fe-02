@@ -1,8 +1,11 @@
 
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import StudentRecord from "@/views/StudentRecord.vue";
 import Home from "@/views/Home.vue"; // 메인
-import CourseEvaluation from "@/views/CourseEvaluation.vue";
+
+
+const professor ='/professor'
+const course = '/course'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,10 +13,6 @@ const router = createRouter({
     {
       path: "/",
       component: Home,
-    },
-    {
-      path: "/professor/course/registration",
-      component: () => import("@/views/RegistrationCourse.vue"),
     },
     {
       path: "/login",
@@ -50,8 +49,10 @@ const router = createRouter({
     {
       path: "/rank",
       component: StudentRecord,
-     },
-     {
+    },
+    
+    // 교수 탭
+    {
       path: '/professor/course/registration',
       name: 'RegistrationCourse',
       component: () => import('@/components/RegistrationCourse.vue'),

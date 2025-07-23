@@ -235,7 +235,7 @@ input {
 
 .detail {
   height: 200px;
-  .table-content {
+  .table-content { 
     input {
       height: 100%;
     }
