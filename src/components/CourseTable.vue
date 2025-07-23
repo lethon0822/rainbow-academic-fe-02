@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 defineProps({
   courseList: Array,
   maxHeight: {
@@ -34,6 +35,19 @@ const change = (status) =>{
 const openLink = (id) => {
   window.open(`/course/detail/${id}`, '_blank', 'width=700px,height=800px,scrollbars=yes');
 };
+
+// 강의 관리로 이동 
+const router = useRouter();
+const send = (id, json) =>{
+  const jsonBody = JSON.stringify(json);
+  router.push({
+    path:`/professor/course/${id}/students`,
+    state: {
+      data:jsonBody
+    }
+  })
+
+}
 </script>
 <template>
   <div class="table-container" :style="{ maxHeight: maxHeight }">
@@ -84,17 +98,14 @@ const openLink = (id) => {
             </button>
           </td>
           <td v-else-if="show.setting">
-            <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link to="/professor/course/students" class="setting">관리</router-link>
-            </button>
+                <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
           <td v-else-if="show.modify">
-            <button class="enroll-btn">
               <!-- 강의 수정 라우팅 처리해야함 -->
-              <!-- <router-link to="/professor/course/registration">수정</router-link> -->
-              <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >수정</router-link>
-            </button>
+              <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >
+                <button class="enroll-btn">수정</button>
+              </router-link>
           </td>
         </tr>
       </tbody>
