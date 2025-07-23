@@ -6,14 +6,16 @@ import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
-import { useAccountStore } from "@/stores/account";
+import { useUserStore } from "@/stores/account";
 
 const props = defineProps({
   id: Number,
 });
 
-const userStore = useAccountStore();
-const name = userStore.userName
+const userStore = useUserStore();
+
+console.log('이름', userStore.userName)
+console.log('아이디', userStore.userId)
 
 const state = reactive({
   form: {
@@ -68,8 +70,9 @@ const submit = async () => {
       <div class="d-flex top last">
         <div class="table-title">교수번호</div>
         <div class="table-content d-flex gap-1"> 
-          <input type="text" class="num" disabled :placeholder="userStore.userName"/>
-          <input type="text" class="name" disabled />
+          <input type="text" class="num" disabled :placeholder="userStore.userId"/>
+          
+          <input type="text" class="name" disabled :placeholder="userStore.userName" />
         </div>
 
       </div>
