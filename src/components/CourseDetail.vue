@@ -17,7 +17,8 @@ const state = reactive({
     goal: '',
     maxStd: null,
     deptName: "",
-    userName:""
+    userName:"",
+    grade: null
   },
 });
 
@@ -90,7 +91,7 @@ const loadCourseDetail = async (id) => {
         <div class="table-title">수강대상</div>
         <template v-if="state.form.type === '전공'">
           <div class="table-content">
-            {{ state.form.deptName +" "+ state.form.semester}}학년
+            {{ state.form.deptName +" "+ state.form.grade}}학년
           </div>
         </template>
         <template v-else>
