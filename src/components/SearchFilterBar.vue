@@ -1,24 +1,26 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(["search"]);
 
-const props = defineProps({ //학과와 연도만 받아오고 나머지는 하드코딩임. 
+const props = defineProps({
+  //학과와 연도만 받아오고 나머지는 하드코딩임.
   state: Boolean,
   departments: Array,
-  years: Array});
+  years: Array,
+});
 
 const filters = reactive({ 
-  year: '',
+  year: 2025,
   type: '',
   department: '',
   grade: '',
-  semester: '',
+  semester: 1,
   keyword: '',
 });
 
 function onSearch() {
-  emit('search', { ...filters });
+  emit("search", { ...filters });
 }
 </script>
 
@@ -26,7 +28,8 @@ function onSearch() {
   <div class="filter-bar">
     <label>연도:</label>
     <select v-model="filters.year">
-      <option value="">전체</option>
+      <option value="0">전체</option>
+      <option value="2025">2025</option>
       <option
           v-for="y in props.years"
           :key="y.year"
@@ -84,7 +87,6 @@ function onSearch() {
   </div>
 </template>
 
-
 <style scoped>
 .filter-bar {
   display: flex;
@@ -93,6 +95,7 @@ function onSearch() {
   border: 2px solid #ccc;
   padding: 2px 10px;
   border-radius: 6px;
+  min-width: 1350px;
 }
 .filter-bar label {
   font-size: 20px;
@@ -108,5 +111,8 @@ function onSearch() {
   color: white;
   border: none;
   border-radius: 4px;
+}
+button{
+  margin-left: auto;
 }
 </style>

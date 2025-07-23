@@ -48,7 +48,7 @@ const students = ref([
 
 const saveAttendance = async () => {
   if (!attendDate.value) {
-    alert('출결일자를 선택해주세요.');
+    alert("출결일자를 선택해주세요.");
     return;
   }
 
@@ -77,11 +77,11 @@ const saveAttendance = async () => {
       }
     }
 
-    alert('출결 저장 완료!'); // 알림 띄우고
-    router.push('/professor'); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
+    alert("출결 저장 완료!"); // 알림 띄우고
+    router.push("/professor"); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
   } catch (error) {
-    console.error('출결 저장 중 오류:', error);
-    alert('출결 저장 중 오류가 발생했습니다.');
+    console.error("출결 저장 중 오류:", error);
+    alert("출결 저장 중 오류가 발생했습니다.");
   }
 };
 </script>

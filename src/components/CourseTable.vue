@@ -3,21 +3,22 @@ defineProps({
   courseList: Array,
   maxHeight: {
     type: String,
-    default: '1000px',
+    default: "1000px",
   },
   show: {
     //
     type: Object,
     default: () => ({
-      professor: false,
-      remSeats: false,
+      professorName: false,
+      remStd: false,
       enroll: false,
       cancel: false,
+      setting: false,
     }),
   },
 });
 
-defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,취소 할 떄 쓸 부분. 다른 분들은 무시하셔도 돼요.
+defineEmits(["enroll", "cancel"]);
 </script>
 
 <template>
@@ -29,27 +30,29 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
-          <th v-if="show.professor">담당교수</th>
+          <th v-if="show.professorName">담당교수</th>
           <th>학년</th>
           <th>강의시간</th>
           <th>학점</th>
           <th>정원</th>
-          <th v-if="show.remSeats">잔여</th>
+          <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
+          <th v-if="show.setting"> </th>
+          
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
-          <td>{{ course.id }}</td>
+          <td>{{ course.courseId }}</td>
           <td>{{ course.title }}</td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
-          <td v-if="show.professor">{{ course.professor }}</td>
+          <td v-if="show.professorName">{{ course.professorName }}</td>
           <td>{{ course.grade }}</td>
           <td>{{ course.time }}</td>
           <td>{{ course.credit }}</td>
           <td>{{ course.maxStd }}</td>
-          <td v-if="show.remSeats">{{ course.remSeats }}</td>
+          <td v-if="show.remStd">{{ course.remStd }}</td>
           <td v-if="show.enroll">
             <button class="enroll-btn" @click="$emit('enroll', course)">
               수강신청
@@ -58,6 +61,12 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
           <td v-else-if="show.cancel">
             <button class="cancel-btn" @click="$emit('cancel', course)">
               수강취소
+            </button>
+          </td>
+          <td v-else-if="show.setting">
+            <button class="enroll-btn">
+              <!-- 학생관리 라우팅 처리해야함 -->
+              <router-link class="setting">학생관리</router-link>
             </button>
           </td>
         </tr>
@@ -70,6 +79,7 @@ defineEmits(['enroll', 'cancel']); //수강신청 페이지에서 수강신청,�
 .table-container {
   margin: 20px;
   border-radius: 5px;
+  width: 100%;
   max-width: 1430px;
   overflow-y: auto; // 세로 스크롤
   scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
@@ -122,7 +132,7 @@ button {
 
 button.enroll-btn {
   background-color: #2460ce;
-
+  color: #fff;
   &:hover {
     background-color: #1f53b5;
   }
@@ -135,5 +145,11 @@ button.cancel-btn {
   &:hover {
     background-color: #d32f2f;
   }
+}
+
+.setting{
+  padding-top: 1px;
+  text-decoration: none;
+  color: #fff;
 }
 </style>

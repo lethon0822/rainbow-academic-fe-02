@@ -22,8 +22,8 @@ defineProps({
   margin: 30px 30px 30px 250px;
   width: 100%;
   max-width: 1430px;
+  min-height: 1000px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  min-height: calc(100vh - 120px);
   box-sizing: border-box;
 }
 .inner {
@@ -39,6 +39,6 @@ defineProps({
 }
 .line {
   border-bottom: 2px solid #1f2c5a;
-  margin-bottom: 50px;
+  margin-bottom: -30px;
 }
 </style>
