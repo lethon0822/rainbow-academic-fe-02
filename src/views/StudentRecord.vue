@@ -3,23 +3,19 @@ import { ref, onMounted } from "vue";
 import { getGrades } from "@/services/GradeService.js";
 import StudentRecordTab from "@/components/StudentRecordTab.vue";
 import Profile from "@/components/Profile.vue";
-
 const grades = ref([]);
-
 onMounted(async () => {
   const response = await getGrades();
   grades.value = response.data;
-  document.body.style.backgroundColor = "#dee2e5";
+  document.body.style.backgroundColor = "#DEE2E5";
 });
 </script>
-
 <template>
   <Profile />
   <div class="content">
     <StudentRecordTab :grades="grades" />
   </div>
 </template>
-
 <style scoped lang="scss">
 //수동 컨트롤러
 .content {

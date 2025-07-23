@@ -1,9 +1,6 @@
-
 import { createRouter, createWebHistory } from "vue-router";
 import StudentRecord from "@/views/StudentRecord.vue";
 import Home from "@/views/Home.vue"; // 메인
-
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -29,11 +26,11 @@ const router = createRouter({
     },
     {
       path: "/attendance",
-      component: () => import("@/components/AttendanceInput.vue"),
+      component: () => import("@/components/Attendance.vue"),
     },
     {
       path: "/gradeinput",
-      component: () => import("@/components/GradeInput.vue"),
+      component: () => import("@/components/EnrollmentGrade.vue"),
     },
     {
       path: "/course/detail",
@@ -47,7 +44,7 @@ const router = createRouter({
       path: "/rank",
       component: StudentRecord,
     },
-    
+  
     // 교수 탭
     {
       path: '/professor/course/registration',
@@ -59,6 +56,18 @@ const router = createRouter({
       name: 'ModifyCourse',
       component: () => import('@/components/RegistrationCourse.vue'),
       props: true
+    },
+    {
+      path: '/enrollment',
+      component: () => import('@/views/Enrollment.vue'),
+    },
+    {
+      path: '/attendance',
+      component: () => import('@/components/Attendance.vue'),
+    },
+    {
+      path: '/enrollmentgrade',
+      component: () => import('@/components/EnrollmentGrade.vue'),
     },
     {
       path: '/professor/course/status',
@@ -78,5 +87,4 @@ const router = createRouter({
     },
   ],
 });
-
 export default router;

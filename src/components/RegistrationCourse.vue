@@ -1,5 +1,4 @@
 <!-- 강의 계획서 작성창 -->
-
 <script setup>
 import { reactive, onMounted } from "vue";
 import { saveCourse, modify } from "@/services/professorService";
@@ -33,7 +32,6 @@ const state = reactive({
     grade: 1,
   },
 });
-
 onMounted(async () => {
   if (props.id) {
     state.courseId = props.id;
@@ -42,9 +40,7 @@ onMounted(async () => {
     state.form = res.data;
   }
 });
-
 const router = useRouter();
-
 const submit = async () => {
   let data = null;
   if (state.form.courseId > 0) {
@@ -55,7 +51,6 @@ const submit = async () => {
     const res = await saveCourse(state.form);
     data = res;
   }
-
   if (data === undefined || data.status !== 200) {
     alert("오류 발생. 잠시 후 다시 실행해주십시오.");
     return;
@@ -63,7 +58,6 @@ const submit = async () => {
   router.push("/professor/course/status");
 };
 </script>
-
 <template>
   <WhiteBox :title="'강의등록'">
     <div class="container">
@@ -75,7 +69,6 @@ const submit = async () => {
           <input type="text" class="name" disabled :placeholder="userStore.userName" />
         </div>
       </div>
-
       <form @submit.prevent="submit">
         <p>개설신청</p>
         <div class="table d-flex top">
@@ -89,7 +82,6 @@ const submit = async () => {
             />
           </div>
         </div>
-
         <div class="table d-flex">
           <div class="table-title">교과구분</div>
           <div class="table-content">
@@ -104,7 +96,6 @@ const submit = async () => {
             <input v-else type="text" />
           </div>
         </div>
-
         <div class="table d-flex">
           <div class="table-title">이수학점</div>
           <div class="table-content">
@@ -118,7 +109,6 @@ const submit = async () => {
             </select>
           </div>
         </div>
-
         <div class="table d-flex">
           <div class="table-title">강의시간</div>
           <div class="table-content">
@@ -145,7 +135,6 @@ const submit = async () => {
             </select>
           </div>
         </div>
-
         <p>강의 계획서</p>
         <div class="table d-flex top">
           <div class="table-title">교재</div>
@@ -165,7 +154,6 @@ const submit = async () => {
             <input type="text" v-model="state.form.weekPlan" />
           </div>
         </div>
-
         <div class="button">
           <button class="btn btn-primary mt-3">
             {{ props.id > 0 ? "수정" : "제출" }}
@@ -175,7 +163,6 @@ const submit = async () => {
     </div>
   </WhiteBox>
 </template>
-
 <style scoped lang="scss">
 .container {
   max-width: 1280px;
@@ -187,16 +174,14 @@ const submit = async () => {
   margin-bottom: 10px;
   text-align: left;
 }
-
 p {
   font-size: 20px;
   font-weight: 400;
   margin-top: 70px;
   margin-bottom: 5px;
 }
-
 .table {
-  border: 1px solid #b7b7b7;
+  border: 1px solid #B7B7B7;
   background-color: #fff;
   border-right: 1px solid #fff;
   border-left: 1px solid #364157;
@@ -205,21 +190,19 @@ p {
 }
 select {
   width: 120px;
-  background-color: #e2e2e2;
-  color: #4d4d4d;
+  background-color: #E2E2E2;
+  color: #4D4D4D;
 }
-
 .top {
   border-top: 3px solid #000;
 }
 .last {
-  border-bottom: 1px solid #b7b7b7;
+  border-bottom: 1px solid #B7B7B7;
 }
-
 .table-title {
   width: 150px;
   background-color: #364157;
-  border-right: 1px solid #b7b7b7;
+  border-right: 1px solid #B7B7B7;
   color: #fff;
   padding: 5px;
   align-content: center;
@@ -233,18 +216,16 @@ select {
 input {
   width: 100%;
   box-sizing: border-box;
-  outline-color: #a2a2a2;
+  outline-color: #A2A2A2;
 }
-
 .button {
   display: flex;
   justify-content: flex-end;
   .btn {
-    background-color: #2460ce;
+    background-color: #2460CE;
     margin-bottom: 100px;
   }
 }
-
 .detail {
   height: 200px;
   .table-content {
