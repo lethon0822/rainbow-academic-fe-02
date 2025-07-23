@@ -9,11 +9,11 @@ const props = defineProps({ //학과와 연도만 받아오고 나머지는 하�
   years: Array});
 
 const filters = reactive({ 
-  year: '',
+  year: 2025,
   type: '',
-  departmentName: '',
+  department: '',
   grade: '',
-  semester: '',
+  semester: 1,
   keyword: '',
 });
 
@@ -25,10 +25,16 @@ function onSearch() {
 <template>
   <div class="filter-bar">
     <label>연도:</label>
-    <select v-model="filters.type">
-      <option value="">전체</option>
-      <option>2025</option>
-      <option>교양</option>
+    <select v-model="filters.year">
+      <option value="0">전체</option>
+      <option value="2025">2025</option>
+      <option
+          v-for="y in props.years"
+          :key="y.year"
+          :value="y.year"
+        >
+          {{ y.year }}
+        </option>
     </select>
 
     <label>학기:</label>
@@ -44,14 +50,18 @@ function onSearch() {
         <option value="">전체</option>
         <option value="전공">전공</option>
         <option value="교양">교양</option>
-
       </select>
 
       <label>학과:</label>
       <select v-model="filters.department">
         <option value="">전체</option>
-        <option value="컴퓨터공학과">컴퓨터공학과</option>
-        <option value="경영학과">경영학과</option>
+        <option
+          v-for="d in props.departments"
+          :key="d.departmentName"
+          :value="d.departmentName"
+        >
+          {{ d.departmentName }}
+        </option>
       </select>
 
       <label>학년:</label>
@@ -75,27 +85,6 @@ function onSearch() {
   </div>
 </template>
 
-<script setup>
-import { reactive } from "vue";
-
-const emit = defineEmits(["search"]);
-
-const props = defineProps({
-  state: Boolean,
-});
-
-const filters = reactive({
-  type: "",
-  department: "",
-  grade: "",
-  semester: "",
-  keyword: "",
-});
-
-function onSearch() {
-  emit("search", { ...filters });
-}
-</script>
 
 <style scoped>
 .filter-bar {
@@ -105,6 +94,7 @@ function onSearch() {
   border: 2px solid #ccc;
   padding: 2px 10px;
   border-radius: 6px;
+  min-width: 1350px;
 }
 .filter-bar label {
   font-size: 20px;
@@ -120,5 +110,8 @@ function onSearch() {
   color: white;
   border: none;
   border-radius: 4px;
+}
+button{
+  margin-left: auto;
 }
 </style>
