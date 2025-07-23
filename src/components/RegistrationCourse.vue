@@ -63,12 +63,11 @@ const submit = async () => {
     <div class="container">
       <div class="d-flex top last">
         <div class="table-title">교수번호</div>
-        <div class="table-content d-flex gap-1"> 
+        <div class="table-content d-flex"> 
           <input type="text" class="num" disabled :placeholder="userStore.userId"/>
-          
+            <i class="fas fa-search"></i>
           <input type="text" class="name" disabled :placeholder="userStore.userName" />
         </div>
-
       </div>
       <form @submit.prevent="submit">
         <p>개설신청</p>
@@ -236,12 +235,31 @@ input {
   }
 }
 
-
+i{
+  margin-left:-1px;
+  margin-right: 3px;
+  display: flex;
+  height:30px;
+  width: 35px;
+  padding:3px;
+  text-align: center;
+  align-items: center;
+  border: 2px solid #c2c2c2;
+  background-color: #e2e2e2;
+  color: #8a8a8a;
+  font-weight: 600;
+}
 .num{
   width:150px;
   background-color: #e2e2e2;
 }
 .name{
   background-color: #c9c9c9;
+  
+}
+
+.fa-search{
+  font-size: 20px;
+  
 }
 </style>

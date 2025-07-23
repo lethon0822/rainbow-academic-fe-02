@@ -30,6 +30,7 @@ defineEmits(["enroll", "cancel"]);
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
+          <th>개설학과</th>
           <th v-if="show.professorName">담당교수</th>
           <th>학년</th>
           <th>강의시간</th>
@@ -49,6 +50,7 @@ defineEmits(["enroll", "cancel"]);
           </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
+          <td>{{ course.deptName }}</td>
           <td v-if="show.professorName">{{ course.professorName }}</td>
           <td>{{ course.grade }}</td>
           <td>{{ course.time }}</td>
