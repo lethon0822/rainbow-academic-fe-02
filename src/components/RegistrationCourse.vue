@@ -232,9 +232,6 @@ input {
     }
   }
 }
-<<<<<<< HEAD
-</style>
-=======
 
 
 .num{
@@ -245,4 +242,3 @@ input {
   background-color: #c9c9c9;
 }
 </style>
->>>>>>> a186bf4ba77d6b7126e7853b22cc1b90a1834504

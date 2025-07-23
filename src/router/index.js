@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 import { createRouter, createWebHistory } from "vue-router";
 import StudentRecord from "@/views/StudentRecord.vue";
 import Home from "@/views/Home.vue"; // 메인
-=======
-
-import { createRouter, createWebHistory } from "vue-router";
-import StudentRecord from "@/views/StudentRecord.vue";
-import Home from "@/views/Home.vue"; // 메인
-
-
->>>>>>> a186bf4ba77d6b7126e7853b22cc1b90a1834504
 const router = createRouter({
   history: createWebHistory(),
   routes: [
