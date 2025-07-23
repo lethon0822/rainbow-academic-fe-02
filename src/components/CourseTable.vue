@@ -18,7 +18,7 @@ defineProps({
   },
 });
 
-defineEmits(["enroll", "cancel"]); //수강신청 페이지에서 수강신청,취소 할 떄 쓸 부분. 다른 분들은 무시하셔도 돼요.
+defineEmits(["enroll", "cancel"]);
 </script>
 
 <template>
