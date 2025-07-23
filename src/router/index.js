@@ -7,10 +7,6 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: "/grade/all",
-      component: StudentRecord,
-    },
-    {
       path: "/",
       component: Home,
     },
@@ -55,8 +51,12 @@ const router = createRouter({
       component: () => import("@/components/CourseDetail.vue"),
     },
     {
-      path: "/rank",
+      path: "/grade/all",
       component: () => import("@/views/GetAllGrades.vue"),
+    },
+    {
+      path: "/rank",
+      component: StudentRecord,
     },
     {
       path: "/course/survey",

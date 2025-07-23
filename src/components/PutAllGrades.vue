@@ -8,7 +8,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
 
 <template>
   <!-- 과목별 성적 테이블 -->
-  <h5>과목별 성적</h5>
+  <h4>과목별 성적</h4>
   <div class="table-container">
     <table class="fixed_headers">
       <thead>
@@ -101,21 +101,35 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
 
 <style scoped lang="scss">
 .table-container {
-  margin: 20px;
+  margin: 20px auto;
   border-radius: 5px;
-  max-width: 1100px; // 이미지 가로 길이에 맞게 조정
-  max-height: 350px; // 세로 길이도 맞춰줌 (필요하면 변경)
-  overflow-y: auto; // 세로 스크롤 가능
-  overflow-x: hidden; // 가로 스크롤은 없게 (필요하면 auto로 변경)
-  border: 1px solid #ddd; // 테두리 좀 더 명확히
+  max-width: 1300px;
+  max-height: 235px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-bottom: 1px solid #ddd;
+  scrollbar-color: #888 #fff;
+  border-radius: 5px 5px 0 0;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
 }
 
 table {
   width: 100%;
-  table-layout: fixed; // 열 너비 균등 유지
+  table-layout: fixed;
   border-collapse: collapse;
-  border-bottom: 1px solid #ddd;
-  font-size: 14px; // 폰트 크기 이미지에 맞춤
+  font-size: 16px;
 }
 
 thead {
@@ -126,12 +140,11 @@ thead {
 thead th {
   position: sticky;
   top: 0;
-  background-color: #364157;
   z-index: 2;
-  padding: 8px 5px;
+  padding: 6px 5px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   font-weight: 600;
+  background-color: #364157;
 }
 
 tbody {
@@ -141,13 +154,13 @@ tbody {
 
 tbody tr {
   border-bottom: 1px solid #ddd;
-  height: 30px;
+  height: 40px;
 }
 
-h5 {
+h4 {
   font-weight: bold;
   color: #364157;
-  margin-left: 20px;
+  margin-left: 25px;
   margin-top: 30px;
   margin-bottom: 10px;
 }
