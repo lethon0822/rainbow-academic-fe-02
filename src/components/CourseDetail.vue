@@ -16,6 +16,7 @@ const state = reactive({
     textBook: "",
     goal: "",
     maxStd: null,
+    dept_name: "",
   },
 });
 
@@ -37,92 +38,93 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="container">
-    <p>강의</p>
-    <div class="table d-flex top">
-      <div class="table-title">교과목명</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
-
-    <div class="table d-flex">
-      <div class="table-title">교과구분</div>
-      <div class="table-content">
-        <!-- 입력 -->
+  <WhiteBox>
+    <div class="container">
+      <p>강의</p>
+      <div class="table d-flex top">
+        <div class="table-title">교과목명</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
 
-      <div class="table-title">학과명</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
+      <div class="table d-flex">
+        <div class="table-title">교과구분</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
 
-    <div class="table d-flex">
-      <div class="table-title">이수학점</div>
-      <div class="table-content">
-        <!-- 입력 -->
+        <div class="table-title">학과명</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-      <div class="table-title">학기</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <div class="table d-flex">
-      <div class="table-title">강의시간</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">이수학점</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+        <div class="table-title">학기</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-    </div>
 
-    <div class="table d-flex last">
-      <div class="table-title">수강인원</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">강의시간</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-      <div class="table-title">강의실</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <p>강의 계획서</p>
-    <div class="table d-flex top">
-      <div class="table-title">교재</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex last">
+        <div class="table-title">수강인원</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+        <div class="table-title">강의실</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-    </div>
-    <div class="table d-flex detail">
-      <div class="table-title">강의목표</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
-    <div class="table d-flex detail last">
-      <div class="table-title">주차별계획</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <p>평가방법</p>
-
-    <div class="score">
-      <div class="title">
-        <div>출석</div>
-        <div>중간고사</div>
-        <div>기말고사</div>
+      <p>강의 계획서</p>
+      <div class="table d-flex top">
+        <div class="table-title">교재</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
       </div>
-      <div class="per">
-        <div>20%</div>
-        <div class="middle"><span>40%</span></div>
-        <div>40%</div>
+      <div class="table d-flex detail">
+        <div class="table-title">강의목표</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+      </div>
+      <div class="table d-flex detail last">
+        <div class="table-title">주차별계획</div>
+        <div class="table-content">
+          <!-- 입력 -->
+        </div>
+      </div>
+
+      <p>평가방법</p>
+
+      <div class="score">
+        <div class="title">
+          <div>출석</div>
+          <div>중간고사</div>
+          <div>기말고사</div>
+        </div>
+        <div class="per">
+          <div><span>20%</span></div>
+          <div class="middle"><span>40%</span></div>
+          <div><span> 40%</span></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="empty"></div>
+  </WhiteBox>
 </template>
 
 <style scoped lang="scss">
@@ -155,11 +157,17 @@ const submit = async () => {
   height: 120px;
   align-items: center;
   div {
-    height: 120px;
+    height: 100%;
     flex: 1;
     text-align: center;
     font-size: 20px;
-    align-items: center;
+
+    span {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
 .middle {
@@ -227,7 +235,7 @@ input {
 
 .detail {
   height: 200px;
-  .table-content {
+  .table-content { 
     input {
       height: 100%;
     }

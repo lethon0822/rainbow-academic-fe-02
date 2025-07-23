@@ -44,7 +44,9 @@ defineEmits(["enroll", "cancel"]);
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
-          <td>{{ course.title }}</td>
+          <td>
+            <router-link to="/course/detail">{{ course.title }}</router-link>
+          </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
           <td v-if="show.professorName">{{ course.professorName }}</td>
@@ -66,7 +68,7 @@ defineEmits(["enroll", "cancel"]);
           <td v-else-if="show.setting">
             <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link class="setting">학생관리</router-link>
+              <router-link class="setting">관리</router-link>
             </button>
           </td>
         </tr>
