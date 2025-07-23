@@ -6,10 +6,14 @@ import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
+import { useAccountStore } from "@/stores/account";
 
 const props = defineProps({
   id: Number,
 });
+
+const userStore = useAccountStore();
+const name = userStore.userName
 
 const state = reactive({
   form: {
@@ -63,6 +67,11 @@ const submit = async () => {
     <div class="container">
       <div class="d-flex top last">
         <div class="table-title">교수번호</div>
+        <div class="table-content d-flex gap-1"> 
+          <input type="text" class="num" disabled :placeholder="userStore.userName"/>
+          <input type="text" class="name" disabled />
+        </div>
+
       </div>
 
       <form @submit.prevent="submit">
@@ -241,5 +250,14 @@ input {
       height: 100%;
     }
   }
+}
+
+
+.num{
+  width:150px;
+  background-color: #e2e2e2;
+}
+.name{
+  background-color: #c9c9c9;
 }
 </style>
