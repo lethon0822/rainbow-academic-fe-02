@@ -5,75 +5,81 @@
     <!-- 첫번째 -->
     <div class="one">
       <table>
-        <tr>
-          <td class="label-cell">학적상태</td>
-          <td class="value-cell">졸업</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td class="label-cell">학적상태</td>
+            <td class="value-cell">졸업</td>
+          </tr>
 
-        <tr>
-          <td class="label-cell" rowspan="2">전공(부/복수/연계)</td>
-          <td class="value-cell">복수전공</td>
-        </tr>
-        <tr>
-          <td class="value-cell">부전공</td>
-        </tr>
+          <tr>
+            <td class="label-cell" rowspan="2">전공(부/복수/연계)</td>
+            <td class="value-cell">복수전공</td>
+          </tr>
+          <tr>
+            <td class="value-cell">부전공</td>
+          </tr>
 
-        <tr>
-          <td class="label-cell">조기졸업</td>
-          <td class="value-cell">N</td>
-        </tr>
+          <tr>
+            <td class="label-cell">조기졸업</td>
+            <td class="value-cell">N</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
     <!-- 두번째 -->
     <div class="two">
       <table>
-        <tr>
-          <td class="label-cell">입학일자</td>
-          <td class="value-cell">2020-10-10</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td class="label-cell">입학일자</td>
+            <td class="value-cell">2020-10-10</td>
+          </tr>
 
-        <tr>
-          <td class="label-cell" rowspan="2">신청학부</td>
-          <td class="value-cell">컴퓨터전공</td>
-        </tr>
-        <tr>
-          <td class="value-cell">사진영상학부</td>
-        </tr>
+          <tr>
+            <td class="label-cell" rowspan="2">신청학부</td>
+            <td class="value-cell">컴퓨터전공</td>
+          </tr>
+          <tr>
+            <td class="value-cell">사진영상학부</td>
+          </tr>
 
-        <tr>
-          <td class="label-cell">졸업논문</td>
-          <td class="value-cell">합격</td>
-        </tr>
+          <tr>
+            <td class="label-cell">졸업논문</td>
+            <td class="value-cell">합격</td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
     <!-- 세번째 -->
     <div class="three">
       <table>
-        <tr>
-          <td class="label-cell">입학구분</td>
-          <td class="value-cell">신입학</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td class="label-cell">입학구분</td>
+            <td class="value-cell">신입학</td>
+          </tr>
 
-        <tr>
-          <td class="label-cell">입학학부</td>
-          <td class="value-cell">공예디자인학과</td>
-        </tr>
+          <tr>
+            <td class="label-cell">입학학부</td>
+            <td class="value-cell">공예디자인학과</td>
+          </tr>
 
-        <tr>
-          <td class="label-cell">교직이수</td>
-          <td class="value-cell">
-            <select>
-              <option>선택</option>
-            </select>
-          </td>
-        </tr>
+          <tr>
+            <td class="label-cell">교직이수</td>
+            <td class="value-cell">
+              <select>
+                <option>선택</option>
+              </select>
+            </td>
+          </tr>
 
-        <tr>
-          <td class="label-cell">학석사연계</td>
-          <td class="value-cell"></td>
-        </tr>
+          <tr>
+            <td class="label-cell">학석사연계</td>
+            <td class="value-cell"></td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
