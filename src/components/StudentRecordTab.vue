@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted } from "vue";
-import GradeTable from "@/components/GradeTable.vue";
+import { ref } from "vue";
+import GradeTable from "@/components/TabGradeTable.vue";
+import TabAcademicStatus from "@/components/TabAcademicStatus.vue";
+import TabBasicInfo from "@/components/TabBasicInfo.vue";
 
-// 상위 컴포넌트에서 props로 전달받음
 const props = defineProps({
   grades: {
     type: Array,
@@ -10,134 +11,50 @@ const props = defineProps({
   },
 });
 
-const handleTabClick = (event) => {
-  event.preventDefault();
+const activeTabIndex = ref(0);
 
-  const link = event.target;
-  const tabgroup = "#" + link.closest(".tabs").dataset.tabgroup;
-  const siblings = link.closest("li").parentElement.querySelectorAll("a");
-  const target = link.getAttribute("href");
-
-  // 다른 탭들 비활성화
-  siblings.forEach((sibling) => sibling.classList.remove("active"));
-
-  // 현재 탭 활성화
-  link.classList.add("active");
-
-  // 모든 탭 콘텐츠 숨기기
-  const tabGroupElement = document.querySelector(tabgroup);
-  const allContents = tabGroupElement.querySelectorAll("div");
-  allContents.forEach((content) => (content.style.display = "none"));
-
-  // 선택된 탭 콘텐츠만 보이기
-  const targetContent = document.querySelector(target);
-  if (targetContent) {
-    targetContent.style.display = "block";
-  }
-};
-
-const handleTabClose = (event) => {
-  event.stopPropagation();
-
-  const closeBtn = event.target;
-  const li = closeBtn.closest("li");
-  const link = li.querySelector("a");
-  const targetId = link.getAttribute("href");
-  const content = document.querySelector(targetId);
-  const tabGroup = content.closest(".tabgroup");
-
-  const isActive = link.classList.contains("active");
-
-  // 탭과 콘텐츠 제거
-  li.remove();
-  content.remove();
-
-  // 활성 탭이 제거된 경우 다른 탭 활성화
-  if (isActive) {
-    const tabsContainer = tabGroup.previousElementSibling;
-    const nextTab = tabsContainer.querySelector("a");
-    if (nextTab) {
-      nextTab.classList.add("active");
-      const nextTarget = nextTab.getAttribute("href");
-
-      // 모든 콘텐츠 숨기기
-      const allContents = tabGroup.querySelectorAll("div");
-      allContents.forEach((content) => (content.style.display = "none"));
-
-      // 다음 탭 콘텐츠 보이기
-      const nextContent = document.querySelector(nextTarget);
-      if (nextContent) {
-        nextContent.style.display = "block";
-      }
-    }
-  }
-};
-
-onMounted(() => {
-  // 모든 탭 콘텐츠 숨기기
-  const allTabContents = document.querySelectorAll(".tabgroup > div");
-  allTabContents.forEach((content) => (content.style.display = "none"));
-
-  // 활성 탭에 해당하는 콘텐츠 보이기
-  const activeTab = document.querySelector(".tabs a.active");
-  if (activeTab) {
-    const activeTarget = activeTab.getAttribute("href");
-    const activeContent = document.querySelector(activeTarget);
-    if (activeContent) {
-      activeContent.style.display = "block";
-    }
-  } else {
-    // active 클래스가 없으면 첫 번째 탭을 활성화
-    const firstTab = document.querySelector(".tabs a");
-    if (firstTab) {
-      firstTab.classList.add("active");
-      const firstTarget = firstTab.getAttribute("href");
-      const firstContent = document.querySelector(firstTarget);
-      if (firstContent) {
-        firstContent.style.display = "block";
-      }
-    }
-  }
-
-  // 탭 클릭 이벤트 추가
-  const tabLinks = document.querySelectorAll(".tabs a");
-  tabLinks.forEach((link) => {
-    link.addEventListener("click", handleTabClick);
-  });
-
-  // 탭 닫기 이벤트 추가 (필요한 경우)
-  const closeButtons = document.querySelectorAll(".tab-close");
-  closeButtons.forEach((btn) => {
-    btn.addEventListener("click", handleTabClose);
-  });
-});
+function selectTab(index) {
+  activeTabIndex.value = index;
+}
 </script>
 
 <template>
   <div class="wrapper">
     <ul class="tabs clearfix" data-tabgroup="tab-group-2">
-      <li><a href="#tab1-2">학적사항</a></li>
-      <li><a href="#tab2-2">기본정보</a></li>
-      <li><a href="#tab3-2" class="active">수업/성적</a></li>
-      <li><a href="#tab4-2">등록</a></li>
-      <li><a href="#tab5-2">장학</a></li>
+      <li :class="{ active: activeTabIndex === 0 }">
+        <a href="#" @click.prevent="selectTab(0)">학적사항</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 1 }">
+        <a href="#" @click.prevent="selectTab(1)">기본정보</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 2 }">
+        <a href="#" @click.prevent="selectTab(2)">수업/성적</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 3 }">
+        <a href="#" @click.prevent="selectTab(3)">등록</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 4 }">
+        <a href="#" @click.prevent="selectTab(4)">장학</a>
+      </li>
     </ul>
 
     <section id="tab-group-2" class="tabgroup">
-      <div id="tab1-2">
+      <div v-show="activeTabIndex === 0">
         <h5>학적세부사항</h5>
+        <TabAcademicStatus />
       </div>
-      <div id="tab2-2">
-        <h5>개인신상</h5>
+      <div v-show="activeTabIndex === 1">
+        <h5>개인 신상</h5>
+        <TabBasicInfo />
       </div>
-      <div id="tab3-2">
+      <div v-show="activeTabIndex === 2">
         <h5>수업/성적 조회</h5>
         <GradeTable :grades="grades" />
       </div>
-      <div id="tab4-2">
+      <div v-show="activeTabIndex === 3">
         <h5>등록현황 조회</h5>
       </div>
-      <div id="tab5-2">
+      <div v-show="activeTabIndex === 4">
         <h5>장학현황 조회</h5>
       </div>
     </section>
@@ -176,15 +93,15 @@ onMounted(() => {
   font-size: 15px;
   border-bottom: 1px solid #888;
   background: #a2a2a2;
+  cursor: pointer;
 }
 
 .tabs a:hover {
   background: #f7f7f7;
   color: #888;
-  cursor: pointer;
 }
 
-.tabs a.active {
+.tabs li.active a {
   background: #2460ce;
   color: white;
 }
@@ -210,7 +127,6 @@ onMounted(() => {
   clear: both;
   width: 99.2%;
 }
-
 .clearfix::after {
   content: "";
   display: table;
