@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   courseList: Array,
   maxHeight: {
@@ -13,12 +15,31 @@ defineProps({
       remStd: false,
       enroll: false,
       cancel: false,
-      setting: false,
+      deptName: true,
+      setting: false, //학생관리
+      modify: false, // 강의 신청 조회시 수정 버튼 활성화
     }),
   },
 });
 
 defineEmits(["enroll", "cancel"]);
+
+// 승인여부 css 변경
+const change = (status) =>{
+  if(status === '거부'){
+    return "gray"
+  }else if(status === '승인'){
+    return "blue"
+  }
+  return "red"
+}
+// 강의계획서 새 창 띄우기
+const link = ref('/course/detail');
+const openLink = () => {
+  window.open(link.value, '_blank', 'width=700px,height=800px,scrollbars=yes');
+};
+
+
 </script>
 
 <template>
@@ -27,6 +48,7 @@ defineEmits(["enroll", "cancel"]);
       <thead>
         <tr>
           <th>과목코드</th>
+          <th v-if="show.deptName">학과</th>
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
@@ -37,14 +59,19 @@ defineEmits(["enroll", "cancel"]);
           <th>정원</th>
           <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
-          <th v-if="show.setting"> </th>
+          <th v-if="show.modify">승인여부</th>
+          <th v-if="show.setting || show.modify"> </th>
           
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
-          <td>{{ course.title }}</td>
+          <td v-if="show.deptName">{{ course.deptName }}</td>
+          <td>
+            <div v-if="show.modify">{{ course.title }}</div>
+            <div v-else @click="openLink" class="link">{{ course.title }}</div>
+          </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
           <td v-if="show.professorName">{{ course.professorName }}</td>
@@ -52,10 +79,11 @@ defineEmits(["enroll", "cancel"]);
           <td>{{ course.time }}</td>
           <td>{{ course.credit }}</td>
           <td>{{ course.maxStd }}</td>
+          <td v-if="show.modify" class="status" :class="change(course.status)">{{ course.status }}</td> <!-- 승인여부 뜨기 -->
           <td v-if="show.remStd">{{ course.remStd }}</td>
           <td v-if="show.enroll">
-            <button class="enroll-btn" @click="$emit('enroll', course)">
-              수강신청
+            <button class="enroll-btn" :class="{enrolled: course.enrolled}" :disabled="course.enrolled" @click="$emit('enroll', course)">
+              {{ course.enrolled ? "신청완료": "수강신청" }}
             </button>
           </td>
           <td v-else-if="show.cancel">
@@ -66,7 +94,14 @@ defineEmits(["enroll", "cancel"]);
           <td v-else-if="show.setting">
             <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link class="setting">학생관리</router-link>
+              <router-link to="/professor/course/students" class="setting">관리</router-link>
+            </button>
+          </td>
+          <td v-else-if="show.modify">
+            <button class="enroll-btn">
+              <!-- 강의 수정 라우팅 처리해야함 -->
+              <!-- <router-link to="/professor/course/registration">수정</router-link> -->
+              <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >수정</router-link>
             </button>
           </td>
         </tr>
@@ -138,6 +173,15 @@ button.enroll-btn {
   }
 }
 
+.enroll-btn.enrolled {
+  background-color: gray;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: gray;
+  }
+}
+
 button.cancel-btn {
   background-color: #f44336;
   color: white;
@@ -147,9 +191,26 @@ button.cancel-btn {
   }
 }
 
+.link{
+  color:#2460ce;
+  cursor: pointer;
+}
 .setting{
-  padding-top: 1px;
+  padding-top: 2px;
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  color: #fff;
+  color:#fff;
+  font-weight: 4
+}
+.red{
+  color:#d61421;
+}
+.gray{
+  color:#28292b;
+}
+.blue{
+  color:#2460ce;
+  font-weight: 700;
 }
 </style>

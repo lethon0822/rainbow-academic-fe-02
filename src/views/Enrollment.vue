@@ -4,7 +4,7 @@ import SearchFilterBar from '@/components/SearchFilterBar.vue';
 import CourseTable from '@/components/CourseTable.vue';
 import { getDepartments, getYears } from '@/services/CourseService';
 import { ref, onMounted } from 'vue';
-import { getCourseListByFilter } from '@/services/CourseService';
+import { getCourseListByFilter, getMySugangList } from '@/services/CourseService';
 import { postEnrollCourse } from '@/services/SugangService';
 
 const departments = ref([]);
@@ -23,6 +23,11 @@ onMounted(async () => {
   const yearRes = await getYears();
   console.log(yearRes.data);
   years.value = yearRes.data;
+
+  const mySugangListRes = await getMySugangList();
+  console.log("수강리스트",mySugangListRes);
+  mySugangList.value = mySugangListRes.data;  
+  console.log(mySugangList);
 
 });
 
@@ -58,8 +63,10 @@ const handleEnroll = async (course) => {
         courseList.value[idx].remStd = updatedCourse.remStd;
       }
 
+      courseList.value[idx].enrolled = true;
+
       mySugangList.value.push(updatedCourse);
-      alert('수강신청 완료!');
+      alert('수강신청 완료!');                                                                                                                                                                                                                                        
     }
 
   } catch(error){
@@ -75,7 +82,7 @@ const handleEnroll = async (course) => {
           break;
         
         default:
-          alert('이미 신청한 강의입니다!');
+          alert('알 수 없는 오류');
       }
   }
 };
@@ -87,6 +94,7 @@ const handleEnroll = async (course) => {
       :state="true"
       :departments="departments"
       :years="[{ year: 2025}]"
+      :semester="1"
       @search="handleSearch"
     ></SearchFilterBar>
 
@@ -100,6 +108,7 @@ const handleEnroll = async (course) => {
         remStd: true,
         enroll: true,
         cancel: false,
+        deptName: true,
       }"
       @enroll="handleEnroll"
       @cancel="handleCancel"
@@ -109,13 +118,14 @@ const handleEnroll = async (course) => {
     <h5 class="fw-bold mt-3">신청 내역</h5>
 
     <CourseTable
-      :courseList="mySugangList"
+      :courseList="mySugangList"                          
       maxHeight="500px"
       :show="{
         professorName: true,
         remStd: true,
         enroll: false,
-        cancel: true,
+        cancel: true,  
+        deptName: false,                                                                      
       }"
     >
     </CourseTable>
