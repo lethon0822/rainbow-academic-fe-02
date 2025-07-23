@@ -10,7 +10,7 @@ import { postEnrollCourse } from '@/services/SugangService';
 const departments = ref([]);
 const years = ref([]);
 
-const courseList = ref([]); // 전체 강의 목록 
+const courseList = ref([]); // 이번학기 개설 강의 목록  
 const mySugangList = ref([]); // 수강신청한 강의 목록 
 
 onMounted(async () => {
@@ -23,6 +23,7 @@ onMounted(async () => {
   const yearRes = await getYears();
   console.log(yearRes.data);
   years.value = yearRes.data;
+
 });
 
 const handleSearch = async (filters) => {
@@ -76,17 +77,8 @@ const handleEnroll = async (course) => {
         default:
           alert('이미 신청한 강의입니다!');
       }
-
   }
-
-
-
-
 };
-
-
-  
-  
 </script>
 
 <template>
@@ -94,7 +86,7 @@ const handleEnroll = async (course) => {
     <SearchFilterBar
       :state="true"
       :departments="departments"
-      :years="[{ year: 2025 }]"
+      :years="[{ year: 2025}]"
       @search="handleSearch"
     ></SearchFilterBar>
 

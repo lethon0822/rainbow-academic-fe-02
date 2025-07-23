@@ -3,7 +3,7 @@ defineProps({
   courseList: Array,
   maxHeight: {
     type: String,
-    default: "1000px",
+    default: "800px",
   },
   show: {
     //

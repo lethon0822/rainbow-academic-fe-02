@@ -11,11 +11,11 @@ const props = defineProps({
 });
 
 const filters = reactive({ 
-  year: 2025,
+  year: '',
   type: '',
-  department: '',
+  departmentName: '',
   grade: '',
-  semester: 1,
+  semester: '',
   keyword: '',
 });
 
@@ -28,8 +28,7 @@ function onSearch() {
   <div class="filter-bar">
     <label>연도:</label>
     <select v-model="filters.year">
-      <option value="0">전체</option>
-      <option value="2025">2025</option>
+      <option value="">전체</option>
       <option
           v-for="y in props.years"
           :key="y.year"
@@ -44,6 +43,13 @@ function onSearch() {
       <option value="">전체</option>
       <option value="1">1학기</option>
       <option value="2">2학기</option>
+      <option
+          v-for="s in props.semesters"
+          :key="s.semester"
+          :value="s.semester"
+        >
+          {{ s.semester }}
+        </option>
     </select>
 
     <div v-if="props.state">
@@ -55,7 +61,7 @@ function onSearch() {
       </select>
 
       <label>학과:</label>
-      <select v-model="filters.department">
+      <select v-model="filters.departmentName">
         <option value="">전체</option>
         <option
           v-for="d in props.departments"
