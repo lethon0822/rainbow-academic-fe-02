@@ -10,6 +10,9 @@ import { postEnrollCourse } from '@/services/SugangService';
 const departments = ref([]);
 const years = ref([]);
 
+const courseList = ref([]); // 전체 강의 목록 
+const mySugangList = ref([]); // 수강신청한 강의 목록 
+
 onMounted(async () => {
 
   const departmentRes = await getDepartments();
@@ -30,6 +33,7 @@ const handleSearch = async (filters) => {
   courseList.value = courseListRes.data;
 };
 
+// 수강 신청 처리 함수 
 const handleEnroll = async (course) => {
   const sugangReq = {
     courseId: course.courseId,
@@ -40,9 +44,20 @@ const handleEnroll = async (course) => {
   try{
     const sugangRes = await postEnrollCourse(sugangReq);
     console.log('sugangRes: ', sugangRes);
-    mySugangList.value.push(sugangRes.data);
+   
 
     if(sugangRes.status === 200){
+      const updatedCourse = sugangRes.data; //sugangRes 객체 
+
+      // 전체 강의 목록에서 수강 신청한 강의 찾아 그 강의의 잔여 인원을 -1 줄임. 
+      const idx = courseList.value.findIndex(
+        c => c.courseId === updatedCourse.courseId
+      ); 
+      if(idx !== -1){
+        courseList.value[idx].remStd = updatedCourse.remStd;
+      }
+
+      mySugangList.value.push(updatedCourse);
       alert('수강신청 완료!');
     }
 
@@ -59,7 +74,7 @@ const handleEnroll = async (course) => {
           break;
         
         default:
-          alert('알 수 없는 오류 발생! 수강신청에 실패하였습니다.');
+          alert('이미 신청한 강의입니다!');
       }
 
   }
@@ -69,8 +84,7 @@ const handleEnroll = async (course) => {
 
 };
 
-const courseList = ref([]);
-const mySugangList = ref([]);
+
 </script>
 
 <template>
