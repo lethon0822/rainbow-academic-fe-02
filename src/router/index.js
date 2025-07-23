@@ -1,10 +1,8 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import StudentRecord from "@/views/StudentRecord.vue";
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue"; // 메인
-import CourseEvaluation from "@/views/CourseEvaluation.vue";
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: "/",
@@ -55,8 +53,12 @@ const router = createRouter({
       component: () => import("@/views/GetAllGrades.vue"),
     },
     {
+      path: "/profile",
+      component: () => import("@/views/StudentRecord.vue"),
+    },
+    {
       path: "/rank",
-      component: StudentRecord,
+      component: () => import("@/components/StudentRecordTab.vue"),
     },
     {
       path: "/course/survey",

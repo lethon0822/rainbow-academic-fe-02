@@ -12,6 +12,7 @@ export const useAccountStore = defineStore("account", () => {
 
   return { state, setChecked, setLoggedIn };
 });
+
 export const useUserStore = defineStore("user", {
   state: () => ({
     userName: "",
