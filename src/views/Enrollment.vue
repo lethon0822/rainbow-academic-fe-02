@@ -85,6 +85,8 @@ const handleEnroll = async (course) => {
 };
 
 
+  
+  
 </script>
 
 <template>
@@ -100,7 +102,7 @@ const handleEnroll = async (course) => {
     <h5 class="fw-bold mt-3">개설 과목 목록</h5>
     <CourseTable
       :courseList="courseList"
-      maxHeight="400px"
+      maxHeight="500px"
       :show="{
         professorName: true,
         remStd: true,

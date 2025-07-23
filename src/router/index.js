@@ -14,10 +14,6 @@ const router = createRouter({
       component: Home,
     },
     {
-      path: '/professor/course/registration',
-      component: () => import('@/views/RegistrationCourse.vue'),
-    },
-    {
       path: '/login',
       component: () => import('@/views/Login.vue'),
     },
@@ -27,7 +23,7 @@ const router = createRouter({
     },
     {
       path: '/renewal',
-      component: () => import('@/views/Renewal.vue'),
+      component: () => import('@/views/RenewalPwd.vue'),
     },
     {
       path: '/enrollment',
@@ -42,12 +38,27 @@ const router = createRouter({
       component: () => import('@/components/GradeInput.vue'),
     },
     {
+      path: '/professor/course/registration',
+      name: 'RegistrationCourse',
+      component: () => import('@/components/RegistrationCourse.vue'),
+    },
+    {
+      path: '/professor/course/registration/:id',
+      name: 'ModifyCourse',
+      component: () => import('@/components/RegistrationCourse.vue'),
+      props: true
+    },
+    {
+      path: '/professor/course/status',
+      component: () => import('@/views/ProfessorCourseStatus.vue'),
+    },
+    {
       path: '/professor/course/management',
-      component: () => import('@/views/CourseManagement.vue'),
+      component: () => import('@/views/ProfessorCourseManagement.vue'),
     },
     {
       path: '/professor/course/students',
-      component: () => import('@/components/CourseStudents.vue'),
+      component: () => import('@/components/CourseStudentsList.vue'),
     },
     {
       path: '/course/detail',

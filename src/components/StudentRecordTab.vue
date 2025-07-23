@@ -78,14 +78,26 @@ onMounted(() => {
   const allTabContents = document.querySelectorAll(".tabgroup > div");
   allTabContents.forEach((content) => (content.style.display = "none"));
 
-  // 각 탭 그룹의 첫 번째 콘텐츠만 보이기
-  const tabGroups = document.querySelectorAll(".tabgroup");
-  tabGroups.forEach((group) => {
-    const firstContent = group.querySelector("div:first-of-type");
-    if (firstContent) {
-      firstContent.style.display = "block";
+  // 활성 탭에 해당하는 콘텐츠 보이기
+  const activeTab = document.querySelector(".tabs a.active");
+  if (activeTab) {
+    const activeTarget = activeTab.getAttribute("href");
+    const activeContent = document.querySelector(activeTarget);
+    if (activeContent) {
+      activeContent.style.display = "block";
     }
-  });
+  } else {
+    // active 클래스가 없으면 첫 번째 탭을 활성화
+    const firstTab = document.querySelector(".tabs a");
+    if (firstTab) {
+      firstTab.classList.add("active");
+      const firstTarget = firstTab.getAttribute("href");
+      const firstContent = document.querySelector(firstTarget);
+      if (firstContent) {
+        firstContent.style.display = "block";
+      }
+    }
+  }
 
   // 탭 클릭 이벤트 추가
   const tabLinks = document.querySelectorAll(".tabs a");
@@ -93,7 +105,7 @@ onMounted(() => {
     link.addEventListener("click", handleTabClick);
   });
 
-  // 탭 닫기 이벤트 추가
+  // 탭 닫기 이벤트 추가 (필요한 경우)
   const closeButtons = document.querySelectorAll(".tab-close");
   closeButtons.forEach((btn) => {
     btn.addEventListener("click", handleTabClose);
@@ -103,71 +115,30 @@ onMounted(() => {
 
 <template>
   <div class="wrapper">
-    <ul class="tabs clearfix" data-tabgroup="tab-group-1">
-      <li>
-        <a href="#tab1-1" class="active">Tab 1</a
-        ><span class="tab-close">×</span>
-      </li>
-      <li><a href="#tab2-1">Tab 2</a><span class="tab-close">×</span></li>
-      <li><a href="#tab3-1">Tab 3</a><span class="tab-close">×</span></li>
-      <li><a href="#tab4-1">Tab 4</a><span class="tab-close">×</span></li>
-      <li><a href="#tab5-1">Tab 5</a><span class="tab-close">×</span></li>
-    </ul>
-
-    <section id="tab-group-1" class="tabgroup">
-      <div id="tab1-1">
-        <GradeTable :grades="grades" />
-      </div>
-
-      <div id="tab2-1">
-        <h2>Heading 2</h2>
-        <p>Tab 2 content...</p>
-      </div>
-      <div id="tab3-1">
-        <h2>Heading 3</h2>
-        <p>Tab 3 content...</p>
-      </div>
-      <div id="tab4-1">
-        <h2>Heading 4</h2>
-        <p>Tab 4 content...</p>
-      </div>
-      <div id="tab5-1">
-        <h2>Heading 5</h2>
-        <p>Tab 5 content...</p>
-      </div>
-    </section>
-  </div>
-
-  <div class="wrapper">
     <ul class="tabs clearfix" data-tabgroup="tab-group-2">
-      <li>
-        <a href="#tab1-2" class="active">Tab 1</a>
-      </li>
-      <li><a href="#tab2-2">Tab 2</a></li>
-      <li><a href="#tab3-2">Tab 3</a></li>
-      <li><a href="#tab4-2">Tab 4</a></li>
-      <li><a href="#tab5-2">Tab 5</a></li>
+      <li><a href="#tab1-2">학적사항</a></li>
+      <li><a href="#tab2-2">기본정보</a></li>
+      <li><a href="#tab3-2" class="active">수업/성적</a></li>
+      <li><a href="#tab4-2">등록</a></li>
+      <li><a href="#tab5-2">장학</a></li>
     </ul>
 
     <section id="tab-group-2" class="tabgroup">
       <div id="tab1-2">
-        <GradeTable :grades="grades" />
+        <h5>학적세부사항</h5>
       </div>
       <div id="tab2-2">
-        <h2>Heading 2</h2>
-        <p>Tab 2 content...</p>
+        <h5>개인신상</h5>
       </div>
       <div id="tab3-2">
-        <h2>Heading 3</h2>
-        <p>Tab 3 content...</p>
+        <h5>수업/성적 조회</h5>
+        <GradeTable :grades="grades" />
       </div>
       <div id="tab4-2">
-        <h2>Heading 4</h2>
-        <p>Tab 4 content...</p>
+        <h5>등록현황 조회</h5>
       </div>
       <div id="tab5-2">
-        <h2>Heading 5</h2>
-        <p>Tab 5 content...</p>
+        <h5>장학현황 조회</h5>
       </div>
     </section>
   </div>
@@ -190,7 +161,8 @@ onMounted(() => {
 
 .tabs li {
   float: left;
-  width: 20%;
+  width: 8%;
+  margin-right: 8px;
   position: relative;
 }
 
@@ -200,8 +172,9 @@ onMounted(() => {
   text-decoration: none;
   text-transform: uppercase;
   color: #fff;
-  padding: 20px 0;
-  border-bottom: 2px solid #888;
+  padding: 10px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #888;
   background: #a2a2a2;
 }
 
@@ -232,8 +205,10 @@ onMounted(() => {
 
 .tabgroup div {
   padding: 15px;
+  margin-bottom: 10px;
   background-color: #fff;
   clear: both;
+  width: 99.2%;
 }
 
 .clearfix::after {
