@@ -48,10 +48,8 @@ body,
   height: 100%;
   margin: 0;
   background-color: #dee2e5;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
-
-
 
 .content {
   position: relative;

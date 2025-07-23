@@ -18,7 +18,7 @@ export const getCourseListByFilter = (filters) => {
     });
 }
 
-// 강의등록
-export const loadCourse = id =>{
-  return axios.get(`/course/${id}`, id).catch(e => e.response);
+// 강의조회
+export const loadCourse = course_id =>{
+  return axios.get(`/course/${course_id}`, course_id).catch(e => e.response);
 }

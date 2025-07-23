@@ -30,9 +30,9 @@ const change = (status) =>{
   return "red"
 }
 // 강의계획서 새 창 띄우기
-const link = ref('/course/detail');
-const openLink = () => {
-  window.open(link.value, '_blank', 'width=700px,height=800px,scrollbars=yes');
+//const link = ref(/course/detail);
+const openLink = (id) => {
+  window.open(`/course/detail/${id}`, '_blank', 'width=700px,height=800px,scrollbars=yes');
 };
 </script>
 <template>
@@ -41,7 +41,7 @@ const openLink = () => {
       <thead>
         <tr>
           <th>과목코드</th>
-          <th >학과</th>
+          <th>학과</th>
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
@@ -62,7 +62,7 @@ const openLink = () => {
           <td>{{ course.deptName }}</td>
           <td>
             <div v-if="show.modify">{{ course.title }}</div>
-            <div v-else @click="openLink" class="link">{{ course.title }}</div>
+            <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
           </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
@@ -107,6 +107,7 @@ const openLink = () => {
   border-radius: 5px;
   width: 100%;
   max-width: 1430px;
+  min-width: 1350px;
   overflow-y: auto; // 세로 스크롤
   scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
 }
