@@ -4,9 +4,6 @@ import StudentRecord from "@/views/StudentRecord.vue";
 import Home from "@/views/Home.vue"; // 메인
 
 
-const professor ='/professor'
-const course = '/course'
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [

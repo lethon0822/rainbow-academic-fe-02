@@ -68,7 +68,7 @@ defineEmits(["enroll", "cancel"]);
           <td v-else-if="show.setting">
             <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link class="setting">학생관리</router-link>
+              <router-link class="setting">관리</router-link>
             </button>
           </td>
         </tr>

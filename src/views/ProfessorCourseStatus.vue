@@ -6,12 +6,15 @@ import SearchFilterBar from "@/components/SearchFilterBar.vue";
 import CourseTable from "@/components/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import { reactive } from "vue";
+import { useUserStore } from "@/stores/account";
 
 const state = reactive({
   item: [],
 });
 
+const userStore = useUserStore();
 const myCourse = async (filters) => {
+  console.log("야:",userStore.userId);
   const json = {
     year: filters.year,
     semester: filters.semester,
