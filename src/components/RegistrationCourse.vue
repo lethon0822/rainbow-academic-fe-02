@@ -44,6 +44,7 @@ const router = useRouter();
 const submit = async () => {
   let data = null;
   if (state.form.courseId > 0) {
+
     const res = await modify(state.form);
     console.log("이곳은 강의등록창입니다(수정):", res.data);
     data = res;
@@ -126,15 +127,24 @@ const submit = async () => {
             <input type="number" v-model="state.form.maxStd" required />
           </div>
           <div class="table-title">수강대상</div>
-          <div class="table-content">
-            <select v-model="state.form.grade" required>
-              <option value="1">1학년</option>
-              <option value="2">2학년</option>
-              <option value="3">3학년</option>
-              <option value="4">4학년</option>
-            </select>
-          </div>
+          <template v-if="state.form.type==='전공'">
+            <div class="table-content">
+              <select v-model="state.form.grade" required>
+                <option value="1">1학년</option>
+                <option value="2">2학년</option>
+                <option value="3">3학년</option>
+                <option value="4">4학년</option>
+              </select>
+            </div>
+          </template>
+          <template v-else>
+            <div class="table-content">
+              <input type="text" value="수강희망자" disabled/>
+            </div>
+          </template>
         </div>
+
+
         <p>강의 계획서</p>
         <div class="table d-flex top">
           <div class="table-title">교재</div>
