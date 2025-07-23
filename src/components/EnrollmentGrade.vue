@@ -1,77 +1,91 @@
 <!-- 성적 기입 -->
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import axios from "axios";
 import WhiteBox from "./WhiteBox.vue";
+import { useRoute } from "vue-router";
 
-const students = ref([
-  {
-    enrollmentId: 30,
-    major: '컴퓨터공학과',
-    courseId: '5',
-    studentId: '20250001',
-    name: '유아린',
-    attendanceScore: 90,
-    midtermScore: 80,
-    finalScore: 70,
-    assignmentScore: 85,
-    totalScore: 0,
-    grade: "",
-  },
-  {
-    enrollmentId: 31,
-    major: '전자공학과',
-    courseId: '9',
-    studentId: '20250002',
-    name: '홍길동',
-    attendanceScore: 80,
-    midtermScore: 75,
-    finalScore: 60,
-    assignmentScore: 90,
-    totalScore: 0,
-    grade: ''
-  },
-  {
-    enrollmentId: 32,
-    major: '전자공학과',
-    courseId: '7',
-    studentId: '20250003',
-    name: '남효정',
-    attendanceScore: 0,
-    midtermScore: 0,
-    finalScore: 0,
-    assignmentScore: 0,
-    totalScore: 0,
-    grade: ''
-  },
-  {
-    enrollmentId: 33,
-    major: '경영학과',
-    courseId: '29',
-    studentId: '20250004',
-    name: '김효정',
-    attendanceScore: 80,
-    midtermScore: 75,
-    finalScore: 60,
-    assignmentScore: 90,
-    totalScore: 0,
-    grade: ''
-  },
-  {
-    enrollmentId: 34,
-    major: '일본어학과',
-    courseId: '28',
-    studentId: '20250005',
-    name: '조효정',
-    attendanceScore: 80,
-    midtermScore: 75,
-    finalScore: 60,
-    assignmentScore: 90,
-    totalScore: 0,
-    grade: ''
+const students = ref([]);
+const route = useRoute();
+const courseId = Number(route.params.courseId); // props/ 상태에서 가져오기
+
+onMounted(async () => {
+  try {
+    const res = await axios.get(`/api/professor/course/${courseId}/grades`);
+    students.value = res.data;
+  } catch (error) {
+    console.error('성적 조회 실패:', error);
   }
-]);
+});
+// 임시 하드코딩
+// const students = ref([
+//   {
+//     enrollmentId: 30,
+//     major: '컴퓨터공학과',
+//     courseId: '5',
+//     studentId: '20250001',
+//     name: '유아린',
+//     attendanceScore: 90,
+//     midtermScore: 80,
+//     finalScore: 70,
+//     assignmentScore: 85,
+//     totalScore: 0,
+//     grade: "",
+//   },
+//   {
+//     enrollmentId: 31,
+//     major: '전자공학과',
+//     courseId: '9',
+//     studentId: '20250002',
+//     name: '홍길동',
+//     attendanceScore: 80,
+//     midtermScore: 75,
+//     finalScore: 60,
+//     assignmentScore: 90,
+//     totalScore: 0,
+//     grade: ''
+//   },
+//   {
+//     enrollmentId: 32,
+//     major: '전자공학과',
+//     courseId: '7',
+//     studentId: '20250003',
+//     name: '남효정',
+//     attendanceScore: 0,
+//     midtermScore: 0,
+//     finalScore: 0,
+//     assignmentScore: 0,
+//     totalScore: 0,
+//     grade: ''
+//   },
+//   {
+//     enrollmentId: 33,
+//     major: '경영학과',
+//     courseId: '29',
+//     studentId: '20250004',
+//     name: '김효정',
+//     attendanceScore: 80,
+//     midtermScore: 75,
+//     finalScore: 60,
+//     assignmentScore: 90,
+//     totalScore: 0,
+//     grade: ''
+//   },
+//   {
+//     enrollmentId: 34,
+//     major: '일본어학과',
+//     courseId: '28',
+//     studentId: '20250005',
+//     name: '조효정',
+//     attendanceScore: 80,
+//     midtermScore: 75,
+//     finalScore: 60,
+//     assignmentScore: 90,
+//     totalScore: 0,
+//     grade: ''
+//   }
+// ]);
 
 //  점수 유효성 검사 + 총점/등급 자동 계산
 watchEffect(() => {
