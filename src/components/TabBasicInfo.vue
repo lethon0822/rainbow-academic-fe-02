@@ -3,49 +3,51 @@
 <template>
   <div class="info-box">
     <table>
-      <!-- 첫 행: 우편번호 + 전화번호 -->
-      <tr>
-        <td class="label-cell">우편번호</td>
-        <td class="value-cell">
-          <div class="search-box">
-            <input type="text" placeholder="34158" />
-            <button aria-label="검색">
-              <img
-                src="/src/assets/btn_search.svg"
-                alt="돋보기 아이콘"
-                style="filter: invert(0)"
-              />
-            </button>
-          </div>
-        </td>
+      <tbody>
+        <!-- 첫 행: 우편번호 + 전화번호 -->
+        <tr>
+          <td class="label-cell">우편번호</td>
+          <td class="value-cell">
+            <div class="search-box">
+              <input type="text" placeholder="34158" />
+              <button aria-label="검색">
+                <img
+                  src="/src/assets/btn_search.svg"
+                  alt="돋보기 아이콘"
+                  style="filter: invert(0)"
+                />
+              </button>
+            </div>
+          </td>
 
-        <td class="label-cell">전화번호</td>
-        <td class="value-cell">010-123-4560</td>
-      </tr>
+          <td class="label-cell">전화번호</td>
+          <td class="value-cell">010-123-4560</td>
+        </tr>
 
-      <!-- 두번째 행: 주소 + 병역구분 -->
-      <tr>
-        <td class="label-cell">주소</td>
-        <td class="value-cell">대전광역시 유성구 동서대로 125</td>
+        <!-- 두번째 행: 주소 + 병역구분 -->
+        <tr>
+          <td class="label-cell">주소</td>
+          <td class="value-cell">대전광역시 유성구 동서대로 125</td>
 
-        <td class="label-cell">병역구분</td>
-        <td class="value-cell">면제</td>
-      </tr>
+          <td class="label-cell">병역구분</td>
+          <td class="value-cell">면제</td>
+        </tr>
 
-      <!-- 세번째 행: 상세주소 + 빈칸 또는 추가정보 -->
-      <tr>
-        <td class="label-cell">상세주소</td>
-        <td class="value-cell" colspan="3">사과아파트 102동 101호</td>
-      </tr>
+        <!-- 세번째 행: 상세주소 + 빈칸 또는 추가정보 -->
+        <tr>
+          <td class="label-cell">상세주소</td>
+          <td class="value-cell" colspan="3">사과아파트 102동 101호</td>
+        </tr>
 
-      <!-- 네번째 행: 미정 -->
-      <tr>
-        <td class="label-cell">　</td>
-        <td class="value-cell">　</td>
+        <!-- 네번째 행: 미정 -->
+        <tr>
+          <td class="label-cell">　</td>
+          <td class="value-cell">　</td>
 
-        <td class="label-cell">　</td>
-        <td class="value-cell">　</td>
-      </tr>
+          <td class="label-cell">　</td>
+          <td class="value-cell">　</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>

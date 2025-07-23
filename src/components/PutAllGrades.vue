@@ -66,7 +66,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
   </div>
 
   <!-- 학기별 성적 테이블 -->
-  <h>학기별 성적</h>
+  <h4>학기별 성적</h4>
   <div class="table-container">
     <table class="fixed_headers">
       <thead>
