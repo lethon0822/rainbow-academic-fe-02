@@ -44,7 +44,10 @@ defineEmits(["enroll", "cancel"]); //수강신청 페이지에서 수강신청,�
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
-          <td>{{ course.title }}</td>
+          <td>
+            <router-link to="/course/detail">{{ course.title }}</router-link>
+            
+          </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
           <td v-if="show.professorName">{{ course.professorName }}</td>
