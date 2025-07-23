@@ -13,6 +13,7 @@ defineProps({
       remStd: false,
       enroll: false,
       cancel: false,
+      setting: false,
     }),
   },
 });
@@ -36,6 +37,8 @@ defineEmits(["enroll", "cancel"]); //수강신청 페이지에서 수강신청,�
           <th>정원</th>
           <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
+          <th v-if="show.setting"> </th>
+          
         </tr>
       </thead>
       <tbody>
@@ -58,6 +61,12 @@ defineEmits(["enroll", "cancel"]); //수강신청 페이지에서 수강신청,�
           <td v-else-if="show.cancel">
             <button class="cancel-btn" @click="$emit('cancel', course)">
               수강취소
+            </button>
+          </td>
+          <td v-else-if="show.setting">
+            <button class="enroll-btn">
+              <!-- 학생관리 라우팅 처리해야함 -->
+              <router-link class="setting">학생관리</router-link>
             </button>
           </td>
         </tr>
@@ -123,7 +132,7 @@ button {
 
 button.enroll-btn {
   background-color: #2460ce;
-
+  color: #fff;
   &:hover {
     background-color: #1f53b5;
   }
@@ -136,5 +145,11 @@ button.cancel-btn {
   &:hover {
     background-color: #d32f2f;
   }
+}
+
+.setting{
+  padding-top: 1px;
+  text-decoration: none;
+  color: #fff;
 }
 </style>
