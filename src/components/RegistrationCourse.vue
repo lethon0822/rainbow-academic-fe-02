@@ -1,11 +1,19 @@
+<!-- 강의 계획서 작성창 -->
+
 <script setup>
-import { reactive } from "vue";
-import { saveCourse } from "@/services/professorService";
+import { reactive, onMounted } from "vue";
+import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
+import { loadCourse } from "@/services/CourseService";
+
+const props = defineProps({
+  id: Number,
+});
 
 const state = reactive({
   form: {
+    courseId: 0,
     classroom: "",
     type: "전공",
     semester: 1,
@@ -16,23 +24,37 @@ const state = reactive({
     textBook: "",
     goal: "",
     maxStd: null,
+    grade: 1,
   },
+});
+
+onMounted(async () => {
+  if (props.id) {
+    state.courseId = props.id;
+    const res = await loadCourse(props.id);
+    console.log("계획표 수정 가보자");
+    state.form = res.data;
+  }
 });
 
 const router = useRouter();
 
 const submit = async () => {
-  console.log("시작할게");
+  let data = null;
+  if (state.form.courseId > 0) {
+    const res = await modify(state.form);
+    console.log("이곳은 강의등록창입니다(수정):", res.data);
+    data = res;
+  } else {
+    const res = await saveCourse(state.form);
+    data = res;
+  }
 
-  const res = await saveCourse(state.form);
-  console.log("알이에스:", res);
-
-  if (res === undefined || res.status !== 200) {
+  if (data === undefined || data.status !== 200) {
     alert("오류 발생. 잠시 후 다시 실행해주십시오.");
     return;
   }
-  console.log("성공했나?");
-  router.push("/professor/course/management");
+  router.push("/professor/course/status");
 };
 </script>
 
@@ -43,7 +65,7 @@ const submit = async () => {
         <div class="table-title">교수번호</div>
       </div>
 
-      <form @submit="submit">
+      <form @submit.prevent="submit">
         <p>개설신청</p>
         <div class="table d-flex top">
           <div class="table-title">교과목명</div>
@@ -68,6 +90,7 @@ const submit = async () => {
           <div class="table-title">학과명</div>
           <div class="table-content">
             <span v-if="state.form.type === '교양'"> 교양학부 </span>
+            <input v-else type="text" />
           </div>
         </div>
 
@@ -90,6 +113,10 @@ const submit = async () => {
           <div class="table-content">
             <input type="text" v-model="state.form.time" required />
           </div>
+          <div class="table-title">강의실</div>
+          <div class="table-content">
+            <input type="text" v-model="state.form.classroom" required />
+          </div>
         </div>
 
         <div class="table d-flex last">
@@ -97,9 +124,14 @@ const submit = async () => {
           <div class="table-content">
             <input type="number" v-model="state.form.maxStd" required />
           </div>
-          <div class="table-title">강의실</div>
+          <div class="table-title">수강대상</div>
           <div class="table-content">
-            <input type="text" v-model="state.form.classroom" required />
+            <select v-model="state.form.grade" required>
+              <option value="1">1학년</option>
+              <option value="2">2학년</option>
+              <option value="3">3학년</option>
+              <option value="4">4학년</option>
+            </select>
           </div>
         </div>
 
@@ -124,7 +156,9 @@ const submit = async () => {
         </div>
 
         <div class="button">
-          <button class="btn btn-primary mt-3">제출</button>
+          <button class="btn btn-primary mt-3">
+            {{ props.id > 0 ? "수정" : "제출" }}
+          </button>
         </div>
       </form>
     </div>
