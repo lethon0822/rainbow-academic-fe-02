@@ -122,7 +122,7 @@ function handleButtonClick(grade) {
 }
 
 .body-table tbody td {
-  padding: 6px 7px;
+  padding: 5px 7px;
   text-align: center;
   border-bottom: 1px solid #ddd;
   white-space: nowrap;

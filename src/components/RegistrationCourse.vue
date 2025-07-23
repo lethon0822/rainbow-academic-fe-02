@@ -5,9 +5,11 @@ import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
+
 const props = defineProps({
   id: Number,
 });
+
 const state = reactive({
   form: {
     courseId: 0,
@@ -106,6 +108,7 @@ const submit = async () => {
             <input type="text" v-model="state.form.classroom" required />
           </div>
         </div>
+
         <div class="table d-flex last">
           <div class="table-title">수강인원</div>
           <div class="table-content">

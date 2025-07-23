@@ -8,7 +8,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
 
 <template>
   <!-- 과목별 성적 테이블 -->
-  <h5>과목별 성적</h5>
+  <h4>과목별 성적</h4>
   <div class="table-container">
     <table class="fixed_headers">
       <thead>
@@ -101,17 +101,35 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
 
 <style scoped lang="scss">
 .table-container {
-  margin: 20px;
+  margin: 20px auto;
   border-radius: 5px;
-  max-width: 1430px;
-  overflow-y: auto; // 세로 스크롤
+  max-width: 1300px;
+  max-height: 235px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-bottom: 1px solid #ddd;
+  scrollbar-color: #888 #fff;
+  border-radius: 5px 5px 0 0;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
 }
 
 table {
   width: 100%;
-  table-layout: fixed; // 열 너비 일정하게 주기
+  table-layout: fixed;
   border-collapse: collapse;
-  border-bottom: 1px solid #ddd;
+  font-size: 16px;
 }
 
 thead {
@@ -120,28 +138,30 @@ thead {
 }
 
 thead th {
-  //스크롤시 헤더 고정하는 부분 및 스타일 적용
-  position: sticky; //스크롤 해도 헤더가 상단에 고정되도록 하기 위함
-  top: 0; // 가장 가까운 overflow 조상 요소기준 최상단(0px) 위치에 고정 (table-container)
-  background-color: #364157; /* 스티키는 기본 배경색 투명이므로 배경색 다시 지정*/
-  z-index: 2; // 스티키 헤더가 다른 요소보다 위에 떠있게 설정
-  padding: 7px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 6px 5px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+  background-color: #364157;
 }
 
 tbody {
-  text-align: center; // 내용 가운데 정렬
+  text-align: center;
   color: black;
 }
 
 tbody tr {
   border-bottom: 1px solid #ddd;
-  height: 30px;
+  height: 40px;
 }
 
-h5 {
+h4 {
   font-weight: bold;
   color: #364157;
+  margin-left: 25px;
+  margin-top: 30px;
+  margin-bottom: 10px;
 }
 </style>
