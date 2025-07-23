@@ -64,6 +64,10 @@ const router = createRouter({
       path: '/course/detail',
       component: () => import('@/components/CourseDetail.vue'),
     },
+    {
+      path: '/sugang/history',
+      component: () => import('@/views/SugangHistory.vue'),
+    },
   ],
 });
 

@@ -49,7 +49,7 @@ const handleEnroll = async (course) => {
     if(sugangRes.status === 200){
       const updatedCourse = sugangRes.data; //sugangRes 객체 
 
-      // 전체 강의 목록에서 수강 신청한 강의 찾아 그 강의의 잔여 인원을 -1 줄임. 
+      // 전체 강의 목록에서 수강 신청한 강의를 찾아 그 강의의 잔여 인원을 -1 줄임. 
       const idx = courseList.value.findIndex(
         c => c.courseId === updatedCourse.courseId
       ); 
