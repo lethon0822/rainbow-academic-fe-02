@@ -1,12 +1,14 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(["search"]);
 
-const props = defineProps({ //학과와 연도만 받아오고 나머지는 하드코딩임. 
+const props = defineProps({
+  //학과와 연도만 받아오고 나머지는 하드코딩임.
   state: Boolean,
   departments: Array,
-  years: Array});
+  years: Array,
+});
 
 const filters = reactive({ 
   year: 2025,
@@ -18,7 +20,7 @@ const filters = reactive({
 });
 
 function onSearch() {
-  emit('search', { ...filters });
+  emit("search", { ...filters });
 }
 </script>
 
@@ -84,7 +86,6 @@ function onSearch() {
     <button @click="onSearch">조회</button>
   </div>
 </template>
-
 
 <style scoped>
 .filter-bar {
