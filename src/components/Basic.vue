@@ -154,12 +154,14 @@ watch(
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/grade/all" class="router-link">
+            <router-link to="/rank" class="router-link">
               학적기본사항관리
             </router-link>
           </li>
 
-          <li><a href="javascript:void(0);">학적변동관리</a></li>
+          <li><router-link to="/grade/all" class="router-link">
+            학적변동관리
+            </router-link></li>
         </ul>
       </li>
 

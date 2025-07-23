@@ -1,4 +1,3 @@
-
 <!-- 강의 신청 현황  -->
 <script setup>
 import WhiteBox from "@/components/WhiteBox.vue";
@@ -7,11 +6,9 @@ import CourseTable from "@/components/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import { reactive } from "vue";
 import { useUserStore } from "@/stores/account";
-
 const state = reactive({
   item: [],
 });
-
 const userStore = useUserStore();
 const myCourse = async (filters) => {
   console.log("야:",userStore.userId);
@@ -24,7 +21,6 @@ const myCourse = async (filters) => {
   console.log(state.item);
 };
 </script>
-
 <template>
   <WhiteBox :title="'강의신청현황조회'">
     <SearchFilterBar @search="myCourse" />
@@ -40,7 +36,6 @@ const myCourse = async (filters) => {
     </div>
   </WhiteBox>
 </template>
-
 <style lang="scss" scoped>
 button {
   display: flex;
@@ -66,3 +61,9 @@ button.enroll-btn {
   justify-content: flex-end;
 }
 </style>
+
+
+
+
+
+

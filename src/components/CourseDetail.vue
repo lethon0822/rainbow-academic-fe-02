@@ -6,15 +6,15 @@ import WhiteBox from "@/components/WhiteBox.vue";
 
 const state = reactive({
   form: {
-    classroom: "",
-    type: "전공",
+    classroom: '',
+    type: '전공',
     semester: 1,
-    time: "",
-    title: "",
+    time: '',
+    title: '',
     credit: null,
-    weekPlan: "",
-    textBook: "",
-    goal: "",
+    weekPlan: '',
+    textBook: '',
+    goal: '',
     maxStd: null,
     dept_name: "",
   },
@@ -23,17 +23,17 @@ const state = reactive({
 const router = useRouter();
 
 const submit = async () => {
-  console.log("시작할게");
+  console.log('시작할게');
 
   const res = await saveCourse(state.form);
-  console.log("알이에스:", res);
+  console.log('알이에스:', res);
 
   if (res === undefined || res.status !== 200) {
-    alert("오류 발생. 잠시 후 다시 실행해주십시오.");
+    alert('오류 발생. 잠시 후 다시 실행해주십시오.');
     return;
   }
-  console.log("성공했나?");
-  router.push("/professor/course/management");
+  console.log('성공했나?');
+  router.push('/professor/course/management');
 };
 </script>
 

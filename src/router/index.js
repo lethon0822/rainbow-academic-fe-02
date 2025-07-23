@@ -1,9 +1,6 @@
-
 import { createRouter, createWebHistory } from "vue-router";
 import StudentRecord from "@/views/StudentRecord.vue";
 import Home from "@/views/Home.vue"; // 메인
-
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -47,10 +44,8 @@ const router = createRouter({
       path: "/rank",
       component: StudentRecord,
     },
-
-    
+  
     // 교수 탭
-
     {
       path: '/professor/course/registration',
       name: 'RegistrationCourse',
@@ -62,8 +57,6 @@ const router = createRouter({
       component: () => import('@/components/RegistrationCourse.vue'),
       props: true
     },
-    
-      
     {
       path: '/enrollment',
       component: () => import('@/views/Enrollment.vue'),
@@ -80,7 +73,6 @@ const router = createRouter({
       path: '/professor/course/status',
       component: () => import('@/views/ProfessorCourseStatus.vue'),
     },
-    
     {
       path: '/professor/course/management',
       component: () => import('@/views/ProfessorCourseManagement.vue'),
@@ -95,5 +87,4 @@ const router = createRouter({
     },
   ],
 });
-
 export default router;
