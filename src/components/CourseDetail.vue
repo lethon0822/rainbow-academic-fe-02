@@ -16,6 +16,7 @@ const state = reactive({
     textBook: '',
     goal: '',
     maxStd: null,
+    dept_name: "",
   },
 });
 
@@ -156,7 +157,7 @@ const submit = async () => {
   height: 120px;
   align-items: center;
   div {
-    height: 120px;
+    height: 100%;
     flex: 1;
     text-align: center;
     font-size: 20px;
@@ -234,7 +235,7 @@ input {
 
 .detail {
   height: 200px;
-  .table-content {
+  .table-content { 
     input {
       height: 100%;
     }
