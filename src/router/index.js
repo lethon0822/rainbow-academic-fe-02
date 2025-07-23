@@ -29,11 +29,11 @@ const router = createRouter({
     },
     {
       path: "/attendance",
-      component: () => import("@/components/AttendanceInput.vue"),
+      component: () => import("@/components/Attendance.vue"),
     },
     {
       path: "/gradeinput",
-      component: () => import("@/components/GradeInput.vue"),
+      component: () => import("@/components/EnrollmentGrade.vue"),
     },
     {
       path: "/course/detail",
@@ -47,8 +47,10 @@ const router = createRouter({
       path: "/rank",
       component: StudentRecord,
     },
+
     
     // 교수 탭
+
     {
       path: '/professor/course/registration',
       name: 'RegistrationCourse',
@@ -60,10 +62,25 @@ const router = createRouter({
       component: () => import('@/components/RegistrationCourse.vue'),
       props: true
     },
+    
+      
+    {
+      path: '/enrollment',
+      component: () => import('@/views/Enrollment.vue'),
+    },
+    {
+      path: '/attendance',
+      component: () => import('@/components/Attendance.vue'),
+    },
+    {
+      path: '/enrollmentgrade',
+      component: () => import('@/components/EnrollmentGrade.vue'),
+    },
     {
       path: '/professor/course/status',
       component: () => import('@/views/ProfessorCourseStatus.vue'),
     },
+    
     {
       path: '/professor/course/management',
       component: () => import('@/views/ProfessorCourseManagement.vue'),
