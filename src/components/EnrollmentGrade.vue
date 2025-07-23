@@ -10,6 +10,7 @@ const students = ref([
     enrollmentId: 30,
     major: '컴퓨터공학과',
     courseId: '5',
+    studentId: '20250001',
     name: '유아린',
     attendanceScore: 90,
     midtermScore: 80,
@@ -22,6 +23,7 @@ const students = ref([
     enrollmentId: 31,
     major: '전자공학과',
     courseId: '9',
+    studentId: '20250002',
     name: '홍길동',
     attendanceScore: 80,
     midtermScore: 75,
@@ -34,11 +36,12 @@ const students = ref([
     enrollmentId: 32,
     major: '전자공학과',
     courseId: '7',
+    studentId: '20250003',
     name: '남효정',
-    attendanceScore: 80,
-    midtermScore: 75,
-    finalScore: 60,
-    assignmentScore: 90,
+    attendanceScore: 0,
+    midtermScore: 0,
+    finalScore: 0,
+    assignmentScore: 0,
     totalScore: 0,
     grade: ''
   },
@@ -46,6 +49,7 @@ const students = ref([
     enrollmentId: 33,
     major: '경영학과',
     courseId: '29',
+    studentId: '20250004',
     name: '김효정',
     attendanceScore: 80,
     midtermScore: 75,
@@ -58,6 +62,7 @@ const students = ref([
     enrollmentId: 34,
     major: '일본어학과',
     courseId: '28',
+    studentId: '20250005',
     name: '조효정',
     attendanceScore: 80,
     midtermScore: 75,
@@ -101,9 +106,13 @@ const saveGrades = async () => {
   try {
     for (const s of students.value) {
       const enrollmentgradeputreq = {
-        enrollmentId: s.enrollmentId,
-        score: s.totalScore,
-        grade: s.grade
+        enrollmentId: s.enrollmentId, // 수강 Id
+        grade: s.totalScore, // 총점
+        rank: s.grade, // 등급 A+, B, C+, F
+        midScore: s.midtermScore, // 중간
+        finScore: s.finalScore, // 기말
+        attendanceScore: s.attendanceScore, // 출석
+        assignmentScore: s.assignmentScore // 과제
     };
     await axios.put('http://localhost:8080/api/professor/course/grade', enrollmentgradeputreq);
     }
