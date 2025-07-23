@@ -8,10 +8,6 @@ export const saveCourse = jsonBody =>{
 export const findMyCourse = params =>{
   return axios.get("/professor/course", {params}).catch(e => e.response);
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> d0c30aedebe1a8fe2851f55727eb6bf9d95334e9
 // 강의 계획서 수정
 export const modify = jsonBody =>{
   return axios.put ("/professor/course", jsonBody).catch(e => e.response);
