@@ -99,4 +99,7 @@ function onSearch() {
   border: none;
   border-radius: 4px;
 }
+button{
+  margin-left: auto;
+}
 </style>

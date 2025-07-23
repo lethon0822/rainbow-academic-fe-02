@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue';
-import { saveCourse } from '@/services/professor';
+import { saveCourse } from '@/services/professorService';
 import { useRouter } from 'vue-router';
 import WhiteBox from '@/components/WhiteBox.vue';
 
