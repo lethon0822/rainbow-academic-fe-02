@@ -32,9 +32,7 @@ const myCourse = async (filters) => {
     />
     <div>
       <button class="enroll-btn">
-        <router-link to="/professor/course/registration" class="move"
-          >개설신청</router-link
-        >
+        <router-link to="/professor/course/registration" class="move">개설신청</router-link>
       </button>
     </div>
   </WhiteBox>
