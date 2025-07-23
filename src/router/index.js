@@ -57,10 +57,25 @@ const router = createRouter({
       component: () => import('@/components/RegistrationCourse.vue'),
       props: true
     },
+    
+      
+    {
+      path: '/enrollment',
+      component: () => import('@/views/Enrollment.vue'),
+    },
+    {
+      path: '/attendance',
+      component: () => import('@/components/Attendance.vue'),
+    },
+    {
+      path: '/enrollmentgrade',
+      component: () => import('@/components/EnrollmentGrade.vue'),
+    },
     {
       path: '/professor/course/status',
       component: () => import('@/views/ProfessorCourseStatus.vue'),
     },
+    
     {
       path: '/professor/course/management',
       component: () => import('@/views/ProfessorCourseManagement.vue'),
