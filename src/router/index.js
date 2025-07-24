@@ -74,7 +74,7 @@ const router = createRouter({
       component: () => import("@/views/CourseEvaluation.vue"),
     },
     {
-      path: '/sugang/history',
+      path: '/course/history',
       component: () => import('@/views/CourseList.vue'),
     },
   ],
