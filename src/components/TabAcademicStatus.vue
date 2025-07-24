@@ -8,7 +8,7 @@
         <tbody>
           <tr>
             <td class="label-cell">학적상태</td>
-            <td class="value-cell">졸업</td>
+            <td class="value-cell">재학</td>
           </tr>
 
           <tr>
@@ -63,7 +63,7 @@
 
           <tr>
             <td class="label-cell">입학학부</td>
-            <td class="value-cell">공예디자인학과</td>
+            <td class="value-cell">컴퓨터공학과</td>
           </tr>
 
           <tr>
