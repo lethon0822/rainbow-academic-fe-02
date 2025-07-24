@@ -6,7 +6,7 @@ import axios from "axios";
 import WhiteBox from "./WhiteBox.vue";
 import { useRoute } from "vue-router";
 
-const students = ref([]);
+const student = ref([]);
 const route = useRoute();
 const courseId = Number(route.params.courseId); // props/ 상태에서 가져오기
 
@@ -19,73 +19,73 @@ onMounted(async () => {
   }
 });
 // 임시 하드코딩
-// const students = ref([
-//   {
-//     enrollmentId: 30,
-//     major: '컴퓨터공학과',
-//     courseId: '5',
-//     studentId: '20250001',
-//     name: '유아린',
-//     attendanceScore: 90,
-//     midtermScore: 80,
-//     finalScore: 70,
-//     assignmentScore: 85,
-//     totalScore: 0,
-//     grade: "",
-//   },
-//   {
-//     enrollmentId: 31,
-//     major: '전자공학과',
-//     courseId: '9',
-//     studentId: '20250002',
-//     name: '홍길동',
-//     attendanceScore: 80,
-//     midtermScore: 75,
-//     finalScore: 60,
-//     assignmentScore: 90,
-//     totalScore: 0,
-//     grade: ''
-//   },
-//   {
-//     enrollmentId: 32,
-//     major: '전자공학과',
-//     courseId: '7',
-//     studentId: '20250003',
-//     name: '남효정',
-//     attendanceScore: 0,
-//     midtermScore: 0,
-//     finalScore: 0,
-//     assignmentScore: 0,
-//     totalScore: 0,
-//     grade: ''
-//   },
-//   {
-//     enrollmentId: 33,
-//     major: '경영학과',
-//     courseId: '29',
-//     studentId: '20250004',
-//     name: '김효정',
-//     attendanceScore: 80,
-//     midtermScore: 75,
-//     finalScore: 60,
-//     assignmentScore: 90,
-//     totalScore: 0,
-//     grade: ''
-//   },
-//   {
-//     enrollmentId: 34,
-//     major: '일본어학과',
-//     courseId: '28',
-//     studentId: '20250005',
-//     name: '조효정',
-//     attendanceScore: 80,
-//     midtermScore: 75,
-//     finalScore: 60,
-//     assignmentScore: 90,
-//     totalScore: 0,
-//     grade: ''
-//   }
-// ]);
+const students = ref([
+  {
+    enrollmentId: 30,
+    major: '컴퓨터공학과',
+    courseId: '5',
+    studentId: '20250001',
+    name: '유아린',
+    attendanceScore: 0,
+    midtermScore: 0,
+    finalScore: 0,
+    assignmentScore: 0,
+    totalScore: 0,
+    grade: "",
+  },
+  {
+    enrollmentId: 31,
+    major: '전자공학과',
+    courseId: '9',
+    studentId: '20250002',
+    name: '홍길동',
+    attendanceScore: 0,
+    midtermScore: 0,
+    finalScore: 0,
+    assignmentScore: 0,
+    totalScore: 0,
+    grade: ''
+  },
+  {
+    enrollmentId: 32,
+    major: '전자공학과',
+    courseId: '7',
+    studentId: '20250003',
+    name: '남효정',
+    attendanceScore: 0,
+    midtermScore: 0,
+    finalScore: 0,
+    assignmentScore: 0,
+    totalScore: 0,
+    grade: ''
+  },
+  {
+    enrollmentId: 33,
+    major: '경영학과',
+    courseId: '29',
+    studentId: '20250004',
+    name: '김효정',
+    attendanceScore: 0,
+    midtermScore: 0,
+    finalScore: 0,
+    assignmentScore: 0,
+    totalScore: 0,
+    grade: ''
+  },
+  {
+    enrollmentId: 34,
+    major: '일본어학과',
+    courseId: '28',
+    studentId: '20250005',
+    name: '조효정',
+    attendanceScore: 0,
+    midtermScore: 0,
+    finalScore: 0,
+    assignmentScore: 0,
+    totalScore: 0,
+    grade: ''
+  }
+]);
 
 //  점수 유효성 검사 + 총점/등급 자동 계산
 watchEffect(() => {
@@ -140,109 +140,73 @@ const saveGrades = async () => {
 
 <template>
   <WhiteBox title="성적 관리">
-    <div class="max-w-4xl mx-auto p-4">
+    <div class="grade-wrapper">
       <h2 class="text-2xl font-bold mb-4 text-center">
         성적입력 (출석20%, 중간30%, 기말30%, 과제20%)
       </h2>
-
-      <table class="w-full border text-center">
-        <thead class="bg-gray-100">
+      <table class="grade-table w-full">
+      <thead class="grade-table-header">
           <tr>
-            <th class="border px-2 py-1">학과</th>
-            <th class="border px-2 py-1">학번</th>
-            <th class="border px-2 py-1">이름</th>
-            <th class="border px-2 py-1">출석<br />(20%)</th>
-            <th class="border px-2 py-1">중간<br />(30%)</th>
-            <th class="border px-2 py-1">기말<br />(30%)</th>
-            <th class="border px-2 py-1">과제<br />(20%)</th>
-            <th class="border px-2 py-1">총점<br />(%)</th>
-            <th class="border px-2 py-1">등급</th>
+            <th class="px-3 py-2 text-center align-middle">학과</th>
+            <th class="px-3 py-2 text-center align-middle">학번</th>
+            <th class="px-3 py-2 text-center align-middle">이름</th>
+            <th class="px-3 py-2 text-center align-middle">출석<br />(20%)</th>
+            <th class="px-3 py-2 text-center align-middle">중간<br />(30%)</th>
+            <th class="px-3 py-2 text-center align-middle">기말<br />(30%)</th>
+            <th class="px-3 py-2 text-center align-middle">과제<br />(20%)</th>
+            <th class="px-3 py-2 text-center align-middle">총점<br />(%)</th>
+            <th class="px-3 py-2 text-center align-middle">등급</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="s in students" :key="s.enrollmentId">
-
-            <td class="border px-2 py-1">{{ s.major }}</td>
-            <td class="border px-2 py-1">{{ s.studentId }}</td>
-            <td class="border px-2 py-1">{{ s.name }}</td>
-            <td class="border px-2 py-1">
-              <input
-                type="number"
-                v-model="s.attendanceScore"
-                min="0"
-                max="100"
-                class="w-16 border rounded text-center"
-              />
-            </td>
-            <td class="border px-2 py-1">
-              <input
-                type="number"
-                v-model="s.midtermScore"
-                min="0"
-                max="100"
-                class="w-16 border rounded text-center"
-              />
-            </td>
-            <td class="border px-2 py-1">
-              <input
-                type="number"
-                v-model="s.finalScore"
-                min="0"
-                max="100"
-                class="w-16 border rounded text-center" />
-            </td>
-            <td class="border px-2 py-1">
-              <input
-                type="number"
-                v-model="s.assignmentScore"
-                min="0"
-                max="100"
-                class="w-16 border rounded text-center"
-              />
-            </td>
-            <td class="border px-2 py-1">
-              <input
-                type="text"
-                :value="s.totalScore + '%'"
-                class="w-20 border rounded text-center bg-gray-100"
-                readonly
-              />
-            </td>
-            <td class="border px-2 py-1">
-              <input
-                type="text"
-                :value="s.grade"
-                class="w-16 border rounded text-center bg-gray-100"
-                readonly
-              />
-            </td>
-          </tr>
-        </tbody>
+          <tbody>
+        <tr v-for="s in students" :key="s.enrollmentId">
+          <td class="text-center align-middle px-3 py-2">{{ s.major }}</td>
+          <td class="text-center align-middle px-3 py-2">{{ s.studentId }}</td>
+          <td class="text-center align-middle px-3 py-2">{{ s.name }}</td>
+          <td><input type="number" v-model="s.attendanceScore" class="form-control" /></td>
+          <td><input type="number" v-model="s.midtermScore" class="form-control" /></td>
+          <td><input type="number" v-model="s.finalScore" class="form-control" /></td>
+          <td><input type="number" v-model="s.assignmentScore" class="form-control" /></td>
+          <td><input type="text" :value="s.totalScore + '%'" class="form-control bg-light" readonly /></td>
+          <td><input type="text" :value="s.grade" class="form-control bg-light" readonly /></td>
+        </tr>
+      </tbody>
       </table>
 
-      <div class="text-center mt-6">
-        <button
-          @click="saveGrades"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded"
-        >
-          저장
-        </button>
+      <div class="text-center mt-3">
+        <button @click="saveGrades" class="btn btn-primary">저장</button>
       </div>
     </div>
   </WhiteBox>
 </template>
 
 <style scoped lang="scss">
-button {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: left;
 }
-
-button:hover {
-  background-color: #2563eb;
+.grade-table {
+  width: 100%;
+  th, td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+  }
+}
+input[type='number'], input[type='text'] {
+  padding: 4px 8px;
+  text-align: center;
+}
+.grade-table-header {
+  background-color: #364157 !important;
+  color: white !important;
+}
+.grade-table th,
+.grade-table td {
+  vertical-align: middle !important;
+  text-align: center;
 }
 </style>
+

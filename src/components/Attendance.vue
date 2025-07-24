@@ -88,31 +88,31 @@ const saveAttendance = async () => {
 
 <template>
   <WhiteBox title="출결 관리">
-    <div class="attendance-wrapper">
-      <div class="attendance-box"></div>
-      <h2 class="text-xl font-bold mb-4 text-center">출결 입력창</h2>
-      <label class="block mb-2">출결일자</label>
-      <input
-        type="date"
-        v-model="attendDate"
-        class="mb-4 border px-2 py-1 rounded"
-      />
-
-      <table class="table-auto w-full border">
-        <thead>
+    <div class="container mt-4">
+      <h2 class="text-center fw-bold mb-4">출결 입력창</h2>
+      <div class="mb-3">
+        <label class="form-label">출결일자</label>
+        <input
+          type="date"
+          v-model="attendDate"
+          class="form-control w-25"
+        />
+      </div>
+      <table class="attendance-table table table bordered">
+        <thead class="table-primary">
           <tr>
-            <th class="border px-2 py-1">이름</th>
-            <th class="border px-2 py-1">학번</th>
-            <th class="border px-2 py-1">출결 상태</th>
-            <th class="border px-2 py-1">비고</th>
+            <th>이름</th>
+            <th>학번</th>
+            <th>출결 상태</th>
+            <th>비고</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="s in students" :key="s.enrollmentId">
-            <td class="border px-2 py-1">{{ s.name }}</td>
-            <td class="border px-2 py-1">{{ s.studentId }}</td>
-            <td class="border px-2 py-1">
-              <select v-model="s.status" class="border px-1 py-1 rounded">
+            <td>{{ s.name }}</td>
+            <td>{{ s.studentId }}</td>
+            <td>
+              <select v-model="s.status" class="form-select">
                 <option disabled value="">선택</option>
                 <option value="출석">출석</option>
                 <option value="지각">지각</option>
@@ -121,29 +121,27 @@ const saveAttendance = async () => {
                 <option value="경조사">경조사</option>
               </select>
             </td>
-            <td class="border px-2 py-1">
+            <td>
               <input
                 v-model="s.note"
                 :disabled="!['지각', '병가', '경조사'].includes(s.status)"
-                class="border px-1 py-1 rounded w-full"
+                class="form-control"
                 placeholder="사유 입력"
               />
             </td>
           </tr>
         </tbody>
       </table>
-
-      <button
-        @click="saveAttendance"
-        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        저장!
-      </button>
+      <div class="text-center mt-4">
+        <button @click="saveAttendance" class="btn btn-primary px-4">
+          저장!
+        </button>
+      </div>
     </div>
   </WhiteBox>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 // .attendance-wrapper {
 //   padding-left: 160px; // 사이드바 피해서
 //   padding-top: 30px;
