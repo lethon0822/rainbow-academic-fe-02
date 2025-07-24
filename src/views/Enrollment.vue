@@ -129,7 +129,7 @@ const handleEnroll = async (course) => {
       <h5 class="fw-bold mt-2 mb-0.3rem">신청 내역</h5>
       <div class="credit-box">
         <span>최대 학점: {{ maxCredit }}18학점</span>
-        <span>신청 학점: {{ totalCredit }}10학점</span>
+        <span>신청 학점: {{ totalCredit }}학점</span>
         <span>신청 과목 수: {{ courseCount }}개</span>
       </div>
     </div>
