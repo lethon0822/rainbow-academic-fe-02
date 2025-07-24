@@ -9,7 +9,7 @@ import Basic from "@/components/Basic.vue";
     <Basic />
   </div>
   <div class="content">
-    <router-view />
+    <router-view></router-view>
   </div>
 </template>
 

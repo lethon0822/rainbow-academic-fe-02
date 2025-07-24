@@ -1,33 +1,32 @@
 <script setup>
 import logo from "@/assets/logoW.svg";
-import { useAccountStore } from '@/stores/account';
-import { logout } from '@/services/accountService';
+import { useAccountStore } from "@/stores/account";
+import { logout } from "@/services/accountService";
 import { reactive, onMounted } from "vue";
-import { useUserStore } from '@/stores/account'
+import { useUserStore } from "@/stores/account";
 
 const state = reactive({
-  data : {
+  data: {
     userId: 0,
-    password: '',
-    userName: '',
-    userRole: ''
-  }
-})
+    password: "",
+    userName: "",
+    userRole: "",
+  },
+});
 
 const userStore = useUserStore();
-
 
 const account = useAccountStore();
 //로그아웃
 const logoutAccount = async () => {
-    if (!confirm('로그아웃 하시겠습니까?'));
-    const res = await logout();
-    console.log("로그아웃",res)
-    if(res === undefined || res.status !== 200) {
-        return;
-    }
-    account.setLoggedIn(false);
-}
+  if (!confirm("로그아웃 하시겠습니까?"));
+  const res = await logout();
+  console.log("로그아웃", res);
+  if (res === undefined || res.status !== 200) {
+    return;
+  }
+  account.setLoggedIn(false);
+};
 
 // onMounted(()=>{
 //   const passJson = history.state.data;
@@ -51,7 +50,9 @@ const logoutAccount = async () => {
         <!-- 로고 왼쪽 -->
         <div class="logo d-flex align-items-center" @click="$router.push('/')">
           <img :src="logo" alt="로고 아이콘" height="40" />
-          <span class="systemText" @click="$router.push('/')">학사관리시스템</span>
+          <span class="systemText" @click="$router.push('/')"
+            >학사관리시스템</span
+          >
         </div>
 
         <!-- 메뉴 오른쪽 -->
@@ -60,13 +61,13 @@ const logoutAccount = async () => {
             <span>{{ userStore.userName }}님 반갑습니다</span>
             <span class="divider">|</span>
             <a @click="logoutAccount()">로그아웃</a>
-        </div>
+          </div>
         </template>
         <template v-else>
           <router-link to="/login">
-              <a href="#" class="text-white text-decoration-none">로그인</a>
+            <a href="#" class="text-white text-decoration-none">로그인</a>
           </router-link>
-        </template>      
+        </template>
       </div>
     </div>
   </header>
