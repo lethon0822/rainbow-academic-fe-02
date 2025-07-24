@@ -1,6 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
-import StudentRecord from "@/views/StudentRecord.vue";
+
+
+import { createRouter, createWebHistory } from 'vue-router';
 import Home from "@/views/Home.vue"; // 메인
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -41,8 +43,12 @@ const router = createRouter({
       component: () => import("@/views/GetAllGrades.vue"),
     },
     {
+      path: "/profile",
+      component: () => import("@/views/StudentRecord.vue"),
+    },
+    {
       path: "/rank",
-      component: StudentRecord,
+      component: () => import("@/components/StudentRecordTab.vue"),
     },
   
     // 교수 탭
@@ -84,6 +90,19 @@ const router = createRouter({
     {
       path: "/course/survey",
       component: () => import("@/views/CourseEvaluation.vue"),
+    },
+    {
+
+      path: '/course/history',
+
+      component: () => import('@/views/CourseList.vue'),
+    },
+    
+    {
+
+      path: '/renewal/privacy',
+      component: () => import('@/views/RenewalPrivacy.vue'),
+
     },
   ],
 });

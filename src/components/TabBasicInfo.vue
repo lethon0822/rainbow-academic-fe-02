@@ -1,21 +1,76 @@
-<script setup></script>
+<script setup>
+// 카카오 api 씀 상세주소는 DB 필요
+import { ref } from "vue";
+
+const sample6_postcode = ref("");
+const sample6_address = ref("");
+const sample6_extraAddress = ref("");
+const sample6_detailAddress = ref("");
+
+function sample6_execDaumPostcode() {
+  new daum.Postcode({
+    oncomplete: function (data) {
+      let addr = "";
+      let extraAddr = "";
+
+      if (data.userSelectedType === "R") {
+        addr = data.roadAddress;
+      } else {
+        addr = data.jibunAddress;
+      }
+
+      if (data.userSelectedType === "R") {
+        if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
+          extraAddr += data.bname;
+        }
+        if (data.buildingName !== "" && data.apartment === "Y") {
+          extraAddr +=
+            extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
+        }
+        if (extraAddr !== "") {
+          extraAddr = " (" + extraAddr + ")";
+        }
+        sample6_extraAddress.value = extraAddr;
+      } else {
+        sample6_extraAddress.value = "";
+      }
+
+      sample6_postcode.value = data.zonecode;
+      sample6_address.value = addr;
+
+      nextTick(() => {
+        if (sample6_detailAddressRef.value) {
+          sample6_detailAddressRef.value.focus();
+        }
+      });
+    },
+  }).open();
+}
+
+import { nextTick, ref as vueRef } from "vue";
+const sample6_detailAddressRef = vueRef(null);
+</script>
 
 <template>
   <div class="info-box">
     <table>
       <tbody>
-        <!-- 첫 행: 우편번호 + 전화번호 -->
         <tr>
           <td class="label-cell">우편번호</td>
           <td class="value-cell">
             <div class="search-box">
-              <input type="text" placeholder="34158" />
-              <button aria-label="검색">
-                <img
-                  src="/src/assets/btn_search.svg"
-                  alt="돋보기 아이콘"
-                  style="filter: invert(0)"
-                />
+              <input
+                type="text"
+                placeholder="34158"
+                v-model="sample6_postcode"
+                readonly
+              />
+              <button
+                type="button"
+                aria-label="검색"
+                @click="sample6_execDaumPostcode"
+              >
+                <img src="/src/assets/btn_search.svg" alt="돋보기 아이콘" />
               </button>
             </div>
           </td>
@@ -24,26 +79,38 @@
           <td class="value-cell">010-123-4560</td>
         </tr>
 
-        <!-- 두번째 행: 주소 + 병역구분 -->
         <tr>
           <td class="label-cell">주소</td>
-          <td class="value-cell">대전광역시 유성구 동서대로 125</td>
+          <td class="value-cell">
+            <input
+              type="text"
+              v-model="sample6_address"
+              readonly
+              style="width: 100%"
+            />
+          </td>
 
           <td class="label-cell">병역구분</td>
           <td class="value-cell">면제</td>
         </tr>
 
-        <!-- 세번째 행: 상세주소 + 빈칸 또는 추가정보 -->
         <tr>
           <td class="label-cell">상세주소</td>
-          <td class="value-cell" colspan="3">사과아파트 102동 101호</td>
+          <td class="value-cell" colspan="3">
+            <input
+              type="text"
+              v-model="sample6_detailAddress"
+              ref="sample6_detailAddressRef"
+              placeholder="상세주소를 입력하세요"
+              style="width: 100%"
+            />
+            <input type="hidden" v-model="sample6_extraAddress" />
+          </td>
         </tr>
 
-        <!-- 네번째 행: 미정 -->
         <tr>
           <td class="label-cell">　</td>
           <td class="value-cell">　</td>
-
           <td class="label-cell">　</td>
           <td class="value-cell">　</td>
         </tr>

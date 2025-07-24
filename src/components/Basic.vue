@@ -154,14 +154,16 @@ watch(
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/rank" class="router-link">
+            <router-link to="/profile" class="router-link">
               학적기본사항관리
             </router-link>
           </li>
-
-          <li><router-link to="/grade/all" class="router-link">
-            학적변동관리
-            </router-link></li>
+          <li><a href="javascript:void(0);">학적변동관리</a></li>
+          <li>
+            <router-link to="/renewal/privacy" class="router-link">
+              개인정보변경
+            </router-link>
+          </li>
         </ul>
       </li>
 
@@ -180,6 +182,7 @@ watch(
       <li class="menu-gangui">
         <a href="javascript:void(0);">강의</a>
         <ul>
+          <li><router-link to="/course/history" class="router-link">강의조회</router-link></li>
           <li><router-link to="/professor/course/status">강의등록</router-link></li>
           <li><router-link to="/professor/course/management">강의관리</router-link></li>
         </ul>
@@ -193,6 +196,8 @@ watch(
           <li><a href="javascript:void(0);">Settings</a></li>
         </ul>
       </li>
+
+    
     </ul>
   </div>
 </template>
