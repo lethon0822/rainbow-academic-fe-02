@@ -104,7 +104,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
   margin: 20px auto;
   border-radius: 5px;
   max-width: 1300px;
-  max-height: 235px;
+  max-height: 240px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-color: #888 #fff;

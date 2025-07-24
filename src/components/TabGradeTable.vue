@@ -32,15 +32,15 @@ function handleButtonClick(grade) {
         <thead>
           <tr>
             <th>순번</th>
-            <th>이수구분</th>
-            <th>수업코드</th>
-            <th>과목명</th>
+            <th>년도</th>
+            <th>학년</th>
             <th>학기</th>
+            <th>과목명</th>
             <th>학점</th>
             <th>등급</th>
+            <th>이수구분</th>
+            <th>담당교수</th>
             <th>성적등록날짜</th>
-            <th></th>
-            <th></th>
           </tr>
         </thead>
       </table>
@@ -52,19 +52,20 @@ function handleButtonClick(grade) {
         <tbody>
           <tr v-for="(grade, index) in grades" :key="index">
             <td>{{ index + 1 }}</td>
-            <td>{{ grade.type }}</td>
-            <td>{{ grade.courseId }}</td>
-            <td>{{ grade.title }}</td>
-            <td>{{ grade.semester }}</td>
-            <td>{{ grade.credit }}</td>
+            <td>{{ grade.year }}</td>
             <td>{{ grade.grade }}</td>
+            <td>{{ grade.semester }}</td>
+            <td>{{ grade.title }}</td>
+            <td>{{ grade.credit }}</td>
+            <td>{{ grade.rank }}</td>
+            <td>{{ grade.type }}</td>
+            <td>{{ grade.professorName }}</td>
             <td>{{ formatDate(grade.createdAt) }}</td>
             <td>
               <button class="btn btn-primary" @click="handleButtonClick(grade)">
                 강의평가
               </button>
             </td>
-            <td></td>
           </tr>
         </tbody>
       </table>
@@ -88,13 +89,13 @@ function handleButtonClick(grade) {
 .header-container {
   background-color: #364157;
   border-radius: 8px;
-  border-bottom-left-radius: 0; /* 아래쪽 왼쪽은 직각 */
-  border-bottom-right-radius: 0; /* 아래쪽 오른쪽은 직각 */
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   overflow: hidden;
 }
 
 .header-table {
-  width: 100%;
+  width: 1250px;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -117,7 +118,7 @@ function handleButtonClick(grade) {
 }
 
 .body-table {
-  width: 100%;
+  width: 1375px;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -146,13 +147,13 @@ function handleButtonClick(grade) {
 }
 
 .btn-primary {
-  background-color: #4a76a8;
+  background: linear-gradient(135deg, #4a76a8 0%, #2c5f8a 100%);
   color: white;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  background-color: #3b5f8a;
+  background: linear-gradient(135deg, #3b5f8a 0%, #1f4568 100%);
 }
 
 // 스크롤바 스타일
