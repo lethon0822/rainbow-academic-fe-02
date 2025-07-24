@@ -93,8 +93,12 @@ const router = createRouter({
     },
     {
 
-      path: '/sugang/history',
+      path: '/course/history',
+
       component: () => import('@/views/CourseList.vue'),
+    },
+    
+    {
 
       path: '/renewal/privacy',
       component: () => import('@/views/RenewalPrivacy.vue'),

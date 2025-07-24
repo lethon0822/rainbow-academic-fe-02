@@ -182,7 +182,7 @@ watch(
       <li class="menu-gangui">
         <a href="javascript:void(0);">강의</a>
         <ul>
-          <li><router-link to="/sugang/history" class="router-link">강의조회</router-link></li>
+          <li><router-link to="/course/history" class="router-link">강의조회</router-link></li>
           <li><router-link to="/professor/course/status">강의등록</router-link></li>
           <li><router-link to="/professor/course/management">강의관리</router-link></li>
         </ul>
