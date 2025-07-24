@@ -1,6 +1,19 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+  profile: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+</script>
 
 <template>
+  <div class="inner">
+    <h2 class="title">학적기본사항관리</h2>
+    <div class="line"></div>
+    <slot></slot>
+  </div>
+
   <div class="profile-container">
     <!-- 이미지 영역을 별도의 박스로 분리 -->
     <div class="image-box">
@@ -29,17 +42,17 @@
           <table>
             <tr>
               <td class="label-cell">학번</td>
-              <td class="value-cell">1234567</td>
+              <td class="value-cell">{{ profile.loginId }}</td>
             </tr>
 
             <tr>
               <td class="label-cell">성명(한글)</td>
-              <td class="value-cell">홍길동</td>
+              <td class="value-cell">{{ profile.userName }}</td>
             </tr>
 
             <tr>
               <td class="label-cell">E-mail</td>
-              <td class="value-cell">123@naver.com</td>
+              <td class="value-cell">{{ profile.email }}</td>
             </tr>
 
             <tr>
@@ -62,7 +75,7 @@
 
             <tr>
               <td class="label-cell">학적상태</td>
-              <td class="value-cell">졸업</td>
+              <td class="value-cell">{{ profile.status }}</td>
             </tr>
           </table>
         </div>
@@ -71,7 +84,7 @@
           <table>
             <tr>
               <td class="label-cell">학년</td>
-              <td class="value-cell" colspan="2">4</td>
+              <td class="value-cell" colspan="2">{{ profile.grade }}</td>
             </tr>
 
             <tr>
@@ -85,18 +98,22 @@
             </tr>
             <tr>
               <td class="label-cell">전공</td>
-              <td class="value-cell"></td>
+              <td class="value-cell">{{ profile.deptName }}</td>
             </tr>
 
             <tr>
               <td class="label-cell">담당교수</td>
-              <td class="value-cell" colspan="2">김성배</td>
+              <td class="value-cell" colspan="2">
+                {{ profile.professorName }}
+              </td>
             </tr>
+
             <tr>
               <td class="label-cell">학기</td>
               <td class="value-cell" colspan="2">
-                <select>
-                  <option>1학기</option>
+                <select v-model="profile.semester">
+                  <option value="1">1학기</option>
+                  <option value="2">2학기</option>
                 </select>
               </td>
             </tr>
@@ -112,7 +129,29 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.inner {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  padding: 30px;
+  margin: 30px 30px 30px 250px;
+  width: 100%;
+  max-width: 1430px;
+  margin-left: 250px;
+}
+
+.title {
+  font-size: 38px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.line {
+  border-bottom: 2px solid #1f2c5a;
+  margin-bottom: -30px;
+}
+
 body {
   font-family: "Malgun Gothic", sans-serif;
   background-color: #f5f5f5;

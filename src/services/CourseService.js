@@ -18,12 +18,15 @@ export const getCourseListByFilter = (filters) => {
     });
 }
 
+
 //나의 수강신청 내역 onMounted 때 띄울 용도 
 export const getMySugangList = () => {
     return axios.get('/student/sugang').catch(e=>e.response);
 }
 
-// 강의등록
-export const loadCourse = id =>{
-  return axios.get(`/course/${id}`, id).catch(e => e.response);
+
+// 강의조회
+export const loadCourse = course_id =>{
+  return axios.get(`/course/${course_id}`, course_id).catch(e => e.response);
+
 }

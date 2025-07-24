@@ -1,5 +1,6 @@
-<script setup>
+ <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 defineProps({
   courseList: Array,
@@ -21,9 +22,7 @@ defineProps({
     }),
   },
 });
-
 defineEmits(["enroll", "cancel"]);
-
 // 승인여부 css 변경
 const change = (status) =>{
   if(status === '거부'){
@@ -34,21 +33,31 @@ const change = (status) =>{
   return "red"
 }
 // 강의계획서 새 창 띄우기
-const link = ref('/course/detail');
-const openLink = () => {
-  window.open(link.value, '_blank', 'width=700px,height=800px,scrollbars=yes');
+//const link = ref(/course/detail);
+const openLink = (id) => {
+  window.open(`/course/detail/${id}`, '_blank', 'width=700px,height=800px,scrollbars=yes');
 };
 
+// 강의 관리로 이동 
+const router = useRouter();
+const send = (id, json) =>{
+  const jsonBody = JSON.stringify(json);
+  router.push({
+    path:`/professor/course/${id}/students`,
+    state: {
+      data:jsonBody
+    }
+  })
 
+}
 </script>
-
 <template>
   <div class="table-container" :style="{ maxHeight: maxHeight }">
     <table>
       <thead>
         <tr>
           <th>과목코드</th>
-          <th v-if="show.deptName">학과</th>
+          <th v-if="show.depeName">학과</th>
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
@@ -67,10 +76,10 @@ const openLink = () => {
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
-          <td v-if="show.deptName">{{ course.deptName }}</td>
+          <td v-if="show.depeName">{{ course.deptName }}</td>
           <td>
             <div v-if="show.modify">{{ course.title }}</div>
-            <div v-else @click="openLink" class="link">{{ course.title }}</div>
+            <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
           </td>
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
@@ -92,46 +101,40 @@ const openLink = () => {
             </button>
           </td>
           <td v-else-if="show.setting">
-            <button class="enroll-btn">
               <!-- 학생관리 라우팅 처리해야함 -->
-              <router-link to="/professor/course/students" class="setting">관리</router-link>
-            </button>
+                <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
           <td v-else-if="show.modify">
-            <button class="enroll-btn">
               <!-- 강의 수정 라우팅 처리해야함 -->
-              <!-- <router-link to="/professor/course/registration">수정</router-link> -->
-              <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >수정</router-link>
-            </button>
+              <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >
+                <button class="enroll-btn">수정</button>
+              </router-link>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-
 <style lang="scss">
 .table-container {
   margin: 20px;
   border-radius: 5px;
   width: 100%;
   max-width: 1430px;
+  min-width: 1350px;
   overflow-y: auto; // 세로 스크롤
   scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
 }
-
 table {
   width: 100%;
   table-layout: fixed; // 열 너비 일정하게 주기
   border-collapse: collapse;
   border-bottom: 1px solid #ddd;
 }
-
 thead {
   color: white;
   background-color: #364157;
 }
-
 thead th {
   //스크롤시 헤더 고정하는 부분 및 스타일 적용
   position: sticky; //스크롤 해도 헤더가 상단에 고정되도록 하기 위함
@@ -142,17 +145,14 @@ thead th {
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-
 tbody {
   text-align: center; // 내용 가운데 정렬
   color: black;
 }
-
 tbody tr {
   border-bottom: 1px solid #ddd;
   height: 30px;
 }
-
 button {
   color: white;
   padding: 6px 12px;
@@ -164,12 +164,11 @@ button {
   font-weight: 500;
   transition: background-color 0.2s ease; // 버튼 클릭시 툭 바뀌는 게 아닌 0.2초 동안 천천히 바뀜
 }
-
 button.enroll-btn {
-  background-color: #2460ce;
+  background-color: #2460CE;
   color: #fff;
   &:hover {
-    background-color: #1f53b5;
+    background-color: #1F53B5;
   }
 }
 
@@ -183,14 +182,12 @@ button.enroll-btn {
 }
 
 button.cancel-btn {
-  background-color: #f44336;
+  background-color: #F44336;
   color: white;
-
   &:hover {
-    background-color: #d32f2f;
+    background-color: #D32F2F;
   }
 }
-
 .link{
   color:#2460ce;
   cursor: pointer;
@@ -213,4 +210,4 @@ button.cancel-btn {
   color:#2460ce;
   font-weight: 700;
 }
-</style>
+</style> 

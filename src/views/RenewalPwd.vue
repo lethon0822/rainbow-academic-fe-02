@@ -68,7 +68,7 @@ input {
 }
 .auth {
   display: flex;
-  width: 210px;
+  width: 220px;
   height: 40px;
   justify-content: center;
   align-items: center;

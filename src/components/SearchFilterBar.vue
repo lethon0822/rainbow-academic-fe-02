@@ -1,7 +1,6 @@
 <script setup>
-import { reactive } from 'vue';
-
-const emit = defineEmits(['search']);
+import { reactive } from "vue";
+const emit = defineEmits(["search"]);
 
 const props = defineProps({
   //학과와 연도만 받아오고 나머지는 하드코딩임.
@@ -11,6 +10,7 @@ const props = defineProps({
   semester: String,
 });
 
+
 const filters = reactive({
   year: '',
   type: '',
@@ -19,12 +19,10 @@ const filters = reactive({
   semester: '',
   keyword: '',
 });
-
 function onSearch() {
   emit('search', { ...filters });
 }
 </script>
-
 <template>
   <div class="filter-bar">
     <label>연도:</label>
@@ -34,7 +32,6 @@ function onSearch() {
         {{ y.year }}
       </option>
     </select>
-
     <label>학기:</label>
     <select v-model="filters.semester">
       <option value="">전체</option>
@@ -50,7 +47,6 @@ function onSearch() {
         <option value="2">2학기</option>
       </template>
     </select>
-
     <div v-if="props.state">
       <label>이수구분:</label>
       <select v-model="filters.type">
@@ -58,7 +54,6 @@ function onSearch() {
         <option value="전공">전공</option>
         <option value="교양">교양</option>
       </select>
-
       <label>학과:</label>
       <select v-model="filters.departmentName">
         <option value="">전체</option>
@@ -70,7 +65,6 @@ function onSearch() {
           {{ d.departmentName }}
         </option>
       </select>
-
       <label>학년:</label>
       <select v-model="filters.grade">
         <option value="">전체</option>
@@ -79,7 +73,6 @@ function onSearch() {
         <option value="3">3학년</option>
         <option value="4">4학년</option>
       </select>
-
       <label>교과목명:</label>
       <input
         type="text"
@@ -87,11 +80,9 @@ function onSearch() {
         placeholder="교과목명을 입력하세요."
       />
     </div>
-
     <button @click="onSearch">조회</button>
   </div>
 </template>
-
 <style scoped>
 .filter-bar {
   display: flex;
@@ -112,7 +103,7 @@ function onSearch() {
 }
 .filter-bar button {
   padding: 12px 18px;
-  background-color: #2962ff;
+  background-color: #2962FF;
   color: white;
   border: none;
   border-radius: 4px;
@@ -121,3 +112,12 @@ button {
   margin-left: auto;
 }
 </style>
+
+
+
+
+
+
+
+
+

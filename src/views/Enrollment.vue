@@ -9,9 +9,9 @@ import {
   getMySugangList,
 } from '@/services/CourseService';
 import { postEnrollCourse } from '@/services/SugangService';
-
 const departments = ref([]);
 const years = ref([]);
+
 
 const courseList = ref([]); // 이번학기 개설 강의 목록
 const mySugangList = ref([]); // 수강신청한 강의 목록
@@ -23,6 +23,7 @@ const totalCredit = computed(() =>
 
 //신청 과목 수 계산
 const courseCount = computed(() => mySugangList.value.length);
+
 
 onMounted(async () => {
   const departmentRes = await getDepartments();
@@ -38,10 +39,8 @@ onMounted(async () => {
   mySugangList.value = mySugangListRes.data;
   console.log(mySugangList);
 });
-
 const handleSearch = async (filters) => {
   console.log(' 받은 필터:', filters);
-
   const courseListRes = await getCourseListByFilter(filters);
   console.log('courseListRes: ', courseListRes);
   courseList.value = courseListRes.data;
@@ -52,8 +51,8 @@ const handleEnroll = async (course) => {
   const sugangReq = {
     courseId: course.courseId,
   };
-
   console.log('수강신청할 강의: ', sugangReq);
+
 
   try {
     const sugangRes = await postEnrollCourse(sugangReq);
@@ -72,10 +71,12 @@ const handleEnroll = async (course) => {
 
       courseList.value[idx].enrolled = true;
 
+
       mySugangList.value.push(updatedCourse);
 
       alert('수강신청 완료!');
     }
+
   } catch (error) {
     const err = error.response.data;
     console.log(err);
@@ -91,10 +92,10 @@ const handleEnroll = async (course) => {
       default:
         alert('알 수 없는 오류');
     }
+
   }
 };
 </script>
-
 <template>
   <WhiteBox title="수강 신청">
     <SearchFilterBar
@@ -104,7 +105,6 @@ const handleEnroll = async (course) => {
       :semester="1"
       @search="handleSearch"
     ></SearchFilterBar>
-
     <!-- 개설 과목 테이블  -->
 
     <h5 class="fw-bold mt-3">개설 과목 목록</h5>
@@ -134,6 +134,7 @@ const handleEnroll = async (course) => {
         <span>신청 과목 수: {{ courseCount }}개</span>
       </div>
     </div>
+
     <CourseTable
       :courseList="mySugangList"
       maxHeight="500px"
@@ -148,6 +149,7 @@ const handleEnroll = async (course) => {
     </CourseTable>
   </WhiteBox>
 </template>
+
 
 <style lang="scss">
 .creditInfo {
@@ -165,3 +167,4 @@ const handleEnroll = async (course) => {
   font-weight: 500;
 }
 </style>
+
