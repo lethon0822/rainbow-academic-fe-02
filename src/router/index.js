@@ -1,6 +1,6 @@
 
-import { createRouter, createWebHistory } from "vue-router";
-import StudentRecord from "@/views/StudentRecord.vue";
+
+import { createRouter, createWebHistory } from 'vue-router';
 import Home from "@/views/Home.vue"; // 메인
 
 const router = createRouter({
@@ -28,14 +28,14 @@ const router = createRouter({
     },
     {
       path: "/attendance",
-      component: () => import("@/components/AttendanceInput.vue"),
+      component: () => import("@/components/Attendance.vue"),
     },
     {
       path: "/gradeinput",
-      component: () => import("@/components/GradeInput.vue"),
+      component: () => import("@/components/EnrollmentGrade.vue"),
     },
     {
-      path: "/course/detail",
+      path: "/course/detail/:id",
       component: () => import("@/components/CourseDetail.vue"),
     },
     {
@@ -43,10 +43,16 @@ const router = createRouter({
       component: () => import("@/views/GetAllGrades.vue"),
     },
     {
+      path: "/profile",
+      component: () => import("@/views/StudentRecord.vue"),
+    },
+    {
       path: "/rank",
-      component: StudentRecord,
-     },
-     {
+      component: () => import("@/components/StudentRecordTab.vue"),
+    },
+  
+    // 교수 탭
+    {
       path: '/professor/course/registration',
       name: 'RegistrationCourse',
       component: () => import('@/components/RegistrationCourse.vue'),
@@ -58,6 +64,18 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/enrollment',
+      component: () => import('@/views/Enrollment.vue'),
+    },
+    {
+      path: '/attendance',
+      component: () => import('@/components/Attendance.vue'),
+    },
+    {
+      path: '/enrollmentgrade',
+      component: () => import('@/components/EnrollmentGrade.vue'),
+    },
+    {
       path: '/professor/course/status',
       component: () => import('@/views/ProfessorCourseStatus.vue'),
     },
@@ -66,7 +84,7 @@ const router = createRouter({
       component: () => import('@/views/ProfessorCourseManagement.vue'),
     },
     {
-      path: '/professor/course/students',
+      path: '/professor/course/:id/students',
       component: () => import('@/components/CourseStudentsList.vue'),
     },
     {
@@ -74,10 +92,14 @@ const router = createRouter({
       component: () => import("@/views/CourseEvaluation.vue"),
     },
     {
+
       path: '/sugang/history',
       component: () => import('@/views/CourseList.vue'),
+
+      path: '/renewal/privacy',
+      component: () => import('@/views/RenewalPrivacy.vue'),
+
     },
   ],
 });
-
 export default router;

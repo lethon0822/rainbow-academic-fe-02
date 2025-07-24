@@ -9,3 +9,11 @@ export const getGrades = (params) => {
 export function GradesbyCourse() {
   return axios.get("/student/grade/all", { params: { userId: 1 } });
 }
+
+//학생프로필
+export const getProfile = (loginId = "10001") => {
+  return axios.get("/student/profile", {
+    params: { loginId },
+    withCredentials: true,
+  });
+};

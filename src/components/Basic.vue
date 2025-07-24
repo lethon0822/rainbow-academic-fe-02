@@ -154,12 +154,16 @@ watch(
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/grade/all" class="router-link">
+            <router-link to="/profile" class="router-link">
               학적기본사항관리
             </router-link>
           </li>
-
           <li><a href="javascript:void(0);">학적변동관리</a></li>
+          <li>
+            <router-link to="/renewal/privacy" class="router-link">
+              개인정보변경
+            </router-link>
+          </li>
         </ul>
       </li>
 
@@ -167,7 +171,8 @@ watch(
         <a href="javascript:void(0);">수강</a>
         <ul>
           <li><router-link to="/attendance" class="router-link">출결입력</router-link></li>
-          <li><router-link to="/gradeinput" class="router-link">성적입력</router-link></li>
+          <li><router-link to="/EnrollmentGrade" class="router-link">성적입력</router-link></li>
+          <li><a href="javascript:void(0);">수강조회</a></li>
           <li><router-link to="/enrollment" class="router-link"
               >수강신청 관리</router-link></li>
         </ul>
@@ -191,6 +196,8 @@ watch(
           <li><a href="javascript:void(0);">Settings</a></li>
         </ul>
       </li>
+
+    
     </ul>
   </div>
 </template>

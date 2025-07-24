@@ -39,7 +39,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
   </div>
 
   <!-- 이수구분별 취득학점 테이블 -->
-  <h5>이수구분별 취득학점 (학기별)</h5>
+  <h4>이수구분별 취득학점</h4>
   <div class="table-container">
     <table class="fixed_headers">
       <thead>
@@ -66,7 +66,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
   </div>
 
   <!-- 학기별 성적 테이블 -->
-  <h5>학기별 성적</h5>
+  <h4>학기별 성적</h4>
   <div class="table-container">
     <table class="fixed_headers">
       <thead>
@@ -107,7 +107,6 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
   max-height: 235px;
   overflow-y: auto;
   overflow-x: hidden;
-  border-bottom: 1px solid #ddd;
   scrollbar-color: #888 #fff;
   border-radius: 5px 5px 0 0;
 }
