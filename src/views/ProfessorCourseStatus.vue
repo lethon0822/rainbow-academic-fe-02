@@ -5,6 +5,7 @@ import SearchFilterBar from "@/components/SearchFilterBar.vue";
 import CourseTable from "@/components/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import {  onMounted, ref } from "vue";
+import { getYears } from '@/services/CourseService';
 
 
 const years = ref([]);
@@ -31,7 +32,7 @@ const myCourse = async (filters) => {
 </script>
 <template>
   <WhiteBox :title="'강의신청현황조회'">
-    <SearchFilterBar @search="myCourse" />
+    <SearchFilterBar @search="myCourse" :years="years"/>
     <CourseTable
       :course-list="courseList"
       :show="{ modify: true }"
