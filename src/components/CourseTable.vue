@@ -35,7 +35,7 @@ const change = (status) =>{
 // 강의계획서 새 창 띄우기
 //const link = ref(/course/detail);
 const openLink = (id) => {
-  window.open(/course/detail/${id}, '_blank', 'width=700px,height=800px,scrollbars=yes');
+  window.open(`/course/detail/${id}`, '_blank', 'width=700px,height=800px,scrollbars=yes');
 };
 
 // 강의 관리로 이동 
@@ -43,7 +43,7 @@ const router = useRouter();
 const send = (id, json) =>{
   const jsonBody = JSON.stringify(json);
   router.push({
-    path:/professor/course/${id}/students,
+    path:`/professor/course/${id}/students`,
     state: {
       data:jsonBody
     }
