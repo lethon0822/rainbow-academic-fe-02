@@ -1,43 +1,51 @@
 <script setup>
 import { reactive } from "vue";
 const emit = defineEmits(["search"]);
+
 const props = defineProps({
   //학과와 연도만 받아오고 나머지는 하드코딩임.
   state: Boolean,
   departments: Array,
   years: Array,
+  semester: String,
 });
+
+
 const filters = reactive({
-  year: 2025,
+  year: '',
   type: '',
-  department: '',
+  departmentName: '',
   grade: '',
-  semester: 1,
+  semester: '',
   keyword: '',
 });
 function onSearch() {
-  emit("search", { ...filters });
+  emit('search', { ...filters });
 }
 </script>
 <template>
   <div class="filter-bar">
     <label>연도:</label>
     <select v-model="filters.year">
-      <option value="0">전체</option>
-      <option value="2025">2025</option>
-      <option
-          v-for="y in props.years"
-          :key="y.year"
-          :value="y.year"
-        >
-          {{ y.year }}
-        </option>
+      <option value="">전체</option>
+      <option v-for="y in props.years" :key="y.year" :value="y.year">
+        {{ y.year }}
+      </option>
     </select>
     <label>학기:</label>
     <select v-model="filters.semester">
       <option value="">전체</option>
-      <option value="1">1학기</option>
-      <option value="2">2학기</option>
+
+      <!-- props.semester가 있으면 (수강신청시 지정학기만 떠야되므로) 그 값만 보여줌 -->
+      <template v-if="props.semester">
+        <option :value="props.semester">{{ props.semester }}학기</option>
+      </template>
+
+      <!-- 없으면 기본 1학기/2학기 보여줌 -->
+      <template v-else>
+        <option value="1">1학기</option>
+        <option value="2">2학기</option>
+      </template>
     </select>
     <div v-if="props.state">
       <label>이수구분:</label>
@@ -47,7 +55,7 @@ function onSearch() {
         <option value="교양">교양</option>
       </select>
       <label>학과:</label>
-      <select v-model="filters.department">
+      <select v-model="filters.departmentName">
         <option value="">전체</option>
         <option
           v-for="d in props.departments"
@@ -62,8 +70,8 @@ function onSearch() {
         <option value="">전체</option>
         <option value="1">1학년</option>
         <option value="2">2학년</option>
-        <option value="2">3학년</option>
-        <option value="2">4학년</option>
+        <option value="3">3학년</option>
+        <option value="4">4학년</option>
       </select>
       <label>교과목명:</label>
       <input
@@ -100,7 +108,7 @@ function onSearch() {
   border: none;
   border-radius: 4px;
 }
-button{
+button {
   margin-left: auto;
 }
 </style>

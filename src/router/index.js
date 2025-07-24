@@ -1,6 +1,8 @@
 
+
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from "@/views/Home.vue"; // 메인
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -90,8 +92,13 @@ const router = createRouter({
       component: () => import("@/views/CourseEvaluation.vue"),
     },
     {
+
+      path: '/sugang/history',
+      component: () => import('@/views/CourseList.vue'),
+
       path: '/renewal/privacy',
       component: () => import('@/views/RenewalPrivacy.vue'),
+
     },
   ],
 });

@@ -4,3 +4,4 @@ import axios from "@/services/httpRequester"
 export const postEnrollCourse = (sugangReq) => {
     return axios.post('/student/sugang', sugangReq); 
 }
+

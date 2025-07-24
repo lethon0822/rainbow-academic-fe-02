@@ -1,4 +1,5 @@
-<script setup>
+ <script setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 defineProps({
@@ -15,6 +16,7 @@ defineProps({
       remStd: false,
       enroll: false,
       cancel: false,
+      deptName: true,
       setting: false, //학생관리
       modify: false, // 강의 신청 조회시 수정 버튼 활성화
     }),
@@ -33,7 +35,7 @@ const change = (status) =>{
 // 강의계획서 새 창 띄우기
 //const link = ref(/course/detail);
 const openLink = (id) => {
-  window.open(`/course/detail/${id}`, '_blank', 'width=700px,height=800px,scrollbars=yes');
+  window.open(/course/detail/${id}, '_blank', 'width=700px,height=800px,scrollbars=yes');
 };
 
 // 강의 관리로 이동 
@@ -41,7 +43,7 @@ const router = useRouter();
 const send = (id, json) =>{
   const jsonBody = JSON.stringify(json);
   router.push({
-    path:`/professor/course/${id}/students`,
+    path:/professor/course/${id}/students,
     state: {
       data:jsonBody
     }
@@ -55,7 +57,7 @@ const send = (id, json) =>{
       <thead>
         <tr>
           <th>과목코드</th>
-          <th>학과</th>
+          <th v-if="show.depeName">학과</th>
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
@@ -68,12 +70,13 @@ const send = (id, json) =>{
           <th v-if="show.enroll || show.cancel">수강</th>
           <th v-if="show.modify">승인여부</th>
           <th v-if="show.setting || show.modify"> </th>
+          
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseId }}</td>
-          <td>{{ course.deptName }}</td>
+          <td v-if="show.depeName">{{ course.deptName }}</td>
           <td>
             <div v-if="show.modify">{{ course.title }}</div>
             <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
@@ -88,8 +91,8 @@ const send = (id, json) =>{
           <td v-if="show.modify" class="status" :class="change(course.status)">{{ course.status }}</td> <!-- 승인여부 뜨기 -->
           <td v-if="show.remStd">{{ course.remStd }}</td>
           <td v-if="show.enroll">
-            <button class="enroll-btn" @click="$emit('enroll', course)">
-              수강신청
+            <button class="enroll-btn" :class="{enrolled: course.enrolled}" :disabled="course.enrolled" @click="$emit('enroll', course)">
+              {{ course.enrolled ? "신청완료": "수강신청" }}
             </button>
           </td>
           <td v-else-if="show.cancel">
@@ -168,6 +171,16 @@ button.enroll-btn {
     background-color: #1F53B5;
   }
 }
+
+.enroll-btn.enrolled {
+  background-color: gray;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: gray;
+  }
+}
+
 button.cancel-btn {
   background-color: #F44336;
   color: white;
@@ -197,4 +210,4 @@ button.cancel-btn {
   color:#2460ce;
   font-weight: 700;
 }
-</style>
+</style> 
