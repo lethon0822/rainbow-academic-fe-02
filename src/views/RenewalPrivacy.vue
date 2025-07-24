@@ -5,6 +5,8 @@ import { reactive } from 'vue';
 
 const state = reactive({
   form: {
+    name: '',
+    addressPreview: '',
     studentId: '',
     studentNumber: '',
     zipcode: '',
@@ -61,6 +63,7 @@ const searchStudentNumber = async () => {
     console.log('검색 결과:', res);
 
     if (res?.data) {
+      state.form.name = res.data.name ?? '';
       state.form.zipcode = res.data.zipcode ?? '';
       state.form.detailAddress = res.data.detailAddress ?? '';
       state.form.phone = res.data.phone ?? '';
@@ -137,7 +140,7 @@ const changePassword = async () => {
         <div class="table-content d-flex">
           <input type="text" class="num" v-model="state.form.studentNumber">
           <i class="fas fa-search" style="cursor:pointer;" @click="searchStudentNumber"></i>
-          <input type="text" class="name" disabled />
+          <input type="text" class="name" disabled v-model="state.form.name" />
         </div>
       </div>
       
