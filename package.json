@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "@vue/compiler-sfc": "^3.5.17",
     "axios": "^1.10.0",
+    "bootstrap": "^5.3.7",
     "bootstrap-vue-3": "^0.5.1",
     "pinia": "^2.1.7",
     "vue": "^3.5.17",
