@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from "vue-router";
+
+import { createRouter, createWebHistory } from 'vue-router';
 import Home from "@/views/Home.vue"; // 메인
 const router = createRouter({
   history: createWebHistory(),
