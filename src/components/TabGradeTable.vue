@@ -75,6 +75,7 @@ function handleButtonClick(grade) {
 <style scoped lang="scss">
 .table-wrapper {
   margin: 20px auto;
+  margin-top: 15px;
   max-width: 1430px;
   background-color: white;
   display: flex;
@@ -130,7 +131,6 @@ function handleButtonClick(grade) {
   text-overflow: ellipsis;
 }
 
-// 행 hover 효과
 .body-table tbody tr:hover {
   background-color: #f9f9f9;
 }

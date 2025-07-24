@@ -40,6 +40,8 @@ const submit = async () => {
   }
   const userStore = useUserStore();
   userStore.userName = res.data.userName;
+  userStore.userId = res.data.userId;
+  userStore.userRole = res.data.userRole;
 };
 </script>
 

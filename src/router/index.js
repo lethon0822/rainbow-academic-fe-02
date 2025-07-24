@@ -32,7 +32,11 @@ const router = createRouter({
       component: () => import("@/components/Attendance.vue"),
     },
     {
-      path: "/course/detail",
+      path: "/gradeinput",
+      component: () => import("@/components/EnrollmentGrade.vue"),
+    },
+    {
+      path: "/course/detail/:id",
       component: () => import("@/components/CourseDetail.vue"),
     },
     {
@@ -43,6 +47,8 @@ const router = createRouter({
       path: "/rank",
       component: StudentRecord,
     },
+  
+    // 교수 탭
     {
       path: '/professor/course/registration',
       name: 'RegistrationCourse',
@@ -54,8 +60,6 @@ const router = createRouter({
       component: () => import('@/components/RegistrationCourse.vue'),
       props: true
     },
-    
-      
     {
       path: '/enrollment',
       component: () => import('@/views/Enrollment.vue'),
@@ -72,7 +76,6 @@ const router = createRouter({
       path: '/professor/course/status',
       component: () => import('@/views/ProfessorCourseStatus.vue'),
     },
-    
     {
       path: '/professor/course/management',
       component: () => import('@/views/ProfessorCourseManagement.vue'),
@@ -87,5 +90,4 @@ const router = createRouter({
     },
   ],
 });
-
 export default router;

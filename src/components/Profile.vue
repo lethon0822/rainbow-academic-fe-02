@@ -1,6 +1,12 @@
 <script setup></script>
 
 <template>
+  <div class="inner">
+    <h2 class="title">학적기본사항관리</h2>
+    <div class="line"></div>
+    <slot></slot>
+  </div>
+
   <div class="profile-container">
     <!-- 이미지 영역을 별도의 박스로 분리 -->
     <div class="image-box">
@@ -112,7 +118,29 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+.inner {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  padding: 30px;
+  margin: 30px 30px 30px 250px;
+  width: 100%;
+  max-width: 1430px;
+  margin-left: 250px;
+}
+
+.title {
+  font-size: 38px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.line {
+  border-bottom: 2px solid #1f2c5a;
+  margin-bottom: -30px;
+}
+
 body {
   font-family: "Malgun Gothic", sans-serif;
   background-color: #f5f5f5;
