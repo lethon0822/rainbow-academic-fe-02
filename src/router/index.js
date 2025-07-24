@@ -1,6 +1,4 @@
-
-
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue"; // 메인
 
 const router = createRouter({
@@ -50,59 +48,56 @@ const router = createRouter({
       path: "/rank",
       component: () => import("@/components/StudentRecordTab.vue"),
     },
-  
+
     // 교수 탭
     {
-      path: '/professor/course/registration',
-      name: 'RegistrationCourse',
-      component: () => import('@/components/RegistrationCourse.vue'),
+      path: "/professor/course/registration",
+      name: "RegistrationCourse",
+      component: () => import("@/components/RegistrationCourse.vue"),
     },
     {
-      path: '/professor/course/registration/:id',
-      name: 'ModifyCourse',
-      component: () => import('@/components/RegistrationCourse.vue'),
-      props: true
+      path: "/professor/course/registration/:id",
+      name: "ModifyCourse",
+      component: () => import("@/components/RegistrationCourse.vue"),
+      props: true,
     },
     {
-      path: '/enrollment',
-      component: () => import('@/views/Enrollment.vue'),
+      path: "/enrollment",
+      component: () => import("@/views/Enrollment.vue"),
     },
     {
-      path: '/attendance',
-      component: () => import('@/components/Attendance.vue'),
+      path: "/attendance",
+      component: () => import("@/components/Attendance.vue"),
     },
     {
-      path: '/enrollmentgrade',
-      component: () => import('@/components/EnrollmentGrade.vue'),
+      path: "/enrollmentgrade",
+      component: () => import("@/components/EnrollmentGrade.vue"),
     },
     {
-      path: '/professor/course/status',
-      component: () => import('@/views/ProfessorCourseStatus.vue'),
+      path: "/professor/course/status",
+      component: () => import("@/views/ProfessorCourseStatus.vue"),
     },
     {
-      path: '/professor/course/management',
-      component: () => import('@/views/ProfessorCourseManagement.vue'),
+      path: "/professor/course/management",
+      component: () => import("@/views/ProfessorCourseManagement.vue"),
     },
     {
-      path: '/professor/course/:id/students',
-      component: () => import('@/components/CourseStudentsList.vue'),
+      path: "/professor/course/:id/students",
+      component: () => import("@/components/CourseStudentsList.vue"),
     },
     {
       path: "/course/survey",
       component: () => import("@/views/CourseEvaluation.vue"),
     },
     {
+      path: "/course/history",
 
-      path: '/course/history',
-
-      component: () => import('@/views/CourseList.vue'),
+      component: () => import("@/views/CourseList.vue"),
     },
-    
+
     {
-
-      path: '/renewal/privacy',
-      component: () => import('@/views/RenewalPrivacy.vue'),
-
+      path: "/renewal/privacy",
+      component: () => import("@/views/RenewalPrivacy.vue"),
     },
   ],
 });
