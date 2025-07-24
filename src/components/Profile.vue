@@ -226,7 +226,6 @@ const saveProfile = async () => {
                 <select v-model="formData.studentType">
                   <option>대학생</option>
                   <option>대학원생</option>
-                  <option>교환학생</option>
                 </select>
               </td>
             </tr>
@@ -256,9 +255,8 @@ const saveProfile = async () => {
               <td class="value-cell">
                 <select v-model="formData.department">
                   <option>선택</option>
-                  <option>컴퓨터공학과</option>
-                  <option>전자공학과</option>
-                  <option>기계공학과</option>
+                  <option>자연융합학부</option>
+                  <option>공학시스템학부</option>
                 </select>
               </td>
             </tr>
@@ -282,8 +280,10 @@ const saveProfile = async () => {
             </tr>
 
             <tr>
-              <td class="label-cell">졸업충족 학점</td>
-              <td class="value-cell" colspan="2">48(이수)/ 140(총)</td>
+              <td class="label-cell">졸업충족학점</td>
+              <td class="value-cell" colspan="2">
+                {{ profile.totalCredits }}(이수) / 140(총)
+              </td>
             </tr>
           </table>
         </div>
