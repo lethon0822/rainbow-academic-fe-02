@@ -1,4 +1,11 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+  profile: {
+    type: Object,
+    default: () => ({}),
+  },
+});
+</script>
 
 <template>
   <div class="inner">
@@ -35,17 +42,17 @@
           <table>
             <tr>
               <td class="label-cell">학번</td>
-              <td class="value-cell">1234567</td>
+              <td class="value-cell">{{ profile.loginId }}</td>
             </tr>
 
             <tr>
               <td class="label-cell">성명(한글)</td>
-              <td class="value-cell">홍길동</td>
+              <td class="value-cell">{{ profile.userName }}</td>
             </tr>
 
             <tr>
               <td class="label-cell">E-mail</td>
-              <td class="value-cell">123@naver.com</td>
+              <td class="value-cell">{{ profile.email }}</td>
             </tr>
 
             <tr>
@@ -68,7 +75,7 @@
 
             <tr>
               <td class="label-cell">학적상태</td>
-              <td class="value-cell">졸업</td>
+              <td class="value-cell">{{ profile.status }}</td>
             </tr>
           </table>
         </div>
@@ -77,7 +84,7 @@
           <table>
             <tr>
               <td class="label-cell">학년</td>
-              <td class="value-cell" colspan="2">4</td>
+              <td class="value-cell" colspan="2">{{ profile.grade }}</td>
             </tr>
 
             <tr>
@@ -91,18 +98,22 @@
             </tr>
             <tr>
               <td class="label-cell">전공</td>
-              <td class="value-cell"></td>
+              <td class="value-cell">{{ profile.deptName }}</td>
             </tr>
 
             <tr>
               <td class="label-cell">담당교수</td>
-              <td class="value-cell" colspan="2">김성배</td>
+              <td class="value-cell" colspan="2">
+                {{ profile.professorName }}
+              </td>
             </tr>
+
             <tr>
               <td class="label-cell">학기</td>
               <td class="value-cell" colspan="2">
-                <select>
-                  <option>1학기</option>
+                <select v-model="profile.semester">
+                  <option value="1">1학기</option>
+                  <option value="2">2학기</option>
                 </select>
               </td>
             </tr>
