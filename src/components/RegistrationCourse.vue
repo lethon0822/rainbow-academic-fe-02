@@ -139,7 +139,7 @@ const submit = async () => {
           </template>
           <template v-else>
             <div class="table-content">
-              <input type="text" value="수강희망자" disabled/>
+              <input type="text" value="1" disabled/>
             </div>
           </template>
         </div>
@@ -155,13 +155,13 @@ const submit = async () => {
         <div class="table d-flex detail">
           <div class="table-title">강의목표</div>
           <div class="table-content">
-            <input type="text" v-model="state.form.goal" />
+            <textarea type="text" v-model="state.form.goal"></textarea>
           </div>
         </div>
         <div class="table d-flex detail last">
           <div class="table-title">주차별계획</div>
           <div class="table-content">
-            <input type="text" v-model="state.form.weekPlan" />
+            <textarea type="text" v-model="state.form.weekPlan"></textarea>
           </div>
         </div>
         <div class="button">
@@ -223,11 +223,13 @@ select {
   padding: 3px;
   flex: 1;
 }
-input {
+input, textarea {
   width: 100%;
+  height: 100%;
   box-sizing: border-box;
   outline-color: #A2A2A2;
 }
+
 .button {
   display: flex;
   justify-content: flex-end;

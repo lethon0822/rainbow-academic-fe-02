@@ -4,28 +4,36 @@ import WhiteBox from "@/components/WhiteBox.vue";
 import SearchFilterBar from "@/components/SearchFilterBar.vue";
 import CourseTable from "@/components/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
-import { reactive } from "vue";
-import { useUserStore } from "@/stores/account";
-const state = reactive({
-  item: [],
+import {  onMounted, ref } from "vue";
+
+
+const years = ref([]);
+const courseList = ref([]);
+
+
+onMounted(async ()=>{
+
+const yearRes = await getYears();
+years.value = yearRes.data;
+
 });
-const userStore = useUserStore();
+
 const myCourse = async (filters) => {
-  console.log("야:",userStore.userId);
+  
   const json = {
     year: filters.year,
     semester: filters.semester,
   };
   const res = await findMyCourse(json);
-  state.item = res.data;
-  console.log(state.item);
+  courseList.value= res.data;
+
 };
 </script>
 <template>
   <WhiteBox :title="'강의신청현황조회'">
     <SearchFilterBar @search="myCourse" />
     <CourseTable
-      :course-list="state.item"
+      :course-list="courseList"
       :show="{ modify: true }"
       class="some"
     />

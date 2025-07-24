@@ -19,7 +19,8 @@ const filters = reactive({
   semester: '',
   keyword: '',
 });
-function onSearch() {
+
+const onSearch =()=>{
   emit('search', { ...filters });
 }
 </script>
