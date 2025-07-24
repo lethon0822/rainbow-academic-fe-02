@@ -30,7 +30,10 @@ onMounted(async ()=>{
     console.log('아이디:',id)
     const res = await courseStudentList(id);
     console.log("res",res)
-    state.data =res.data
+    if(res.data.length > 0){
+      state.data =res.data
+      return;
+    }
     
   }
 })

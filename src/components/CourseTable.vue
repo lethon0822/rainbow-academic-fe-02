@@ -41,6 +41,8 @@ const openLink = (id) => {
 // 강의 관리로 이동 
 const router = useRouter();
 const send = (id, json) =>{
+
+  console.log("먀오:",json)
   const jsonBody = JSON.stringify(json);
   router.push({
     path:`/professor/course/${id}/students`,
