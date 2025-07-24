@@ -215,7 +215,9 @@ watch(
       <li class="menu-etc">
         <a href="javascript:void(0);">기타 다른 메뉴</a>
         <ul>
-          <li><a href="javascript:void(0);">Search</a></li>
+          <li>
+            <router-link to="/test" class="router-link">테스트메뉴</router-link>
+          </li>
           <li><a href="javascript:void(0);">Graphs</a></li>
           <li><a href="javascript:void(0);">Settings</a></li>
         </ul>

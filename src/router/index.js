@@ -1,12 +1,15 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/views/Home.vue"; // 메인
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: "/",
-      component: Home,
+      component: () => import("@/views/LoginPage.vue"),
+    },
+    {
+      path: "/main",
+      component: () => import("@/views/Home.vue"),
     },
     {
       path: "/login",
@@ -98,6 +101,12 @@ const router = createRouter({
     {
       path: "/renewal/privacy",
       component: () => import("@/views/RenewalPrivacy.vue"),
+    },
+
+    //테스트 중 지워도 됩니다
+    {
+      path: "/test",
+      component: () => import("@/views/TestMain.vue"),
     },
   ],
 });
