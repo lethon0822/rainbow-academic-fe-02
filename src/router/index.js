@@ -54,6 +54,10 @@ const router = createRouter({
       path: '/course/detail',
       component: () => import('@/components/CourseDetail.vue'),
     },
+    {
+      path: '/renewal/privacy',
+      component: () => import('@/views/RenewalPrivacy.vue'),
+    },
   ],
 });
 

@@ -158,8 +158,15 @@ watch(
               학적기본사항관리
             </router-link>
           </li>
-
           <li><a href="javascript:void(0);">학적변동관리</a></li>
+          <li>
+            <router-link to="/renewal/privacy" class="router-link">
+              개인정보변경
+            </router-link>
+          </li>
+
+
+          
         </ul>
       </li>
 
@@ -194,14 +201,7 @@ watch(
         </ul>
       </li>
 
-      <li class="menu-infoma">
-        <a href="javascript:void(0);">개인정보확인</a>
-        <ul>
-          <li><a href="javascript:void(0);">교수</a></li>
-          <li><a href="javascript:void(0);">학생</a></li>
-        </ul>
-        
-      </li>
+    
     </ul>
   </div>
 </template>
