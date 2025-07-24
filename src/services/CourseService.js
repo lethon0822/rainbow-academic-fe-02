@@ -17,3 +17,8 @@ export const getCourseListByFilter = (filters) => {
         params: filters,
     });
 }
+
+// 강의조회
+export const loadCourse = course_id =>{
+  return axios.get(`/course/${course_id}`, course_id).catch(e => e.response);
+}

@@ -1,135 +1,163 @@
 <script setup>
-import { reactive } from "vue";
-import { saveCourse } from "@/services/professor";
-import { useRouter } from "vue-router";
+import { reactive , onMounted} from "vue";
+import { useRouter, useRoute } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
+import { loadCourse } from "@/services/CourseService";
 
 const state = reactive({
   form: {
-    classroom: "",
-    type: "전공",
+    classroom: '',
+    type: '전공',
     semester: 1,
-    time: "",
-    title: "",
+    time: '',
+    title: '',
     credit: null,
-    weekPlan: "",
-    textBook: "",
-    goal: "",
+    weekPlan: '',
+    textBook: '',
+    goal: '',
     maxStd: null,
+    deptName: "",
+    userName:"",
+    grade: null
   },
 });
 
-const router = useRouter();
+const route = useRoute();
+onMounted(()=>{
+  const id = route.params.id
+  loadCourseDetail(id);
 
-const submit = async () => {
-  console.log("시작할게");
+})
 
-  const res = await saveCourse(state.form);
-  console.log("알이에스:", res);
-
+const loadCourseDetail = async (id) => {
+  
+  const res = await loadCourse(id);
   if (res === undefined || res.status !== 200) {
-    alert("오류 발생. 잠시 후 다시 실행해주십시오.");
+    alert('오류 발생. 잠시 후 다시 실행해주십시오.');
     return;
   }
-  console.log("성공했나?");
-  router.push("/professor/course/management");
+  state.form = res.data;
+  if(state.form.type === '교양'){
+    state.form.deptName ='교양학부'
+  }
+
+
 };
 </script>
 
 <template>
-  <div class="container">
-    <p>강의</p>
-    <div class="table d-flex top">
-      <div class="table-title">교과목명</div>
-      <div class="table-content">
-        <!-- 입력 -->
+  <WhiteBox :title="'강의계획서'" class="white-box">
+    <div class="container">
+      
+      <div class="table d-flex top">
+        <div class="table-title">교과목명</div>
+        <div class="table-content">
+          {{state.form.title}}
+        </div>
+        <div class="table-title">담당교수</div>
+        <div class="table-content">
+          {{ state.form.userName }}
+        </div>
       </div>
-    </div>
 
-    <div class="table d-flex">
-      <div class="table-title">교과구분</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">이수구분</div>
+        <div class="table-content">
+          {{ state.form.type }}
+        </div>
+
+        <div class="table-title">학과명</div>
+        <div class="table-content">
+          {{ state.form.deptName }}
+        </div>
       </div>
 
-      <div class="table-title">학과명</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">이수학점</div>
+        <div class="table-content">
+          {{ state.form.credit}}
+        </div>
+        <div class="table-title">학기</div>
+        <div class="table-content">
+          {{ state.form.semester}}
+        </div>
       </div>
-    </div>
 
-    <div class="table d-flex">
-      <div class="table-title">이수학점</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex">
+        <div class="table-title">강의시간</div>
+        <div class="table-content">
+          {{ state.form.time}}
+        </div>
+        <div class="table-title">수강대상</div>
+        <template v-if="state.form.type === '전공'">
+          <div class="table-content">
+            {{ state.form.deptName +" "+ state.form.grade}}학년
+          </div>
+        </template>
+        <template v-else>
+          <div class="table-content">
+            수강희망자
+          </div>
+        </template>
       </div>
-      <div class="table-title">학기</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
 
-    <div class="table d-flex">
-      <div class="table-title">강의시간</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex last">
+        <div class="table-title">수강정원</div>
+        <div class="table-content">
+          {{ state.form.maxStd}}
+        </div>
+        <div class="table-title">강의실</div>
+        <div class="table-content">
+          {{ state.form.classroom}}
+        </div>
       </div>
-    </div>
 
-    <div class="table d-flex last">
-      <div class="table-title">수강인원</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <p>강의 계획서</p>
+      <div class="table d-flex top">
+        <div class="table-title">교재</div>
+        <div class="table-content">
+          {{ state.form.textBook}}
+        </div>
       </div>
-      <div class="table-title">강의실</div>
-      <div class="table-content">
-        <!-- 입력 -->
+      <div class="table d-flex detail">
+        <div class="table-title">강의목표</div>
+        <div class="table-content">
+          {{ state.form.goal}}
+        </div>
       </div>
-    </div>
+      <div class="table d-flex detail last">
+        <div class="table-title">주차별계획</div>
+        <div class="table-content">
+          {{ state.form.weekPlan}}
+        </div>
+      </div>
 
-    <p>강의 계획서</p>
-    <div class="table d-flex top">
-      <div class="table-title">교재</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
-    <div class="table d-flex detail">
-      <div class="table-title">강의목표</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
-    <div class="table d-flex detail last">
-      <div class="table-title">주차별계획</div>
-      <div class="table-content">
-        <!-- 입력 -->
-      </div>
-    </div>
+      <p>평가방법</p>
 
-    <p>평가방법</p>
-
-    <div class="score">
-      <div class="title">
-        <div>출석</div>
-        <div>중간고사</div>
-        <div>기말고사</div>
-      </div>
-      <div class="per">
-        <div>20%</div>
-        <div class="middle"><span>40%</span></div>
-        <div>40%</div>
+      <div class="score">
+        <div class="title">
+          <div>출석</div>
+          <div>중간고사</div>
+          <div>기말고사</div>
+        </div>
+        <div class="per">
+          <div><span>20%</span></div>
+          <div class="middle"><span>40%</span></div>
+          <div><span> 40%</span></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="empty"></div>
+  </WhiteBox>
 </template>
 
 <style scoped lang="scss">
+.white-box{
+  max-width: 1080px;
+}
 .container {
   margin-top: 70px;
-  max-width: 1280px;
-  min-width: 1280px;
+  max-width: 1080px;
+  min-width: 1028px;
 }
 
 .title {
@@ -155,11 +183,17 @@ const submit = async () => {
   height: 120px;
   align-items: center;
   div {
-    height: 120px;
+    height: 100%;
     flex: 1;
     text-align: center;
     font-size: 20px;
-    align-items: center;
+
+    span {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
 .middle {
@@ -227,7 +261,7 @@ input {
 
 .detail {
   height: 200px;
-  .table-content {
+  .table-content { 
     input {
       height: 100%;
     }

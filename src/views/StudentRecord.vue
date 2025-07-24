@@ -12,7 +12,6 @@ console.log("로그인 아이디:", account.state.loggedIn);
 
 const profile = ref({});
 const grades = ref([]);
-
 onMounted(async () => {
   try {
     const gradeResponse = await getGrades();
@@ -37,14 +36,12 @@ onMounted(async () => {
   }
 });
 </script>
-
 <template>
   <div class="content">
     <Profile :profile="profile" />
     <StudentRecordTab :grades="grades" :profile="profile" />
   </div>
 </template>
-
 <style scoped lang="scss">
 .content {
   position: relative;
