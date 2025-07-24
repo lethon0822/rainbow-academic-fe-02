@@ -16,6 +16,12 @@ const years = ref([]);
 const courseList = ref([]); // 이번학기 개설 강의 목록
 const mySugangList = ref([]); // 수강신청한 강의 목록
 
+//신청 학점 계산
+const totalCredit = computed(() =>
+  mySugangList.value.reduce((sum, course) => sum + course.credit, 0)
+);
+
+//신청 과목 수 계산
 const courseCount = computed(() => mySugangList.value.length);
 
 onMounted(async () => {
@@ -118,7 +124,7 @@ const handleEnroll = async (course) => {
     ></CourseTable>
 
     <!-- 나의 수강신청 내역 -->
-    
+
     <div class="creditInfo">
       <h5 class="fw-bold mt-2 mb-0.3rem">신청 내역</h5>
       <div class="credit-box">
