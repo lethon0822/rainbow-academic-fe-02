@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted } from "vue";
-import GradeTable from "@/components/GradeTable.vue";
+import { ref } from "vue";
+import GradeTable from "@/components/TabGradeTable.vue";
+import TabAcademicStatus from "@/components/TabAcademicStatus.vue";
+import TabBasicInfo from "@/components/TabBasicInfo.vue";
 
-// 상위 컴포넌트에서 props로 전달받음
 const props = defineProps({
   grades: {
     type: Array,
@@ -10,164 +11,51 @@ const props = defineProps({
   },
 });
 
-const handleTabClick = (event) => {
-  event.preventDefault();
+const activeTabIndex = ref(0);
 
-  const link = event.target;
-  const tabgroup = "#" + link.closest(".tabs").dataset.tabgroup;
-  const siblings = link.closest("li").parentElement.querySelectorAll("a");
-  const target = link.getAttribute("href");
-
-  // 다른 탭들 비활성화
-  siblings.forEach((sibling) => sibling.classList.remove("active"));
-
-  // 현재 탭 활성화
-  link.classList.add("active");
-
-  // 모든 탭 콘텐츠 숨기기
-  const tabGroupElement = document.querySelector(tabgroup);
-  const allContents = tabGroupElement.querySelectorAll("div");
-  allContents.forEach((content) => (content.style.display = "none"));
-
-  // 선택된 탭 콘텐츠만 보이기
-  const targetContent = document.querySelector(target);
-  if (targetContent) {
-    targetContent.style.display = "block";
-  }
-};
-
-const handleTabClose = (event) => {
-  event.stopPropagation();
-
-  const closeBtn = event.target;
-  const li = closeBtn.closest("li");
-  const link = li.querySelector("a");
-  const targetId = link.getAttribute("href");
-  const content = document.querySelector(targetId);
-  const tabGroup = content.closest(".tabgroup");
-
-  const isActive = link.classList.contains("active");
-
-  // 탭과 콘텐츠 제거
-  li.remove();
-  content.remove();
-
-  // 활성 탭이 제거된 경우 다른 탭 활성화
-  if (isActive) {
-    const tabsContainer = tabGroup.previousElementSibling;
-    const nextTab = tabsContainer.querySelector("a");
-    if (nextTab) {
-      nextTab.classList.add("active");
-      const nextTarget = nextTab.getAttribute("href");
-
-      // 모든 콘텐츠 숨기기
-      const allContents = tabGroup.querySelectorAll("div");
-      allContents.forEach((content) => (content.style.display = "none"));
-
-      // 다음 탭 콘텐츠 보이기
-      const nextContent = document.querySelector(nextTarget);
-      if (nextContent) {
-        nextContent.style.display = "block";
-      }
-    }
-  }
-};
-
-onMounted(() => {
-  // 모든 탭 콘텐츠 숨기기
-  const allTabContents = document.querySelectorAll(".tabgroup > div");
-  allTabContents.forEach((content) => (content.style.display = "none"));
-
-  // 각 탭 그룹의 첫 번째 콘텐츠만 보이기
-  const tabGroups = document.querySelectorAll(".tabgroup");
-  tabGroups.forEach((group) => {
-    const firstContent = group.querySelector("div:first-of-type");
-    if (firstContent) {
-      firstContent.style.display = "block";
-    }
-  });
-
-  // 탭 클릭 이벤트 추가
-  const tabLinks = document.querySelectorAll(".tabs a");
-  tabLinks.forEach((link) => {
-    link.addEventListener("click", handleTabClick);
-  });
-
-  // 탭 닫기 이벤트 추가
-  const closeButtons = document.querySelectorAll(".tab-close");
-  closeButtons.forEach((btn) => {
-    btn.addEventListener("click", handleTabClose);
-  });
-});
+function selectTab(index) {
+  activeTabIndex.value = index;
+}
 </script>
 
 <template>
   <div class="wrapper">
-    <ul class="tabs clearfix" data-tabgroup="tab-group-1">
-      <li>
-        <a href="#tab1-1" class="active">Tab 1</a
-        ><span class="tab-close">×</span>
-      </li>
-      <li><a href="#tab2-1">Tab 2</a><span class="tab-close">×</span></li>
-      <li><a href="#tab3-1">Tab 3</a><span class="tab-close">×</span></li>
-      <li><a href="#tab4-1">Tab 4</a><span class="tab-close">×</span></li>
-      <li><a href="#tab5-1">Tab 5</a><span class="tab-close">×</span></li>
-    </ul>
-
-    <section id="tab-group-1" class="tabgroup">
-      <div id="tab1-1">
-        <GradeTable :grades="grades" />
-      </div>
-
-      <div id="tab2-1">
-        <h2>Heading 2</h2>
-        <p>Tab 2 content...</p>
-      </div>
-      <div id="tab3-1">
-        <h2>Heading 3</h2>
-        <p>Tab 3 content...</p>
-      </div>
-      <div id="tab4-1">
-        <h2>Heading 4</h2>
-        <p>Tab 4 content...</p>
-      </div>
-      <div id="tab5-1">
-        <h2>Heading 5</h2>
-        <p>Tab 5 content...</p>
-      </div>
-    </section>
-  </div>
-
-  <div class="wrapper">
     <ul class="tabs clearfix" data-tabgroup="tab-group-2">
-      <li>
-        <a href="#tab1-2" class="active">Tab 1</a>
+      <li :class="{ active: activeTabIndex === 0 }">
+        <a href="#" @click.prevent="selectTab(0)">학적사항</a>
       </li>
-      <li><a href="#tab2-2">Tab 2</a></li>
-      <li><a href="#tab3-2">Tab 3</a></li>
-      <li><a href="#tab4-2">Tab 4</a></li>
-      <li><a href="#tab5-2">Tab 5</a></li>
+      <li :class="{ active: activeTabIndex === 1 }">
+        <a href="#" @click.prevent="selectTab(1)">기본정보</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 2 }">
+        <a href="#" @click.prevent="selectTab(2)">수업/성적</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 3 }">
+        <a href="#" @click.prevent="selectTab(3)">등록</a>
+      </li>
+      <li :class="{ active: activeTabIndex === 4 }">
+        <a href="#" @click.prevent="selectTab(4)">장학</a>
+      </li>
     </ul>
 
     <section id="tab-group-2" class="tabgroup">
-      <div id="tab1-2">
+      <div v-show="activeTabIndex === 0">
+        <h5>학적세부사항</h5>
+        <TabAcademicStatus />
+      </div>
+      <div v-show="activeTabIndex === 1">
+        <h5>개인 신상</h5>
+        <TabBasicInfo />
+      </div>
+      <div v-show="activeTabIndex === 2">
+        <h5>수업/성적 조회</h5>
         <GradeTable :grades="grades" />
       </div>
-      <div id="tab2-2">
-        <h2>Heading 2</h2>
-        <p>Tab 2 content...</p>
+      <div v-show="activeTabIndex === 3">
+        <h5>등록현황 조회</h5>
       </div>
-      <div id="tab3-2">
-        <h2>Heading 3</h2>
-        <p>Tab 3 content...</p>
-      </div>
-      <div id="tab4-2">
-        <h2>Heading 4</h2>
-        <p>Tab 4 content...</p>
-      </div>
-      <div id="tab5-2">
-        <h2>Heading 5</h2>
-        <p>Tab 5 content...</p>
+      <div v-show="activeTabIndex === 4">
+        <h5>장학현황 조회</h5>
       </div>
     </section>
   </div>
@@ -190,7 +78,8 @@ onMounted(() => {
 
 .tabs li {
   float: left;
-  width: 20%;
+  width: 8%;
+  margin-right: 8px;
   position: relative;
 }
 
@@ -200,18 +89,19 @@ onMounted(() => {
   text-decoration: none;
   text-transform: uppercase;
   color: #fff;
-  padding: 20px 0;
-  border-bottom: 2px solid #888;
+  padding: 10px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #888;
   background: #a2a2a2;
+  cursor: pointer;
 }
 
 .tabs a:hover {
   background: #f7f7f7;
   color: #888;
-  cursor: pointer;
 }
 
-.tabs a.active {
+.tabs li.active a {
   background: #2460ce;
   color: white;
 }
@@ -232,10 +122,11 @@ onMounted(() => {
 
 .tabgroup div {
   padding: 15px;
+  margin-bottom: 10px;
   background-color: #fff;
   clear: both;
+  width: 99.2%;
 }
-
 .clearfix::after {
   content: "";
   display: table;
