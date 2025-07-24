@@ -89,6 +89,10 @@ const router = createRouter({
       path: "/course/survey",
       component: () => import("@/views/CourseEvaluation.vue"),
     },
+    {
+      path: '/renewal/privacy',
+      component: () => import('@/views/RenewalPrivacy.vue'),
+    },
   ],
 });
 export default router;
