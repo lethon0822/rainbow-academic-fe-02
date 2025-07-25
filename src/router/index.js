@@ -36,10 +36,6 @@ const router = createRouter({
       component: () => import("@/components/EnrollmentGrade.vue"),
     },
     {
-      path: "/course/detail/:id",
-      component: () => import("@/components/CourseDetail.vue"),
-    },
-    {
       path: "/grade/all",
       component: () => import("@/views/GetAllGrades.vue"),
     },

@@ -1,6 +1,7 @@
  <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { inject } from 'vue';
 
 defineProps({
   courseList: Array,
@@ -34,8 +35,12 @@ const change = (status) =>{
 }
 // 강의계획서 새 창 띄우기
 //const link = ref(/course/detail);
+
+const openModal = inject('openModal')
 const openLink = (id) => {
-  window.open(`/course/detail/${id}`, '_blank', 'width= 1200px,height=800px,scrollbars=yes');
+  // window.open(`/course/detail/${id}`, '_blank', 'width= 1200px,height=800px,scrollbars=yes');
+  console.log(id)
+  openModal(id);
 };
 
 // 강의 관리로 이동 
@@ -114,6 +119,7 @@ const send = (id, json) =>{
       </tbody>
     </table>
   </div>
+  
 </template>
 <style lang="scss">
 .table-container {
@@ -210,4 +216,5 @@ button.cancel-btn {
   color:#2460ce;
   font-weight: 700;
 }
+
 </style> 
