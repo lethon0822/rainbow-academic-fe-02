@@ -23,7 +23,7 @@ provide('openModal', openModal)
 
 <template>
   <template v-if="show.modal">
-    <div class="black-bg">
+    <div class="black-bg" @click="show.modal=false">
       <div class="cover">
         <div class="white-bg">
           <div @click="show.modal=false" class="close">⨯</div>
