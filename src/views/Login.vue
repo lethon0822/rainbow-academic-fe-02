@@ -85,7 +85,7 @@ const submit = async () => {
 <style scoped>
 .title {
   text-align: center;
-  margin: 50px 0;
+  margin: 150px 0 50px;
   font-weight: 600;
 }
 .container {
