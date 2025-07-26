@@ -5,6 +5,7 @@ import CourseTable from "@/components/CourseTable.vue";
 import { reactive, onMounted, ref } from "vue";
 import { findMyCourse } from "@/services/professorService";
 import { getYears } from '@/services/CourseService';
+import CourseDetail from "@/components/CourseDetail.vue";
 
 
 const state = reactive({
@@ -56,6 +57,7 @@ const myCourse = async (filters) => {
         <div>개설된 강의가 없습니다.</div>
       </template>
   </WhiteBox>
+  
 </template>
 
 <style scoped>

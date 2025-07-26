@@ -4,6 +4,10 @@ import { useRouter, useRoute } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 
+const props = defineProps({
+  id: Number
+})
+
 const state = reactive({
   form: {
     classroom: '',
@@ -22,15 +26,14 @@ const state = reactive({
   },
 });
 
-const route = useRoute();
-onMounted(()=>{
-  const id = route.params.id
-  loadCourseDetail(id);
+
+onMounted(()=>{  
+  loadCourseDetail(props.id);
 
 })
 
 const loadCourseDetail = async (id) => {
-  
+  console.log('아이디',id)
   const res = await loadCourse(id);
   if (res === undefined || res.status !== 200) {
     alert('오류 발생. 잠시 후 다시 실행해주십시오.');
@@ -153,6 +156,7 @@ const loadCourseDetail = async (id) => {
 <style scoped lang="scss">
 .white-box{
   max-width: 1080px;
+  margin-left: 0;
 }
 .container {
   margin-top: 70px;
@@ -182,6 +186,7 @@ const loadCourseDetail = async (id) => {
   margin-bottom: 70px;
   height: 120px;
   align-items: center;
+  border: 1px solid #b7b7b7;
   div {
     height: 100%;
     flex: 1;
