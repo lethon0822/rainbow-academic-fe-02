@@ -1,9 +1,10 @@
 <script setup>
 import logo from "@/assets/logoW.svg";
-import { useAccountStore } from "@/stores/account";
+import { useAccountStore, useUserStore } from "@/stores/account";
 import { logout } from "@/services/accountService";
 import { reactive, onMounted } from "vue";
-import { useUserStore } from "@/stores/account";
+import { useRouter } from "vue-router";
+
 
 const state = reactive({
   data: {
@@ -14,18 +15,21 @@ const state = reactive({
   },
 });
 
+const router = useRouter();
 const userStore = useUserStore();
 
 const account = useAccountStore();
 //로그아웃
 const logoutAccount = async () => {
-  if (!confirm("로그아웃 하시겠습니까?"));
+  if (!confirm("로그아웃 하시겠습니까?")){return};
   const res = await logout();
   console.log("로그아웃", res);
   if (res === undefined || res.status !== 200) {
     return;
   }
   account.setLoggedIn(false);
+  router.push('/login')
+
 };
 
 // onMounted(()=>{
@@ -63,11 +67,11 @@ const logoutAccount = async () => {
             <a @click="logoutAccount()">로그아웃</a>
           </div>
         </template>
-        <template v-else>
+        <!-- <template v-else>
           <router-link to="/login">
             <a href="#" class="text-white text-decoration-none">로그인</a>
           </router-link>
-        </template>
+        </template> -->
       </div>
     </div>
   </header>
@@ -93,6 +97,10 @@ body,
 main,
 #app {
   padding-top: 60px;
+}
+
+a{
+  text-decoration: none;
 }
 
 .logo img {

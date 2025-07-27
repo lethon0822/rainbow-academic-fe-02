@@ -1,6 +1,5 @@
 <script setup>
 import { reactive , onMounted} from "vue";
-import { useRouter, useRoute } from "vue-router";
 import WhiteBox from "@/components/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 
@@ -35,6 +34,7 @@ onMounted(()=>{
 const loadCourseDetail = async (id) => {
   console.log('아이디',id)
   const res = await loadCourse(id);
+  console.log('res:',res)
   if (res === undefined || res.status !== 200) {
     alert('오류 발생. 잠시 후 다시 실행해주십시오.');
     return;

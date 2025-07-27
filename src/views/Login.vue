@@ -27,7 +27,7 @@ const submit = async () => {
   switch (res.status) {
     case 200:
       await router.push({
-        path: "/main",
+        path: "/",
         // state: {
         //     data:json
         // }
