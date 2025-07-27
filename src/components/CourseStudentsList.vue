@@ -105,6 +105,14 @@ onMounted(async ()=>{
       </div>
     </div>
 
+    <div class="button d-flex">
+      <router-link to="/attendance">
+        <button class="btn btn-primary">출결관리</button>
+      </router-link>
+      <router-link to="/EnrollmentGrade">
+        <button class="btn btn-primary">성적관리</button>
+      </router-link>
+    </div>
 
     <div class="table-container">
     <table>
@@ -142,6 +150,7 @@ onMounted(async ()=>{
   margin-top: 70px;
   max-width: 1350px;
   min-width: 1350px;
+  margin-bottom: 70px;
 }
 
 .table {
@@ -151,6 +160,15 @@ onMounted(async ()=>{
   border-left: 1px solid #364157;
   margin-bottom: 0;
   border-bottom: 0.5px;
+}
+
+.button{
+  justify-content: flex-end;
+  margin-right: 26px;
+
+  .btn{
+    background-color: #2460CE
+  }
 }
 
 .student-table{
@@ -188,7 +206,7 @@ onMounted(async ()=>{
 
 .table-container {
   margin: 20px;
-  margin-top: 70px;
+  margin-top:10px;
   width: 100%;
   max-width: 1350px;
   min-width: 800px;
