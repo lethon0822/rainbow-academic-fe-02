@@ -6,11 +6,16 @@ const props = defineProps({
   //학과와 연도만 받아오고 나머지는 하드코딩임.
   state: Boolean,
   departments: Array,
-  years: Array,
   semester: String,
+  enrollment:Boolean
 });
 
+let today = new Date();
+let year = today.getFullYear(); 
 
+let enroll = props.enrollment
+
+console.log(enroll)
 const filters = reactive({
   year: '',
   type: '',
@@ -20,19 +25,28 @@ const filters = reactive({
   keyword: '',
 });
 
+filters.year = year;
+
 const onSearch =()=>{
+  if(filters.year < year-5){
+    filters.year = year-5
+  }
   emit('search', { ...filters });
 }
+
+// 년도
+
 </script>
 <template>
   <div class="filter-bar">
     <label>연도:</label>
-    <select v-model="filters.year">
-      <option value="">전체</option>
-      <option v-for="y in props.years" :key="y.year" :value="y.year">
-        {{ y.year }}
-      </option>
-    </select>
+    <template v-if="enroll">
+      <input type="Number" v-model="filters.year" class="year" disabled>
+    </template>
+    <template v-else>
+      <input type="Number" :min="year-5" :max= "year" step="1" v-model="filters.year" >
+    </template>
+
     <label>학기:</label>
     <select v-model="filters.semester">
       <option value="">전체</option>
@@ -48,6 +62,7 @@ const onSearch =()=>{
         <option value="2">2학기</option>
       </template>
     </select>
+
     <div v-if="props.state">
       <label>이수구분:</label>
       <select v-model="filters.type">
@@ -84,6 +99,7 @@ const onSearch =()=>{
     <button @click="onSearch">조회</button>
   </div>
 </template>
+
 <style scoped>
 .filter-bar {
   display: flex;
@@ -109,8 +125,23 @@ const onSearch =()=>{
   border: none;
   border-radius: 4px;
 }
+
+.year{
+  width: 91px;
+  
+}
 button {
   margin-left: auto;
+}
+
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+    opacity: 1;
 }
 </style>
 

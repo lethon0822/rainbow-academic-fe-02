@@ -144,7 +144,7 @@ const changePassword = async () => {
   
 
     
-    <form @submit="submit">
+    <form @submit.prevent="submit">
       <!-- 본인정보 -->
       <p>본인정보</p>
       <div class="d-flex top last">

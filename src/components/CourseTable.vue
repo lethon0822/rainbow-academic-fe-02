@@ -80,7 +80,7 @@ const send = (id, json) =>{
       </thead>
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
-          <td>{{ course.courseId }}</td>
+          <td>{{ course.courseCode }}</td>
           <td v-if="show.depeName">{{ course.deptName }}</td>
           <td>
             <div v-if="show.modify">{{ course.title }}</div>
@@ -93,7 +93,7 @@ const send = (id, json) =>{
             <td>수강희망자</td>
           </template>
           <template v-else>
-            <td>{{ course.grade }}</td>
+            <td>{{ course.deptName + " " +course.grade }}학년</td>
           </template>
           <td>{{ course.time }}</td>
           <td>{{ course.credit }}</td>
@@ -114,7 +114,7 @@ const send = (id, json) =>{
               <!-- 학생관리 라우팅 처리해야함 -->
                 <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
-          <td v-else-if="show.modify">
+          <td v-else-if="show.modify && course.status !=='승인' ">
               <!-- 강의 수정 라우팅 처리해야함 -->
               <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >
                 <button class="enroll-btn">수정</button>
