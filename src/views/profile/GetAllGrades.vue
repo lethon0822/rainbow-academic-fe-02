@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watchEffect } from "vue";
-import AllGradesWhiteBox from "@/components/AllGradesWhiteBox.vue";
-import PutAllGrades from "@/components/PutAllGrades.vue";
+import AllGradesWhiteBox from "@/components/common/AllGradesWhiteBox.vue";
+import PutAllGrades from "@/components/profile/PutAllGrades.vue";
 import { GradesbyCourse } from "@/services/GradeService.js";
 
 const grades = ref([]);

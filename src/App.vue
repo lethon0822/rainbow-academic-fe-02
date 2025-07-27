@@ -1,7 +1,7 @@
 <script setup>
 // import Header from "@/components/Header.vue";
 import { reactive, provide, onMounted, watch } from "vue";
-import CourseDetail from "./components/CourseDetail.vue";
+import CourseDetail from "./components/course/CourseDetail.vue";
 import { useAccountStore } from "@/stores/account";
 import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";

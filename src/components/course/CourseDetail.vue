@@ -1,6 +1,6 @@
 <script setup>
 import { reactive , onMounted} from "vue";
-import WhiteBox from "@/components/WhiteBox.vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 
 const props = defineProps({

@@ -3,7 +3,7 @@
 import { reactive, onMounted } from "vue";
 import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
-import WhiteBox from "@/components/WhiteBox.vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 import { useUserStore } from "@/stores/account";
 
