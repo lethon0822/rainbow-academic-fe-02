@@ -5,7 +5,7 @@ import SearchFilterBar from "@/components/SearchFilterBar.vue";
 import CourseTable from "@/components/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import {  onMounted, ref } from "vue";
-import { getYears } from '@/services/CourseService';
+
 
 
 // const years = ref([]);
