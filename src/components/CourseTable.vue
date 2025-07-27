@@ -67,7 +67,7 @@ const send = (id, json) =>{
           <th>강의실</th>
           <th>이수구분</th>
           <th v-if="show.professorName">담당교수</th>
-          <th>학년</th>
+          <th>수강대상</th>
           <th>강의시간</th>
           <th>학점</th>
           <th>정원</th>
@@ -89,7 +89,12 @@ const send = (id, json) =>{
           <td>{{ course.classroom }}</td>
           <td>{{ course.type }}</td>
           <td v-if="show.professorName">{{ course.professorName }}</td>
-          <td>{{ course.grade }}</td>
+          <template v-if="course.grade === 0 ">
+            <td>수강희망자</td>
+          </template>
+          <template v-else>
+            <td>{{ course.grade }}</td>
+          </template>
           <td>{{ course.time }}</td>
           <td>{{ course.credit }}</td>
           <td>{{ course.maxStd }}</td>

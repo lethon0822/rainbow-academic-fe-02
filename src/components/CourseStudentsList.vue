@@ -114,6 +114,7 @@ onMounted(async ()=>{
           <th>학번</th>
           <th>이름</th>
           <th>학과</th>
+          <th>학년</th>
           <th>이메일</th>
           <th>전화번호</th>
         </tr>
@@ -124,6 +125,7 @@ onMounted(async ()=>{
           <td>{{ student.loginId }}</td>
           <td>{{ student.userName }}</td>
           <td>{{ student.deptName }}</td>
+          <td>{{ student.grade }}</td>
           <td>{{ student.email }}</td>
           <td>{{ student.phone }}</td>
         </tr>
