@@ -48,9 +48,9 @@ const logoutAccount = async () => {
         class="container-fluid d-flex justify-content-between align-items-center px-4"
       >
         <!-- 로고 왼쪽 -->
-        <div class="logo d-flex align-items-center" @click="$router.push('/')">
+        <div class="logo d-flex align-items-center" @click="$router.push('/main')">
           <img :src="logo" alt="로고 아이콘" height="40" />
-          <span class="systemText" @click="$router.push('/')"
+          <span class="systemText" @click="$router.push('/main')"
             >학사관리시스템</span
           >
         </div>
