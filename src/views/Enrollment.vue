@@ -101,7 +101,7 @@ const handleEnroll = async (course) => {
     <SearchFilterBar
       :state="true"
       :departments="departments"
-      :years="[{ year: 2025 }]"
+      :enrollment="true"
       :semester="1"
       @search="handleSearch"
     ></SearchFilterBar>
