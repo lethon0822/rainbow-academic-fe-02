@@ -1,7 +1,7 @@
 <script setup>
-import SearchFilterBar from "@/components/SearchFilterBar.vue";
-import WhiteBox from "@/components/WhiteBox.vue";
-import CourseTable from "@/components/CourseTable.vue";
+import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import CourseTable from "@/components/course/CourseTable.vue";
 import { reactive, ref } from "vue";
 import { findMyCourse } from "@/services/professorService";
 

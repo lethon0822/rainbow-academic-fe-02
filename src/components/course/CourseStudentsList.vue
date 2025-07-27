@@ -1,5 +1,5 @@
 <script setup>
-import WhiteBox from "./WhiteBox.vue";
+import WhiteBox from "./common/WhiteBox.vue";
 import { reactive, onMounted } from "vue";
 import { courseStudentList } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";

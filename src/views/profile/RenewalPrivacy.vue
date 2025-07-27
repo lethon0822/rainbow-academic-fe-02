@@ -1,5 +1,5 @@
 <script setup>
-import WhiteBox from '@/components/WhiteBox.vue';
+import WhiteBox from '@/components/common/WhiteBox.vue';
 import { findId } from '@/services/accountService';
 import { reactive } from 'vue';
 
