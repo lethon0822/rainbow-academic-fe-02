@@ -74,7 +74,7 @@ const submit = async () => {
 }
 .title{
     text-align: center;
-    margin: 50px 0;
+    margin: 150px 0 50px;
     font-weight: 600;
     
 }

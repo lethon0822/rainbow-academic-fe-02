@@ -2,8 +2,8 @@
 import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
 import { getGrades, getProfile } from "@/services/GradeService.js";
-import StudentRecordTab from "@/components/StudentRecordTab.vue";
-import Profile from "@/components/Profile.vue";
+import StudentRecordTab from "@/components/profile/StudentRecordTab.vue";
+import Profile from "@/components/profile/Profile.vue";
 
 const account = useAccountStore();
 

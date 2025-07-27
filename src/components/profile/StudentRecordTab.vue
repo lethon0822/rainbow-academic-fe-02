@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from "vue";
-import GradeTable from "@/components/TabGradeTable.vue";
-import TabAcademicStatus from "@/components/TabAcademicStatus.vue";
-import TabBasicInfo from "@/components/TabBasicInfo.vue";
+import GradeTable from "@/components/profile/TabGradeTable.vue";
+import TabAcademicStatus from "@/components/profile/TabAcademicStatus.vue";
+import TabBasicInfo from "@/components/profile/TabBasicInfo.vue";
 
 const props = defineProps({
   grades: {

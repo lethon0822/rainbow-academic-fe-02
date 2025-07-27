@@ -1,8 +1,8 @@
 <!-- 강의 신청 현황  -->
 <script setup>
-import WhiteBox from "@/components/WhiteBox.vue";
-import SearchFilterBar from "@/components/SearchFilterBar.vue";
-import CourseTable from "@/components/CourseTable.vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
+import CourseTable from "@/components/course/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import {  onMounted, ref } from "vue";
 

@@ -1,7 +1,7 @@
 <script setup>
-import WhiteBox from '@/components/WhiteBox.vue';
-import SearchFilterBar from '@/components/SearchFilterBar.vue';
-import CourseTable from '@/components/CourseTable.vue';
+import WhiteBox from '@/components/common/WhiteBox.vue';
+import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
+import CourseTable from '@/components/course/CourseTable.vue';
 import { getDepartments, getYears } from '@/services/CourseService';
 import { ref, onMounted } from 'vue';
 import { getCourseListByFilter } from '@/services/CourseService';
