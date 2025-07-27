@@ -62,14 +62,14 @@ const send = (id, json) =>{
       <thead>
         <tr>
           <th>과목코드</th>
-          <th v-if="show.depeName">학과</th>
+          <th>학과</th>
           <th>교과목명</th>
           <th>강의실</th>
           <th>이수구분</th>
           <th v-if="show.professorName">담당교수</th>
           <th>수강대상</th>
           <th>강의시간</th>
-          <th>학점</th>
+          <th class="credit">학점</th>
           <th>정원</th>
           <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
@@ -81,7 +81,7 @@ const send = (id, json) =>{
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseCode }}</td>
-          <td v-if="show.depeName">{{ course.deptName }}</td>
+          <td>{{ course.deptName }}</td>
           <td>
             <div v-if="show.modify">{{ course.title }}</div>
             <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
@@ -96,7 +96,7 @@ const send = (id, json) =>{
             <td>{{ course.deptName + " " +course.grade }}학년</td>
           </template>
           <td>{{ course.time }}</td>
-          <td>{{ course.credit }}</td>
+          <td class="credit">{{ course.credit }}</td>
           <td>{{ course.maxStd }}</td>
           <td v-if="show.modify" class="status" :class="change(course.status)">{{ course.status }}</td> <!-- 승인여부 뜨기 -->
           <td v-if="show.remStd">{{ course.remStd }}</td>
@@ -129,6 +129,7 @@ const send = (id, json) =>{
 <style lang="scss">
 .table-container {
   margin: 20px;
+  margin-left: 15px;
   border-radius: 5px;
   width: 100%;
   max-width: 1430px;
@@ -210,6 +211,10 @@ button.cancel-btn {
   text-decoration: none;
   color:#fff;
   font-weight: 4
+}
+
+.credit{
+  width: 50px;
 }
 .red{
   color:#d61421;

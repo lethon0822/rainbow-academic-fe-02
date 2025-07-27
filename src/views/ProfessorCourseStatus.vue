@@ -8,16 +8,16 @@ import {  onMounted, ref } from "vue";
 import { getYears } from '@/services/CourseService';
 
 
-const years = ref([]);
+// const years = ref([]);
 const courseList = ref([]);
 
 
-onMounted(async ()=>{
+// onMounted(async ()=>{
 
-const yearRes = await getYears();
-years.value = yearRes.data;
+// const yearRes = await getYears();
+// years.value = yearRes.data;
 
-});
+// });
 
 const myCourse = async (filters) => {
   
@@ -31,8 +31,8 @@ const myCourse = async (filters) => {
 };
 </script>
 <template>
-  <WhiteBox :title="'강의신청현황조회'">
-    <SearchFilterBar @search="myCourse" :years="years"/>
+  <WhiteBox :title="'강의개설신청 및 신청현황조회'">
+    <SearchFilterBar @search="myCourse"/>
     <CourseTable
       :course-list="courseList"
       :show="{ modify: true }"
