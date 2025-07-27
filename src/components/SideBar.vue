@@ -173,16 +173,6 @@ watch(
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
-          <li>
-            <router-link to="/attendance" class="router-link"
-              >출결입력</router-link
-            >
-          </li>
-          <li>
-            <router-link to="/EnrollmentGrade" class="router-link"
-              >성적입력</router-link
-            >
-          </li>
           <li><a href="javascript:void(0);">수강조회</a></li>
           <li>
             <router-link to="/enrollment" class="router-link"
@@ -202,7 +192,7 @@ watch(
             >
           </li>
           <li>
-            <router-link to="/professor/course/status">강의등록</router-link>
+            <router-link to="/professor/course/status">강의개설신청 및 신청현황조회</router-link>
           </li>
           <li>
             <router-link to="/professor/course/management"
@@ -212,7 +202,7 @@ watch(
         </ul>
       </li>
 
-      <li class="menu-etc">
+      <!-- <li class="menu-etc">
         <a href="javascript:void(0);">기타 다른 메뉴</a>
         <ul>
           <li>
@@ -221,7 +211,7 @@ watch(
           <li><a href="javascript:void(0);">Graphs</a></li>
           <li><a href="javascript:void(0);">Settings</a></li>
         </ul>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
