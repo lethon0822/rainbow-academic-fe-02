@@ -4,26 +4,14 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: "/",
+      path: "/login",
       component: () => import("@/views/LoginPage.vue"),
     },
     {
-      path: "/main",
+      path: "/",
       component: () => import("@/views/Home.vue"),
-    },
-    {
-      path: "/login",
-      component: () => import("@/views/Login.vue"),
-    },
-    {
-      path: "/id",
-      component: () => import("@/views/Id.vue"),
-    },
-    {
-      path: "/renewal",
-      component: () => import("@/views/RenewalPwd.vue"),
-    },
-    {
+      children:[
+        {
       path: "/enrollment",
       component: () => import("@/views/Enrollment.vue"),
     },
@@ -99,6 +87,18 @@ const router = createRouter({
       component: () => import("@/views/RenewalPrivacy.vue"),
     },
 
+
+      ]
+    },
+    {
+      path: "/id",
+      component: () => import("@/views/Id.vue"),
+    },
+    {
+      path: "/renewal",
+      component: () => import("@/views/RenewalPwd.vue"),
+    },
+    
     //테스트 중 지워도 됩니다
     {
       path: "/test",
