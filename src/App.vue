@@ -99,8 +99,13 @@ watch(
   </template>
 </template>
 <style lang="scss">
-body {
+html,
+body,
+#app {
+  height: 100%;
   margin: 0;
+  background-color: #dee2e5;
+  overflow-x: hidden;
 }
 div {
   box-sizing: border-box;

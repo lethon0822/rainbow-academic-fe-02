@@ -3,9 +3,13 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 import { reactive, onMounted } from "vue";
 import { courseStudentList } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
+import { useRoute, useRouter } from "vue-router";
 
 const userStore = useUserStore();
-  
+const route = useRoute();
+const router = useRouter();
+
+
   const state = reactive({
     data:[],
     course:{
@@ -22,17 +26,13 @@ const userStore = useUserStore();
   });
 
 onMounted(async ()=>{
-  console.log('안녕')
   const passJson = history.state.data;
   if(passJson){
     const nana = JSON.parse(passJson);
     state.course = nana
 
     const id = state.course.courseId
-    console.log('아이디:',id)
-
     const res = await courseStudentList(id);
-    console.log("res",res)
     
     if(res.data.length > 0){
       state.data =res.data
@@ -41,6 +41,32 @@ onMounted(async ()=>{
     
   }
 })
+
+const attendance = () =>{
+  const jsonBody = JSON.stringify(state.data)
+
+  router.push({
+    path: '/attendance',
+    state:{
+      data: jsonBody
+      ,id: route.params.id
+    }
+    
+  })
+}
+
+const enrollmentGrade = () =>{
+  const jsonBody = JSON.stringify(state.data)
+
+  router.push({
+    path: '/enrollmentgrade',
+    state:{
+      data: jsonBody
+      ,id: route.params.id
+    }
+    
+  })
+}
 
 </script>
 
@@ -113,12 +139,8 @@ onMounted(async ()=>{
     </div>
 
     <div class="button d-flex">
-      <router-link to="/attendance">
-        <button class="btn btn-primary">출결관리</button>
-      </router-link>
-      <router-link to="/EnrollmentGrade">
-        <button class="btn btn-primary">성적관리</button>
-      </router-link>
+      <button class="btn btn-primary" @click="attendance">출결관리</button>
+      <button class="btn btn-primary" @click="enrollmentGrade">성적관리</button>
     </div>
 
     <div class="table-container">

@@ -1,9 +1,20 @@
 <!-- 성적 기입 -->
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect ,reactive, onMounted} from "vue";
 import axios from "axios";
 import WhiteBox from "@/components/common/WhiteBox.vue";
+
+const state = reactive({
+  data:[],
+  courseId:null
+})
+
+onMounted(()=>{
+  const arrData = history.state.data;
+  state.courseId = history.state.id;
+  state.data = arrData
+})
 
 const students = ref([
   {

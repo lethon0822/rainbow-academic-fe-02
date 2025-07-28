@@ -1,11 +1,22 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const router = useRouter();
 const attendDate = ref('');
+
+const state = reactive({
+  data:[],
+  courseId:null
+})
+
+onMounted(()=>{
+  const arrData = history.state.data;
+  state.courseId = history.state.id;
+  state.data = arrData
+})
 
 // 임시 하드코딩 학생 데이터
 const students = ref([

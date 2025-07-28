@@ -122,7 +122,7 @@ const send = (id, json) =>{
           <td v-else-if="show.modify && course.status !=='승인' ">
               <!-- 강의 수정 라우팅 처리해야함 -->
               <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >
-                <button class="enroll-btn">수정</button>
+                <button class="enroll-btn d-flex btn">수정</button>
               </router-link>
           </td>
         </tr>
@@ -215,7 +215,8 @@ button.cancel-btn {
   align-items: center;
   text-decoration: none;
   color:#fff;
-  font-weight: 4
+  font-weight: 4;
+  justify-content: center;
 }
 
 .credit{
@@ -231,5 +232,6 @@ button.cancel-btn {
   color:#2460ce;
   font-weight: 700;
 }
+
 
 </style> 
