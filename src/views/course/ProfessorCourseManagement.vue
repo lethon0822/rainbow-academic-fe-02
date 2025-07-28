@@ -37,9 +37,6 @@ const myCourse = async (filters) => {
     state.visable = true;
   
     
-    
-  
-  console.log(state.visable)
 };
 </script>
 <template>
