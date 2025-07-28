@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/services/accountService";
 import { useUserStore } from "@/stores/account";
@@ -82,7 +82,6 @@ const submit = async () => {
       </form>
 
       <div class="login-links">
-        
         <a href="#" class="link" @click.prevent="openModal('id')">아이디찾기</a>
         <span class="divider">|</span>
         <a href="#" class="link" @click.prevent="openModal('renewal')"

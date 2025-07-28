@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import axios from "axios"; // axios import 추가
 
 const totalQuestions = 5;
 const answers = ref({
@@ -13,6 +14,20 @@ const progress = ref(0);
 const submitted = ref(false);
 const additionalOpinion = ref("");
 const currentStep = ref(1);
+
+// 강의 정보 관련 상태 추가
+const courseInfo = ref({
+  course_name: "",
+  professor_name: "",
+  credits: "",
+  evaluation_date: "",
+});
+const isLoading = ref(true);
+const loadError = ref(null);
+
+// Props나 route에서 course_id를 받아올 수 있도록 설정
+// 실제 사용 시에는 props나 useRoute()를 통해 받아오세요
+const courseId = ref("YOUR_COURSE_ID"); // 실제 course_id로 변경 필요
 
 const questions = [
   { number: 1, question: "수업내용이 체계적으로 구성되었다." },
@@ -32,6 +47,60 @@ const ratings = [
   { label: "그렇다", value: 4 },
   { label: "매우 그렇다", value: 5 },
 ];
+
+// 강의 정보 조회 API 함수
+const loadCourse = (course_id) => {
+  return axios.get(`/course/${course_id}`).catch((e) => e.response);
+};
+
+// 강의 정보 로드 함수 (CourseFilterRes 모델에 맞춤)
+const fetchCourseInfo = async () => {
+  try {
+    isLoading.value = true;
+    loadError.value = null;
+
+    const response = await loadCourse(courseId.value);
+
+    if (response && response.data) {
+      const data = response.data;
+
+      // CourseFilterRes 모델에 맞게 매핑
+      courseInfo.value = {
+        courseId: data.courseId,
+        title: data.title || "과목명 정보 없음",
+        classroom: data.classroom || "강의실 정보 없음",
+        type: data.type || "이수구분 정보 없음",
+        professorName: data.professorName || "교수명 정보 없음",
+        grade: data.grade || "학년 정보 없음",
+        year: data.year || new Date().getFullYear(),
+        semester: data.semester || "학기 정보 없음",
+        time: data.time || "시간 정보 없음",
+        credit: data.credit || "학점 정보 없음",
+        maxStd: data.maxStd || "정원 정보 없음",
+        remStd: data.remStd || "잔여인원 정보 없음",
+        evaluation_date: new Date().toLocaleDateString("ko-KR"),
+      };
+    } else {
+      throw new Error("강의 정보를 불러올 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("강의 정보 로드 실패:", error);
+    loadError.value =
+      error.message || "강의 정보를 불러오는 중 오류가 발생했습니다.";
+
+    // 오류 발생 시 기본값 설정
+    courseInfo.value = {
+      courseId: null,
+      title: "강의 정보 로드 실패",
+      credit: "정보 없음",
+      professorName: "정보 없음",
+      time: "정보 없음",
+      evaluation_date: new Date().toLocaleDateString("ko-KR"),
+    };
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 const updateProgress = () => {
   const answeredCount = Object.values(answers.value).filter(
@@ -61,8 +130,18 @@ const submitSurvey = () => {
   if (Object.values(answers.value).every((v) => v !== null)) {
     submitted.value = true;
     alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
-    console.log("설문 결과:", answers.value);
-    console.log("추가 의견:", additionalOpinion.value);
+
+    // 제출할 데이터 구성
+    const surveyData = {
+      courseId: courseInfo.value.courseId,
+      answers: answers.value,
+      additionalOpinion: additionalOpinion.value,
+      submittedAt: new Date().toISOString(),
+    };
+
+    console.log("설문 결과:", surveyData);
+    // 여기서 설문 제출 API를 호출할 수 있습니다
+    // await submitSurveyAPI(surveyData);
   } else {
     alert("모든 필수 항목에 답변해주세요.");
   }
@@ -88,8 +167,10 @@ const allQuestionsAnswered = computed(() => {
 
 onMounted(() => {
   updateProgress();
+  fetchCourseInfo(); // 컴포넌트 마운트 시 강의 정보 로드
 });
 </script>
+
 <template>
   <div class="survey-container">
     <!-- 설문 헤더 -->
@@ -100,14 +181,30 @@ onMounted(() => {
     <!-- 강의 정보 -->
     <div class="course-info">
       <h5>📚 강의 정보</h5>
-      <div class="row">
+
+      <!-- 로딩 상태 -->
+      <div v-if="isLoading" class="loading-container">
+        <div class="spinner"></div>
+        <p>강의 정보를 불러오는 중...</p>
+      </div>
+
+      <!-- 에러 상태 -->
+      <div v-else-if="loadError" class="error-container">
+        <p class="error-message">⚠️ {{ loadError }}</p>
+        <button @click="fetchCourseInfo" class="btn btn-sm btn-outline-primary">
+          다시 시도
+        </button>
+      </div>
+
+      <!-- 강의 정보 표시 (CourseFilterRes 모델에 맞춤) -->
+      <div v-else class="row">
         <div class="col-md-6">
-          <p><strong>과목명:</strong> 전공1자료구조13</p>
-          <p><strong>담당교수:</strong> 홍길동 교수</p>
+          <p><strong>과목명:</strong> {{ courseInfo.title }}</p>
+          <p><strong>담당교수:</strong> {{ courseInfo.professorName }}</p>
         </div>
         <div class="col-md-6">
-          <p><strong>학점:</strong> 3학점</p>
-          <p><strong>평가일:</strong> 2025년 3월 1일</p>
+          <p><strong>학점:</strong> {{ courseInfo.credit }}학점</p>
+          <p><strong>평가일:</strong> {{ courseInfo.time }}</p>
         </div>
       </div>
     </div>

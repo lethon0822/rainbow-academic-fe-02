@@ -6,22 +6,19 @@ import { useAccountStore } from "@/stores/account";
 import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";
 
-
-const show =reactive({
+const show = reactive({
   modal: false,
-  id: null
-})
+  id: null,
+});
 
-const openModal = (id) =>{  
-  console.log('id:',id)
-  show.modal= true;
-  show.id = id
-  console.log('show.id',show.id)
-}
+const openModal = (id) => {
+  console.log("id:", id);
+  show.modal = true;
+  show.id = id;
+  console.log("show.id", show.id);
+};
 
-provide('openModal', openModal)
-
-
+provide("openModal", openModal);
 
 const route = useRoute();
 const account = useAccountStore();
@@ -39,11 +36,11 @@ const checkAccount = async () => {
 onMounted(() => {
   checkAccount();
 
-  if(account.state.checked){
-    router.push('/')
+  if (account.state.checked) {
+    router.push("/");
     return;
   }
-  router.push('/login')
+  router.push("/login");
 });
 watch(
   () => route.path,
@@ -51,28 +48,26 @@ watch(
     checkAccount();
   }
 );
-
 </script>
 
 <template>
   <template v-if="show.modal">
-    <div class="black-bg" @click="show.modal=false">
+    <div class="black-bg" @click="show.modal = false">
       <div class="cover">
         <div class="white-bg" @click.stop>
-          <div @click="show.modal=false" class="close">⨯</div>
+          <div @click="show.modal = false" class="close">⨯</div>
           <CourseDetail :id="show.id" />
         </div>
       </div>
     </div>
   </template>
 
-  
   <router-view />
 </template>
 
 <style lang="scss">
-  body {
-  margin : 0;
+body {
+  margin: 0;
 }
 div {
   box-sizing: border-box;
@@ -81,22 +76,21 @@ div {
 .black-bg {
   display: flex;
   width: 100%;
-  height:100vh;
-  background: rgba(0,0,0,0.5);
-  position: fixed; 
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
   padding: 20px;
   z-index: 9999;
   justify-content: center;
   align-items: center;
 }
 
-.cover{
+.cover {
   overflow: hidden;
   border-radius: 8px;
-  
 }
 
-.close{
+.close {
   font-size: 20px;
   font-weight: 800;
   background-color: #2460ce;
@@ -109,7 +103,6 @@ div {
   border-radius: 8px;
   line-height: 30px;
   margin-right: 28px;
-  
 }
 
 .white-bg {
@@ -121,7 +114,5 @@ div {
   z-index: 99999;
   overflow-y: auto;
   padding-right: 10px;
-  
-} 
-
+}
 </style>
