@@ -15,7 +15,6 @@ import SideBar from "@/components/common/SideBar.vue"
 
 <style lang="scss" scoped>
 
-
 .content {
   position: relative;
   top: 65px;
