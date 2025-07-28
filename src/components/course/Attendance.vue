@@ -1,22 +1,11 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const router = useRouter();
 const attendDate = ref('');
-
-const state = reactive({
-  data:[],
-  courseId:null
-})
-
-onMounted(()=>{
-  const arrData = history.state.data;
-  state.courseId = history.state.id;
-  state.data = arrData
-})
 
 // 임시 하드코딩 학생 데이터
 const students = ref([
@@ -56,12 +45,15 @@ const students = ref([
     note: '',
   },
 ]);
+const isLoading = ref(false);
 
 const saveAttendance = async () => {
   if (!attendDate.value) {
     alert("출결일자를 선택해주세요.");
     return;
   }
+
+  isLoading.value = true; // 로딩 시작
 
   try {
     for (const s of students.value) {
@@ -93,6 +85,8 @@ const saveAttendance = async () => {
   } catch (error) {
     console.error("출결 저장 중 오류:", error);
     alert("출결 저장 중 오류가 발생했습니다.");
+  } finally {
+    isLoading.value = false; //로딩 끝
   }
 };
 </script>
