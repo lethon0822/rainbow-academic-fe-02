@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
@@ -7,21 +7,10 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 const router = useRouter();
 const attendDate = ref('');
 
-const state = reactive({
-  data:[],
-  courseId:null
-})
-
-onMounted(()=>{
-  const arrData = history.state.data;
-  state.courseId = history.state.id;
-  state.data = arrData
-})
-
 // 임시 하드코딩 학생 데이터
 const students = ref([
   {
-    enrollmentId: 62,
+    enrollmentId: 171,
     name: 'lily',
     studentId: '20257945',
     status: '결석',
@@ -78,7 +67,6 @@ const saveAttendance = async () => {
         enrollmentId: s.enrollmentId,
         status: s.status,
         note: s.note,
-        username: s.username,
       };
 
       const { data: exists } = await axios.post(
@@ -182,10 +170,10 @@ const saveAttendance = async () => {
 :deep(.attendance-table) {
   border-collapse: collapse;
   width: 100%;
-  border: 1px solid #ddd;  /*  테두리 전체 */
+  border: 1px solid #ddd;  /* ✅ 테두리 전체 */
 
   th, td {
-    border: 1px solid #ddd !important; /*  셀 간 경계선 */
+    border: 1px solid #ddd !important; /* ✅ 셀 간 경계선 */
     padding: 8px;
     text-align: center;
   }
