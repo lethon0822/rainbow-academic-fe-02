@@ -13,7 +13,7 @@ import SideBar from "@/components/common/SideBar.vue"
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 html,
 body,
 #app {
