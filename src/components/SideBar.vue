@@ -148,7 +148,6 @@ watch(
 <template>
   <div id="accordian" ref="accordian">
     <ul>
-      <!-- 학적 -->
       <li class="menu-hakjeok">
         <a href="javascript:void(0);">학적</a>
         <ul>
@@ -156,11 +155,6 @@ watch(
             <router-link to="/profile" class="router-link">
               학적기본사항관리
             </router-link>
-          </li>
-          <li>
-            <router-link to="/grade/all" class="router-link"
-              >학적변동관리</router-link
-            >
           </li>
           <li>
             <router-link to="/renewal/privacy" class="router-link">
@@ -182,7 +176,6 @@ watch(
         </ul>
       </li>
 
-      <!-- 추후 v-if설정 해야함 -->
       <li class="menu-gangui">
         <a href="javascript:void(0);">강의</a>
         <ul>
@@ -192,7 +185,9 @@ watch(
             >
           </li>
           <li>
-            <router-link to="/professor/course/status">강의개설신청 및 신청현황조회</router-link>
+            <router-link to="/professor/course/status"
+              >강의개설신청 및 신청현황조회</router-link
+            >
           </li>
           <li>
             <router-link to="/professor/course/management"
@@ -202,16 +197,16 @@ watch(
         </ul>
       </li>
 
-      <!-- <li class="menu-etc">
-        <a href="javascript:void(0);">기타 다른 메뉴</a>
+      <li class="menu-seongjeok">
+        <a href="javascript:void(0);">성적</a>
         <ul>
           <li>
-            <router-link to="/test" class="router-link">테스트메뉴</router-link>
+            <router-link to="/grade/all" class="router-link"
+              >학적변동관리</router-link
+            >
           </li>
-          <li><a href="javascript:void(0);">Graphs</a></li>
-          <li><a href="javascript:void(0);">Settings</a></li>
         </ul>
-      </li> -->
+      </li>
     </ul>
   </div>
 </template>
@@ -286,7 +281,7 @@ body {
 #accordian li.menu-sugang > a,
 #accordian li.menu-hakjeok > a,
 #accordian li.menu-gangui > a,
-#accordian li.menu-etc > a {
+#accordian li.menu-seongjeok > a {
   background-color: #febe3a;
   color: #364157;
   border: 1px solid #febe3a;
@@ -344,7 +339,7 @@ body {
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
 #accordian
-  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(
+  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-seongjeok):not(
     .menu-gangui
   ).active
   > a {

@@ -77,11 +77,10 @@ const submit = async () => {
   max-width: 400px;
   margin: auto;
 }
-.title{
-    text-align: center;
-    margin: 150px 0 50px;
-    font-weight: 600;
-    
+.title {
+  text-align: center;
+  margin: 50px 0 0px;
+  font-weight: 600;
 }
 .showId {
   display: flex;

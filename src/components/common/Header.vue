@@ -19,16 +19,19 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const account = useAccountStore();
+
 //로그아웃
 const logoutAccount = async () => {
   if (!confirm("로그아웃 하시겠습니까?")){return};
   const res = await logout();
+ 
+
   console.log("로그아웃", res);
   if (res === undefined || res.status !== 200) {
     return;
   }
   account.setLoggedIn(false);
-  router.push('/login')
+  router.push('/login');
 
 };
 

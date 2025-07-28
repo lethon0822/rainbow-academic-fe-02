@@ -4,11 +4,9 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
 import CourseTable from "@/components/course/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
-import {  onMounted, ref } from "vue";
+import { ref } from "vue";
 
 
-
-// const years = ref([]);
 const courseList = ref([]);
 
 
@@ -39,16 +37,19 @@ const myCourse = async (filters) => {
       class="some"
     />
     <div>
-      <button class="enroll-btn">
-        <router-link to="/professor/course/registration" class="move">개설신청</router-link>
-      </button>
+      <router-link to="/professor/course/registration" class="move">
+        <button class="enroll-btn">
+          개설신청
+        </button>  
+      </router-link>
+      
     </div>
   </WhiteBox>
 </template>
 <style lang="scss" scoped>
 button {
   display: flex;
-  margin-right: 40px;
+  margin-right: 26px;
   color: white;
   padding: 6px 12px;
   font-size: 14px;

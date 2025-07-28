@@ -166,6 +166,9 @@ const submit = async () => {
           </div>
         </div>
         <div class="button">
+          <button class="btn btn-light mt-3">
+            취소
+          </button>
           <button class="btn btn-primary mt-3">
             {{ props.id > 0 ? "수정" : "제출" }}
           </button>
@@ -234,11 +237,16 @@ input, textarea {
 .button {
   display: flex;
   justify-content: flex-end;
-  .btn {
-    background-color: #2460CE;
-    margin-bottom: 100px;
-  }
+  margin-bottom: 100px;
 }
+
+.btn-primary {
+    background-color: #2460CE;
+  }
+.btn-light{
+  background-color: #E2E2E2;
+}
+
 .detail {
   height: 200px;
   .table-content {
