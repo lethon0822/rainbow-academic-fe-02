@@ -37,6 +37,10 @@ const submit = async () => {
 
   switch (res.status) {
     case 200:
+    const userStore = useUserStore();
+      userStore.userName = res.data.userName;
+      userStore.userId = res.data.userId;
+      userStore.userRole = res.data.userRole;
       await router.push({
         path: "/",
       });
@@ -45,10 +49,7 @@ const submit = async () => {
       alert("아이디/비밀번호를 확인해주세요.");
       break;
   }
-  const userStore = useUserStore();
-  userStore.userName = res.data.userName;
-  userStore.userId = res.data.userId;
-  userStore.userRole = res.data.userRole;
+ 
 };
 </script>
 
@@ -179,6 +180,43 @@ const submit = async () => {
   align-items: center;
   gap: 12px;
   margin-top: 20px;
+}
+
+.link {
+  color: #666;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+.divider {
+  color: #ccc;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    max-width: 280px;
+  }
+
+  .login-title {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  .login-input,
+  .login-button {
+    height: 44px;
+  }
+
+  .login-button {
+    font-size: 15px;
+  }
 }
 
 .link {

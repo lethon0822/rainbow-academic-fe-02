@@ -18,12 +18,14 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const account = useAccountStore();
+
 //로그아웃
 const logoutAccount = async () => {
   if (!confirm("로그아웃 하시겠습니까?")) {
     return;
   }
   const res = await logout();
+
   console.log("로그아웃", res);
   if (res === undefined || res.status !== 200) {
     return;
@@ -57,7 +59,7 @@ const logoutAccount = async () => {
           @click="$router.push('/main')"
         >
           <img :src="logo" alt="로고 아이콘" height="40" />
-          <span class="systemText" @click="$router.push('/main')"
+          <span class="systemText" @click="$router.push('/')"
             >학사관리시스템</span
           >
         </div>

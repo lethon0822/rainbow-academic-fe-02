@@ -1,11 +1,15 @@
 <script setup>
-import WhiteBox from "@/common/WhiteBox.vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
 import { reactive, onMounted } from "vue";
 import { courseStudentList } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
+import { useRoute, useRouter } from "vue-router";
 
 const userStore = useUserStore();
-  
+const route = useRoute();
+const router = useRouter();
+
+
   const state = reactive({
     data:[],
     course:{
@@ -26,14 +30,43 @@ onMounted(async ()=>{
   if(passJson){
     const nana = JSON.parse(passJson);
     state.course = nana
+
     const id = state.course.courseId
-    console.log('아이디:',id)
     const res = await courseStudentList(id);
-    console.log("res",res)
-    state.data =res.data
+    
+    if(res.data.length > 0){
+      state.data =res.data
+      return;
+    }
     
   }
 })
+
+const attendance = () =>{
+  const jsonBody = JSON.stringify(state.data)
+
+  router.push({
+    path: '/attendance',
+    state:{
+      data: jsonBody
+      ,id: route.params.id
+    }
+    
+  })
+}
+
+const enrollmentGrade = () =>{
+  const jsonBody = JSON.stringify(state.data)
+
+  router.push({
+    path: '/enrollmentgrade',
+    state:{
+      data: jsonBody
+      ,id: route.params.id
+    }
+    
+  })
+}
 
 </script>
 
@@ -106,7 +139,7 @@ onMounted(async ()=>{
     </div>
 
     <div class="button d-flex">
-      <router-link to="/attendance">
+      <router-link to="/professor/attendance">
         <button class="btn btn-primary">출결관리</button>
       </router-link>
       <router-link to="/EnrollmentGrade">

@@ -164,7 +164,4 @@ h4 {
   margin-top: 30px;
 }
 
-.override-whitebox-margin {
-  margin-top: -90px;
-}
 </style>

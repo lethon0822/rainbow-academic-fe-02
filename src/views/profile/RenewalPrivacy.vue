@@ -3,8 +3,11 @@ import WhiteBox from '@/components/common/WhiteBox.vue';
 import { findId } from '@/services/accountService';
 import { reactive } from 'vue';
 
+
 const state = reactive({
   form: {
+    name: '',
+    addressPreview: '',
     studentId: '',
     studentNumber: '',
     zipcode: '',
@@ -15,11 +18,43 @@ const state = reactive({
     newPassword: '',
     confirmPassword: '',
     authCode: '',
-    changePassword: ''
+    changePassword: '',
+    userId: '',
+    studentNumber: ''
+    
   }
 });
 
 const router = findId(); // findId 함수가 라우터 기능인지 확인 필요, 보통 router는 useRouter()
+const searchStudentNumber = async () => {
+  console.log('🔍 검색 버튼 작동됨');
+
+  if (!state.form.studentNumber) {
+    alert('학번을 입력해주세요.');
+    return;
+  }
+
+  try {
+    // findId는 studentNumber 또는 userId 기준 조회 API여야 합니다
+    const res = await findId(state.form.studentNumber);
+    console.log('검색 결과:', res);
+
+    if (res?.data) {
+      state.form.userId = res.data.userId ?? '';
+      state.form.name = res.data.name ?? '';
+      state.form.zipcode = res.data.zipcode ?? '';
+      state.form.detailAddress = res.data.detailAddress ?? '';
+      state.form.phone = res.data.phone ?? '';
+      state.form.mobile = res.data.mobile ?? '';
+      state.form.email = res.data.email ?? '';
+    } else {
+      alert('해당 학번의 정보를 찾을 수 없습니다.');
+    }
+  } catch (error) {
+    console.error(error);
+    alert('검색 중 오류 발생');
+  }
+};
 
 // 폼 제출 함수
 const submit = async () => {
@@ -44,12 +79,24 @@ const searchzipcode = async () => {
     alert('우편번호를 입력해주세요.');
     return;
   }
-  // 우편번호 검색 API 호출 로직 추가 가능
-  alert(`우편번호 '${state.form.zipcode}' 검색 기능은 아직 구현되지 않았습니다.`);
+
+  try {
+    const res = await axios.get(`/api/zipcode?code=${state.form.zipcode}`);
+
+    if (res.data && res.data.address) {
+      state.form.detailAddress = res.data.address;
+      alert('주소가 입력되었습니다.');
+    } else {
+      alert('해당 우편번호로 주소를 찾을 수 없습니다.');
+    }
+  } catch (error) {
+    console.error('우편번호 검색 오류:', error);
+    alert('우편번호 검색 중 오류가 발생했습니다.');
+  }
 };
 
 // 학번 검색 버튼 클릭 시
-const searchStudentNumber = async () => {
+const searchUserid = async () => {
   if (!state.form.studentNumber) {
     alert('학번을 입력해주세요.');
     return;
@@ -61,6 +108,7 @@ const searchStudentNumber = async () => {
     console.log('검색 결과:', res);
 
     if (res?.data) {
+      state.form.name = res.data.name ?? '';
       state.form.zipcode = res.data.zipcode ?? '';
       state.form.detailAddress = res.data.detailAddress ?? '';
       state.form.phone = res.data.phone ?? '';
@@ -137,7 +185,7 @@ const changePassword = async () => {
         <div class="table-content d-flex">
           <input type="text" class="num" v-model="state.form.studentNumber">
           <i class="fas fa-search" style="cursor:pointer;" @click="searchStudentNumber"></i>
-          <input type="text" class="name" disabled />
+          <input type="text" class="name" disabled v-model="state.form.name" />
         </div>
       </div>
       
@@ -216,12 +264,12 @@ const changePassword = async () => {
       </div>
 
 
-     
+    
     </form>
   </WhiteBox>
 
 </template>
- 
+
 <style scoped lang="scss">
 
 
