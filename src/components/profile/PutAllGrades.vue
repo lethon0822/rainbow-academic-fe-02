@@ -160,7 +160,7 @@ h4 {
   font-weight: bold;
   color: #364157;
   margin-left: 25px;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  
+  margin-bottom: 40px;
 }
 </style>
