@@ -182,10 +182,10 @@ const saveAttendance = async () => {
 :deep(.attendance-table) {
   border-collapse: collapse;
   width: 100%;
-  border: 1px solid #ddd;  /* ✅ 테두리 전체 */
+  border: 1px solid #ddd;  /*  테두리 전체 */
 
   th, td {
-    border: 1px solid #ddd !important; /* ✅ 셀 간 경계선 */
+    border: 1px solid #ddd !important; /*  셀 간 경계선 */
     padding: 8px;
     text-align: center;
   }
