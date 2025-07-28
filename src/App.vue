@@ -10,6 +10,7 @@ import { useRoute, useRouter } from "vue-router";
 const show =reactive({
   modal: false,
   id: null
+
 })
 
 const openModal = (id) =>{  
