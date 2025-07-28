@@ -22,16 +22,17 @@ export const getAddressByZipcode = async (zipcode) => {
 };
 
 export const updateUser = async (userDto) => {
-  const res = await axios.post('/api/user/update', userDto);
+  const res = await axios.post("/api/user/update", userDto);
   return res.data;
 };
 
 export async function verifyAuthCode(code) {
-  return await axios.post('/api/email/verify-code', { code });
-};
+  return await axios.post("/api/email/verify-code", { code });
+}
 
 export async function changePasswordApi(userId, newPassword) {
-  return await axios.post('/api/user/change-password', {
+  return await axios.post("/api/user/change-password", {
     userId,
     newPassword,
-  })};
+  });
+}

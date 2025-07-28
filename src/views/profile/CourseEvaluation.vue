@@ -1,6 +1,11 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import axios from "axios"; // axios import 추가
+import axios from "axios";
+import { useRoute } from "vue-router";
+
+const props = defineProps({
+  courseId: String,
+});
 
 const totalQuestions = 5;
 const answers = ref({
@@ -14,6 +19,8 @@ const progress = ref(0);
 const submitted = ref(false);
 const additionalOpinion = ref("");
 const currentStep = ref(1);
+const route = useRoute();
+const courseId = ref(props.courseId || route.query.courseId || "");
 
 // 강의 정보 관련 상태 추가
 const courseInfo = ref({
@@ -24,10 +31,6 @@ const courseInfo = ref({
 });
 const isLoading = ref(true);
 const loadError = ref(null);
-
-// Props나 route에서 course_id를 받아올 수 있도록 설정
-// 실제 사용 시에는 props나 useRoute()를 통해 받아오세요
-const courseId = ref("YOUR_COURSE_ID"); // 실제 course_id로 변경 필요
 
 const questions = [
   { number: 1, question: "수업내용이 체계적으로 구성되었다." },
@@ -64,20 +67,15 @@ const fetchCourseInfo = async () => {
     if (response && response.data) {
       const data = response.data;
 
-      // CourseFilterRes 모델에 맞게 매핑
       courseInfo.value = {
         courseId: data.courseId,
-        title: data.title || "과목명 정보 없음",
-        classroom: data.classroom || "강의실 정보 없음",
+        title: data.title || data.title || "과목명 정보 없음",
+        credit: data.credit !== undefined ? data.credit : "학점 정보 없음",
+        professorName: data.userName || "교수명 정보 없음",
         type: data.type || "이수구분 정보 없음",
-        professorName: data.professorName || "교수명 정보 없음",
-        grade: data.grade || "학년 정보 없음",
-        year: data.year || new Date().getFullYear(),
+        classroom: data.classroom || "강의실 정보 없음",
+        year: data.year || "년도 정보 없음",
         semester: data.semester || "학기 정보 없음",
-        time: data.time || "시간 정보 없음",
-        credit: data.credit || "학점 정보 없음",
-        maxStd: data.maxStd || "정원 정보 없음",
-        remStd: data.remStd || "잔여인원 정보 없음",
         evaluation_date: new Date().toLocaleDateString("ko-KR"),
       };
     } else {
@@ -94,7 +92,10 @@ const fetchCourseInfo = async () => {
       title: "강의 정보 로드 실패",
       credit: "정보 없음",
       professorName: "정보 없음",
-      time: "정보 없음",
+      type: "이수구분 정보 없음",
+      classroom: "정보 없음",
+      year: "정보 없음",
+      semester: "정보 없음",
       evaluation_date: new Date().toLocaleDateString("ko-KR"),
     };
   } finally {
@@ -126,22 +127,30 @@ const prevStep = () => {
   }
 };
 
-const submitSurvey = () => {
+const submitSurvey = async () => {
   if (Object.values(answers.value).every((v) => v !== null)) {
-    submitted.value = true;
-    alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
+    const answersArray = Object.values(answers.value);
+    const averageScore = Math.round(
+      answersArray.reduce((sum, score) => sum + score, 0) / answersArray.length
+    );
 
-    // 제출할 데이터 구성
     const surveyData = {
-      courseId: courseInfo.value.courseId,
-      answers: answers.value,
-      additionalOpinion: additionalOpinion.value,
-      submittedAt: new Date().toISOString(),
+      courseId: parseInt(courseId.value),
+      userId: userId.value,
+      review: additionalOpinion.value,
+      average: averageScore,
     };
 
     console.log("설문 결과:", surveyData);
-    // 여기서 설문 제출 API를 호출할 수 있습니다
-    // await submitSurveyAPI(surveyData);
+
+    try {
+      await axios.post("/course/survey", surveyData);
+      submitted.value = true;
+      alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
+    } catch (error) {
+      console.error("설문 제출 실패:", error);
+      alert("설문 제출에 실패했습니다. 다시 시도해주세요.");
+    }
   } else {
     alert("모든 필수 항목에 답변해주세요.");
   }
@@ -167,7 +176,7 @@ const allQuestionsAnswered = computed(() => {
 
 onMounted(() => {
   updateProgress();
-  fetchCourseInfo(); // 컴포넌트 마운트 시 강의 정보 로드
+  fetchCourseInfo();
 });
 </script>
 
@@ -204,7 +213,7 @@ onMounted(() => {
         </div>
         <div class="col-md-6">
           <p><strong>학점:</strong> {{ courseInfo.credit }}학점</p>
-          <p><strong>평가일:</strong> {{ courseInfo.time }}</p>
+          <p><strong>이수구분:</strong> {{ courseInfo.type }}</p>
         </div>
       </div>
     </div>
@@ -342,7 +351,7 @@ onMounted(() => {
 .survey-container {
   max-width: 800px;
   margin: 40px auto;
-  padding: 60px 40px; /* 위아래 패딩을 30px에서 60px로 늘려서 높이 증가 */
+  padding: 60px 40px;
   background: #f9fbfc;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -462,9 +471,9 @@ onMounted(() => {
 }
 
 .rating-container {
-  background: transparent; /* 배경 없애기 */
-  border: none; /* 테두리 없애기 */
-  padding: 0; /* 필요 없으면 패딩도 제거 */
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .rating-scale {

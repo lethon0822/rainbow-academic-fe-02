@@ -1,23 +1,22 @@
-
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     // 로그인
     {
-      path: '/login',
-      component: () => import('@/views/login/LoginPage.vue'),
+      path: "/login",
+      component: () => import("@/views/login/LoginPage.vue"),
     },
     //아이디 찾기(views-login)
     {
-      path: '/id',
-      component: () => import('@/views/login/Id.vue'),
+      path: "/id",
+      component: () => import("@/views/login/Id.vue"),
     },
     //비밀번호 변경(views-login)
     {
-      path: '/renewal',
-      component: () => import('@/views/login/RenewalPwd.vue'),
+      path: "/renewal",
+      component: () => import("@/views/login/RenewalPwd.vue"),
     },
 
     //홈
@@ -36,71 +35,73 @@ const router = createRouter({
           component: () => import("@/components/course/Attendance.vue"),
         },
         {
-          path: '/professor/course/:id/students',
-          component: () => import('@/components/course/CourseStudentsList.vue'),
+          path: "/professor/course/:id/students",
+          component: () => import("@/components/course/CourseStudentsList.vue"),
         },
         {
-          path: '/enrollmentgrade',
-          component: () => import('@/components/course/EnrollmentGrade.vue'),
+          path: "/enrollmentgrade",
+          component: () => import("@/components/course/EnrollmentGrade.vue"),
         },
         {
           //강의계획서 등록
-          path: '/professor/course/registration',
-          name: 'RegistrationCourse',
-          component: () => import('@/components/course/RegistrationCourse.vue'),
+          path: "/professor/course/registration",
+          name: "RegistrationCourse",
+          component: () => import("@/components/course/RegistrationCourse.vue"),
         },
         {
           //강의계획서 수정
-          path: '/professor/course/registration/:id',
-          name: 'ModifyCourse',
-          component: () => import('@/components/course/RegistrationCourse.vue'),
+          path: "/professor/course/registration/:id",
+          name: "ModifyCourse",
+          component: () => import("@/components/course/RegistrationCourse.vue"),
           props: true,
         },
 
         //profile
         {
-          path: '/rank',
-          component: () => import('@/components/profile/StudentRecordTab.vue'),
+          path: "/rank",
+          component: () => import("@/components/profile/StudentRecordTab.vue"),
         },
 
         //vies
         //course
         {
-          path: '/course/history',
-          component: () => import('@/views/course/CourseList.vue'),
+          path: "/course/history",
+          component: () => import("@/views/course/CourseList.vue"),
         },
         {
-          path: '/professor/course/management',
-          component: () => import('@/views/course/ProfessorCourseManagement.vue'),
+          path: "/professor/course/management",
+          component: () =>
+            import("@/views/course/ProfessorCourseManagement.vue"),
         },
         {
-          path: '/professor/course/status',
-          component: () => import('@/views/course/ProfessorCourseStatus.vue'),
+          path: "/professor/course/status",
+          component: () => import("@/views/course/ProfessorCourseStatus.vue"),
         },
 
         //enrollment
 
         {
-          path: '/enrollment',
-          component: () => import('@/views/enrollment/Enrollment.vue'),
+          path: "/enrollment",
+          component: () => import("@/views/enrollment/Enrollment.vue"),
         },
 
         //profile
         {
-          path: '/course/survey',
-          component: () => import('@/views/profile/CourseEvaluation.vue'),
+          path: "/course/survey",
+          component: () => import("@/views/profile/CourseEvaluation.vue"),
+          name: "CourseEvaluation",
         },
         {
-          path: '/grade/all',
-          component: () => import('@/views/profile/GetAllGrades.vue'),
+          path: "/grade/all",
+          component: () => import("@/views/profile/GetAllGrades.vue"),
         },
         {
-          path: '/renewal/privacy',
-          component: () => import('@/views/profile/RenewalPrivacy.vue'),
+          path: "/renewal/privacy",
+          component: () => import("@/views/profile/RenewalPrivacy.vue"),
         },
         {
-          path: '/profile',
-          component: () => import('@/views/profile/StudentRecord.vue'),
+          path: "/profile",
+          component: () => import("@/views/profile/StudentRecord.vue"),
         },
       ],
     },
