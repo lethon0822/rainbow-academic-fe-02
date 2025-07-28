@@ -16,3 +16,4 @@ export const modify = jsonBody =>{
 export const courseStudentList = id =>{
   return axios.get(`/professor/student?id=${id}`).catch(e => e.response);
 }
+
