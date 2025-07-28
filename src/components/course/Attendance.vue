@@ -10,7 +10,7 @@ const attendDate = ref('');
 // 임시 하드코딩 학생 데이터
 const students = ref([
   {
-    enrollmentId: 171,
+    enrollmentId: 62,
     name: 'lily',
     studentId: '20257945',
     status: '결석',
@@ -45,12 +45,15 @@ const students = ref([
     note: '',
   },
 ]);
+const isLoading = ref(false);
 
 const saveAttendance = async () => {
   if (!attendDate.value) {
     alert("출결일자를 선택해주세요.");
     return;
   }
+
+  isLoading.value = true; // 로딩 시작
 
   try {
     for (const s of students.value) {
@@ -64,6 +67,7 @@ const saveAttendance = async () => {
         enrollmentId: s.enrollmentId,
         status: s.status,
         note: s.note,
+        username: s.username,
       };
 
       const { data: exists } = await axios.post(
@@ -82,6 +86,8 @@ const saveAttendance = async () => {
   } catch (error) {
     console.error("출결 저장 중 오류:", error);
     alert("출결 저장 중 오류가 발생했습니다.");
+  } finally {
+    isLoading.value = false; //로딩 끝
   }
 };
 </script>
