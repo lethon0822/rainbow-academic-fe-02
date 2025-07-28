@@ -2,9 +2,11 @@
 
 <script setup>
 import { onMounted, ref, watchEffect } from "vue";
+
 import axios from "axios";
 import { useRoute } from "vue-router";
 import WhiteBox from "@/components/common/WhiteBox.vue";
+
 
 const student = ref([]);
 const route = useRoute();

@@ -20,21 +20,20 @@ const router = createRouter({
       component: () => import('@/views/login/RenewalPwd.vue'),
     },
 
-    //테스트 중 지워도 됩니다
-    {
-      path: '/test',
-      component: () => import('@/views/TestMain.vue'),
-    },
     //홈
     {
-      path: '/',
-      component: () => import('@/views/Home.vue'),
+      path: "/",
+      component: () => import("@/views/Home.vue"),
       children: [
         //components
         //course
         {
-          path: 'professor/attendance',
-          component: () => import('@/components/course/Attendance.vue'),
+          path: "/main",
+          component: () => import("@/views/Home.vue"),
+        },
+        {
+          path: "/attendance",
+          component: () => import("@/components/course/Attendance.vue"),
         },
         {
           path: '/professor/course/:id/students',
@@ -72,8 +71,7 @@ const router = createRouter({
         },
         {
           path: '/professor/course/management',
-          component: () =>
-            import('@/views/course/ProfessorCourseManagement.vue'),
+          component: () => import('@/views/course/ProfessorCourseManagement.vue'),
         },
         {
           path: '/professor/course/status',
