@@ -122,11 +122,11 @@ watch(() => filters.type, (newVal) => {
 }
 
 .filter-bar input[type="text"] {
-  width: 300px;
+  width: 270px;
 }
 
 .filter-bar select.short {
-  width: 80px;
+  width: 90px;
 }
 
 .filter-bar select.department {
