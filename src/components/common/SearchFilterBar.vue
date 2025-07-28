@@ -130,7 +130,7 @@ watch(() => filters.type, (newVal) => {
 }
 
 .filter-bar select.department {
-  width: 190px !important;
+  width: 178px !important;
 }
 
 .year {
