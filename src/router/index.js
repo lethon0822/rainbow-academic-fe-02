@@ -32,12 +32,12 @@ const router = createRouter({
       //components
         //course
         {
-        path: "/attendance",
-        component: () => import("@/components/course/Attendance.vue"),
+          path: "/attendance",
+          component: () => import("@/components/course/Attendance.vue"),
         },
         {
-        path: "/professor/course/:id/students",
-        component: () => import("@/components/course/CourseStudentsList.vue"),
+          path: "/professor/course/:id/students",
+          component: () => import("@/components/course/CourseStudentsList.vue"),
         },
         {
           path: "/gradeinput",

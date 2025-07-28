@@ -1,6 +1,6 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
-import Basic from "@/components/common/SideBar.vue";
+import Basic from "@/components/common/SideBar.vue"
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import Basic from "@/components/common/SideBar.vue";
     <Basic />
   </div>
   <div class="content">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
