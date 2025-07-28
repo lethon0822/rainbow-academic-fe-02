@@ -84,7 +84,7 @@ const send = (id, json) =>{
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseCode }}</td>
           <td>
-            <div v-if="course.type==='교양'">교양학부 </div>
+            <div v-if="course.type==='교양'">교양학부</div>
             <div v-else >{{ course.deptName }}</div>
           </td>
         
@@ -137,6 +137,7 @@ const send = (id, json) =>{
   
 </template>
 <style lang="scss">
+
 .table-container {
   margin: 20px;
   margin-left: 15px;
