@@ -1,7 +1,7 @@
 <!-- 성적 기입 -->
 
 <script setup>
-import { ref, watchEffect ,reactive} from "vue";
+import { ref, watchEffect ,reactive, onMounted} from "vue";
 import axios from "axios";
 import WhiteBox from "@/components/common/WhiteBox.vue";
 
