@@ -30,6 +30,7 @@ const myCourse = async (filters) => {
       return item.status === "승인";
     });
     state.resultItem = result;
+    state.visable = false;
     return;
   }
     state.resultItem = [];
