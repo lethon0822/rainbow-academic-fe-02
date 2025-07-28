@@ -37,6 +37,10 @@ const submit = async () => {
 
   switch (res.status) {
     case 200:
+    const userStore = useUserStore();
+      userStore.userName = res.data.userName;
+      userStore.userId = res.data.userId;
+      userStore.userRole = res.data.userRole;
       await router.push({
         path: "/",
       });
@@ -45,10 +49,7 @@ const submit = async () => {
       alert("아이디/비밀번호를 확인해주세요.");
       break;
   }
-  const userStore = useUserStore();
-  userStore.userName = res.data.userName;
-  userStore.userId = res.data.userId;
-  userStore.userRole = res.data.userRole;
+ 
 };
 </script>
 
