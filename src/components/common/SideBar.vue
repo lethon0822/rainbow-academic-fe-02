@@ -1,9 +1,11 @@
 <script setup>
 import { ref, nextTick, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useUserStore } from "@/stores/account";
 
 const accordian = ref(null);
 const route = useRoute();
+const userStore = useUserStore();
 
 const slideUp = (element) => {
   element.style.height = element.scrollHeight + "px";
@@ -169,18 +171,18 @@ watch(
           </li>
         </ul>
       </li>
-
+      <template v-if="userStore.userRole !== 'professor'">
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
           <li><a href="javascript:void(0);">수강조회</a></li>
           <li>
-            <router-link to="/enrollment" class="router-link"
-              >수강신청 관리</router-link
+            <router-link to="/enrollment" class="router-link">수강신청 관리</router-link
             >
           </li>
         </ul>
       </li>
+    </template>
 
       <!-- 추후 v-if설정 해야함 -->
       <li class="menu-gangui">
@@ -191,10 +193,10 @@ watch(
               >강의조회</router-link
             >
           </li>
-          <li>
+          <li v-if="userStore.userRole !== 'student'">
             <router-link to="/professor/course/status">강의개설신청 및 신청현황조회</router-link>
           </li>
-          <li>
+          <li v-if="userStore.userRole !== 'student'">
             <router-link to="/professor/course/management"
               >강의관리</router-link
             >
