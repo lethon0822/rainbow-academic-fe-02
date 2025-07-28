@@ -7,33 +7,33 @@ const props = defineProps({
   state: Boolean,
   departments: Array,
   semester: String,
-  enrollment:Boolean
+  enrollment: Boolean,
 });
 
 let today = new Date();
-let year = today.getFullYear(); 
+let year = today.getFullYear();
 
-let enroll = props.enrollment
+let enroll = props.enrollment;
 
 console.log(enroll)
 
 const filters = reactive({
-  year: '',
-  type: '',
-  departmentName: '',
-  grade: '',
-  semester: '',
-  keyword: '',
+  year: "",
+  type: "",
+  departmentName: "",
+  grade: "",
+  semester: "",
+  keyword: "",
 });
 
 filters.year = year;
 
-const onSearch =()=>{
-  if(filters.year < year-5){
-    filters.year = year-5
+const onSearch = () => {
+  if (filters.year < year - 5) {
+    filters.year = year - 5;
   }
-  emit('search', { ...filters });
-}
+  emit("search", { ...filters });
+};
 
 // 이수 구분이 교양이면 학과를 교양학부로 고정 
 watch(()=>filters.type, (newVal, oldVal) => {
@@ -50,10 +50,16 @@ watch(()=>filters.type, (newVal, oldVal) => {
   <div class="filter-bar">
     <label>연도:</label>
     <template v-if="enroll">
-      <input type="Number" v-model="filters.year" class="year" disabled>
+      <input type="Number" v-model="filters.year" class="year" disabled />
     </template>
     <template v-else>
-      <input type="Number" :min="year-5" :max= "year" step="1" v-model="filters.year" >
+      <input
+        type="Number"
+        :min="year - 5"
+        :max="year"
+        step="1"
+        v-model="filters.year"
+      />
     </template>
 
     <label>학기:</label>
@@ -129,29 +135,27 @@ watch(()=>filters.type, (newVal, oldVal) => {
 }
 .filter-bar button {
   padding: 12px 18px;
-  background-color: #2962FF;
+  background-color: #2962ff;
   color: white;
   border: none;
   border-radius: 4px;
 }
 
-.year{
+.year {
   width: 91px;
-  
 }
 button {
   margin-left: auto;
 }
 
-.year{
+.year {
   background-color: #e2e2e2;
 }
 
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
-    opacity: 1;
-    background-color: #e2e2e2;
-    
+  opacity: 1;
+  background-color: #e2e2e2;
 }
 
 select:disabled {

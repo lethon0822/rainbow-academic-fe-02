@@ -22,9 +22,13 @@ const router = createRouter({
     {
       path: "/",
       component: () => import("@/views/Home.vue"),
-      children:[
-      //components
+      children: [
+        //components
         //course
+        {
+          path: "/main",
+          component: () => import("@/views/Home.vue"),
+        },
         {
           path: "/attendance",
           component: () => import("@/components/course/Attendance.vue"),
@@ -50,15 +54,14 @@ const router = createRouter({
           component: () => import("@/components/course/RegistrationCourse.vue"),
           props: true,
         },
-        
+
         //profile
         {
           path: "/rank",
           component: () => import("@/components/profile/StudentRecordTab.vue"),
         },
 
-
-      //vies
+        //vies
         //course
         {
           path: "/course/history",
@@ -66,22 +69,21 @@ const router = createRouter({
         },
         {
           path: "/professor/course/management",
-          component: () => import("@/views/course/ProfessorCourseManagement.vue"),
+          component: () =>
+            import("@/views/course/ProfessorCourseManagement.vue"),
         },
         {
           path: "/professor/course/status",
           component: () => import("@/views/course/ProfessorCourseStatus.vue"),
         },
 
-        
         //enrollment
-          
+
         {
           path: "/enrollment",
           component: () => import("@/views/enrollment/Enrollment.vue"),
         },
 
-        
         //profile
         {
           path: "/course/survey",
@@ -99,9 +101,8 @@ const router = createRouter({
           path: "/profile",
           component: () => import("@/views/profile/StudentRecord.vue"),
         },
-        
-      ]
-    }
+      ],
+    },
   ],
 });
 export default router;
