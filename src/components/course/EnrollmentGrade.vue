@@ -3,7 +3,7 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import axios from "axios";
-import WhiteBox from "./common/WhiteBox.vue";
+import WhiteBox from "@/common/WhiteBox.vue";
 
 const students = ref([
   {

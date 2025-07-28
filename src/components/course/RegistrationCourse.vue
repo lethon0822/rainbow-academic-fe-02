@@ -42,11 +42,12 @@ onMounted(async () => {
 });
 const router = useRouter();
 const submit = async () => {
+  if(!confirm('제출하시겠습니까?')){return};
+
   let data = null;
   if (state.form.courseId > 0) {
 
     const res = await modify(state.form);
-    console.log("이곳은 강의등록창입니다(수정):", res.data);
     data = res;
   } else {
     const res = await saveCourse(state.form);
@@ -100,7 +101,7 @@ const submit = async () => {
         <div class="table d-flex">
           <div class="table-title">이수학점</div>
           <div class="table-content">
-            <input type="number" v-model="state.form.credit" required />
+            <input type="number" max="3" v-model="state.form.credit" required />
           </div>
           <div class="table-title">학기</div>
           <div class="table-content">

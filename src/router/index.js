@@ -3,100 +3,20 @@ import { createRouter, createWebHistory } from "vue-router";
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    // 로그인
     {
       path: "/login",
-      component: () => import("@/views/LoginPage.vue"),
+      component: () => import("@/views/login/LoginPage.vue"),
     },
-    {
-      path: "/",
-      component: () => import("@/views/Home.vue"),
-      children:[
-        {
-      path: "/enrollment",
-      component: () => import("@/views/enrollment/Enrollment.vue"),
-    },
-    {
-      path: "/attendance",
-      component: () => import("@/components/Attendance.vue"),
-    },
-    {
-      path: "/gradeinput",
-      component: () => import("@/components/EnrollmentGrade.vue"),
-    },
-    {
-      path: "/grade/all",
-      component: () => import("@/views/profile/GetAllGrades.vue"),
-    },
-    {
-      path: "/profile",
-      component: () => import("@/views/profile/StudentRecord.vue"),
-    },
-    {
-      path: "/rank",
-      component: () => import("@/components/profile/StudentRecordTab.vue"),
-    },
-
-    // 교수 탭
-    {
-      path: "/professor/course/registration",
-      name: "RegistrationCourse",
-      component: () => import("@/components/course/RegistrationCourse.vue"),
-    },
-    {
-      path: "/professor/course/registration/:id",
-      name: "ModifyCourse",
-      component: () => import("@/components/course/RegistrationCourse.vue"),
-      props: true,
-    },
-    {
-      path: "/enrollment",
-      component: () => import("@/views/enrollment/Enrollment.vue"),
-    },
-    {
-      path: "/attendance",
-      component: () => import("@/components/Attendance.vue"),
-    },
-    {
-      path: "/enrollmentgrade",
-      component: () => import("@/components/EnrollmentGrade.vue"),
-    },
-    {
-      path: "/professor/course/status",
-      component: () => import("@/views/course/ProfessorCourseStatus.vue"),
-    },
-    {
-      path: "/professor/course/management",
-      component: () => import("@/views/course/ProfessorCourseManagement.vue"),
-    },
-    {
-      path: "/professor/course/:id/students",
-      component: () => import("@/components/course/CourseStudentsList.vue"),
-    },
-    {
-      path: "/course/survey",
-      component: () => import("@/views/profile/CourseEvaluation.vue"),
-    },
-    {
-      path: "/course/history",
-
-      component: () => import("@/views/course/CourseList.vue"),
-    },
-
-    {
-      path: "/renewal/privacy",
-      component: () => import("@/views/profile/RenewalPrivacy.vue"),
-    },
-
-
-      ]
-    },
+    //아이디 찾기(views-login)
     {
       path: "/id",
-      component: () => import("@/views/Id.vue"),
+      component: () => import("@/views/login/Id.vue"),
     },
+    //비밀번호 변경(views-login)
     {
       path: "/renewal",
-      component: () => import("@/views/RenewalPwd.vue"),
+      component: () => import("@/views/login/RenewalPwd.vue"),
     },
     
     //테스트 중 지워도 됩니다
@@ -104,6 +24,90 @@ const router = createRouter({
       path: "/test",
       component: () => import("@/views/TestMain.vue"),
     },
+    //홈
+    {
+      path: "/",
+      component: () => import("@/views/Home.vue"),
+      children:[
+      //components
+        //course
+        {
+        path: "/attendance",
+        component: () => import("@/components/course/Attendance.vue"),
+        },
+        {
+        path: "/professor/course/:id/students",
+        component: () => import("@/components/course/CourseStudentsList.vue"),
+        },
+        {
+          path: "/gradeinput",
+          component: () => import("@/components/course/EnrollmentGrade.vue"),
+        },
+        {
+          //강의계획서 등록
+          path: "/professor/course/registration",
+          name: "RegistrationCourse",
+          component: () => import("@/components/course/RegistrationCourse.vue"),
+        },
+        {
+          //강의계획서 수정
+          path: "/professor/course/registration/:id",
+          name: "ModifyCourse",
+          component: () => import("@/components/course/RegistrationCourse.vue"),
+          props: true,
+        },
+        
+        //profile
+        {
+          path: "/rank",
+          component: () => import("@/components/profile/StudentRecordTab.vue"),
+        },
+
+
+      //vies
+        //course
+        {
+          path: "/course/history",
+          component: () => import("@/views/course/CourseList.vue"),
+        },
+        {
+          path: "/professor/course/management",
+          component: () => import("@/views/course/ProfessorCourseManagement.vue"),
+        },
+        {
+          path: "/professor/course/status",
+          component: () => import("@/views/course/ProfessorCourseStatus.vue"),
+        },
+
+        
+        //enrollment
+          
+        {
+          path: "/enrollment",
+          component: () => import("@/views/enrollment/Enrollment.vue"),
+        },
+
+        
+        //profile
+        {
+          path: "/course/survey",
+          component: () => import("@/views/profile/CourseEvaluation.vue"),
+        },
+        {
+          path: "/grade/all",
+          component: () => import("@/views/profile/GetAllGrades.vue"),
+        },
+        {
+          path: "/renewal/privacy",
+          component: () => import("@/views/profile/RenewalPrivacy.vue"),
+        },
+        {
+          path: "/profile",
+          component: () => import("@/views/profile/StudentRecord.vue"),
+        },
+        
+      ]
+    }
   ],
 });
 export default router;
