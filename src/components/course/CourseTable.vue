@@ -23,7 +23,7 @@ defineProps({
     }),
   },
 });
-defineEmits(["enroll", "cancel"]);
+defineEmits(["enroll", "cancel","check"]);
 // 승인여부 css 변경
 const change = (status) =>{
   if(status === '거부'){
@@ -47,7 +47,6 @@ const openLink = (id) => {
 const router = useRouter();
 const send = (id, json) =>{
 
-  console.log("먀오:",json)
   const jsonBody = JSON.stringify(json);
   router.push({
     path:`/professor/course/${id}/students`,
@@ -122,7 +121,7 @@ const send = (id, json) =>{
           </td>
           <td v-else-if="show.check">
               <!-- 학생관리 라우팅 처리해야함 -->
-                <button class="enroll-btn" @click="$emit('check', course.courseId)">보기</button>
+                <button class="enroll-btn" @click="$emit('check', course.courseId)">강의평 보기</button>
           </td>
           <td v-else-if="show.modify && course.status !=='승인' ">
               <!-- 강의 수정 라우팅 처리해야함 -->
