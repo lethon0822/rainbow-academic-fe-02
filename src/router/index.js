@@ -1,7 +1,5 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
-import StudentRecord from "@/views/StudentRecord.vue";
-import Home from "@/views/Home.vue"; // 메인
 
 const router = createRouter({
   history: createWebHistory(),
