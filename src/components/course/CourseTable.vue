@@ -82,7 +82,11 @@ const send = (id, json) =>{
       <tbody>
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseCode }}</td>
-          <td>{{ course.deptName }}</td>
+          <td>
+            <div v-if="course.type==='교양'">교양학부 </div>
+            <div v-else >{{ course.deptName }}</div>
+          </td>
+        
           <td>
             <div v-if="show.modify">{{ course.title }}</div>
             <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>

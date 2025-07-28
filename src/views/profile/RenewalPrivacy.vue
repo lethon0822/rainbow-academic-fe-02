@@ -264,12 +264,12 @@ const changePassword = async () => {
       </div>
 
 
-     
+    
     </form>
   </WhiteBox>
 
 </template>
- 
+
 <style scoped lang="scss">
 
 

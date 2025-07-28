@@ -1,27 +1,19 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
-import Basic from "@/components/common/SideBar.vue";
+import SideBar from "@/components/common/SideBar.vue"
 </script>
 
 <template>
   <Header />
   <div class="sidebar">
-    <Basic />
+    <SideBar/>
   </div>
   <div class="content">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
-<style lang="scss">
-html,
-body,
-#app {
-  height: 100%;
-  margin: 0;
-  background-color: #dee2e5;
-  overflow-x: hidden;
-}
+<style lang="scss" scoped>
 
 .content {
   position: relative;
