@@ -5,11 +5,17 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import logo from "@/assets/muji_horizontaLogo.svg";
 
-import Login from "@/views/login/Login.vue";
 import { useRoute } from "vue-router";
 import { onMounted, watch, ref } from "vue";
 import { useAccountStore } from "@/stores/account";
 import { check } from "@/services/accountService";
+import logo from "@/assets/muji_horizontaLogo.svg";
+import Login from "@/views/login/Login.vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+
 
 import img1 from "@/assets/1.jpg";
 import img2 from "@/assets/2.jpg";
@@ -458,11 +464,17 @@ watch(
   border-color: #0056b3;
 }
 
+.page-btn.active:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
 /* 스와이프 네비게이션 관련 스타일 제거 */
 
 @media (max-width: 768px) {
   .logo-container {
     margin-bottom: 15px;
+     margin: 15px;
   }
 
   .logo-container img {
