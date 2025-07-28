@@ -8,6 +8,7 @@ import {
   getCourseListByFilter,
   getMySugangList,
 } from '@/services/CourseService';
+
 import { postEnrollCourse } from '@/services/SugangService';
 const departments = ref([]);
 const years = ref([]);
@@ -26,6 +27,8 @@ const courseCount = computed(() => mySugangList.value.length);
 
 
 onMounted(async () => {
+
+  // 학과, 연도 불러오기
   const departmentRes = await getDepartments();
   console.log(departmentRes.data);
   departments.value = departmentRes.data;
@@ -34,16 +37,27 @@ onMounted(async () => {
   console.log(yearRes.data);
   years.value = yearRes.data;
 
+  // 수강 신청한 강의 목록을 불러오기
   const mySugangListRes = await getMySugangList();
   console.log('수강리스트', mySugangListRes);
   mySugangList.value = mySugangListRes.data;
   console.log(mySugangList);
 });
+
+// 필터에 따른 개설 강의 목록을 조회하는 기능 
 const handleSearch = async (filters) => {
   console.log(' 받은 필터:', filters);
   const courseListRes = await getCourseListByFilter(filters);
   console.log('courseListRes: ', courseListRes);
-  courseList.value = courseListRes.data;
+
+  courseList.value = courseListRes.data.map(course => {
+    course.enrolled = mySugangList.value.some(
+      (c) => c.courseId === course.courseId
+    );
+    console.log("course",course);
+    return course;
+    
+  });
 };
 
 // 수강 신청 처리 함수
@@ -96,6 +110,7 @@ const handleEnroll = async (course) => {
   }
 };
 </script>
+
 <template>
   <WhiteBox title="수강 신청">
     <SearchFilterBar
@@ -128,7 +143,7 @@ const handleEnroll = async (course) => {
     <div class="creditInfo">
       <h5 class="fw-bold mt-2 mb-0.3rem">신청 내역</h5>
       <div class="credit-box">
-        <span>최대 학점: {{ maxCredit }}18학점</span>
+        <span>최대 학점: 18학점</span>
         
         <span>신청 학점: {{ totalCredit }}학점</span>
         <span>신청 과목 수: {{ courseCount }}개</span>

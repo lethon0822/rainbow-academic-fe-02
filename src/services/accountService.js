@@ -15,3 +15,23 @@ export const logout = () => {
 export const findId = (params) => {
   return axios.get("/account/id", { params }).catch((e) => e.response);
 };
+
+export const getAddressByZipcode = async (zipcode) => {
+  const res = await axios.get(`/api/zipcode?code=${zipcode}`);
+  return res.data;
+};
+
+export const updateUser = async (userDto) => {
+  const res = await axios.post('/api/user/update', userDto);
+  return res.data;
+};
+
+export async function verifyAuthCode(code) {
+  return await axios.post('/api/email/verify-code', { code });
+};
+
+export async function changePasswordApi(userId, newPassword) {
+  return await axios.post('/api/user/change-password', {
+    userId,
+    newPassword,
+  })};

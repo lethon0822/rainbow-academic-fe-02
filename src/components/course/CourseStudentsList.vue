@@ -22,14 +22,18 @@ const userStore = useUserStore();
   });
 
 onMounted(async ()=>{
+  console.log('안녕')
   const passJson = history.state.data;
   if(passJson){
     const nana = JSON.parse(passJson);
     state.course = nana
+
     const id = state.course.courseId
     console.log('아이디:',id)
+
     const res = await courseStudentList(id);
     console.log("res",res)
+    
     if(res.data.length > 0){
       state.data =res.data
       return;

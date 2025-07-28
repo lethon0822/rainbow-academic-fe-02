@@ -142,6 +142,5 @@ watchEffect(() => {
 <style scoped lang="scss">
 .content {
   width: 1350px;
-  margin-left: -150px;
 }
 </style>

@@ -7,101 +7,102 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
 </script>
 
 <template>
-  <!-- 과목별 성적 테이블 -->
-  <h4>과목별 성적</h4>
-  <div class="table-container">
-    <table class="fixed_headers">
-      <thead>
-        <tr>
-          <th>순번</th>
-          <th>학년</th>
-          <th>학기</th>
-          <th>과목코드</th>
-          <th>교과목명</th>
-          <th>학점</th>
-          <th>등급</th>
-          <th>이수구분</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(grade, index) in grades" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ grade.grade }}</td>
-          <td>{{ grade.semester }}</td>
-          <td>{{ grade.courseId }}</td>
-          <td>{{ grade.title }}</td>
-          <td>{{ grade.credit }}</td>
-          <td>{{ grade.rank || "-" }}</td>
-          <td>{{ grade.type }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="override-whitebox-margin">
+    <!-- 과목별 성적 테이블 -->
+    <h4>과목별 성적</h4>
+    <div class="table-container">
+      <table class="fixed_headers">
+        <thead>
+          <tr>
+            <th>순번</th>
+            <th>학년</th>
+            <th>학기</th>
+            <th>과목코드</th>
+            <th>교과목명</th>
+            <th>학점</th>
+            <th>등급</th>
+            <th>이수구분</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(grade, index) in grades" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ grade.grade }}</td>
+            <td>{{ grade.semester }}</td>
+            <td>{{ grade.courseId }}</td>
+            <td>{{ grade.title }}</td>
+            <td>{{ grade.credit }}</td>
+            <td>{{ grade.rank || "-" }}</td>
+            <td>{{ grade.type }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <!-- 이수구분별 취득학점 테이블 -->
-  <h4>이수구분별 취득학점</h4>
-  <div class="table-container">
-    <table class="fixed_headers">
-      <thead>
-        <tr>
-          <th>순번</th>
-          <th>학년</th>
-          <th>학기</th>
-          <th>전공필수</th>
-          <th>전공선택</th>
-          <th>교양</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(record, index) in creditByCategory" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ record.grade }}</td>
-          <td>{{ record.semester }}</td>
-          <td>{{ record.majorRequired }}</td>
-          <td>{{ record.majorElective }}</td>
-          <td>{{ record.generalEducation }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- 이수구분별 취득학점 테이블 -->
+    <h4>이수구분별 취득학점</h4>
+    <div class="table-container">
+      <table class="fixed_headers">
+        <thead>
+          <tr>
+            <th>순번</th>
+            <th>학년</th>
+            <th>학기</th>
+            <th>전공필수</th>
+            <th>전공선택</th>
+            <th>교양</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(record, index) in creditByCategory" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ record.grade }}</td>
+            <td>{{ record.semester }}</td>
+            <td>{{ record.majorRequired }}</td>
+            <td>{{ record.majorElective }}</td>
+            <td>{{ record.generalEducation }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <!-- 학기별 성적 테이블 -->
-  <h4>학기별 성적</h4>
-  <div class="table-container">
-    <table class="fixed_headers">
-      <thead>
-        <tr>
-          <th>순번</th>
-          <th>학년</th>
-          <th>학기</th>
-          <th>신청학점</th>
-          <th>취득학점</th>
-          <th>평균점수</th>
-          <th>평균평점</th>
-          <th>석차</th>
-          <th>인원</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(semesterGrade, index) in semesterGrades" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ semesterGrade.grade }}</td>
-          <td>{{ semesterGrade.semester }}</td>
-          <td>{{ semesterGrade.requestedCredits }}</td>
-          <td>{{ semesterGrade.acquiredCredits }}</td>
-          <td>{{ semesterGrade.avgScore }}</td>
-          <td>{{ semesterGrade.avgGradePoint }}</td>
-          <td>{{ semesterGrade.grading }}</td>
-          <td>{{ semesterGrade.totalStudents }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- 학기별 성적 테이블 -->
+    <h4>학기별 성적</h4>
+    <div class="table-container">
+      <table class="fixed_headers">
+        <thead>
+          <tr>
+            <th>순번</th>
+            <th>학년</th>
+            <th>학기</th>
+            <th>신청학점</th>
+            <th>취득학점</th>
+            <th>평균점수</th>
+            <th>평균평점</th>
+            <th>석차</th>
+            <th>인원</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(semesterGrade, index) in semesterGrades" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ semesterGrade.grade }}</td>
+            <td>{{ semesterGrade.semester }}</td>
+            <td>{{ semesterGrade.requestedCredits }}</td>
+            <td>{{ semesterGrade.acquiredCredits }}</td>
+            <td>{{ semesterGrade.avgScore }}</td>
+            <td>{{ semesterGrade.avgGradePoint }}</td>
+            <td>{{ semesterGrade.grading }}</td>
+            <td>{{ semesterGrade.totalStudents }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .table-container {
-  margin: 20px auto;
   border-radius: 5px;
   max-width: 1300px;
   max-height: 240px;
@@ -160,7 +161,7 @@ h4 {
   font-weight: bold;
   color: #364157;
   margin-left: 25px;
-  
-  margin-bottom: 40px;
+  margin-top: 30px;
 }
+
 </style>
