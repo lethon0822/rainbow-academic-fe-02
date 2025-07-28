@@ -1,10 +1,4 @@
 <script setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Autoplay, EffectFade } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import logo from "@/assets/muji_horizontaLogo.svg";
-
 import { useRoute } from "vue-router";
 import { onMounted, watch, ref } from "vue";
 import { useAccountStore } from "@/stores/account";

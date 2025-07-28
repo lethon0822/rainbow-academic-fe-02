@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/services/accountService";
 import { useUserStore } from "@/stores/account";
@@ -180,8 +180,6 @@ const submit = async () => {
   align-items: center;
   gap: 12px;
   margin-top: 20px;
-<<<<<<< HEAD
-=======
 }
 
 .link {
@@ -219,7 +217,6 @@ const submit = async () => {
   .login-button {
     font-size: 15px;
   }
->>>>>>> f0973a3829edc0b5bb78ee4ab582f76334cb58da
 }
 
 .link {

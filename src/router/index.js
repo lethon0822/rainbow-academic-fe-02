@@ -18,10 +18,6 @@ const router = createRouter({
       path: "/renewal",
       component: () => import("@/views/login/RenewalPwd.vue"),
     },
-<<<<<<< HEAD
-=======
-
->>>>>>> f0973a3829edc0b5bb78ee4ab582f76334cb58da
     //홈
     {
       path: "/",
@@ -30,12 +26,6 @@ const router = createRouter({
         //components
         //course
         {
-<<<<<<< HEAD
-          path: "/attendance",
-          component: () => import("@/components/course/Attendance.vue"),
-        },
-        {
-=======
           path: "/main",
           component: () => import("@/views/Home.vue"),
         },
@@ -44,7 +34,6 @@ const router = createRouter({
           component: () => import("@/components/course/Attendance.vue"),
         },
         {
->>>>>>> f0973a3829edc0b5bb78ee4ab582f76334cb58da
           path: "/professor/course/:id/students",
           component: () => import("@/components/course/CourseStudentsList.vue"),
         },
