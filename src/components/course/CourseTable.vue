@@ -111,7 +111,7 @@ const send = (id, json) =>{
             </button>
           </td>
           <td v-else-if="show.cancel">
-            <button class="cancel-btn" @click="$emit('cancel', course)">
+            <button class="cancel-btn" @click="$emit('cancel', course.courseId)">
               수강취소
             </button>
           </td>
