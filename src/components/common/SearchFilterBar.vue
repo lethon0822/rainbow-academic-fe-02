@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 const emit = defineEmits(["search"]);
 
 const props = defineProps({
@@ -16,6 +16,7 @@ let year = today.getFullYear();
 let enroll = props.enrollment
 
 console.log(enroll)
+
 const filters = reactive({
   year: '',
   type: '',
@@ -34,7 +35,15 @@ const onSearch =()=>{
   emit('search', { ...filters });
 }
 
-// 년도
+// 이수 구분이 교양이면 학과를 교양학부로 고정 
+watch(()=>filters.type, (newVal, oldVal) => {
+  console.log("바뀜: ", oldVal, "->", newVal);
+  if(newVal === '교양'){
+    filters.departmentName = '교양학부';
+  } else{
+    filters.departmentName = '';
+  }
+} );
 
 </script>
 <template>
@@ -71,7 +80,7 @@ const onSearch =()=>{
         <option value="교양">교양</option>
       </select>
       <label>학과:</label>
-      <select v-model="filters.departmentName">
+      <select v-model="filters.departmentName" :disabled="filters.type === '교양'">
         <option value="">전체</option>
         <option
           v-for="d in props.departments"
@@ -143,6 +152,12 @@ input::-webkit-outer-spin-button {
     opacity: 1;
     background-color: #e2e2e2;
     
+}
+
+select:disabled {
+  color: #000; 
+  background-color: #fff; 
+  border: 1px solid #333;  
 }
 </style>
 
