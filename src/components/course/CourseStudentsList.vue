@@ -55,6 +55,19 @@ const attendance = () =>{
   })
 }
 
+const enrollmentGrade = () =>{
+  const jsonBody = JSON.stringify(state.data)
+
+  router.push({
+    path: '/enrollmentgrade',
+    state:{
+      data: jsonBody
+      ,id: route.params.id
+    }
+    
+  })
+}
+
 </script>
 
 <template>
@@ -126,10 +139,8 @@ const attendance = () =>{
     </div>
 
     <div class="button d-flex">
-        <button class="btn btn-primary" @click="attendance">출결관리</button>
-      <router-link to="/EnrollmentGrade">
-        <button class="btn btn-primary">성적관리</button>
-      </router-link>
+      <button class="btn btn-primary" @click="attendance">출결관리</button>
+      <button class="btn btn-primary" @click="enrollmentGrade">성적관리</button>
     </div>
 
     <div class="table-container">
