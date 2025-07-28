@@ -10,38 +10,38 @@ const attendDate = ref('');
 // 임시 하드코딩 학생 데이터
 const students = ref([
   {
-    enrollmentId: 30,
+    enrollmentId: 171,
     name: 'lily',
     studentId: '20257945',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 31,
+    enrollmentId:172,
     name: 'Andy',
     studentId: '20257946',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 32,
+    enrollmentId: 173,
     name: 'Hannah',
     studentId: '20257947',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 33,
+    enrollmentId: 174,
     name: 'Jacob',
     studentId: '20257948',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 34,
+    enrollmentId: 176,
     name: 'lucy',
     studentId: '20257949',
-    status: '',
+    status: '결석',
     note: '',
   },
 ]);
@@ -78,7 +78,7 @@ const saveAttendance = async () => {
     }
 
     alert("출결 저장 완료!"); // 알림 띄우고
-    router.push("/professor"); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
+    await router.push("/professor/attendance"); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
   } catch (error) {
     console.error("출결 저장 중 오류:", error);
     alert("출결 저장 중 오류가 발생했습니다.");
@@ -98,8 +98,8 @@ const saveAttendance = async () => {
           class="form-control w-25"
         />
       </div>
-      <table class="attendance-table table table bordered">
-        <thead class="table-primary">
+      <table class="attendance-table">
+        <thead class="grade-table-header">
           <tr>
             <th>이름</th>
             <th>학번</th>
@@ -141,7 +141,7 @@ const saveAttendance = async () => {
   </WhiteBox>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 // .attendance-wrapper {
 //   padding-left: 160px; // 사이드바 피해서
 //   padding-top: 30px;
@@ -162,33 +162,20 @@ const saveAttendance = async () => {
 //   margin-left: 80px;
 // }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-.form-group {
-  margin-bottom: 16px;
-
-  input[type='date'] {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-}
-
-.attendance-table {
-  width: 100%;
+:deep(.attendance-table) {
   border-collapse: collapse;
-  margin-bottom: 16px;
+  width: 100%;
+  border: 1px solid #ddd;  /* ✅ 테두리 전체 */
 
-  th,
-  td {
-    border: 1px solid #ccc;
+  th, td {
+    border: 1px solid #ddd !important; /* ✅ 셀 간 경계선 */
     padding: 8px;
     text-align: center;
+  }
+
+  th {
+    background-color: #364157;
+    color: white;
   }
 
   input,
@@ -197,19 +184,5 @@ const saveAttendance = async () => {
     width: 100%;
     box-sizing: border-box;
   }
-}
-
-button {
-  background-color: #3b82f6;
-  color: #3b82f6;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  float: center;
-}
-
-button:hover {
-  background-color: #2563eb;
 }
 </style>

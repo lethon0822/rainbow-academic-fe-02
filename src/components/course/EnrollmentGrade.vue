@@ -23,7 +23,7 @@ const students = ref([
   {
     enrollmentId: 30,
     major: '컴퓨터공학과',
-    courseId: '5',
+    courseId: '180',
     studentId: '20250001',
     name: '유아린',
     attendanceScore: 0,
@@ -36,7 +36,7 @@ const students = ref([
   {
     enrollmentId: 31,
     major: '전자공학과',
-    courseId: '9',
+    courseId: '181',
     studentId: '20250002',
     name: '홍길동',
     attendanceScore: 0,
@@ -49,7 +49,7 @@ const students = ref([
   {
     enrollmentId: 32,
     major: '전자공학과',
-    courseId: '7',
+    courseId: '182',
     studentId: '20250003',
     name: '남효정',
     attendanceScore: 0,
@@ -62,7 +62,7 @@ const students = ref([
   {
     enrollmentId: 33,
     major: '경영학과',
-    courseId: '29',
+    courseId: '183',
     studentId: '20250004',
     name: '김효정',
     attendanceScore: 0,
@@ -75,7 +75,7 @@ const students = ref([
   {
     enrollmentId: 34,
     major: '일본어학과',
-    courseId: '28',
+    courseId: '186',
     studentId: '20250005',
     name: '조효정',
     attendanceScore: 0,
@@ -144,7 +144,7 @@ const saveGrades = async () => {
       <h2 class="text-2xl font-bold mb-4 text-center">
         성적입력 (출석20%, 중간30%, 기말30%, 과제20%)
       </h2>
-      <table class="grade-table w-full">
+      <table class="grade-table">
       <thead class="grade-table-header">
           <tr>
             <th class="px-3 py-2 text-center align-middle">학과</th>
@@ -181,32 +181,33 @@ const saveGrades = async () => {
 </template>
 
 <style scoped lang="scss">
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  text-align: left;
-}
-.grade-table {
+:deep(.grade-table) {
   width: 100%;
-  th, td {
-    text-align: center;
-    vertical-align: middle;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  border: 1px solid #ddd; /* 테이블 외곽선 */
+
+  th,
+  td {
+    border: 1px solid #ddd !important; /* 셀 구분선 */
     padding: 8px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #364157;
+    color: white;
+  }
+
+  input {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #f8f9fa; /* 입력 칸에 연한 회색 */
   }
 }
-input[type='number'], input[type='text'] {
-  padding: 4px 8px;
-  text-align: center;
-}
-.grade-table-header {
-  background-color: #364157 !important;
-  color: white !important;
-}
-.grade-table th,
-.grade-table td {
-  vertical-align: middle !important;
-  text-align: center;
-}
 </style>
+
 

@@ -109,7 +109,7 @@ onMounted(async ()=>{
     </div>
 
     <div class="button d-flex">
-      <router-link to="/attendance">
+      <router-link to="/professor/attendance">
         <button class="btn btn-primary">출결관리</button>
       </router-link>
       <router-link to="/EnrollmentGrade">
