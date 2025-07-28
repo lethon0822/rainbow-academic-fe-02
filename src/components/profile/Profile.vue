@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from 'vue';
 
 const props = defineProps({
   profile: {
@@ -16,8 +16,8 @@ const currentProfileImage = ref(null); // 세션 저장용 프로필 이미지
 
 // 폼 데이터 상태
 const formData = reactive({
-  studentType: "대학생",
-  department: "선택",
+  studentType: '대학생',
+  department: '선택',
 });
 
 const loadUserProfileImage = () => {
@@ -27,10 +27,10 @@ const loadUserProfileImage = () => {
   if (savedImage) {
     currentProfileImage.value = savedImage;
   } else {
-    if (props.profile.loginId === "20220001") {
+    if (props.profile.loginId === '20220001') {
       // 시연용 기본 프로필 이미지
       currentProfileImage.value =
-        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjBGMEYwIi8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjE2IiBmaWxsPSIjNkM3NTdEIi8+CjxwYXRoIGQ9Ik0zMCA4MEMzMCA3MS4xNjM0IDQ0LjUzNjYgNjQgNjAgNjRDNzUuNDYzNCA2NCA5MCA3MS4xNjM0IDkwIDgwVjEwMEgzMFY4MFoiIGZpbGw9IiM2Qzc1N0QiLz4KPC9zdmc+";
+        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjBGMEYwIi8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjE2IiBmaWxsPSIjNkM3NTdEIi8+CjxwYXRoIGQ9Ik0zMCA4MEMzMCA3MS4xNjM0IDQ0LjUzNjYgNjQgNjAgNjRDNzUuNDYzNCA2NCA5MCA3MS4xNjM0IDkwIDgwVjEwMEgzMFY4MFoiIGZpbGw9IiM2Qzc1N0QiLz4KPC9zdmc+';
     }
   }
 };
@@ -60,13 +60,13 @@ const handleImageSelect = (event) => {
   if (file) {
     // 파일 크기 체크
     if (file.size > 5 * 1024 * 1024) {
-      alert("파일 크기는 5MB 이하여야 합니다.");
+      alert('파일 크기는 5MB 이하여야 합니다.');
       return;
     }
 
     // 파일 형식 체크
-    if (!file.type.startsWith("image/")) {
-      alert("이미지 파일만 업로드 가능합니다.");
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드 가능합니다.');
       return;
     }
 
@@ -90,7 +90,7 @@ const openFileDialog = () => {
 const removeImage = () => {
   selectedImage.value = null;
   imagePreview.value = null;
-  fileInput.value.value = "";
+  fileInput.value.value = '';
 
   // 세션에서도 제거
   const sessionKey = `profileImage_${props.profile.loginId}`;
@@ -116,18 +116,18 @@ const saveProfile = async () => {
       department: formData.department,
     };
 
-    const response = await fetch("/api/profile/update", {
-      method: "POST",
+    const response = await fetch('/api/profile/update', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('authToken')}`,
       },
       body: JSON.stringify(formDataToSend),
     });
 
     if (response.ok || true) {
       alert(
-        "프로필이 성공적으로 업데이트되었습니다.\n(이미지는 세션 동안만 유지됩니다)"
+        '프로필이 성공적으로 업데이트되었습니다.\n(이미지는 세션 동안만 유지됩니다)'
       );
 
       // 임시 미리보기 상태 초기화
@@ -135,8 +135,8 @@ const saveProfile = async () => {
       imagePreview.value = null;
     }
   } catch (error) {
-    console.error("프로필 업데이트 오류:", error);
-    alert("프로필 업데이트 중 오류가 발생했습니다.");
+    console.error('프로필 업데이트 오류:', error);
+    alert('프로필 업데이트 중 오류가 발생했습니다.');
   }
 };
 </script>
@@ -146,7 +146,13 @@ const saveProfile = async () => {
     <div class="header-section">
       <h2 class="title">학적기본사항관리</h2>
       <div class="action-buttons">
-        <button class="btn btn-primary" @click="saveProfile">저장</button>
+        <button
+          class="btn btn-primary"
+          @click="saveProfile"
+          v-if="imagePreview"
+        >
+          저장
+        </button>
         <button
           class="btn btn-secondary"
           @click="removeImage"
@@ -356,7 +362,7 @@ const saveProfile = async () => {
 }
 
 body {
-  font-family: "Malgun Gothic", sans-serif;
+  font-family: 'Malgun Gothic', sans-serif;
   background-color: #f5f5f5;
   margin: 0;
   padding: 20px;

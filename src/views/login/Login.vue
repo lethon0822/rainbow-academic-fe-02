@@ -3,8 +3,14 @@ import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "@/services/accountService";
 import { useUserStore } from "@/stores/account";
+import Modal from "@/components/common/Modal.vue";
+import Id from "@/views/login/Id.vue";
+import RenewalPwd from "@/views/login/RenewalPwd.vue";
 
 const router = useRouter();
+
+const isModalOpen = ref(false);
+const modalContent = ref(null);
 
 const state = reactive({
   form: {
@@ -12,6 +18,19 @@ const state = reactive({
     password: "",
   },
 });
+//모달
+const openModal = (type) => {
+  if (type === "id") {
+    modalContent.value = "id";
+  } else if (type === "renewal") {
+    modalContent.value = "renewal";
+  }
+  isModalOpen.value = true;
+};
+const closeModal = () => {
+  isModalOpen.value = false;
+  modalContent.value = null;
+};
 
 const submit = async () => {
   const res = await login(state.form);
@@ -63,10 +82,16 @@ const submit = async () => {
       </form>
 
       <div class="login-links">
-        <router-link to="/id" class="link">아이디찾기</router-link>
+        
+        <a href="#" class="link" @click.prevent="openModal('id')">아이디찾기</a>
         <span class="divider">|</span>
-        <router-link to="/renewal" class="link">비밀번호변경</router-link>
+        <a href="#" class="link" @click.prevent="openModal('renewal')"
+          >비밀번호변경</a
+        >
       </div>
+      <Modal v-if="isModalOpen" @close="closeModal">
+        <component :is="modalContent === 'id' ? Id : RenewalPwd" />
+      </Modal>
     </div>
   </div>
 </template>
