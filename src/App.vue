@@ -107,6 +107,7 @@ body,
   background-color: #dee2e5;
   overflow-x: hidden;
 }
+
 div {
   box-sizing: border-box;
 }

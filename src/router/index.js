@@ -77,6 +77,10 @@ const router = createRouter({
           path: '/professor/course/status',
           component: () => import('@/views/course/ProfessorCourseStatus.vue'),
         },
+        {
+          path: '/professor/survey/check',
+          component: () => import('@/views/course/SurveyResultCheck.vue'),
+        },
 
         //enrollment
 
