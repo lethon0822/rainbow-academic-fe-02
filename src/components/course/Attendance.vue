@@ -21,38 +21,38 @@ onMounted(()=>{
 // 임시 하드코딩 학생 데이터
 const students = ref([
   {
-    enrollmentId: 30,
+    enrollmentId: 171,
     name: 'lily',
     studentId: '20257945',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 31,
+    enrollmentId:172,
     name: 'Andy',
     studentId: '20257946',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 32,
+    enrollmentId: 173,
     name: 'Hannah',
     studentId: '20257947',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 33,
+    enrollmentId: 174,
     name: 'Jacob',
     studentId: '20257948',
-    status: '',
+    status: '결석',
     note: '',
   },
   {
-    enrollmentId: 34,
+    enrollmentId: 176,
     name: 'lucy',
     studentId: '20257949',
-    status: '',
+    status: '결석',
     note: '',
   },
 ]);
@@ -89,7 +89,7 @@ const saveAttendance = async () => {
     }
 
     alert("출결 저장 완료!"); // 알림 띄우고
-    router.push("/professor"); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
+    await router.push("/professor/attendance"); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
   } catch (error) {
     console.error("출결 저장 중 오류:", error);
     alert("출결 저장 중 오류가 발생했습니다.");
@@ -99,31 +99,31 @@ const saveAttendance = async () => {
 
 <template>
   <WhiteBox title="출결 관리">
-    <div class="attendance-wrapper">
-      <div class="attendance-box"></div>
-      <h2 class="text-xl font-bold mb-4 text-center">출결 입력창</h2>
-      <label class="block mb-2">출결일자</label>
-      <input
-        type="date"
-        v-model="attendDate"
-        class="mb-4 border px-2 py-1 rounded"
-      />
-
-      <table class="table-auto w-full border">
-        <thead>
+    <div class="container mt-4">
+      <h2 class="text-center fw-bold mb-4">출결 입력창</h2>
+      <div class="mb-3">
+        <label class="form-label">출결일자</label>
+        <input
+          type="date"
+          v-model="attendDate"
+          class="form-control w-25"
+        />
+      </div>
+      <table class="attendance-table">
+        <thead class="grade-table-header">
           <tr>
-            <th class="border px-2 py-1">이름</th>
-            <th class="border px-2 py-1">학번</th>
-            <th class="border px-2 py-1">출결 상태</th>
-            <th class="border px-2 py-1">비고</th>
+            <th>이름</th>
+            <th>학번</th>
+            <th>출결 상태</th>
+            <th>비고</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="s in students" :key="s.enrollmentId">
-            <td class="border px-2 py-1">{{ s.name }}</td>
-            <td class="border px-2 py-1">{{ s.studentId }}</td>
-            <td class="border px-2 py-1">
-              <select v-model="s.status" class="border px-1 py-1 rounded">
+            <td>{{ s.name }}</td>
+            <td>{{ s.studentId }}</td>
+            <td>
+              <select v-model="s.status" class="form-select">
                 <option disabled value="">선택</option>
                 <option value="출석">출석</option>
                 <option value="지각">지각</option>
@@ -132,24 +132,22 @@ const saveAttendance = async () => {
                 <option value="경조사">경조사</option>
               </select>
             </td>
-            <td class="border px-2 py-1">
+            <td>
               <input
                 v-model="s.note"
                 :disabled="!['지각', '병가', '경조사'].includes(s.status)"
-                class="border px-1 py-1 rounded w-full"
+                class="form-control"
                 placeholder="사유 입력"
               />
             </td>
           </tr>
         </tbody>
       </table>
-
-      <button
-        @click="saveAttendance"
-        class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        저장!
-      </button>
+      <div class="text-center mt-4">
+        <button @click="saveAttendance" class="btn btn-primary px-4">
+          저장!
+        </button>
+      </div>
     </div>
   </WhiteBox>
 </template>
@@ -175,33 +173,20 @@ const saveAttendance = async () => {
 //   margin-left: 80px;
 // }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-.form-group {
-  margin-bottom: 16px;
-
-  input[type='date'] {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-}
-
-.attendance-table {
-  width: 100%;
+:deep(.attendance-table) {
   border-collapse: collapse;
-  margin-bottom: 16px;
+  width: 100%;
+  border: 1px solid #ddd;  /* ✅ 테두리 전체 */
 
-  th,
-  td {
-    border: 1px solid #ccc;
+  th, td {
+    border: 1px solid #ddd !important; /* ✅ 셀 간 경계선 */
     padding: 8px;
     text-align: center;
+  }
+
+  th {
+    background-color: #364157;
+    color: white;
   }
 
   input,
@@ -210,19 +195,5 @@ const saveAttendance = async () => {
     width: 100%;
     box-sizing: border-box;
   }
-}
-
-button {
-  background-color: #3b82f6;
-  color: #3b82f6;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  float: center;
-}
-
-button:hover {
-  background-color: #2563eb;
 }
 </style>
