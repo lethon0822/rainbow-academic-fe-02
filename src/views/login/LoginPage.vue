@@ -6,10 +6,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import Login from "@/views/login/Login.vue";
-import { useRoute } from "vue-router";
-import { onMounted, watch } from "vue";
-import { useAccountStore } from "@/stores/account";
-import { check } from "@/services/accountService";
 
 import img1 from "@/assets/1.jpg";
 import img2 from "@/assets/2.jpg";
@@ -19,27 +15,6 @@ import img5 from "@/assets/5.jpg";
 
 const images = [img1, img2, img3, img4, img5];
 
-const route = useRoute();
-const account = useAccountStore();
-//로그인 여부 확인
-const checkAccount = async () => {
-  const res = await check();
-  if (res === undefined || res.status != 200) {
-    account.setChecked(false);
-    return;
-  }
-  account.setChecked(true);
-  account.setLoggedIn(res.data > 0);
-};
-onMounted(() => {
-  checkAccount();
-});
-watch(
-  () => route.path,
-  () => {
-    checkAccount();
-  }
-);
 </script>
 
 <template>
