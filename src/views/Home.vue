@@ -1,19 +1,19 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
-import Basic from "@/components/common/SideBar.vue";
+import SideBar from "@/components/common/SideBar.vue"
 </script>
 
 <template>
   <Header />
   <div class="sidebar">
-    <Basic />
+    <SideBar/>
   </div>
   <div class="content">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 html,
 body,
 #app {

@@ -14,15 +14,20 @@ const state = reactive({
 });
 
 const submit = async () => {
-  const res = await findId(state.form);
-  state.data = res.data;
-  //   try {
-  //     const res = await findId(state.form);
-  //     foundId.value = res.id || '아이디를 찾을 수 없습니다.';
-  //   } catch (err) {
-  //     console.error('아이디 찾기 실패:', err);
-  //     foundId.value = '조회 중 오류가 발생했습니다.';
-  //   }
+  try {
+    const res = await findId(state.form);
+
+    // 데이터가 없거나 loginId가 비어있으면 경고창 표시
+    if (!res.data || !res.data.loginId) {
+      alert("일치하는 회원 정보가 없습니다.");
+      state.data = { userName: "", loginId: "" }; // 결과 초기화
+    } else {
+      state.data = res.data;
+    }
+  } catch (error) {
+    alert("오류가 발생했습니다. 다시 시도해주세요.");
+    console.error(error);
+  }
 };
 </script>
 
