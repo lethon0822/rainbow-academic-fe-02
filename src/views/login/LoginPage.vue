@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import Login from "@/views/Login.vue";
+import Login from "@/views/login/Login.vue";
 import { useRoute } from "vue-router";
 import { onMounted, watch } from "vue";
 import { useAccountStore } from "@/stores/account";

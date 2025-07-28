@@ -134,14 +134,15 @@ button {
   margin-left: auto;
 }
 
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.year{
+  background-color: #e2e2e2;
 }
 
 input::-webkit-inner-spin-button,
 input::-webkit-outer-spin-button {
     opacity: 1;
+    background-color: #e2e2e2;
+    
 }
 </style>
 
