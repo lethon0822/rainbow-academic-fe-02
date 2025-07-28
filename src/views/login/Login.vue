@@ -11,28 +11,16 @@ const state = reactive({
     loginId: "",
     password: "",
   },
-  // data: {
-  //     userId: '',
-  //     password: '',
-  //     userName: '',
-  //     userRole: ''
-  // }
 });
 
 const submit = async () => {
   const res = await login(state.form);
 
-  // state.data = res.data;
-  // const json = JSON.stringify(state.data);
   switch (res.status) {
     case 200:
       await router.push({
         path: "/",
-        // state: {
-        //     data:json
-        // }
       });
-
       break;
     case 404:
       alert("아이디/비밀번호를 확인해주세요.");
@@ -47,56 +35,162 @@ const submit = async () => {
 
 <template>
   <div class="login">
-    <div class="container">
-      <h2 class="title">로그인</h2>
-      <form class="py-5 d-flex flex-column gap-3" @submit.prevent="submit">
-        <div class="form-floating">
+    <div class="login-container">
+      <h2 class="login-title">로그인</h2>
+      <form class="login-form" @submit.prevent="submit">
+        <div class="input-group">
           <input
             type="text"
-            class="form-control"
+            class="login-input"
             id="loginId"
             placeholder="아이디"
             v-model="state.form.loginId"
+            required
           />
-          <label for="loginId">아이디</label>
         </div>
-        <div class="form-floating">
+        <div class="input-group">
           <input
             type="password"
-            class="form-control"
+            class="login-input"
             id="password"
             placeholder="패스워드"
             v-model="state.form.password"
             autocomplete="off"
+            required
           />
-          <label for="password">패스워드</label>
         </div>
-        <button class="w-100 h6 btn py-3 btn-primary">로그인</button>
+        <button type="submit" class="login-button">로그인</button>
       </form>
 
-      <div class="d-flex change">
-        <router-link to="/id">아이디찾기</router-link>
-        <router-link to="/renewal">비밀번호변경</router-link>
+      <div class="login-links">
+        <router-link to="/id" class="link">아이디찾기</router-link>
+        <span class="divider">|</span>
+        <router-link to="/renewal" class="link">비밀번호변경</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.title {
-  text-align: center;
-  margin: 150px 0 50px;
-  font-weight: 600;
-}
-.container {
-  max-width: 576px;
-}
 .login {
+  display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
-.change {
+
+.login-container {
+  width: 100%;
+  max-width: 320px;
+  padding: 0;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 30px 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.input-group {
+  position: relative;
+}
+
+.login-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.login-input::placeholder {
+  color: #999;
+}
+
+.login-button {
+  width: 100%;
+  height: 48px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.login-button:hover {
+  background: #0056b3;
+}
+
+.login-button:active {
+  transform: translateY(1px);
+}
+
+.login-links {
+  display: flex;
   justify-content: center;
-  gap: 70px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.link {
+  color: #666;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s ease;
+}
+
+.link:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+.divider {
+  color: #ccc;
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    max-width: 280px;
+  }
+
+  .login-title {
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  .login-input,
+  .login-button {
+    height: 44px;
+  }
+
+  .login-button {
+    font-size: 15px;
+  }
 }
 </style>
