@@ -1,5 +1,5 @@
 <script setup>
-import WhiteBox from "./common/WhiteBox.vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
 import { reactive, onMounted } from "vue";
 import { courseStudentList } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
@@ -30,7 +30,10 @@ onMounted(async ()=>{
     console.log('아이디:',id)
     const res = await courseStudentList(id);
     console.log("res",res)
-    state.data =res.data
+    if(res.data.length > 0){
+      state.data =res.data
+      return;
+    }
     
   }
 })

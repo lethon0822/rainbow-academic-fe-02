@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import Login from "./Login.vue";
+import Login from "@/views/login/Login.vue";
 
 import img1 from "@/assets/1.jpg";
 import img2 from "@/assets/2.jpg";

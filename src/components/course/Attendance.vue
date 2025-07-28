@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import WhiteBox from './common/WhiteBox.vue';
+import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const router = useRouter();
 const attendDate = ref('');

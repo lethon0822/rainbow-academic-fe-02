@@ -3,12 +3,8 @@
 <script setup>
 import { onMounted, ref, watchEffect } from "vue";
 import axios from "axios";
-<<<<<<< HEAD:src/components/EnrollmentGrade.vue
-import WhiteBox from "./WhiteBox.vue";
 import { useRoute } from "vue-router";
-=======
-import WhiteBox from "./common/WhiteBox.vue";
->>>>>>> 8fbc6b44a0f10d1d36eecc80de98ac7b190e59b9:src/components/course/EnrollmentGrade.vue
+import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const student = ref([]);
 const route = useRoute();
