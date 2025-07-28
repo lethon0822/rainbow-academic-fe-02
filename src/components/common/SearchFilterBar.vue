@@ -1,6 +1,6 @@
 <script setup>
-import { reactive, watch } from "vue";
-const emit = defineEmits(["search"]);
+import { reactive, watch } from 'vue';
+const emit = defineEmits(['search']);
 
 const props = defineProps({
   state: Boolean,
@@ -14,12 +14,12 @@ let year = today.getFullYear();
 let enroll = props.enrollment;
 
 const filters = reactive({
-  year: "",
-  type: "",
-  departmentName: "",
-  grade: "",
-  semester: "",
-  keyword: "",
+  year: '',
+  type: '',
+  departmentName: '',
+  grade: '',
+  semester: '',
+  keyword: '',
 });
 
 filters.year = year;
@@ -28,12 +28,22 @@ const onSearch = () => {
   if (filters.year < year - 5) {
     filters.year = year - 5;
   }
-  emit("search", { ...filters });
+  emit('search', { ...filters });
 };
 
-watch(() => filters.type, (newVal) => {
-  filters.departmentName = newVal === "교양" ? "교양학부" : "";
-});
+filters.semester = props.semester || '';
+
+// 이수 구분이 교양이면 학과를 교양학부로 고정
+watch(
+  () => filters.type,
+  (newVal) => {
+    if (newVal === '교양') {
+      filters.departmentName = '교양학부';
+    } else {
+      filters.departmentName = '';
+    }
+  }
+);
 </script>
 
 <template>
@@ -43,16 +53,22 @@ watch(() => filters.type, (newVal) => {
       <input type="number" v-model="filters.year" class="year" disabled />
     </template>
     <template v-else>
-      <input type="number" :min="year - 5" :max="year" step="1" v-model="filters.year" />
+      <input
+        type="number"
+        :min="year - 5"
+        :max="year"
+        step="1"
+        v-model="filters.year"
+      />
     </template>
 
     <label>학기:</label>
-    <select v-model="filters.semester" class="short">
-      <option value="">전체</option>
+    <select v-model="filters.semester" class="short" :disabled="props.semester">
       <template v-if="props.semester">
         <option :value="props.semester">{{ props.semester }}학기</option>
       </template>
       <template v-else>
+        <option value="">전체</option>
         <option value="1">1학기</option>
         <option value="2">2학기</option>
       </template>
@@ -67,9 +83,17 @@ watch(() => filters.type, (newVal) => {
       </select>
 
       <label>학과:</label>
-      <select v-model="filters.departmentName" :disabled="filters.type === '교양'" class="department">
+      <select
+        v-model="filters.departmentName"
+        :disabled="filters.type === '교양'"
+        class="department"
+      >
         <option value="">전체</option>
-        <option v-for="d in props.departments" :key="d.departmentName" :value="d.departmentName">
+        <option
+          v-for="d in props.departments"
+          :key="d.departmentName"
+          :value="d.departmentName"
+        >
           {{ d.departmentName }}
         </option>
       </select>
@@ -84,7 +108,11 @@ watch(() => filters.type, (newVal) => {
       </select>
 
       <label>교과목명:</label>
-      <input type="text" v-model="filters.keyword" placeholder="교과목명을 입력하세요." />
+      <input
+        type="text"
+        v-model="filters.keyword"
+        placeholder="교과목명을 입력하세요."
+      />
     </div>
 
     <button @click="onSearch">조회</button>
@@ -121,7 +149,7 @@ watch(() => filters.type, (newVal) => {
   box-sizing: border-box;
 }
 
-.filter-bar input[type="text"] {
+.filter-bar input[type='text'] {
   width: 270px;
 }
 

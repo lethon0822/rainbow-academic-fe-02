@@ -132,6 +132,7 @@ const send = (id, json) =>{
   
 </template>
 <style lang="scss">
+
 .table-container {
   margin: 20px;
   margin-left: 15px;
