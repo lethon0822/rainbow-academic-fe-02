@@ -23,10 +23,10 @@ onMounted(async () => {
 // 임시 하드코딩
 const students = ref([
   {
-    enrollmentId: 171,
+    enrollmentId: 21,
     major: '컴퓨터공학과',
     courseId: '180',
-    studentId: '20012',
+    studentId: '20001',
     name: '김주현',
     attendanceScore: 0,
     midtermScore: 0,
@@ -36,10 +36,10 @@ const students = ref([
     grade: "",
   },
   {
-    enrollmentId: 164,
+    enrollmentId: 22,
     major: '전자공학과',
     courseId: '181',
-    studentId: '20013',
+    studentId: '20002',
     name: '김설영',
     attendanceScore: 0,
     midtermScore: 0,
@@ -49,10 +49,10 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 165,
+    enrollmentId: 23,
     major: '전자공학과',
     courseId: '182',
-    studentId: '20014',
+    studentId: '20003',
     name: '류지민',
     attendanceScore: 0,
     midtermScore: 0,
@@ -62,10 +62,10 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 167,
+    enrollmentId: 24,
     major: '경영학과',
     courseId: '183',
-    studentId: '20015',
+    studentId: '20004',
     name: '남도일',
     attendanceScore: 0,
     midtermScore: 0,
@@ -78,7 +78,7 @@ const students = ref([
     enrollmentId: 169,
     major: '일본어학과',
     courseId: '184',
-    studentId: '20016',
+    studentId: '20005',
     name: '유미란',
     attendanceScore: 0,
     midtermScore: 0,
