@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 import { useUserStore } from "@/stores/account";
+import { professorDept } from "@/services/professorService"
 
 const props = defineProps({
   id: Number,
@@ -18,6 +19,7 @@ console.log('아이디', userStore.userId)
 
 const state = reactive({
   form: {
+    deptName: '',
     courseId: 0,
     classroom: "",
     type: "전공",
@@ -33,10 +35,12 @@ const state = reactive({
   },
 });
 onMounted(async () => {
+  const name = await professorDept();
+  state.form.deptName = name.data;
+  name.data
   if (props.id) {
     state.courseId = props.id;
     const res = await loadCourse(props.id);
-    console.log("계획표 수정 가보자");
     state.form = res.data;
   }
 });
@@ -95,7 +99,7 @@ const submit = async () => {
           <div class="table-title">학과명</div>
           <div class="table-content">
             <span v-if="state.form.type === '교양'"> 교양학부 </span>
-            <input v-else type="text" />
+            <span v-else> {{ state.form.deptName }}</span>
           </div>
         </div>
         <div class="table d-flex">
@@ -140,7 +144,7 @@ const submit = async () => {
           </template>
           <template v-else>
             <div class="table-content">
-              <input type="text" value="1" disabled/>
+              수강희망자
             </div>
           </template>
         </div>
@@ -166,6 +170,9 @@ const submit = async () => {
           </div>
         </div>
         <div class="button">
+          <button class="btn btn-light mt-3">
+            취소
+          </button>
           <button class="btn btn-primary mt-3">
             {{ props.id > 0 ? "수정" : "제출" }}
           </button>
@@ -234,11 +241,16 @@ input, textarea {
 .button {
   display: flex;
   justify-content: flex-end;
-  .btn {
-    background-color: #2460CE;
-    margin-bottom: 100px;
-  }
+  margin-bottom: 100px;
 }
+
+.btn-primary {
+    background-color: #2460CE;
+  }
+.btn-light{
+  background-color: #E2E2E2;
+}
+
 .detail {
   height: 200px;
   .table-content {
