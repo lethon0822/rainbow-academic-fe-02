@@ -21,7 +21,7 @@ defineProps({
     }),
   },
 });
-defineEmits(["enroll", "cancel"]);
+defineEmits(["enroll", "cancel", "check"]);
 
 const change = (status) => {
   if (status === '거부') return "gray";
@@ -105,7 +105,11 @@ const send = (id, json) => {
           <td v-else-if="show.setting">
             <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
-          <td v-else-if="show.modify && course.status !== '승인'">
+          <td v-else-if="show.check">
+              <!-- 학생관리 라우팅 처리해야함 -->
+                <button class="enroll-btn" @click="$emit('check', course.courseId)">강의평 보기</button>
+          </td>
+          <td v-else-if="show.modify">
             <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
               <button class="enroll-btn d-flex btn">수정</button>
             </router-link>
