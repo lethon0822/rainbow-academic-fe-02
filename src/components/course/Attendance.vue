@@ -1,50 +1,35 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
 
-const router = useRouter();
-const attendDate = ref('');
+const state = reactive({
+  data: [],
+  courseId:''
+})
 
-// 임시 하드코딩 학생 데이터
-const students = ref([
-  {
-    enrollmentId: 21,
-    name: 'lily',
-    studentId: '20001',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId:22,
-    name: 'Andy',
-    studentId: '20002',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 23,
-    name: 'Hannah',
-    studentId: '20003',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 24,
-    name: 'Jacob',
-    studentId: '20004',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 25,
-    name: 'lucy',
-    studentId: '20005',
-    status: '결석',
-    note: '',
-  },
-]);
+const students = ref([]);
+const router = useRouter();
+const attendDate = ref(new Date().toISOString().slice(0, 10)); // 기본값 오늘날짜
+
+
+onMounted(async () => {
+  const passJson = history.state.data;
+  const passid = history.state.id;
+
+  
+
+  const nana = JSON.parse(passJson);
+  state.data = nana
+
+  const id = JSON.parse(passid)
+  state.courseId = id;
+
+  console.log('스테이트데이타:', state.data)
+  console.log('라우팅 아이디:', state.courseId)
+});
+
 const isLoading = ref(false);
 
 const saveAttendance = async () => {
@@ -63,10 +48,10 @@ const saveAttendance = async () => {
       }
 
       const data = {
-        attendDate: attendDate.value,
-        enrollmentId: s.enrollmentId,
-        status: s.status,
-        note: s.note,
+        attendDate: '',
+        enrollmentId: '',
+        status: '',
+        note: '',
       };
 
       const { data: exists } = await axios.post(
@@ -113,9 +98,9 @@ const saveAttendance = async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="s in students" :key="s.enrollmentId">
-            <td>{{ s.name }}</td>
-            <td>{{ s.studentId }}</td>
+          <tr v-for="student in state.data" :key="student.enrollmentId">
+            <td>{{ student?.name || '이름 없음' }}</td>
+            <td>{{ student?.studentId || '학번 없음' }}</td>
             <td>
               <select v-model="s.status" class="form-select">
                 <option disabled value="">선택</option>
@@ -170,10 +155,10 @@ const saveAttendance = async () => {
 :deep(.attendance-table) {
   border-collapse: collapse;
   width: 100%;
-  border: 1px solid #ddd;  /* ✅ 테두리 전체 */
+  border: 1px solid #ddd;  /* 테두리 전체 */
 
   th, td {
-    border: 1px solid #ddd !important; /* ✅ 셀 간 경계선 */
+    border: 1px solid #ddd !important; /* 셀 간 경계선 */
     padding: 8px;
     text-align: center;
   }
