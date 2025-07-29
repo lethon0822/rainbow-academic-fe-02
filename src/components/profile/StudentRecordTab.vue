@@ -11,6 +11,10 @@ const props = defineProps({
   },
 });
 
+
+
+
+
 const activeTabIndex = ref(0);
 
 function selectTab(index) {

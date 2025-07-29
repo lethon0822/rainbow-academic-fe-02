@@ -1,11 +1,12 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 
-const props = defineProps({
-  profile: {
-    type: Object,
-    default: () => ({}),
-  },
+onMounted(async () => {
+  try {
+    profile.value = await fetchUserProfile(userId);
+  } catch (error) {
+    console.error('유저 정보 불러오기 실패:', error);
+  }
 });
 
 // 이미지 관련 상태
