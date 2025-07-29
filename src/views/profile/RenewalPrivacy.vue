@@ -53,9 +53,8 @@ function sample6_execDaumPostcode() {
 const state = reactive({
   data: {
     loginId: '',
-    name: '',
+    userName: '',
     phone: '',
-    mobile: '',
     email: '',
   },
 });
@@ -64,8 +63,8 @@ onMounted(() => {
   selectPrivacy();
 });
 
-const selectPrivacy = async (userId) => {
-  const res = await getPrivacy(userId);
+const selectPrivacy = async () => {
+  const res = await getPrivacy();
   if (res.data === undefined || res.status !== 200) {
     return;
   }
@@ -73,8 +72,8 @@ const selectPrivacy = async (userId) => {
   console.log(state.data);
 };
 
-const savePrivacy = async () => {
-  const res = await putPrivacy(state.data.loginId);
+const modifyPrivacy = async () => {
+  const res = await putPrivacy(state.data);
   if (res.data === undefined || res.status !== 200) {
     return;
   } 
@@ -89,7 +88,7 @@ const savePrivacy = async () => {
       <div class="table-content d-flex">
         <input type="text" class="num" v-model="state.data.loginId" disabled/>
         <i class="fas fa-search"></i>
-        <input type="text" class="name" disabled v-model="state.data.name" />
+        <input type="text" class="name" v-model="state.data.userName" disabled />
       </div>
     </div>
 
@@ -130,8 +129,7 @@ const savePrivacy = async () => {
 
       <button
         class="button"
-        @click.prevent="savePrivacy"
-      >
+        @click.prevent="modifyPrivacy">
         저장
       </button>
     </form>
