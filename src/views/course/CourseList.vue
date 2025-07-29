@@ -26,7 +26,7 @@ const handleSearch = async (filters) => {
     console.log('필터: ', filters);
     const courseListRes = await getCourseListByFilter(filters);
     console.log('강의조회: ', courseListRes.data);
-    courseList.value = courseListRes.data;
+    courseList.value = courseListRes.data.filter(course => course.status === '승인');
 
 }
 </script>

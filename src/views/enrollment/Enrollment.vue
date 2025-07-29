@@ -40,8 +40,9 @@ onMounted(async () => {
 // 필터에 따른 개설 강의 목록 조회
 const handleSearch = async (filters) => {
   const courseListRes = await getCourseListByFilter(filters);
+  console.log(courseListRes.data);
 
-  courseList.value = courseListRes.data.map((course) => {
+  courseList.value = courseListRes.data.filter(course => course.status === '승인').map((course) => {
     course.enrolled = mySugangList.value.some(
       (c) => c.courseId === course.courseId
     );
