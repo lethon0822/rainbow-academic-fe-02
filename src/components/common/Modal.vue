@@ -13,10 +13,10 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
-const emit = defineEmits(['close']);
+import { defineEmits } from "vue";
+const emit = defineEmits(["close"]);
 const close = () => {
-  emit('close');
+  emit("close");
 };
 </script>
 
@@ -37,7 +37,7 @@ const close = () => {
   background: white;
   border: 1px solid #ccc;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  width: 400px;
+  width: 500px;
   max-width: 90vw;
 }
 .title-bar {
@@ -55,7 +55,7 @@ const close = () => {
   width: 28px;
   height: 28px;
   font-size: 18px;
-  font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+  font-family: "Segoe UI", "Tahoma", "Arial", sans-serif;
   font-weight: bold;
   cursor: pointer;
   display: flex;

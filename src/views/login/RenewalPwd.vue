@@ -1,75 +1,142 @@
 <script setup>
-import { reactive } from 'vue';
-import { findId } from '@/services/accountService';
+import logo from "@/assets/logoW.svg";
+import { useAccountStore, useUserStore } from "@/stores/account";
+import { logout } from "@/services/accountService";
+import { reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const state = reactive({
   data: {
-    email: '',
-    auth: ''
+    userId: 0,
+    password: "",
+    userName: "",
+    userRole: "",
   },
 });
 
-const submit = async () => {
-  const res = await findId(state.form);
-  state.data = res.data;
+const router = useRouter();
+const userStore = useUserStore();
 
+const account = useAccountStore();
+
+//로그아웃
+const logoutAccount = async () => {
+  if (!confirm("로그아웃 하시겠습니까?")) {
+    return;
+  }
+  const res = await logout();
+
+  console.log("로그아웃", res);
+  if (res === undefined || res.status !== 200) {
+    return;
+  }
+  account.setLoggedIn(false);
+  router.push("/login");
 };
+
+// onMounted(()=>{
+//   const passJson = history.state.data;
+//    if (passJson) {
+//       //passJson을 객체로 바꿔서
+//       state.data = JSON.parse(passJson);
+//     }
+//     console.log("악",state.data)
+// })
 </script>
 
 <template>
-  <h2 class="title">비밀번호 변경</h2>
-  <div class="container">
-    <form class="py-5 d-flex flex-column gap-3" @submit.prevent="submit">
-      <label class="labels">이메일:</label>
-      <div class="d-flex">
-        <input
-          type="email"
-          class="form-control"
-          v-model="state.data.email"
-          placeholder="이메일을 입력해주세요."
-          required
-          인증번호 요청
-          />
+  <header>
+    <div
+      class="navbar navbar-dark text-white shadow-sm"
+      style="background-color: #364157; height: 60px"
+    >
+      <div
+        class="container-fluid d-flex justify-content-between align-items-center px-4"
+      >
+        <!-- 로고 왼쪽 -->
+        <div class="logo d-flex align-items-center" @click="$router.push('/')">
+          <img :src="logo" alt="로고 아이콘" height="40" />
+          <span class="systemText" @click="$router.push('/')"
+            >학사관리시스템</span
+          >
+        </div>
+
+        <!-- 메뉴 오른쪽 -->
+        <template v-if="account.state.loggedIn">
+          <div class="menus d-flex align-items-center gap-3">
+            <span>{{ userStore.userName }}님 반갑습니다</span>
+            <span class="divider">|</span>
+            <a @click="logoutAccount()">로그아웃</a>
+          </div>
+        </template>
+        <!-- <template v-else>
+          <router-link to="/login">
+            <a href="#" class="text-white text-decoration-none">로그인</a>
+          </router-link>
+        </template> -->
       </div>
-      <label class="labels">인증번호:</label>
-      <div class="d-flex">
-        <input
-          type="text"
-          class="form-control"
-          v-model="state.data.auth"
-          placeholder="인증번호를 입력해주세요."
-          />
-        <button class="h6 btn py-3 mt-3 btn-primary auth">인증번호 요청</button>
-      </div>
-      <button class="w-100 h6 btn py-3 mt-3 btn-primary">제출</button>
-    </form>
-  </div>
+    </div>
+  </header>
 </template>
 
-<style scoped>
-.container {
-  max-width: 400px;
-}
-.title {
-  text-align: center;
-  margin: 50px 0 0px;
-  font-weight: 600;
-}
-.labels {
-  margin-left: 10px;
-}
-input {
-  margin: 10px;
-}
-.email {
-  width: 500px;
-  padding: 20px;
-}
-.auth {
+<style scoped lang="scss">
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   display: flex;
-  width: 220px;
-  height: 40px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  background-color: #364157;
+  padding: 10px 20px;
+  height: 60px;
+  min-width: 1024px;
+}
+
+body,
+main,
+#app {
+  padding-top: 60px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.logo img {
+  position: relative;
+  left: -20px;
+  display: block;
+  height: 45px;
+  cursor: pointer;
+}
+
+.menus {
+  position: relative;
+  top: -2px;
+  display: flex;
+  gap: 20px;
+}
+
+.menus a {
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+}
+
+.divider {
+  color: #fff;
+  user-select: none;
+}
+
+.systemText {
+  position: relative;
+  top: -2px;
+  left: -12px;
+  font-size: 22px;
+  font-weight: 500;
+  cursor: pointer;
 }
 </style>
