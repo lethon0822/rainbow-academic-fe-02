@@ -86,7 +86,7 @@ const back = () => {
       <div class="d-flex top last">
         <div class="table-title">교수번호</div>
         <div class="table-content d-flex"> 
-          <input type="text" class="num" disabled :placeholder="userStore.userId"/>
+          <input type="text" class="num" disabled :placeholder="userStore.loginId"/>
             <i class="fas fa-search"></i>
           <input type="text" class="name" disabled :placeholder="userStore.userName" />
         </div>

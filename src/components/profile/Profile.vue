@@ -218,7 +218,7 @@ const saveProfile = async () => {
         <div class="left-info">
           <table>
             <tr>
-              <td class="label-cell">학번</td>
+              <td class="label-cell one-cell">학번</td>
               <td class="value-cell">{{ profile.loginId }}</td>
             </tr>
 
@@ -234,12 +234,7 @@ const saveProfile = async () => {
 
             <tr>
               <td class="label-cell">학생구분</td>
-              <td class="value-cell">
-                <select v-model="formData.studentType">
-                  <option>대학생</option>
-                  <option>대학원생</option>
-                </select>
-              </td>
+              <td class="value-cell">대학생</td>
             </tr>
 
             <tr>
@@ -391,8 +386,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
-  left: -20px;
-
+  left: -18px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -404,7 +398,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 30px 35px 20px;
+  padding: 18px 30px 12px 20px;
   border-radius: 8px;
 }
 
@@ -438,8 +432,8 @@ body {
 }
 
 .avatar {
-  width: 170px;
-  height: 170px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   border: 3px solid #6c757d;
   display: flex;
@@ -464,10 +458,10 @@ body {
 
 .camera-icon {
   position: absolute;
-  bottom: 38px;
-  right: 75px;
-  width: 50px;
-  height: 50px;
+  bottom: 22px;
+  right: 55px;
+  width: 60px;
+  height: 60px;
   background-color: #6c757d;
   border-radius: 50%;
   display: flex;
@@ -486,11 +480,13 @@ body {
 }
 
 .left-info {
-  width: 560px;
+  width: 575px;
+  flex-shrink: 0;
 }
 
 .right-info {
   flex: 1;
+  min-width: 0;
 }
 
 table {
@@ -566,5 +562,9 @@ select {
 .dropdown-arrow {
   float: right;
   color: #6c757d;
+}
+
+td.one-cell {
+  padding: 12px;
 }
 </style>

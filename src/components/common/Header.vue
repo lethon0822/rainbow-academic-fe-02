@@ -56,7 +56,7 @@ const logoutAccount = async () => {
         <!-- 로고 왼쪽 -->
         <div
           class="logo d-flex align-items-center"
-          @click="$router.push('/main')"
+          @click="$router.push('/')"
         >
           <img :src="logo" alt="로고 아이콘" height="40" />
           <span class="systemText" @click="$router.push('/')"

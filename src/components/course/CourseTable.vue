@@ -21,7 +21,7 @@ defineProps({
     }),
   },
 });
-defineEmits(["enroll", "cancel"]);
+defineEmits(["enroll", "cancel", "check"]);
 
 const change = (status) => {
   if (status === '거부') return "gray";
@@ -64,7 +64,7 @@ const send = (id, json) => {
           <th class="remStd" v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel" class="enroll-action">수강</th>
           <th v-if="show.modify">승인여부</th>
-          <th v-if="show.setting || show.modify"> </th>
+          <th v-if="show.setting || show.modify || show.check"> </th>
         </tr>
       </thead>
       <tbody>
@@ -105,9 +105,13 @@ const send = (id, json) => {
           <td v-else-if="show.setting">
             <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
-          <td v-else-if="show.modify && course.status !== '승인'">
+          <td v-else-if="show.check">
+              <!-- 학생관리 라우팅 처리해야함 -->
+                <button class="enroll-btn" @click="$emit('check', course.courseId)">강의평 보기</button>
+          </td>
+          <td v-else-if="show.modify">
             <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
-              <button class="enroll-btn d-flex btn">수정</button>
+              <button class="enroll-btn d-flex">수정</button>
             </router-link>
           </td>
         </tr>
@@ -206,27 +210,27 @@ button.cancel-btn {
   color: #2460ce;
   font-weight: 700;
 }
-th.code, td.code {
-  width: 90px;
-}
-th.deptName, td.deptName {
-  width: 130px;
-}
-th.title, td.title {
-  width: 150px;
-}
-th.classroom, td.classroom {
-  width: 140px;
-}
+// th.code, td.code {
+//   width: 90px;
+// }
+// th.deptName, td.deptName {
+//   width: 130px;
+// }
+// th.title, td.title {
+//   width: 150px;
+// }
+// th.classroom, td.classroom {
+//   width: 140px;
+// }
 th.type, td.type {
-  width: 70px;
+  width: 100px;
 }
 th.professor, td.professor {
-  width: 70px;
+  width: 100px;
 }
-th.grade, td.grade {
-  width: 150px;
-}
+// th.grade, td.grade {
+//   width: 150px;
+// }
 th.time, td.time {
   width: 80px;
 }
