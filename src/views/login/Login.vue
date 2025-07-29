@@ -59,25 +59,23 @@ const submit = async () => {
       <h2 class="login-title">로그인</h2>
       <form class="login-form" @submit.prevent="submit">
         <div class="input-group">
-          <input
+          ID <input
             type="text"
             class="login-input"
             id="loginId"
             placeholder="아이디"
             v-model="state.form.loginId"
-            required
-          />
+            required/>
         </div>
         <div class="input-group">
-          <input
+          PW <input
             type="password"
             class="login-input"
             id="password"
             placeholder="패스워드"
             v-model="state.form.password"
             autocomplete="off"
-            required
-          />
+            required/>
         </div>
         <button type="submit" class="login-button">로그인</button>
       </form>
