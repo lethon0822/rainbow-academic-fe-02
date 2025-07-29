@@ -1,5 +1,11 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
+import axios from "axios";
+import { useRoute } from "vue-router";
+
+const props = defineProps({
+  courseId: String,
+});
 
 const totalQuestions = 5;
 const answers = ref({
@@ -13,6 +19,18 @@ const progress = ref(0);
 const submitted = ref(false);
 const additionalOpinion = ref("");
 const currentStep = ref(1);
+const route = useRoute();
+const courseId = ref(props.courseId || route.query.courseId || "");
+
+// 강의 정보 관련 상태 추가
+const courseInfo = ref({
+  course_name: "",
+  professor_name: "",
+  credits: "",
+  evaluation_date: "",
+});
+const isLoading = ref(true);
+const loadError = ref(null);
 
 const questions = [
   { number: 1, question: "수업내용이 체계적으로 구성되었다." },
@@ -32,6 +50,58 @@ const ratings = [
   { label: "그렇다", value: 4 },
   { label: "매우 그렇다", value: 5 },
 ];
+
+// 강의 정보 조회 API 함수
+const loadCourse = (course_id) => {
+  return axios.get(`/course/${course_id}`).catch((e) => e.response);
+};
+
+// 강의 정보 로드 함수 (CourseFilterRes 모델에 맞춤)
+const fetchCourseInfo = async () => {
+  try {
+    isLoading.value = true;
+    loadError.value = null;
+
+    const response = await loadCourse(courseId.value);
+
+    if (response && response.data) {
+      const data = response.data;
+
+      courseInfo.value = {
+        courseId: data.courseId,
+        title: data.title || data.title || "과목명 정보 없음",
+        credit: data.credit !== undefined ? data.credit : "학점 정보 없음",
+        professorName: data.userName || "교수명 정보 없음",
+        type: data.type || "이수구분 정보 없음",
+        classroom: data.classroom || "강의실 정보 없음",
+        year: data.year || "년도 정보 없음",
+        semester: data.semester || "학기 정보 없음",
+        evaluation_date: new Date().toLocaleDateString("ko-KR"),
+      };
+    } else {
+      throw new Error("강의 정보를 불러올 수 없습니다.");
+    }
+  } catch (error) {
+    console.error("강의 정보 로드 실패:", error);
+    loadError.value =
+      error.message || "강의 정보를 불러오는 중 오류가 발생했습니다.";
+
+    // 오류 발생 시 기본값 설정
+    courseInfo.value = {
+      courseId: null,
+      title: "강의 정보 로드 실패",
+      credit: "정보 없음",
+      professorName: "정보 없음",
+      type: "이수구분 정보 없음",
+      classroom: "정보 없음",
+      year: "정보 없음",
+      semester: "정보 없음",
+      evaluation_date: new Date().toLocaleDateString("ko-KR"),
+    };
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 const updateProgress = () => {
   const answeredCount = Object.values(answers.value).filter(
@@ -57,12 +127,30 @@ const prevStep = () => {
   }
 };
 
-const submitSurvey = () => {
+const submitSurvey = async () => {
   if (Object.values(answers.value).every((v) => v !== null)) {
-    submitted.value = true;
-    alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
-    console.log("설문 결과:", answers.value);
-    console.log("추가 의견:", additionalOpinion.value);
+    const answersArray = Object.values(answers.value);
+    const averageScore = Math.round(
+      answersArray.reduce((sum, score) => sum + score, 0) / answersArray.length
+    );
+
+    const surveyData = {
+      courseId: parseInt(courseId.value),
+      userId: userId.value,
+      review: additionalOpinion.value,
+      average: averageScore,
+    };
+
+    console.log("설문 결과:", surveyData);
+
+    try {
+      await axios.post("/course/survey", surveyData);
+      submitted.value = true;
+      alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
+    } catch (error) {
+      console.error("설문 제출 실패:", error);
+      alert("설문 제출에 실패했습니다. 다시 시도해주세요.");
+    }
   } else {
     alert("모든 필수 항목에 답변해주세요.");
   }
@@ -88,8 +176,10 @@ const allQuestionsAnswered = computed(() => {
 
 onMounted(() => {
   updateProgress();
+  fetchCourseInfo();
 });
 </script>
+
 <template>
   <div class="survey-container">
     <!-- 설문 헤더 -->
@@ -100,14 +190,30 @@ onMounted(() => {
     <!-- 강의 정보 -->
     <div class="course-info">
       <h5>📚 강의 정보</h5>
-      <div class="row">
+
+      <!-- 로딩 상태 -->
+      <div v-if="isLoading" class="loading-container">
+        <div class="spinner"></div>
+        <p>강의 정보를 불러오는 중...</p>
+      </div>
+
+      <!-- 에러 상태 -->
+      <div v-else-if="loadError" class="error-container">
+        <p class="error-message">⚠️ {{ loadError }}</p>
+        <button @click="fetchCourseInfo" class="btn btn-sm btn-outline-primary">
+          다시 시도
+        </button>
+      </div>
+
+      <!-- 강의 정보 표시 (CourseFilterRes 모델에 맞춤) -->
+      <div v-else class="row">
         <div class="col-md-6">
-          <p><strong>과목명:</strong> 전공1자료구조13</p>
-          <p><strong>담당교수:</strong> 홍길동 교수</p>
+          <p><strong>과목명:</strong> {{ courseInfo.title }}</p>
+          <p><strong>담당교수:</strong> {{ courseInfo.professorName }}</p>
         </div>
         <div class="col-md-6">
-          <p><strong>학점:</strong> 3학점</p>
-          <p><strong>평가일:</strong> 2025년 3월 1일</p>
+          <p><strong>학점:</strong> {{ courseInfo.credit }}학점</p>
+          <p><strong>이수구분:</strong> {{ courseInfo.type }}</p>
         </div>
       </div>
     </div>
@@ -245,7 +351,7 @@ onMounted(() => {
 .survey-container {
   max-width: 800px;
   margin: 40px auto;
-  padding: 60px 40px; /* 위아래 패딩을 30px에서 60px로 늘려서 높이 증가 */
+  padding: 60px 40px;
   background: #f9fbfc;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -365,9 +471,9 @@ onMounted(() => {
 }
 
 .rating-container {
-  background: transparent; /* 배경 없애기 */
-  border: none; /* 테두리 없애기 */
-  padding: 0; /* 필요 없으면 패딩도 제거 */
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .rating-scale {

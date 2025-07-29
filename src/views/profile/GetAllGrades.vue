@@ -1,10 +1,17 @@
 <script setup>
-import { ref, computed, onMounted, watchEffect } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { GradesbyCourse } from "@/services/GradeService.js";
 import PutAllGrades from "@/components/profile/PutAllGrades.vue";
 import WhiteBox from "@/components/common/WhiteBox.vue";
+import { useUserStore } from "@/stores/account";
 
 const grades = ref([]);
+const userStore = useUserStore();
+const userId = Number(userStore.userId);
+
+if (!userId || isNaN(userId)) {
+  throw new Error(`userId가 유효하지 않습니다: ${userStore.userId}`);
+}
 
 // 학기별 이수구분별 취득학점 집계
 const creditByCategory = computed(() => {
@@ -56,8 +63,8 @@ const mergedSemesterGrades = computed(() => {
         count: 0,
         avgScore: 0,
         avgGradePoint: 0,
-        grading: 1, // 임의값, 필요에 따라 수정
-        totalStudents: 30, // 임의값, 실제 데이터로 대체 필요
+        grading: 1,
+        totalStudents: 30,
       });
     }
 
@@ -65,7 +72,6 @@ const mergedSemesterGrades = computed(() => {
     sem.acquiredCredits += g.credit || 0;
     sem.requestedCredits += g.credit || 0;
 
-    // rank -> 평점 매핑 예시 (필요에 따라 확장)
     const rankToGradePoint = {
       "A+": 4.5,
       A: 4.0,
@@ -81,49 +87,42 @@ const mergedSemesterGrades = computed(() => {
     sem.count++;
   });
 
-  // 평균 평점, 평균 점수 계산
   const result = [];
   semMap.forEach((value) => {
     value.avgGradePoint = value.count
       ? (value.totalGradePoint / value.count).toFixed(2)
       : 0;
-    value.avgScore = (value.avgGradePoint * 20).toFixed(1); // 임의 점수 계산
+    value.avgScore = (value.avgGradePoint * 20).toFixed(1);
 
-    // 불필요한 프로퍼티 제거
     delete value.totalGradePoint;
     delete value.count;
 
     result.push(value);
   });
 
-  // 학년, 학기 순 정렬 (필요 시)
+  // 정렬: 학년 오름차순, 학기 숫자 오름차순
   return result.sort((a, b) => {
-    if (a.grade === b.grade) return a.semester.localeCompare(b.semester);
+    if (a.grade === b.grade) return Number(a.semester) - Number(b.semester);
     return a.grade - b.grade;
   });
 });
 
+// onMounted는 computed 밖에 위치해야 합니다.
 onMounted(async () => {
   try {
-    const response = await GradesbyCourse();
-    console.log("✅ API response:", response.data);
+    const userStore = useUserStore();
+    const userId = Number(userStore.userId);
+
+    if (!userId || isNaN(userId)) {
+      throw new Error(`userId가 유효하지 않습니다: ${userStore.userId}`);
+    }
+
+    const response = await GradesbyCourse(userId);
 
     grades.value = response.data || [];
   } catch (error) {
     console.error("API 호출 실패:", error);
   }
-});
-
-watchEffect(() => {
-  console.log("👀 [Parent] grades:", JSON.stringify(grades.value));
-  console.log(
-    "👀 [Parent] creditByCategory:",
-    JSON.stringify(creditByCategory.value)
-  );
-  console.log(
-    "👀 [Parent] mergedSemesterGrades:",
-    JSON.stringify(mergedSemesterGrades.value)
-  );
 });
 </script>
 
