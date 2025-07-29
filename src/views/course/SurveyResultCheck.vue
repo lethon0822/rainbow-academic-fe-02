@@ -71,7 +71,7 @@ const check = async (courseId) =>{
 <template>
   <WhiteBox :title="'강의평가조회'">
     <SearchFilterBar @search="myCourse" />
-    <CourseTable :course-list="state.resultItem" :show="{ check: true }"  @check="check" />
+    <CourseTable :course-list="state.resultItem" maxHeight="500px" :show="{ check: true }"  @check="check" />
     <template v-if="state.course">
       <div class="d-flex no-comment">
         <span>등록된 강의가 없습니다.</span>

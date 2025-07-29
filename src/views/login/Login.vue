@@ -41,6 +41,7 @@ const submit = async () => {
       userStore.userName = res.data.userName;
       userStore.userId = res.data.userId;
       userStore.userRole = res.data.userRole;
+      userStore.loginId = res.data.loginId;
       await router.push({
         path: "/",
       });
