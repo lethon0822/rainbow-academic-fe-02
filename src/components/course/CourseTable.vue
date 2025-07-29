@@ -210,6 +210,7 @@ button.cancel-btn {
     background-color: #D32F2F;
   }
 }
+
 .link{
   color:#2460ce;
   cursor: pointer;

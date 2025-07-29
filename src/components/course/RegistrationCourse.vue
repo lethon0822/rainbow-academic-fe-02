@@ -1,6 +1,6 @@
 <!-- 강의 계획서 작성창 -->
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, watch } from "vue";
 import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/common/WhiteBox.vue";
@@ -34,6 +34,16 @@ const state = reactive({
     grade: 1,
   },
 });
+
+watch(
+  () => state.form.type,
+  (newType) => {
+    if (newType !== '전공') {
+      state.form.grade = 0;
+    }
+  }
+);
+
 onMounted(async () => {
   const name = await professorDept();
   state.form.deptName = name.data;
@@ -46,7 +56,7 @@ onMounted(async () => {
 });
 const router = useRouter();
 const submit = async () => {
-  if(!confirm('제출하시겠습니까?')){return};
+
 
   let data = null;
   if (state.form.courseId > 0) {
@@ -63,6 +73,12 @@ const submit = async () => {
   }
   router.push("/professor/course/status");
 };
+
+const back = () => {
+  if(!confirm('제출하시겠습니까?')){
+    router.push('/professor/course/status')
+    return};
+}
 </script>
 <template>
   <WhiteBox :title="'강의등록'">
@@ -172,7 +188,7 @@ const submit = async () => {
           </div>
         </div>
         <div class="button">
-          <button class="btn btn-light mt-3">
+          <button class="btn btn-light mt-3" @click.stop="back" >
             취소
           </button>
           <button class="btn btn-primary mt-3">
