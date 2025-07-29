@@ -144,7 +144,9 @@ const submit = async () => {
           </template>
           <template v-else>
             <div class="table-content">
-              수강희망자
+              <select v-model="state.form.grade" class="fix" disabled>
+                <option value="0">수강희망자</option>
+              </select>
             </div>
           </template>
         </div>
@@ -285,6 +287,13 @@ i{
 
 .fa-search{
   font-size: 20px;
+  
+}
+
+.fix{
+  background-color: #fff;
+  appearance: none;
+  border: none;
   
 }
 </style>
