@@ -53,7 +53,7 @@ const submit = async () => {
   <h2 class="title">아이디 찾기</h2>
   <div class="findId">
     <div class="container">
-      <form class="py-5 d-flex flex-column gap-3" @submit.prevent="submit">
+      <form class="py-4 d-flex flex-column gap-3" @submit.prevent="submit">
         <div>
           이메일:
           <input
@@ -80,7 +80,7 @@ const submit = async () => {
       </form>
     </div>
   </div>
-  <div class="showId mt-3" v-if="state.data">
+  <div class="showId" v-if="state.data">
     <p>
       🔐 찾은 아이디:
       <strong
@@ -99,7 +99,7 @@ const submit = async () => {
 }
 .title {
   text-align: center;
-  margin: 50px 0 0px;
+  margin: 20px 0 0px;
   font-weight: 600;
 }
 .showId {
