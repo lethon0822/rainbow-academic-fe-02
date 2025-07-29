@@ -1,6 +1,6 @@
 <!-- 강의 계획서 작성창 -->
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, watch } from "vue";
 import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/common/WhiteBox.vue";
@@ -34,6 +34,16 @@ const state = reactive({
     grade: 1,
   },
 });
+
+watch(
+  () => state.form.type,
+  (newType) => {
+    if (newType !== '전공') {
+      state.form.grade = 0;
+    }
+  }
+);
+
 onMounted(async () => {
   const name = await professorDept();
   state.form.deptName = name.data;

@@ -210,6 +210,13 @@ button.cancel-btn {
     background-color: #D32F2F;
   }
 }
+
+.title{
+  white-space: nowrap;         
+  overflow: hidden;            
+  text-overflow: ellipsis;
+  width: 143px;
+}
 .link{
   color:#2460ce;
   cursor: pointer;
