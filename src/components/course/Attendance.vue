@@ -10,35 +10,35 @@ const attendDate = ref('');
 // 임시 하드코딩 학생 데이터
 const students = ref([
   {
-    enrollmentId: 18,
+    enrollmentId: 21,
     name: 'lily',
     studentId: '20001',
     status: '결석',
     note: '',
   },
   {
-    enrollmentId:19,
+    enrollmentId:22,
     name: 'Andy',
     studentId: '20002',
     status: '결석',
     note: '',
   },
   {
-    enrollmentId: 20,
+    enrollmentId: 23,
     name: 'Hannah',
     studentId: '20003',
     status: '결석',
     note: '',
   },
   {
-    enrollmentId: 21,
+    enrollmentId: 24,
     name: 'Jacob',
     studentId: '20004',
     status: '결석',
     note: '',
   },
   {
-    enrollmentId: 22,
+    enrollmentId: 25,
     name: 'lucy',
     studentId: '20005',
     status: '결석',
@@ -139,7 +139,7 @@ const saveAttendance = async () => {
       </table>
       <div class="text-center mt-4">
         <button @click="saveAttendance" class="btn btn-primary px-4">
-          저장!
+          저장
         </button>
       </div>
     </div>
