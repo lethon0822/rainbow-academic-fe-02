@@ -46,7 +46,7 @@ onMounted(async () => {
 });
 const router = useRouter();
 const submit = async () => {
-  if(!confirm('제출하시겠습니까?')){return};
+
 
   let data = null;
   if (state.form.courseId > 0) {
@@ -63,6 +63,12 @@ const submit = async () => {
   }
   router.push("/professor/course/status");
 };
+
+const back = () => {
+  if(!confirm('제출하시겠습니까?')){
+    router.push('/professor/course/status')
+    return};
+}
 </script>
 <template>
   <WhiteBox :title="'강의등록'">
@@ -172,7 +178,7 @@ const submit = async () => {
           </div>
         </div>
         <div class="button">
-          <button class="btn btn-light mt-3">
+          <button class="btn btn-light mt-3" @click.stop="back" >
             취소
           </button>
           <button class="btn btn-primary mt-3">
