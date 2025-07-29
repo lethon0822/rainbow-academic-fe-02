@@ -1,13 +1,15 @@
 <script setup>
 import { ref, reactive, onMounted, watch } from 'vue';
 
-onMounted(async () => {
-  try {
-    profile.value = await fetchUserProfile(userId);
-  } catch (error) {
-    console.error('유저 정보 불러오기 실패:', error);
-  }
+
+const props = defineProps({
+  profile: {
+    type: Object,
+    default: () => ({}),
+  },
 });
+
+
 
 // 이미지 관련 상태
 const selectedImage = ref(null);
@@ -143,6 +145,8 @@ const saveProfile = async () => {
 </script>
 
 <template>
+ 
+  
   <div class="inner">
     <div class="header-section">
       <h2 class="title">학적기본사항관리</h2>
@@ -208,6 +212,7 @@ const saveProfile = async () => {
     </div>
 
     <!-- 프로필 정보 영역 -->
+    
     <div class="info-box">
       <div class="profile-info">
         <div class="left-info">
@@ -293,6 +298,7 @@ const saveProfile = async () => {
               </td>
             </tr>
           </table>
+          
         </div>
       </div>
     </div>

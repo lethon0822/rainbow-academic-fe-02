@@ -1,4 +1,26 @@
 <script setup>
+import { defineProps, ref } from 'vue';
+
+const props = defineProps({
+  academicInfo: {
+    type: Object,
+    required: true,
+  },
+});
+
+const academicInfo = ref({
+  status: '',
+  majors: [],
+  earlyGraduate: '',
+  admissionDate: '',
+  requestedMajors: [],
+  thesisStatus: '',
+  admissionType: '',
+  admissionDepartment: '',
+  teaching: '',
+  bachelorMaster: '',
+})
+
 </script>
 
 <template>
@@ -9,20 +31,20 @@
         <tbody>
           <tr>
             <td class="label-cell">학적상태</td>
-            <td class="value-cell">재학</td>
+            <td class="value-cell">{{academicInfo.status}}</td>
           </tr>
 
           <tr>
             <td class="label-cell" rowspan="2">전공(부/복수/연계)</td>
-            <td class="value-cell">복수전공</td>
+            <td class="value-cell">{{academicInfo.majors[0]}}</td>
           </tr>
           <tr>
-            <td class="value-cell">부전공</td>
+            <td class="value-cell">{{academicInfo.majors[1]}}</td>
           </tr>
 
           <tr>
             <td class="label-cell">조기졸업</td>
-            <td class="value-cell">N</td>
+            <td class="value-cell">{{academicInfo.earlyGraduate}} </td>
           </tr>
         </tbody>
       </table>
@@ -34,20 +56,20 @@
         <tbody>
           <tr>
             <td class="label-cell">입학일자</td>
-            <td class="value-cell">2020-10-10</td>
+            <td class="value-cell">{{academicInfo.admissionDate}}</td>
           </tr>
 
           <tr>
             <td class="label-cell" rowspan="2">신청학부</td>
-            <td class="value-cell">컴퓨터전공</td>
+            <td class="value-cell">{{ academicInfo.requestedMajors[0] }}</td>
           </tr>
           <tr>
-            <td class="value-cell">사진영상학부</td>
+            <td class="value-cell">{{ academicInfo.requestedMajors[1] }}</td>
           </tr>
 
           <tr>
             <td class="label-cell">졸업논문</td>
-            <td class="value-cell">합격</td>
+            <td class="value-cell">{{ academicInfo.thesisStatus }}</td>
           </tr>
         </tbody>
       </table>
@@ -59,26 +81,28 @@
         <tbody>
           <tr>
             <td class="label-cell">입학구분</td>
-            <td class="value-cell">신입학</td>
+            <td class="value-cell">{{ academicInfo.admissionType }}</td>
           </tr>
 
           <tr>
             <td class="label-cell">입학학부</td>
-            <td class="value-cell">컴퓨터공학과</td>
+            <td class="value-cell">{{ academicInfo.admissionDepartment }}</td>
           </tr>
 
           <tr>
             <td class="label-cell">교직이수</td>
             <td class="value-cell">
-              <select>
-                <option>선택</option>
+              <select v-model="academicInfo.teaching">
+                <option value="">선택</option>
+                <option value="이수중">이수중</option>
+                <option value="미이수">미이수</option>
               </select>
             </td>
           </tr>
 
           <tr>
             <td class="label-cell">학석사연계</td>
-            <td class="value-cell"></td>
+            <td class="value-cell">{{ academicInfo.bachelorMaster }}</td>
           </tr>
         </tbody>
       </table>
