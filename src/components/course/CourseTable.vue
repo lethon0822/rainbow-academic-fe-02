@@ -206,27 +206,27 @@ button.cancel-btn {
   color: #2460ce;
   font-weight: 700;
 }
-th.code, td.code {
-  width: 90px;
-}
-th.deptName, td.deptName {
-  width: 130px;
-}
-th.title, td.title {
-  width: 150px;
-}
-th.classroom, td.classroom {
-  width: 140px;
-}
+// th.code, td.code {
+//   width: 90px;
+// }
+// th.deptName, td.deptName {
+//   width: 130px;
+// }
+// th.title, td.title {
+//   width: 150px;
+// }
+// th.classroom, td.classroom {
+//   width: 140px;
+// }
 th.type, td.type {
-  width: 70px;
+  width: 100px;
 }
 th.professor, td.professor {
-  width: 70px;
+  width: 100px;
 }
-th.grade, td.grade {
-  width: 150px;
-}
+// th.grade, td.grade {
+//   width: 150px;
+// }
 th.time, td.time {
   width: 80px;
 }
