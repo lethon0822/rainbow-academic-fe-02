@@ -211,40 +211,42 @@ const saveProfile = async () => {
       <div class="profile-info">
         <div class="left-info">
           <table>
-            <tr>
-              <td class="label-cell">학번</td>
-              <td class="value-cell">{{ profile.loginId }}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td class="label-cell">학번</td>
+                <td class="value-cell">{{ profile.loginId }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">성명(한글)</td>
-              <td class="value-cell">{{ profile.userName }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">성명(한글)</td>
+                <td class="value-cell">{{ profile.userName }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">E-mail</td>
-              <td class="value-cell">{{ profile.email }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">E-mail</td>
+                <td class="value-cell">{{ profile.email }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">학생구분</td>
-              <td class="value-cell">
-                <select v-model="formData.studentType">
-                  <option>대학생</option>
-                  <option>대학원생</option>
-                </select>
-              </td>
-            </tr>
+              <tr>
+                <td class="label-cell">학생구분</td>
+                <td class="value-cell">
+                  <select v-model="formData.studentType">
+                    <option>대학생</option>
+                    <option>대학원생</option>
+                  </select>
+                </td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">최종등록연도</td>
-              <td class="value-cell">{{ profile.year }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">최종등록연도</td>
+                <td class="value-cell">{{ profile.year }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">학적상태</td>
-              <td class="value-cell">{{ profile.status }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">학적상태</td>
+                <td class="value-cell">{{ profile.status }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
