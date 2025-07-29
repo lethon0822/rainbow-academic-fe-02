@@ -37,10 +37,11 @@ const submit = async () => {
 
   switch (res.status) {
     case 200:
-    const userStore = useUserStore();
+      const userStore = useUserStore();
       userStore.userName = res.data.userName;
       userStore.userId = res.data.userId;
       userStore.userRole = res.data.userRole;
+      userStore.loginId = res.data.loginId;
       await router.push({
         path: "/",
       });
@@ -49,7 +50,6 @@ const submit = async () => {
       alert("아이디/비밀번호를 확인해주세요.");
       break;
   }
- 
 };
 </script>
 
@@ -81,7 +81,6 @@ const submit = async () => {
       </form>
 
       <div class="login-links">
-        
         <a href="#" class="link" @click.prevent="openModal('id')">아이디찾기</a>
         <span class="divider">|</span>
         <a href="#" class="link" @click.prevent="openModal('renewal')"
