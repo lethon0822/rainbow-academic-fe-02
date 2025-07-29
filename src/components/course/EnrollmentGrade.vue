@@ -143,9 +143,9 @@ const saveGrades = async () => {
 <template>
   <WhiteBox title="성적 관리">
     <div class="grade-wrapper">
-      <h2 class="text-2xl font-bold mb-4 text-center">
+      <h3 class="text-2xl font-bold mb-4 text-center">
         성적입력 (출석20%, 중간30%, 기말30%, 과제20%)
-      </h2>
+      </h3>
       <table class="grade-table">
       <thead class="grade-table-header">
           <tr>

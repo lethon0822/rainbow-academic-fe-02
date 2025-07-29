@@ -130,6 +130,7 @@ hr{
 
 .no-comment{
   justify-content: center;
+  margin:10px;
 }
 
 
