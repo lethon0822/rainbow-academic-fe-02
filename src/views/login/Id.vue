@@ -53,7 +53,12 @@ const submit = async () => {
   <h2 class="title">아이디 찾기</h2>
   <div class="findId">
     <div class="container">
-      <form class="py-4 d-flex flex-column gap-3" @submit.prevent="submit">
+      <!-- 결과 없을 때만 입력 폼 표시 -->
+      <form
+        class="py-4 d-flex flex-column gap-3"
+        @submit.prevent="submit"
+        v-if="!state.data.loginId"
+      >
         <div>
           이메일:
           <input
@@ -78,16 +83,16 @@ const submit = async () => {
         </div>
         <button class="w-100 h6 btn py-3 mt-3 btn-primary">조회</button>
       </form>
+
+      <!-- 결과 있을 때만 결과 표시 -->
+      <div class="showId mt-4" v-if="state.data.loginId">
+        <p class="alert alert-success text-center">
+          🔐 찾은 아이디<br />
+          <strong>이름: {{ state.data.userName }}</strong><br />
+          <strong>아이디: {{ state.data.loginId }}</strong>
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="showId" v-if="state.data">
-    <p>
-      🔐 찾은 아이디:
-      <strong
-        >이름:{{ state.data.userName }}, 아이디:
-        {{ state.data.loginId }}</strong
-      >
-    </p>
   </div>
 </template>
 
@@ -105,5 +110,15 @@ const submit = async () => {
 .showId {
   display: flex;
   justify-content: center;
+}
+.showId {
+  display: flex;
+  justify-content: center;
+}
+
+.alert-success {
+  font-size: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
 }
 </style>
