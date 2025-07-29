@@ -217,17 +217,10 @@ const saveProfile = async () => {
                 <td class="value-cell">{{ profile.loginId }}</td>
               </tr>
 
-<<<<<<< HEAD
-              <tr>
-                <td class="label-cell">성명(한글)</td>
-                <td class="value-cell">{{ profile.userName }}</td>
-              </tr>
-=======
             <tr>
               <td class="label-cell">성명(한글)</td>
               <td class="value-cell">{{ profile.studentName }}</td>
             </tr>
->>>>>>> 2310e65691c2d2463c4d43fab8596012c168ad66
 
               <tr>
                 <td class="label-cell">E-mail</td>
