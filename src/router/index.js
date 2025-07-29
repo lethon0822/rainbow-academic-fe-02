@@ -31,7 +31,7 @@ const router = createRouter({
           component: () => import("@/views/Home.vue"),
         },
         {
-          path: "/attendance",
+          path: "/professor/attendance",
           component: () => import("@/components/course/Attendance.vue"),
         },
         {
@@ -76,6 +76,10 @@ const router = createRouter({
         {
           path: "/professor/course/status",
           component: () => import("@/views/course/ProfessorCourseStatus.vue"),
+        },
+        {
+          path: '/professor/survey/check',
+          component: () => import('@/views/course/SurveyResultCheck.vue'),
         },
 
         //enrollment

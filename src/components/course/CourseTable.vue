@@ -19,10 +19,11 @@ defineProps({
       deptName: true,
       setting: false, //학생관리
       modify: false, // 강의 신청 조회시 수정 버튼 활성화
+      check: false,  //강의 평가 조회
     }),
   },
 });
-defineEmits(["enroll", "cancel"]);
+defineEmits(["enroll", "cancel","check"]);
 // 승인여부 css 변경
 const change = (status) =>{
   if(status === '거부'){
@@ -46,7 +47,6 @@ const openLink = (id) => {
 const router = useRouter();
 const send = (id, json) =>{
 
-  console.log("먀오:",json)
   const jsonBody = JSON.stringify(json);
   router.push({
     path:`/professor/course/${id}/students`,
@@ -75,7 +75,7 @@ const send = (id, json) =>{
           <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
           <th v-if="show.modify">승인여부</th>
-          <th v-if="show.setting || show.modify"> </th>
+          <th v-if="show.setting || show.modify || show.check"> </th>
           
         </tr>
       </thead>
@@ -83,7 +83,7 @@ const send = (id, json) =>{
         <tr v-for="course in courseList" :key="course.id">
           <td>{{ course.courseCode }}</td>
           <td>
-            <div v-if="course.type==='교양'">교양학부 </div>
+            <div v-if="course.type==='교양'">교양학부</div>
             <div v-else >{{ course.deptName }}</div>
           </td>
         
@@ -111,13 +111,17 @@ const send = (id, json) =>{
             </button>
           </td>
           <td v-else-if="show.cancel">
-            <button class="cancel-btn" @click="$emit('cancel', course)">
+            <button class="cancel-btn" @click="$emit('cancel', course.courseId)">
               수강취소
             </button>
           </td>
           <td v-else-if="show.setting">
               <!-- 학생관리 라우팅 처리해야함 -->
                 <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
+          </td>
+          <td v-else-if="show.check">
+              <!-- 학생관리 라우팅 처리해야함 -->
+                <button class="enroll-btn" @click="$emit('check', course.courseId)">강의평 보기</button>
           </td>
           <td v-else-if="show.modify && course.status !=='승인' ">
               <!-- 강의 수정 라우팅 처리해야함 -->
@@ -132,6 +136,7 @@ const send = (id, json) =>{
   
 </template>
 <style lang="scss">
+
 .table-container {
   margin: 20px;
   margin-left: 15px;

@@ -201,6 +201,11 @@ watch(
               >강의관리</router-link
             >
           </li>
+          <li v-if="userStore.userRole !== 'student'">
+            <router-link to="/professor/survey/check"
+              >강의평가조회</router-link
+            >
+          </li>
         </ul>
       </li>
 
