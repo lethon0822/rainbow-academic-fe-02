@@ -206,8 +206,6 @@ button.cancel-btn {
   color: #2460ce;
   font-weight: 700;
 }
-
-/* ✅ 열 너비 설정 */
 th.code, td.code {
   width: 90px;
 }

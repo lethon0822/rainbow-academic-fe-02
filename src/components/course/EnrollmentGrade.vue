@@ -23,11 +23,11 @@ onMounted(async () => {
 // 임시 하드코딩
 const students = ref([
   {
-    enrollmentId: 30,
+    enrollmentId: 171,
     major: '컴퓨터공학과',
     courseId: '180',
-    studentId: '20250001',
-    name: '유아린',
+    studentId: '20012',
+    name: '김주현',
     attendanceScore: 0,
     midtermScore: 0,
     finalScore: 0,
@@ -36,11 +36,11 @@ const students = ref([
     grade: "",
   },
   {
-    enrollmentId: 31,
+    enrollmentId: 164,
     major: '전자공학과',
     courseId: '181',
-    studentId: '20250002',
-    name: '홍길동',
+    studentId: '20013',
+    name: '김설영',
     attendanceScore: 0,
     midtermScore: 0,
     finalScore: 0,
@@ -49,11 +49,11 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 32,
+    enrollmentId: 165,
     major: '전자공학과',
     courseId: '182',
-    studentId: '20250003',
-    name: '남효정',
+    studentId: '20014',
+    name: '류지민',
     attendanceScore: 0,
     midtermScore: 0,
     finalScore: 0,
@@ -62,11 +62,11 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 33,
+    enrollmentId: 167,
     major: '경영학과',
     courseId: '183',
-    studentId: '20250004',
-    name: '김효정',
+    studentId: '20015',
+    name: '남도일',
     attendanceScore: 0,
     midtermScore: 0,
     finalScore: 0,
@@ -75,11 +75,11 @@ const students = ref([
     grade: ''
   },
   {
-    enrollmentId: 34,
+    enrollmentId: 169,
     major: '일본어학과',
-    courseId: '186',
-    studentId: '20250005',
-    name: '조효정',
+    courseId: '184',
+    studentId: '20016',
+    name: '유미란',
     attendanceScore: 0,
     midtermScore: 0,
     finalScore: 0,
@@ -182,7 +182,7 @@ const saveGrades = async () => {
   </WhiteBox>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 :deep(.grade-table) {
   width: 100%;
   border-collapse: collapse;

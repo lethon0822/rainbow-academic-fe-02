@@ -1,11 +1,12 @@
 <!-- 강의 계획서 작성창 -->
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, watch } from "vue";
 import { saveCourse, modify } from "@/services/professorService";
 import { useRouter } from "vue-router";
 import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 import { useUserStore } from "@/stores/account";
+import { professorDept } from "@/services/professorService"
 
 const props = defineProps({
   id: Number,
@@ -18,6 +19,7 @@ console.log('아이디', userStore.userId)
 
 const state = reactive({
   form: {
+    deptName: '',
     courseId: 0,
     classroom: "",
     type: "전공",
@@ -32,17 +34,29 @@ const state = reactive({
     grade: 1,
   },
 });
+
+watch(
+  () => state.form.type,
+  (newType) => {
+    if (newType !== '전공') {
+      state.form.grade = 0;
+    }
+  }
+);
+
 onMounted(async () => {
+  const name = await professorDept();
+  state.form.deptName = name.data;
+  console.log(name)
   if (props.id) {
     state.courseId = props.id;
     const res = await loadCourse(props.id);
-    console.log("계획표 수정 가보자");
     state.form = res.data;
   }
 });
 const router = useRouter();
 const submit = async () => {
-  if(!confirm('제출하시겠습니까?')){return};
+
 
   let data = null;
   if (state.form.courseId > 0) {
@@ -59,6 +73,12 @@ const submit = async () => {
   }
   router.push("/professor/course/status");
 };
+
+const back = () => {
+  if(!confirm('제출하시겠습니까?')){
+    router.push('/professor/course/status')
+    return};
+}
 </script>
 <template>
   <WhiteBox :title="'강의등록'">
@@ -95,7 +115,7 @@ const submit = async () => {
           <div class="table-title">학과명</div>
           <div class="table-content">
             <span v-if="state.form.type === '교양'"> 교양학부 </span>
-            <input v-else type="text" />
+            <span v-else> {{ state.form.deptName }}</span>
           </div>
         </div>
         <div class="table d-flex">
@@ -140,7 +160,9 @@ const submit = async () => {
           </template>
           <template v-else>
             <div class="table-content">
-              <input type="text" value="1" disabled/>
+              <select v-model="state.form.grade" class="fix" disabled>
+                <option value="0">수강희망자</option>
+              </select>
             </div>
           </template>
         </div>
@@ -166,7 +188,7 @@ const submit = async () => {
           </div>
         </div>
         <div class="button">
-          <button class="btn btn-light mt-3">
+          <button class="btn btn-light mt-3" @click.stop="back" >
             취소
           </button>
           <button class="btn btn-primary mt-3">
@@ -281,6 +303,13 @@ i{
 
 .fa-search{
   font-size: 20px;
+  
+}
+
+.fix{
+  background-color: #fff;
+  appearance: none;
+  border: none;
   
 }
 </style>

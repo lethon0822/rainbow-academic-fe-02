@@ -23,7 +23,7 @@ function handleButtonClick(grade) {
   });
 }
 </script>
-
+``
 <template>
   <div class="table-wrapper">
     <!-- 고정 헤더 -->
