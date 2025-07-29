@@ -5,9 +5,11 @@ import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
 import CourseTable from "@/components/course/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 
 const courseList = ref([]);
+const router = useRouter();
 
 
 // onMounted(async ()=>{
@@ -27,6 +29,10 @@ const myCourse = async (filters) => {
   courseList.value= res.data;
 
 };
+
+const move = () => {
+  router.push('/professor/course/registration')
+}
 </script>
 <template>
   <WhiteBox :title="'강의개설신청 및 신청현황조회'">
@@ -37,12 +43,10 @@ const myCourse = async (filters) => {
       class="some"
     />
     <div>
-      <router-link to="/professor/course/registration" class="move">
-        <button class="enroll-btn">
+        <button class="enroll-btn" @click="move">
           개설신청
         </button>  
-      </router-link>
-      
+
     </div>
   </WhiteBox>
 </template>
@@ -63,6 +67,7 @@ button.enroll-btn {
   background-color: #364157;
   color: #fff;
   margin-left: auto;
+  margin-right: 38px;
 }
 .move {
   padding-top: 2px;
