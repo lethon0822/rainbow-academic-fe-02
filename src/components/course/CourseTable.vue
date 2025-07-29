@@ -71,7 +71,7 @@ const send = (id, json) =>{
           <th>수강대상</th>
           <th>강의시간</th>
           <th class="credit">학점</th>
-          <th>정원</th>
+          <th class="people">{{ show.setting === true ? "수강인원" : "정원" }}</th>
           <th v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel">수강</th>
           <th v-if="show.modify">승인여부</th>
@@ -98,11 +98,11 @@ const send = (id, json) =>{
             <td>수강희망자</td>
           </template>
           <template v-else>
-            <td>{{ course.deptName + " " +course.grade }}학년</td>
+            <td>{{ course.deptName + " " + course.grade }}학년</td>
           </template>
           <td>{{ course.time }}</td>
           <td class="credit">{{ course.credit }}</td>
-          <td>{{ course.maxStd }}</td>
+          <td class="people">{{ show.setting === true ? course.maxStd - course.remStd : course.maxStd  }}</td>
           <td v-if="show.modify" class="status" :class="change(course.status)">{{ course.status }}</td> <!-- 승인여부 뜨기 -->
           <td v-if="show.remStd">{{ course.remStd }}</td>
           <td v-if="show.enroll">
@@ -126,7 +126,7 @@ const send = (id, json) =>{
           <td v-else-if="show.modify && course.status !=='승인' ">
               <!-- 강의 수정 라우팅 처리해야함 -->
               <router-link :to="{name:'ModifyCourse', params:{id: course.courseId }}" class="setting" >
-                <button class="enroll-btn d-flex btn">수정</button>
+                <button class="enroll-btn ">수정</button>
               </router-link>
           </td>
         </tr>
@@ -224,8 +224,8 @@ button.cancel-btn {
   justify-content: center;
 }
 
-.credit{
-  width: 50px;
+.credit, .people{
+  width: 90px;
 }
 .red{
   color:#d61421;

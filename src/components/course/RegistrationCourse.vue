@@ -37,7 +37,7 @@ const state = reactive({
 onMounted(async () => {
   const name = await professorDept();
   state.form.deptName = name.data;
-  name.data
+  console.log(name)
   if (props.id) {
     state.courseId = props.id;
     const res = await loadCourse(props.id);
