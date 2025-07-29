@@ -149,7 +149,7 @@ const saveProfile = async () => {
         <button
           class="btn btn-primary"
           @click="saveProfile"
-          v-if="imagePreview"
+          v-if="imagePreview || currentProfileImage" 
         >
           저장
         </button>
@@ -285,7 +285,7 @@ const saveProfile = async () => {
             <tr>
               <td class="label-cell">졸업충족학점</td>
               <td class="value-cell" colspan="2">
-                {{ profile.totalCredits }}(이수) / 140(총)
+                {{ profile.totalCredits }}(이수) / 130(총)
               </td>
             </tr>
           </table>

@@ -98,7 +98,7 @@ const modifyPrivacy = async () => {
       <div class="d-flex top last">
         <div class="table-title">우편번호</div>
         <div class="table-content d-flex">
-          <input type="text" class="num" v-model="sample6_postcode" />
+          <input type="text" class="num" v-model="sample6_postcode" disabled/>
           <i
             class="fas fa-search"
             style="cursor: pointer"
@@ -127,11 +127,13 @@ const modifyPrivacy = async () => {
         </div>
       </div>
 
-      <button
-        class="button"
-        @click.prevent="modifyPrivacy">
-        저장
-      </button>
+      <div class="d-flex justify-content-end">
+        <button
+          class="enroll-btn"
+          @click.prevent="modifyPrivacy">
+          저장
+        </button>
+      </div>
     </form>
 
     <form>
@@ -243,12 +245,17 @@ input {
   justify-content: flex-end;
 }
 
-.button {
-  display: flex;
-  justify-content: flex-end;
-  .btn {
-    background-color: #2460ce;
-    margin-bottom: 100px;
+
+
+button.enroll-btn {
+  background-color: #2460CE;
+  color: #fff;
+  margin-top: 10px;
+  border:none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  &:hover {
+    background-color: #1F53B5;
   }
 }
 
