@@ -1,11 +1,13 @@
 <script setup>
 import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
+import { useUserStore } from "@/stores/user";
 import { getGrades, getProfile } from "@/services/GradeService.js";
 import StudentRecordTab from "@/components/profile/StudentRecordTab.vue";
 import Profile from "@/components/profile/Profile.vue";
 
 const account = useAccountStore();
+const user = useUserStore();
 
 console.log("로그인 상태:", account.state.checked);
 console.log("로그인 아이디:", account.state.loggedIn);
@@ -16,24 +18,18 @@ const grades = ref([]);
 onMounted(async () => {
   try {
     const gradeResponse = await getGrades();
-    grades.value = gradeResponse.data;
+    grades.value = gradeResponse.data || [];
 
-    if (account.state.loggedIn) {
-      const response = await getProfile(); // withCredentials 포함된 getProfile 호출
+    // 세션에서 자동으로 loginId 가져와서 프로필 조회
+    const response = await getProfile();
+    profile.value = response.data || {};
 
-      console.log("프로필 API 응답 전체:", response);
-      console.log("프로필 데이터:", response.data);
-
-      if (response.data && typeof response.data === "object") {
-        profile.value = response.data;
-      } else {
-        profile.value = {};
-      }
-    }
-
-    document.body.style.backgroundColor = "#dee2e5";
+    console.log("프로필 데이터:", profile.value);
   } catch (error) {
-    console.error("프로필 조회 중 에러:", error);
+    console.error("에러:", error);
+    if (error.response?.status === 401) {
+      console.log("로그인이 필요합니다");
+    }
   }
 });
 </script>

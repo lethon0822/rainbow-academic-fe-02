@@ -23,7 +23,7 @@ function handleButtonClick(grade) {
   });
 }
 </script>
-
+``
 <template>
   <div class="table-wrapper">
     <!-- 고정 헤더 -->
@@ -82,8 +82,6 @@ function handleButtonClick(grade) {
   display: flex;
   flex-direction: column;
 }
-
-// ⬆ border-radius를 적용할 핵심 요소는 이 wrapper임 (overflow: hidden 포함)
 
 // 헤더 테이블
 .header-container {
