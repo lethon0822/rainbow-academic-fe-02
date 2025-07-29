@@ -33,13 +33,6 @@
             <input type="hidden" />
           </td>
         </tr>
-
-        <tr>
-          <td class="label-cell">　</td>
-          <td class="value-cell">　</td>
-          <td class="label-cell">　</td>
-          <td class="value-cell">　</td>
-        </tr>
       </tbody>
     </table>
   </div>
