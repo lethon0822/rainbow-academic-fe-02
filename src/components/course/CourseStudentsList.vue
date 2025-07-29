@@ -43,6 +43,7 @@ onMounted(async ()=>{
 })
 
 const attendance = () =>{
+  console.log("넘겨줄 데이터",state.data)
   const jsonBody = JSON.stringify(state.data)
 
   router.push({
@@ -56,6 +57,7 @@ const attendance = () =>{
 }
 
 const enrollmentGrade = () =>{
+  console.log("넘겨줄 데이터",state.data)
   const jsonBody = JSON.stringify(state.data)
 
   router.push({
