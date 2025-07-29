@@ -20,9 +20,8 @@ export function GradesbyCourse(userId) {
 }
 
 // 학생 프로필
-export const getProfile = (loginId = "10001") => {
+export const getProfile = () => {
   return axios.get("/student/profile", {
-    params: { loginId },
     withCredentials: true,
   });
 };
