@@ -17,6 +17,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     userName: "",
     userId: "",
+    loginId: "",
     userRole: "",
     loginId:"",
   }),

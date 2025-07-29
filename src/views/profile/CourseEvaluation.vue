@@ -1,11 +1,34 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+
+const userId = ref(null);
+const isUserLoading = ref(true);
+const router = useRouter();
 
 const props = defineProps({
   courseId: String,
 });
+
+// 현재 로그인된 사용자 ID 가져오기
+const fetchCurrentUser = async () => {
+  try {
+    const response = await axios.get("/account/check");
+    userId.value = response.data;
+    console.log("현재 사용자 ID:", userId.value);
+  } catch (error) {
+    console.error("사용자 정보 로드 실패:", error);
+    // 로그인이 필요한 경우
+    if (error.response?.status === 401 || !error.response?.data) {
+      alert("로그인이 필요합니다.");
+      // 로그인 페이지로 리다이렉트하는 로직 추가 가능
+      // this.$router.push('/login')
+    }
+  } finally {
+    isUserLoading.value = false;
+  }
+};
 
 const totalQuestions = 5;
 const answers = ref({
@@ -128,6 +151,12 @@ const prevStep = () => {
 };
 
 const submitSurvey = async () => {
+  // 사용자 ID 확인
+  if (!userId.value) {
+    alert("사용자 인증이 필요합니다. 다시 로그인해주세요.");
+    return;
+  }
+
   if (Object.values(answers.value).every((v) => v !== null)) {
     const answersArray = Object.values(answers.value);
     const averageScore = Math.round(
@@ -136,7 +165,7 @@ const submitSurvey = async () => {
 
     const surveyData = {
       courseId: parseInt(courseId.value),
-      userId: userId.value,
+      userId: userId.value, // 이제 안전하게 사용 가능
       review: additionalOpinion.value,
       average: averageScore,
     };
@@ -144,18 +173,22 @@ const submitSurvey = async () => {
     console.log("설문 결과:", surveyData);
 
     try {
-      await axios.post("/course/survey", surveyData);
+      await axios.post("/student/course/survey", surveyData);
       submitted.value = true;
       alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
+      router.push("/profile");
     } catch (error) {
       console.error("설문 제출 실패:", error);
-      alert("설문 제출에 실패했습니다. 다시 시도해주세요.");
+      if (error.response?.status === 401) {
+        alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+      } else {
+        alert("설문 제출에 실패했습니다. 다시 시도해주세요.");
+      }
     }
   } else {
     alert("모든 필수 항목에 답변해주세요.");
   }
 };
-
 const resetForm = () => {
   if (confirm("작성한 내용이 모두 삭제됩니다. 계속하시겠습니까?")) {
     Object.keys(answers.value).forEach((key) => (answers.value[key] = null));
@@ -174,9 +207,10 @@ const allQuestionsAnswered = computed(() => {
   return Object.values(answers.value).every((v) => v !== null);
 });
 
-onMounted(() => {
+onMounted(async () => {
   updateProgress();
-  fetchCourseInfo();
+  // 사용자 정보와 강의 정보 병렬로 로드
+  await Promise.all([fetchCurrentUser(), fetchCourseInfo()]);
 });
 </script>
 

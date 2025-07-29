@@ -218,7 +218,7 @@ const saveProfile = async () => {
 
             <tr>
               <td class="label-cell">성명(한글)</td>
-              <td class="value-cell">{{ profile.userName }}</td>
+              <td class="value-cell">{{ profile.studentName }}</td>
             </tr>
 
             <tr>
