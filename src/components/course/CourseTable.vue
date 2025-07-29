@@ -64,7 +64,7 @@ const send = (id, json) => {
           <th class="remStd" v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel" class="enroll-action">수강</th>
           <th v-if="show.modify">승인여부</th>
-          <th v-if="show.setting || show.modify"> </th>
+          <th v-if="show.setting || show.modify || show.check"> </th>
         </tr>
       </thead>
       <tbody>
@@ -111,7 +111,7 @@ const send = (id, json) => {
           </td>
           <td v-else-if="show.modify">
             <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
-              <button class="enroll-btn d-flex btn">수정</button>
+              <button class="enroll-btn d-flex">수정</button>
             </router-link>
           </td>
         </tr>
