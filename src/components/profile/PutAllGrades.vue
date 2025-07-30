@@ -212,8 +212,12 @@ td.title {
 td.rank,
 th.rank {
   white-space: nowrap;
-  text-align: center;
-  padding-left: 20px;
+  text-align: left;
+  padding-left: 50px;
+}
+
+td.rank {
+  padding-left: 60px;
 }
 
 td.type,
