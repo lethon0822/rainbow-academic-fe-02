@@ -51,6 +51,7 @@ const check = async (courseId) =>{
   if(res.data.length > 0){
     state.comment = res.data
     console.log(res.data)
+    console.log(state.comment)
 
     for (let item of state.comment) {
     state.avg += item.average
@@ -82,8 +83,8 @@ const check = async (courseId) =>{
     <hr>
     <template v-if="state.comment.length > 0 ">
       <div class="comment-container">
-        <div class="comment" v-for="(item, index) in state.comment" :key="index">
-          <span>{{ item.review }}</span>
+        <div class="comment" v-for="(item, index) in state.comment" :key="index" >
+            <span>{{ item.review }}</span>
         </div>
       </div>
     </template>
