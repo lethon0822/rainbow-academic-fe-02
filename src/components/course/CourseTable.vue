@@ -103,7 +103,7 @@ const send = (id, json) => {
             </button>
           </td>
           <td v-else-if="show.setting" class="button">
-            <button class="enroll-btns" @click="send(course.courseId, course)">관리</button>
+            <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
           <td v-else-if="show.check" class="button">
               <!-- 학생관리 라우팅 처리해야함 -->

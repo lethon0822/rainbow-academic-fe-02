@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, onMounted} from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
@@ -7,44 +7,27 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 const router = useRouter();
 const attendDate = ref('');
 
-// 임시 하드코딩 학생 데이터
-const students = ref([
-  {
-    enrollmentId: 171,
-    name: 'lily',
-    studentId: '20257945',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId:172,
-    name: 'Andy',
-    studentId: '20257946',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 173,
-    name: 'Hannah',
-    studentId: '20257947',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 174,
-    name: 'Jacob',
-    studentId: '20257948',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 176,
-    name: 'lucy',
-    studentId: '20257949',
-    status: '결석',
-    note: '',
-  },
-]);
+const state = reactive({
+  data:[],
+  courseId:''
+})
+
+onMounted(async ()=>{
+  const passJson = history.state.data;
+  const passid = history.state.id;
+
+  const nana = JSON.parse(passJson);
+  state.data = nana
+
+  const id = JSON.parse(passid)
+  state.courseId = id;
+  
+  console.log('스테이트데이타:',state.data)
+  console.log('라우팅 아이디:',state.courseId)
+  }
+)
+
+
 const isLoading = ref(false);
 
 const saveAttendance = async () => {
@@ -113,9 +96,9 @@ const saveAttendance = async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="s in students" :key="s.enrollmentId">
-            <td>{{ s.name }}</td>
-            <td>{{ s.studentId }}</td>
+          <tr v-for="s in state.data" :key="s.enrollmentId">
+            <td>{{ s.userName }}</td>
+            <td>{{ s.loginId }}</td>
             <td>
               <select v-model="s.status" class="form-select">
                 <option disabled value="">선택</option>
