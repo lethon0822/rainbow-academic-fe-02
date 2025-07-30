@@ -29,7 +29,7 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
             <td>{{ index + 1 }}</td>
             <td>{{ grade.grade }}</td>
             <td>{{ grade.semester }}</td>
-            <td>{{ grade.courseId }}</td>
+            <td>{{ grade.courseCode }}</td>
             <td>{{ grade.title }}</td>
             <td>{{ grade.credit }}</td>
             <td>{{ grade.rank || "-" }}</td>
@@ -163,5 +163,4 @@ h4 {
   margin-left: 25px;
   margin-top: 30px;
 }
-
 </style>

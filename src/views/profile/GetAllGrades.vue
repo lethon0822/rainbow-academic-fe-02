@@ -100,14 +100,12 @@ const mergedSemesterGrades = computed(() => {
     result.push(value);
   });
 
-  // 정렬: 학년 오름차순, 학기 숫자 오름차순
   return result.sort((a, b) => {
     if (a.grade === b.grade) return Number(a.semester) - Number(b.semester);
     return a.grade - b.grade;
   });
 });
 
-// onMounted는 computed 밖에 위치해야 합니다.
 onMounted(async () => {
   try {
     const userStore = useUserStore();
