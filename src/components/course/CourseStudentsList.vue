@@ -140,8 +140,8 @@ const enrollmentGrade = () =>{
       </div>
     </div>
 
-    <div class="button d-flex">
-        <button class="btn btn-primary" @click="attendance">출결관리</button>
+    <div class="button">
+        <button class="btn btn-primary " @click="attendance">출결관리</button>
         <button class="btn btn-primary" @click="enrollmentGrade">성적관리</button>
     </div>
 
@@ -194,13 +194,17 @@ const enrollmentGrade = () =>{
 }
 
 .button{
+  width: 100%;
   justify-content: flex-end;
-  margin-right: 26px;
+  display: flex;
+ padding-right: 12px;
+}
 
   .btn{
-    background-color: #2460CE
+    display: flex;
+    background-color: #2460CE;
   }
-}
+
 
 .student-table{
   display: flex;

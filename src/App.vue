@@ -7,15 +7,15 @@ import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";
 const show = reactive({
   modal: false,
-  id: null,
-});
+  id: null
+})
 const openModal = (id) => {
-  console.log("id:", id);
+  console.log('id:', id)
   show.modal = true;
-  show.id = id;
-  console.log("show.id", show.id);
-};
-provide("openModal", openModal);
+  show.id = id
+  console.log('show.id', show.id)
+}
+provide('openModal', openModal)
 const route = useRoute();
 const account = useAccountStore();
 const router = useRouter();
@@ -34,7 +34,7 @@ const checkAccount = async () => {
     account.setLoggedIn(res.data > 0);
     return res.data > 0;
   } catch (error) {
-    console.error("Account check failed:", error);
+    console.error('Account check failed:', error);
     account.setChecked(false);
     account.setLoggedIn(false);
     return false;
@@ -45,15 +45,15 @@ const initializeApp = async () => {
   const isLoggedIn = await checkAccount();
   isInitializing.value = false;
   // 현재 경로가 /login이 아닌 경우에만 리다이렉션 처리
-  if (route.path === "/login") {
+  if (route.path === '/login') {
     // 로그인 페이지에서 이미 로그인된 경우 홈으로 리다이렉션
     if (isLoggedIn) {
-      router.push("/");
+      router.push('/');
     }
   } else {
     // 다른 페이지에서 로그인되지 않은 경우 로그인 페이지로 리다이렉션
     if (!isLoggedIn) {
-      router.push("/login");
+      router.push('/login');
     }
   }
 };
@@ -68,12 +68,12 @@ watch(
     if (!isInitializing.value) {
       const isLoggedIn = await checkAccount();
       // 로그인 페이지가 아닌데 로그인되지 않은 경우
-      if (newPath !== "/login" && !isLoggedIn) {
-        router.push("/login");
+      if (newPath !== '/login' && !isLoggedIn) {
+        router.push('/login');
       }
       // 로그인 페이지인데 이미 로그인된 경우
-      else if (newPath === "/login" && isLoggedIn) {
-        router.push("/");
+      else if (newPath === '/login' && isLoggedIn) {
+        router.push('/');
       }
     }
   }
@@ -81,7 +81,9 @@ watch(
 </script>
 <template>
   <!-- 초기화 중일 때 로딩 표시 (선택사항) -->
-  <div v-if="isInitializing.value" class="loading">로딩중...</div>
+  <div v-if="isInitializing.value" class="loading">
+    로딩중...
+  </div>
   <template v-else>
     <template v-if="show.modal">
       <div class="black-bg" @click="show.modal = false">
@@ -102,7 +104,7 @@ body,
 #app {
   height: 100%;
   margin: 0;
-  background-color: #dee2e5;
+  background-color: #DEE2E5;
   overflow-x: hidden;
 }
 div {
@@ -133,7 +135,7 @@ div {
 .close {
   font-size: 20px;
   font-weight: 800;
-  background-color: #2460ce;
+  background-color: #2460CE;
   color: #fff;
   width: 30px;
   height: 30px;
