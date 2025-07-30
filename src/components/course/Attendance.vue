@@ -5,17 +5,23 @@ import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const router = useRouter();
-const attendDate = ref('');
+const attendDate = ref(new Date().toISOString().slice(0, 10));
+const students = ref([]);
 
 const state = reactive({
   data:[],
   courseId:''
 })
+
 onMounted(async ()=>{
   const passJson = history.state.data;
   const passid = history.state.id;
   const nana = JSON.parse(passJson);
-  state.data = nana
+  state.data = nana.map(s => ({
+    ...s,
+    status: s.status ?? '결석',
+    note: s.note ?? '',
+  }));
   const id = JSON.parse(passid)
   state.courseId = id;
   console.log('스테이트데이타:',state.data)

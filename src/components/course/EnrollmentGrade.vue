@@ -15,27 +15,31 @@ const state = reactive({
   data: [],
   courseId: '',
 });
+console.log('받은 데이터', state.data);
 
 // 총점 계산 함수
 const totalScore = (s) => {
   return (
-    (s.midterm || 0) +
-    (s.final || 0) +
-    (s.assignment || 0) +
-    (s.attendance || 0)
+    (s.attendance || 0) * 0.2 +
+    (s.midterm || 0) * 0.3 +
+    (s.final || 0) * 0.3 +
+    (s.assignment || 0) * 0.2
   );
 };
 
 const getGrade = (total) => {
+  if (total >= 95) return 'A+';
   if (total >= 90) return 'A';
+  if (total >= 85) return 'B+';
   if (total >= 80) return 'B';
+  if (total >= 75) return 'C+';
   if (total >= 70) return 'C';
-  if (total >= 60) return 'D';
   return 'F';
 };
 
 // 페이지 진입 시 전달된 데이터 파싱 및 기본값 0 세팅
 onMounted(() => {
+  
   const passJson = history.state.data;
   const passid = history.state.id;
 
@@ -122,7 +126,7 @@ const saveGrade = async () => {
           <tr v-for="s in state.data" :key="s.enrollmentId">
             <td>{{ s.userName }}</td>
             <td>{{ s.loginId }}</td>
-            <td>{{ s.departmentName }}</td>
+            <td>{{ s.deptName }}</td>
             <!-- 학과 -->
 
             <!-- 출석 점수 입력 -->
