@@ -74,23 +74,14 @@ const saveGrade = async () => {
         midterm: s.midterm || 0,
         final: s.final || 0,
         assignment: s.assignment || 0,
-        total: totalScore(s),
+        rank: getGrade(totalScore(s)),
       };
 
-      const { data: exists } = await axios.post(
-        '/professor/grade/check/exist',
-        data
-      );
-
-      if (exists === 0) {
-        await axios.post('/professor/grade/save', data);
-      } else {
-        await axios.put('/professor/grade/update', data);
-      }
+      await axios.put('http://localhost:8080/api/professor/course/grade', data);
     }
 
     alert('성적 저장 완료!');
-    await router.push('/professor/grade');
+    await router.push('/enrollmentgrade');
   } catch (err) {
     console.error('성적 저장 오류:', err);
     alert('성적 저장 중 오류가 발생했습니다.');
