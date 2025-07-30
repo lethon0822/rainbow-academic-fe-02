@@ -149,7 +149,7 @@ const saveProfile = async () => {
         <button
           class="btn btn-primary"
           @click="saveProfile"
-          v-if="imagePreview || currentProfileImage" 
+          v-if="imagePreview || currentProfileImage"
         >
           저장
         </button>
@@ -217,20 +217,20 @@ const saveProfile = async () => {
                 <td class="value-cell">{{ profile.loginId }}</td>
               </tr>
 
-            <tr>
-              <td class="label-cell">성명(한글)</td>
-              <td class="value-cell">{{ profile.studentName }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">성명(한글)</td>
+                <td class="value-cell">{{ profile.studentName }}</td>
+              </tr>
 
               <tr>
                 <td class="label-cell">E-mail</td>
                 <td class="value-cell">{{ profile.email }}</td>
               </tr>
 
-            <tr>
-              <td class="label-cell">학생구분</td>
-              <td class="value-cell">대학생</td>
-            </tr>
+              <tr>
+                <td class="label-cell">학생구분</td>
+                <td class="value-cell one-cell">대학생</td>
+              </tr>
 
               <tr>
                 <td class="label-cell">최종등록연도</td>
