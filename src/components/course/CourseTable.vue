@@ -106,7 +106,7 @@ const send = (id, json) => {
           </td>
           <td v-else-if="show.check" class="button">
               <!-- 학생관리 라우팅 처리해야함 -->
-                <button class="enroll-btn" @click="$emit('check', course.courseId)">강의평 보기</button>
+                <button class="enroll-btn" @click="$emit('check', course.courseId, course.title)">강의평 보기</button>
           </td>
           <td v-else-if="show.modify" class="button">
             <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
