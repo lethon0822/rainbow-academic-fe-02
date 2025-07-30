@@ -260,6 +260,7 @@ input, textarea {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 100px;
+  width: 100%;
 }
 
 .btn-primary {

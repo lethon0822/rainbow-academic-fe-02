@@ -130,7 +130,7 @@ const handleCancel = async (courseId) => {
     />
 
     <!-- 개설 과목 목록 -->
-    <h5 class="fw-bold mt-3">개설 과목 목록</h5>
+    <h5 class="fw-bold mt-3 ms-3">개설 과목 목록</h5>
     <CourseTable
       :courseList="courseList"
       maxHeight="500px"
@@ -145,8 +145,8 @@ const handleCancel = async (courseId) => {
     />
 
     <!-- 나의 수강신청 내역 -->
-    <div class="creditInfo">
-      <h5 class="fw-bold mt-2 mb-0.3rem">신청 내역</h5>
+    <div class="creditInfo d-flex  mt-5 mb-0.3rem ms-3">
+      <h5 class="fw-bold ">신청 내역</h5>
       <div class="credit-box">
         <span>최대 학점: 18학점</span>
         <span>신청 학점: {{ totalCredit }}학점</span>
@@ -169,7 +169,7 @@ const handleCancel = async (courseId) => {
   </WhiteBox>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .creditInfo {
   display: flex;
   justify-content: space-between;
@@ -183,5 +183,9 @@ const handleCancel = async (courseId) => {
   font-size: 17px;
   color: #333;
   font-weight: 500;
+}
+
+.table-container{
+  margin-top: 2px;
 }
 </style>
