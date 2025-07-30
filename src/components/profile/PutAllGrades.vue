@@ -14,26 +14,26 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
       <table class="fixed_headers">
         <thead>
           <tr>
-            <th>순번</th>
-            <th>학년</th>
-            <th>학기</th>
-            <th>과목코드</th>
+            <th class="index">순번</th>
+            <th class="grade">학년</th>
+            <th class="semester">학기</th>
+            <th class="courseCode">과목코드</th>
             <th>교과목명</th>
-            <th>학점</th>
-            <th>등급</th>
-            <th>이수구분</th>
+            <th class="credit">학점</th>
+            <th class="rank">등급</th>
+            <th class="type">이수구분</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(grade, index) in grades" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ grade.grade }}</td>
-            <td>{{ grade.semester }}</td>
-            <td>{{ grade.courseId }}</td>
-            <td>{{ grade.title }}</td>
-            <td>{{ grade.credit }}</td>
-            <td>{{ grade.rank || "-" }}</td>
-            <td>{{ grade.type }}</td>
+            <td class="index">{{ index + 1 }}</td>
+            <td class="grade">{{ grade.grade }}</td>
+            <td class="semester">{{ grade.semester }}</td>
+            <td class="courseCode">{{ grade.courseCode }}</td>
+            <td class="title">{{ grade.title }}</td>
+            <td class="credit">{{ grade.credit }}</td>
+            <td class="rank">{{ grade.rank || "-" }}</td>
+            <td class="type">{{ grade.type }}</td>
           </tr>
         </tbody>
       </table>
@@ -127,7 +127,6 @@ const { grades, creditByCategory, semesterGrades } = defineProps([
 
 table {
   width: 100%;
-  table-layout: fixed;
   border-collapse: collapse;
   font-size: 16px;
 }
@@ -164,4 +163,63 @@ h4 {
   margin-top: 30px;
 }
 
+/*수동 컨트롤러 */
+
+td.credit {
+  text-align: center;
+  padding-left: 80px;
+}
+
+th.credit {
+  text-align: center;
+  padding-left: 80px;
+}
+
+td.index,
+th.index {
+  white-space: nowrap;
+  text-align: center;
+  padding-left: 30px;
+}
+
+td.grade,
+th.grade {
+  white-space: nowrap;
+  text-align: center;
+  padding-left: 30px;
+}
+
+td.semester,
+th.semester {
+  white-space: nowrap;
+  text-align: center;
+  padding-left: 30px;
+}
+
+td.courseCode,
+th.courseCode {
+  white-space: nowrap;
+  text-align: left;
+  padding-left: 60px;
+}
+
+td.title {
+  white-space: nowrap;
+  text-align: left;
+  padding-left: 0px;
+}
+
+td.rank,
+th.rank {
+  white-space: nowrap;
+  text-align: center;
+  padding-left: 20px;
+}
+
+td.type,
+th.type {
+  white-space: nowrap;
+  text-align: center;
+  padding-right: 30px;
+}
 </style>
