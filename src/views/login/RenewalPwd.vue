@@ -29,7 +29,6 @@ const submit = async () => {
         <input
           type="email"
           class="form-control"
-          v-model="state.data.email"
           placeholder="이메일을 입력해주세요."
           required
           인증번호
@@ -41,7 +40,6 @@ const submit = async () => {
         <input
           type="text"
           class="form-control"
-          v-model="state.data.auth"
           placeholder="인증번호를 입력해주세요."
         />
         <button class="h6 btn py-3 mt-3 btn-primary auth">인증번호 요청</button>
