@@ -19,6 +19,7 @@ const router = createRouter({
       component: () => import("@/views/login/RenewalPwd.vue"),
     },
 
+
     //홈
     {
       path: "/",
