@@ -18,10 +18,6 @@ const router = createRouter({
       path: "/renewal",
       component: () => import("@/views/login/RenewalPwd.vue"),
     },
-    {
-      path: "/new",
-      component: () => import("@/views/login/RenewalNewPwd.vue"),
-    },
 
 
     //홈
