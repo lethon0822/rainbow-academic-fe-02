@@ -176,7 +176,7 @@ watch(
       <li class="menu-sugang">
         <a href="javascript:void(0);">수강</a>
         <ul>
-          <li><a href="javascript:void(0);">수강조회</a></li>
+          <!-- <li><a href="javascript:void(0);">수강조회</a></li> -->
           <li>
             <router-link to="/enrollment" class="router-link">수강신청 관리</router-link
             >

@@ -6,6 +6,7 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const router = useRouter();
 const attendDate = ref('');
+
 const state = reactive({
   data:[],
   courseId:''
