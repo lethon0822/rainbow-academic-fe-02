@@ -75,8 +75,7 @@ const send = (id, json) => {
             <div v-else>{{ course.deptName }}</div>
           </td>
           <td class="title">
-            <div v-if="show.modify">{{ course.title }}</div>
-            <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
+            <div @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
           </td>
           <td class="classroom">{{ course.classroom }}</td>
           <td class="type">{{ course.type }}</td>
@@ -107,7 +106,7 @@ const send = (id, json) => {
           </td>
           <td v-else-if="show.check" class="button">
               <!-- 학생관리 라우팅 처리해야함 -->
-                <button class="enroll-btn" @click="$emit('check', course.courseId)">강의평 보기</button>
+                <button class="enroll-btn" @click="$emit('check', course.courseId, course.title)">강의평 보기</button>
           </td>
           <td v-else-if="show.modify" class="button">
             <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
