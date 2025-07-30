@@ -108,7 +108,7 @@ const saveAttendance = async () => {
       </table>
       <div class="text-center mt-4">
         <button @click="saveAttendance" class="btn btn-primary px-4">
-          저장!
+          저장
         </button>
       </div>
     </div>
