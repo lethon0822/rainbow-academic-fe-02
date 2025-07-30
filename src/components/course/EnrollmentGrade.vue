@@ -1,182 +1,190 @@
 <!-- 성적 기입 -->
 
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
+import { ref, reactive, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import WhiteBox from '@/components/common/WhiteBox.vue';
 
-import axios from "axios";
-import { useRoute } from "vue-router";
-import WhiteBox from "@/components/common/WhiteBox.vue";
+const router = useRouter();
+const isLoading = ref(false);
 
 
-const student = ref([]);
-const route = useRoute();
-const courseId = Number(route.params.courseId); // props/ 상태에서 가져오기
-
-onMounted(async () => {
-  try {
-    const res = await axios.get(`/api/professor/course/${courseId}/grades`);
-    students.value = res.data;
-  } catch (error) {
-    console.error('성적 조회 실패:', error);
-  }
-});
-// 임시 하드코딩
-const students = ref([
-  {
-    enrollmentId: 48,
-    major: '컴퓨터공학과',
-    courseId: '180',
-    studentId: '20012',
-    name: '김주현',
-    attendanceScore: 0,
-    midtermScore: 0,
-    finalScore: 0,
-    assignmentScore: 0,
-    totalScore: 0,
-    grade: "",
-  },
-  {
-    enrollmentId: 164,
-    major: '전자공학과',
-    courseId: '181',
-    studentId: '20013',
-    name: '김설영',
-    attendanceScore: 0,
-    midtermScore: 0,
-    finalScore: 0,
-    assignmentScore: 0,
-    totalScore: 0,
-    grade: ''
-  },
-  {
-    enrollmentId: 165,
-    major: '전자공학과',
-    courseId: '182',
-    studentId: '20014',
-    name: '류지민',
-    attendanceScore: 0,
-    midtermScore: 0,
-    finalScore: 0,
-    assignmentScore: 0,
-    totalScore: 0,
-    grade: ''
-  },
-  {
-    enrollmentId: 167,
-    major: '경영학과',
-    courseId: '183',
-    studentId: '20015',
-    name: '남도일',
-    attendanceScore: 0,
-    midtermScore: 0,
-    finalScore: 0,
-    assignmentScore: 0,
-    totalScore: 0,
-    grade: ''
-  },
-  {
-    enrollmentId: 169,
-    major: '일본어학과',
-    courseId: '184',
-    studentId: '20016',
-    name: '유미란',
-    attendanceScore: 0,
-    midtermScore: 0,
-    finalScore: 0,
-    assignmentScore: 0,
-    totalScore: 0,
-    grade: ''
-  }
-]);
-
-//  점수 유효성 검사 + 총점/등급 자동 계산
-watchEffect(() => {
-  students.value.forEach((s) => {
-    s.attendanceScore = Math.min(100, Math.max(0, s.attendanceScore));
-    s.midtermScore = Math.min(100, Math.max(0, s.midtermScore));
-    s.finalScore = Math.min(100, Math.max(0, s.finalScore));
-    s.assignmentScore = Math.min(100, Math.max(0, s.assignmentScore));
-
-    // 총점 계산
-    const total =
-      s.attendanceScore * 0.2 +
-      s.midtermScore * 0.3 +
-      s.finalScore * 0.3 +
-      s.assignmentScore * 0.2;
-
-    s.totalScore = Math.round(total * 100) / 100; // 소수점 둘째 자리
-
-    // 등급 계산
-    if (s.totalScore >= 95) s.grade = "A+";
-    else if (s.totalScore >= 90) s.grade = "A";
-    else if (s.totalScore >= 85) s.grade = "B+";
-    else if (s.totalScore >= 80) s.grade = "B";
-    else if (s.totalScore >= 75) s.grade = "C+";
-    else if (s.totalScore >= 70) s.grade = "C";
-    else s.grade = "F";
-  });
+// 라우터로부터 받은 데이터 보관용
+const state = reactive({
+  data: [],
+  courseId: '',
 });
 
-// 저장 API
-const saveGrades = async () => {
+// 총점 계산 함수
+const totalScore = (s) => {
+  return (
+    (s.midterm || 0) +
+    (s.final || 0) +
+    (s.assignment || 0) +
+    (s.attendance || 0)
+  );
+};
+
+const getGrade = (total) => {
+  if (total >= 90) return 'A';
+  if (total >= 80) return 'B';
+  if (total >= 70) return 'C';
+  if (total >= 60) return 'D';
+  return 'F';
+};
+
+// 페이지 진입 시 전달된 데이터 파싱 및 기본값 0 세팅
+onMounted(() => {
+  const passJson = history.state.data;
+  const passid = history.state.id;
+
+  const parsedStudents = JSON.parse(passJson);
+  const parsedCourseId = JSON.parse(passid);
+
+  state.data = parsedStudents.map((s) => ({
+    ...s,
+    attendance: s.attendance !== undefined ? s.attendance : 0,
+    midterm: s.midterm !== undefined ? s.midterm : 0,
+    final: s.final !== undefined ? s.final : 0,
+    assignment: s.assignment !== undefined ? s.assignment : 0,
+  }));
+
+  state.courseId = parsedCourseId;
+
+  console.log('학생 목록(history):', state.data);
+  console.log('코스 아이디:', state.courseId);
+});
+
+
+
+// 성적 저장 로직
+const saveGrade = async () => {
+  isLoading.value = true;
+
   try {
-    for (const s of students.value) {
-      const enrollmentgradeputreq = {
-        enrollmentId: s.enrollmentId, // 수강 Id
-        grade: s.totalScore, // 총점
-        rank: s.grade, // 등급 A+, B, C+, F
-        midScore: s.midtermScore, // 중간
-        finScore: s.finalScore, // 기말
-        attendanceScore: s.attendanceScore, // 출석
-        assignmentScore: s.assignmentScore // 과제
-    };
-    await axios.put('http://localhost:8080/api/professor/course/grade', enrollmentgradeputreq);
+    for (const s of state.data) {
+      const data = {
+        enrollmentId: s.enrollmentId,
+        attendance: s.attendance || 0,
+        midterm: s.midterm || 0,
+        final: s.final || 0,
+        assignment: s.assignment || 0,
+        total: totalScore(s),
+      };
+
+      const { data: exists } = await axios.post(
+        '/professor/grade/check/exist',
+        data
+      );
+
+      if (exists === 0) {
+        await axios.post('/professor/grade/save', data);
+      } else {
+        await axios.put('/professor/grade/update', data);
+      }
     }
-    alert("성적 저장 완료!");
-  } catch (e) {
-    console.error(e);
-    alert("저장 실패!");
+
+    alert('성적 저장 완료!');
+    await router.push('/professor/grade');
+  } catch (err) {
+    console.error('성적 저장 오류:', err);
+    alert('성적 저장 중 오류가 발생했습니다.');
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
 
 <template>
   <WhiteBox title="성적 관리">
-    <div class="grade-wrapper">
+    <div class="container mt-4">
+      <h2 class="text-center fw-bold mb-4">성적 입력창</h2>
       <h3 class="text-2xl font-bold mb-4 text-center">
         성적입력 (출석20%, 중간30%, 기말30%, 과제20%)
       </h3>
       <table class="grade-table">
-      <thead class="grade-table-header">
+        <thead>
           <tr>
-            <th class="px-3 py-2 text-center align-middle">학과</th>
-            <th class="px-3 py-2 text-center align-middle">학번</th>
-            <th class="px-3 py-2 text-center align-middle">이름</th>
-            <th class="px-3 py-2 text-center align-middle">출석<br />(20%)</th>
-            <th class="px-3 py-2 text-center align-middle">중간<br />(30%)</th>
-            <th class="px-3 py-2 text-center align-middle">기말<br />(30%)</th>
-            <th class="px-3 py-2 text-center align-middle">과제<br />(20%)</th>
-            <th class="px-3 py-2 text-center align-middle">총점<br />(%)</th>
-            <th class="px-3 py-2 text-center align-middle">등급</th>
+            <th>이름</th>
+            <th>학번</th>
+            <th>학과</th>
+            <th>출석<br />(20%)</th>
+            <th>중간<br />(30%)</th>
+            <th>기말<br />(30%)</th>
+            <th>과제<br />(20%)</th>
+            <th>총점</th>
+            <th>등급</th>
           </tr>
         </thead>
-          <tbody>
-        <tr v-for="s in students" :key="s.enrollmentId">
-          <td class="text-center align-middle px-3 py-2">{{ s.major }}</td>
-          <td class="text-center align-middle px-3 py-2">{{ s.studentId }}</td>
-          <td class="text-center align-middle px-3 py-2">{{ s.name }}</td>
-          <td><input type="number" v-model="s.attendanceScore" class="form-control" /></td>
-          <td><input type="number" v-model="s.midtermScore" class="form-control" /></td>
-          <td><input type="number" v-model="s.finalScore" class="form-control" /></td>
-          <td><input type="number" v-model="s.assignmentScore" class="form-control" /></td>
-          <td><input type="text" :value="s.totalScore + '%'" class="form-control bg-light" readonly /></td>
-          <td><input type="text" :value="s.grade" class="form-control bg-light" readonly /></td>
-        </tr>
-      </tbody>
-      </table>
 
-      <div class="text-center mt-3">
-        <button @click="saveGrades" class="btn btn-primary">저장</button>
+        <tbody>
+          <tr v-for="s in state.data" :key="s.enrollmentId">
+            <td>{{ s.userName }}</td>
+            <td>{{ s.loginId }}</td>
+            <td>{{ s.departmentName }}</td>
+            <!-- 학과 -->
+
+            <!-- 출석 점수 입력 -->
+            <td>
+              <input
+                v-model.number="s.attendance"
+                type="number"
+                min="0"
+                max="100"
+                @input="s.attendance = Math.min(100, Math.max(0, s.attendance))"
+                class="form-control"
+              />
+            </td>
+
+            <!-- 중간 점수 입력 (여기에 작성!) -->
+            <td>
+              <input
+                v-model.number="s.midterm"
+                type="number"
+                min="0"
+                max="100"
+                @input="s.midterm = Math.min(100, Math.max(0, s.midterm))"
+                class="form-control"
+              />
+            </td>
+
+            <!-- 기말 점수 입력 -->
+            <td>
+              <input
+                v-model.number="s.final"
+                type="number"
+                min="0"
+                max="100"
+                @input="s.final = Math.min(100, Math.max(0, s.final))"
+                class="form-control"
+              />
+            </td>
+
+            <!-- 과제 점수 입력 -->
+            <td>
+              <input
+                v-model.number="s.assignment"
+                type="number"
+                min="0"
+                max="100"
+                @input="s.assignment = Math.min(100, Math.max(0, s.assignment))"
+                class="form-control"
+              />
+            </td>
+            <td>{{ totalScore(s) }}</td>
+            <td>{{ getGrade(totalScore(s)) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-center mt-4">
+        <button
+          @click="saveGrade"
+          :disabled="isLoading"
+          class="btn btn-success px-4"
+        >
+          성적 저장
+        </button>
       </div>
     </div>
   </WhiteBox>
@@ -211,5 +219,3 @@ const saveGrades = async () => {
   }
 }
 </style>
-
-
