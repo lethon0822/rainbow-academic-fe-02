@@ -125,7 +125,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <WhiteBox title="학적변동관리">
+  <WhiteBox title="영구성적조회">
     <div class="content">
       <PutAllGrades
         :grades="grades"
