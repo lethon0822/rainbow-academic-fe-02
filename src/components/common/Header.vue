@@ -26,7 +26,7 @@ const logoutAccount = async () => {
   }
   const res = await logout();
 
-  console.log("로그아웃", res);
+  
   if (res === undefined || res.status !== 200) {
     return;
   }
