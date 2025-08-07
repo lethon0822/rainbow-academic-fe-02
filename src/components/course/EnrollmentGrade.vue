@@ -70,10 +70,10 @@ const saveGrade = async () => {
     for (const s of state.data) {
       const data = {
         enrollmentId: s.enrollmentId,
-        attendance: s.attendance || 0,
-        midterm: s.midterm || 0,
-        final: s.final || 0,
-        assignment: s.assignment || 0,
+        attendanceScore: s.attendance || 0,
+        midScore: s.midterm || 0,
+        finScore: s.final || 0,
+        assignmentScore: s.assignment || 0,
         rank: getGrade(totalScore(s)),
       };
 
