@@ -5,7 +5,6 @@ import { logout } from "@/services/accountService";
 import { reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-
 const state = reactive({
   data: {
     userId: 0,
@@ -22,17 +21,17 @@ const account = useAccountStore();
 
 //로그아웃
 const logoutAccount = async () => {
-  if (!confirm("로그아웃 하시겠습니까?")){return};
+  if (!confirm("로그아웃 하시겠습니까?")) {
+    return;
+  }
   const res = await logout();
- 
 
   console.log("로그아웃", res);
   if (res === undefined || res.status !== 200) {
     return;
   }
   account.setLoggedIn(false);
-  router.push('/login');
-
+  router.push("/login");
 };
 
 // onMounted(()=>{
@@ -55,7 +54,10 @@ const logoutAccount = async () => {
         class="container-fluid d-flex justify-content-between align-items-center px-4"
       >
         <!-- 로고 왼쪽 -->
-        <div class="logo d-flex align-items-center" @click="$router.push('/')">
+        <div
+          class="logo d-flex align-items-center"
+          @click="$router.push('/')"
+        >
           <img :src="logo" alt="로고 아이콘" height="40" />
           <span class="systemText" @click="$router.push('/')"
             >학사관리시스템</span
@@ -65,6 +67,9 @@ const logoutAccount = async () => {
         <!-- 메뉴 오른쪽 -->
         <template v-if="account.state.loggedIn">
           <div class="menus d-flex align-items-center gap-3">
+            <div class="info">
+              {{ userStore.loginId }}
+            </div>
             <span>{{ userStore.userName }}님 반갑습니다</span>
             <span class="divider">|</span>
             <a @click="logoutAccount()">로그아웃</a>
@@ -102,7 +107,7 @@ main,
   padding-top: 60px;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
@@ -125,6 +130,14 @@ a{
   cursor: pointer;
   color: #fff;
   text-decoration: none;
+}
+
+.info{
+  padding:3px 15px;
+  margin-right: 3px;
+  border-radius: 25px;
+  background-color: #2460CE;
+  color: #fff;
 }
 
 .divider {

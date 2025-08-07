@@ -22,14 +22,14 @@ const myCourse = async (filters) => {
   };
 
   const res = await findMyCourse(json);
-  console.log("알이에수:",res)
-
   if(res.data.length > 0){
     courseList.value = res.data;
     const result = courseList.value.filter((item) => {
       return item.status === "승인";
     });
     state.resultItem = result;
+    state.resultItem.sort((a,b) =>a.title.localeCompare(b.title));
+    console.log(state.resultItem);
     state.visable = false;
     return;
   }
@@ -37,9 +37,6 @@ const myCourse = async (filters) => {
     state.visable = true;
   
     
-    
-  
-  console.log(state.visable)
 };
 </script>
 <template>

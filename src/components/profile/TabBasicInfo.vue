@@ -1,9 +1,4 @@
-<script setup>
-
-
-import { nextTick, ref as vueRef } from "vue";
-const sample6_detailAddressRef = vueRef(null);
-</script>
+<script setup></script>
 
 <template>
   <div class="info-box">
@@ -13,13 +8,7 @@ const sample6_detailAddressRef = vueRef(null);
           <td class="label-cell">우편번호</td>
           <td class="value-cell">
             <div class="search-box">
-              <input
-                type="text"
-                placeholder="34158"
-                v-model="sample6_postcode"
-                readonly
-              />
-              
+              <input type="text" placeholder="34158" readonly />
             </div>
           </td>
 
@@ -30,12 +19,7 @@ const sample6_detailAddressRef = vueRef(null);
         <tr>
           <td class="label-cell">주소</td>
           <td class="value-cell">
-            <input
-              type="text"
-              v-model="sample6_address"
-              readonly
-              style="width: 100%"
-            />
+            <input type="text" readonly style="width: 100%" />
           </td>
 
           <td class="label-cell">병역구분</td>
@@ -45,21 +29,9 @@ const sample6_detailAddressRef = vueRef(null);
         <tr>
           <td class="label-cell">상세주소</td>
           <td class="value-cell" colspan="3">
-            <input
-              type="text"
-              v-model="sample6_address"
-              readonly
-              style="width: 100%"
-            />
-            <input type="hidden" v-model="sample6_extraAddress" />
+            <input type="text" readonly style="width: 100%" />
+            <input type="hidden" />
           </td>
-        </tr>
-
-        <tr>
-          <td class="label-cell">　</td>
-          <td class="value-cell">　</td>
-          <td class="label-cell">　</td>
-          <td class="value-cell">　</td>
         </tr>
       </tbody>
     </table>

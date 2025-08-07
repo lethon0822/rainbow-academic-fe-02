@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch } from "vue";
 
 const props = defineProps({
   profile: {
@@ -16,8 +16,8 @@ const currentProfileImage = ref(null); // 세션 저장용 프로필 이미지
 
 // 폼 데이터 상태
 const formData = reactive({
-  studentType: '대학생',
-  department: '선택',
+  studentType: "대학생",
+  department: "선택",
 });
 
 const loadUserProfileImage = () => {
@@ -27,10 +27,10 @@ const loadUserProfileImage = () => {
   if (savedImage) {
     currentProfileImage.value = savedImage;
   } else {
-    if (props.profile.loginId === '20220001') {
+    if (props.profile.loginId === "20220001") {
       // 시연용 기본 프로필 이미지
       currentProfileImage.value =
-        'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjBGMEYwIi8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjE2IiBmaWxsPSIjNkM3NTdEIi8+CjxwYXRoIGQ9Ik0zMCA4MEMzMCA3MS4xNjM0IDQ0LjUzNjYgNjQgNjAgNjRDNzUuNDYzNCA2NCA5MCA3MS4xNjM0IDkwIDgwVjEwMEgzMFY4MFoiIGZpbGw9IiM2Qzc1N0QiLz4KPC9zdmc+';
+        "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjBGMEYwIi8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjE2IiBmaWxsPSIjNkM3NTdEIi8+CjxwYXRoIGQ9Ik0zMCA4MEMzMCA3MS4xNjM0IDQ0LjUzNjYgNjQgNjAgNjRDNzUuNDYzNCA2NCA5MCA3MS4xNjM0IDkwIDgwVjEwMEgzMFY4MFoiIGZpbGw9IiM2Qzc1N0QiLz4KPC9zdmc+";
     }
   }
 };
@@ -60,13 +60,13 @@ const handleImageSelect = (event) => {
   if (file) {
     // 파일 크기 체크
     if (file.size > 5 * 1024 * 1024) {
-      alert('파일 크기는 5MB 이하여야 합니다.');
+      alert("파일 크기는 5MB 이하여야 합니다.");
       return;
     }
 
     // 파일 형식 체크
-    if (!file.type.startsWith('image/')) {
-      alert('이미지 파일만 업로드 가능합니다.');
+    if (!file.type.startsWith("image/")) {
+      alert("이미지 파일만 업로드 가능합니다.");
       return;
     }
 
@@ -90,7 +90,7 @@ const openFileDialog = () => {
 const removeImage = () => {
   selectedImage.value = null;
   imagePreview.value = null;
-  fileInput.value.value = '';
+  fileInput.value.value = "";
 
   // 세션에서도 제거
   const sessionKey = `profileImage_${props.profile.loginId}`;
@@ -116,18 +116,18 @@ const saveProfile = async () => {
       department: formData.department,
     };
 
-    const response = await fetch('/api/profile/update', {
-      method: 'POST',
+    const response = await fetch("/api/profile/update", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
       body: JSON.stringify(formDataToSend),
     });
 
     if (response.ok || true) {
       alert(
-        '프로필이 성공적으로 업데이트되었습니다.\n(이미지는 세션 동안만 유지됩니다)'
+        "프로필이 성공적으로 업데이트되었습니다.\n(이미지는 세션 동안만 유지됩니다)"
       );
 
       // 임시 미리보기 상태 초기화
@@ -135,8 +135,8 @@ const saveProfile = async () => {
       imagePreview.value = null;
     }
   } catch (error) {
-    console.error('프로필 업데이트 오류:', error);
-    alert('프로필 업데이트 중 오류가 발생했습니다.');
+    console.error("프로필 업데이트 오류:", error);
+    alert("프로필 업데이트 중 오류가 발생했습니다.");
   }
 };
 </script>
@@ -149,7 +149,7 @@ const saveProfile = async () => {
         <button
           class="btn btn-primary"
           @click="saveProfile"
-          v-if="imagePreview"
+          v-if="imagePreview || currentProfileImage"
         >
           저장
         </button>
@@ -211,40 +211,37 @@ const saveProfile = async () => {
       <div class="profile-info">
         <div class="left-info">
           <table>
-            <tr>
-              <td class="label-cell">학번</td>
-              <td class="value-cell">{{ profile.loginId }}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <td class="label-cell">학번</td>
+                <td class="value-cell">{{ profile.loginId }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">성명(한글)</td>
-              <td class="value-cell">{{ profile.userName }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">성명(한글)</td>
+                <td class="value-cell">{{ profile.studentName }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">E-mail</td>
-              <td class="value-cell">{{ profile.email }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">E-mail</td>
+                <td class="value-cell">{{ profile.email }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">학생구분</td>
-              <td class="value-cell">
-                <select v-model="formData.studentType">
-                  <option>대학생</option>
-                  <option>대학원생</option>
-                </select>
-              </td>
-            </tr>
+              <tr>
+                <td class="label-cell">학생구분</td>
+                <td class="value-cell one-cell">대학생</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">최종등록연도</td>
-              <td class="value-cell">{{ profile.year }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">최종등록연도</td>
+                <td class="value-cell">{{ profile.year }}</td>
+              </tr>
 
-            <tr>
-              <td class="label-cell">학적상태</td>
-              <td class="value-cell">{{ profile.status }}</td>
-            </tr>
+              <tr>
+                <td class="label-cell">학적상태</td>
+                <td class="value-cell">{{ profile.status }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
@@ -288,7 +285,7 @@ const saveProfile = async () => {
             <tr>
               <td class="label-cell">졸업충족학점</td>
               <td class="value-cell" colspan="2">
-                {{ profile.totalCredits }}(이수) / 140(총)
+                {{ profile.totalCredits }}(이수) / 130(총)
               </td>
             </tr>
           </table>
@@ -362,7 +359,7 @@ const saveProfile = async () => {
 }
 
 body {
-  font-family: 'Malgun Gothic', sans-serif;
+  font-family: "Malgun Gothic", sans-serif;
   background-color: #f5f5f5;
   margin: 0;
   padding: 20px;
@@ -384,8 +381,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
-  left: -20px;
-
+  left: -18px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -397,7 +393,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 30px 35px 20px;
+  padding: 18px 30px 12px 20px;
   border-radius: 8px;
 }
 
@@ -431,8 +427,8 @@ body {
 }
 
 .avatar {
-  width: 170px;
-  height: 170px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   border: 3px solid #6c757d;
   display: flex;
@@ -457,10 +453,10 @@ body {
 
 .camera-icon {
   position: absolute;
-  bottom: 38px;
-  right: 75px;
-  width: 50px;
-  height: 50px;
+  bottom: 22px;
+  right: 55px;
+  width: 60px;
+  height: 60px;
   background-color: #6c757d;
   border-radius: 50%;
   display: flex;
@@ -479,11 +475,13 @@ body {
 }
 
 .left-info {
-  width: 560px;
+  width: 575px;
+  flex-shrink: 0;
 }
 
 .right-info {
   flex: 1;
+  min-width: 0;
 }
 
 table {
@@ -559,5 +557,9 @@ select {
 .dropdown-arrow {
   float: right;
   color: #6c757d;
+}
+
+td.one-cell {
+  padding: 12px;
 }
 </style>

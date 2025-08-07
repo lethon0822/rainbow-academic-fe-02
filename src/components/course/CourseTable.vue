@@ -6,7 +6,7 @@ defineProps({
   courseList: Array,
   maxHeight: {
     type: String,
-    default: "800px",
+    default: "700px",
   },
   show: {
     type: Object,
@@ -21,7 +21,7 @@ defineProps({
     }),
   },
 });
-defineEmits(["enroll", "cancel"]);
+defineEmits(["enroll", "cancel", "check"]);
 
 const change = (status) => {
   if (status === '거부') return "gray";
@@ -63,8 +63,8 @@ const send = (id, json) => {
           <th class="maxStd">정원</th>
           <th class="remStd" v-if="show.remStd">잔여</th>
           <th v-if="show.enroll || show.cancel" class="enroll-action">수강</th>
-          <th v-if="show.modify">승인여부</th>
-          <th v-if="show.setting || show.modify"> </th>
+          <th v-if="show.modify" class="status">승인여부</th>
+          <th v-if="show.setting || show.modify || show.check" class="button"> </th>
         </tr>
       </thead>
       <tbody>
@@ -75,8 +75,7 @@ const send = (id, json) => {
             <div v-else>{{ course.deptName }}</div>
           </td>
           <td class="title">
-            <div v-if="show.modify">{{ course.title }}</div>
-            <div v-else @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
+            <div @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
           </td>
           <td class="classroom">{{ course.classroom }}</td>
           <td class="type">{{ course.type }}</td>
@@ -102,12 +101,16 @@ const send = (id, json) => {
               수강취소
             </button>
           </td>
-          <td v-else-if="show.setting">
+          <td v-else-if="show.setting" class="button">
             <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
           </td>
-          <td v-else-if="show.modify && course.status !== '승인'">
+          <td v-else-if="show.check" class="button">
+              <!-- 학생관리 라우팅 처리해야함 -->
+                <button class="enroll-btn" @click="$emit('check', course.courseId, course.title)">강의평 보기</button>
+          </td>
+          <td v-else-if="show.modify" class="button" v-if="course.status !=='승인'" >
             <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
-              <button class="enroll-btn d-flex btn">수정</button>
+              <button class="enroll-btn d-flex" >수정</button>
             </router-link>
           </td>
         </tr>
@@ -164,6 +167,7 @@ button {
   font-weight: 500;
   transition: background-color 0.2s ease;
 }
+
 button.enroll-btn {
   background-color: #2460CE;
   color: #fff;
@@ -171,6 +175,7 @@ button.enroll-btn {
     background-color: #1F53B5;
   }
 }
+
 .enroll-btn.enrolled {
   background-color: gray;
   cursor: not-allowed;
@@ -206,42 +211,46 @@ button.cancel-btn {
   color: #2460ce;
   font-weight: 700;
 }
-
-/* ✅ 열 너비 설정 */
-th.code, td.code {
-  width: 90px;
-}
+// th.code, td.code {
+//   width: 90px;
+// }
 th.deptName, td.deptName {
-  width: 130px;
-}
-th.title, td.title {
   width: 150px;
 }
-th.classroom, td.classroom {
-  width: 140px;
-}
+// th.title, td.title {
+//   width: 150px;
+// }
+// th.classroom, td.classroom {
+//   width: 140px;
+// }
 th.type, td.type {
-  width: 70px;
+  width: 100px;
 }
 th.professor, td.professor {
-  width: 70px;
+  width: 100px;
 }
-th.grade, td.grade {
-  width: 150px;
-}
+// th.grade, td.grade {
+//   width: 150px;
+// }
 th.time, td.time {
   width: 80px;
 }
 th.credit, td.credit {
-  width: 50px;
+  width: 70px;
 }
 th.maxStd, td.maxStd {
-  width: 60px;
+  width: 70px;
 }
 th.remStd, td.remStd {
-  width: 60px;
+  width: 70px;
 }
 th.enroll-action, td.enroll-action {
   width: 100px;
+}
+.status{
+  width: 120px;
+}
+.button{
+  width: 150px;
 }
 </style>

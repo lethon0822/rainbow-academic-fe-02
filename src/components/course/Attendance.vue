@@ -1,82 +1,52 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted} from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
 
 const router = useRouter();
-const attendDate = ref('');
+const attendDate = ref(new Date().toISOString().slice(0, 10));
+const students = ref([]);
 
 const state = reactive({
   data:[],
-  courseId:null
+  courseId:''
 })
 
-onMounted(()=>{
-  const arrData = history.state.data;
-  state.courseId = history.state.id;
-  state.data = arrData
-})
-
-// 임시 하드코딩 학생 데이터
-const students = ref([
-  {
-    enrollmentId: 171,
-    name: 'lily',
-    studentId: '20257945',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId:172,
-    name: 'Andy',
-    studentId: '20257946',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 173,
-    name: 'Hannah',
-    studentId: '20257947',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 174,
-    name: 'Jacob',
-    studentId: '20257948',
-    status: '결석',
-    note: '',
-  },
-  {
-    enrollmentId: 176,
-    name: 'lucy',
-    studentId: '20257949',
-    status: '결석',
-    note: '',
-  },
-]);
-
+onMounted(async ()=>{
+  const passJson = history.state.data;
+  const passid = history.state.id;
+  const nana = JSON.parse(passJson);
+  state.data = nana.map(s => ({
+    ...s,
+    status: s.status ?? '결석',
+    note: s.note ?? '',
+  }));
+  const id = JSON.parse(passid)
+  state.courseId = id;
+  console.log('스테이트데이타:',state.data)
+  console.log('라우팅 아이디:',state.courseId)
+  }
+)
+const isLoading = ref(false);
 const saveAttendance = async () => {
   if (!attendDate.value) {
     alert("출결일자를 선택해주세요.");
     return;
   }
-
+  isLoading.value = true; // 로딩 시작
   try {
     for (const s of students.value) {
       if (!s.status) {
         alert(`학생 ${s.name}의 출결 상태를 선택해주세요.`);
         return;
       }
-
       const data = {
         attendDate: attendDate.value,
         enrollmentId: s.enrollmentId,
         status: s.status,
         note: s.note,
       };
-
       const { data: exists } = await axios.post(
         '/professor/course/check/exist',
         data
@@ -87,16 +57,16 @@ const saveAttendance = async () => {
         await axios.put('/professor/course/check', data);
       }
     }
-
     alert("출결 저장 완료!"); // 알림 띄우고
     await router.push("/professor/attendance"); // 교수 홈으로 이동 (원하는 경로 바꿔도 됨)
   } catch (error) {
     console.error("출결 저장 중 오류:", error);
     alert("출결 저장 중 오류가 발생했습니다.");
+  } finally {
+    isLoading.value = false; //로딩 끝
   }
 };
 </script>
-
 <template>
   <WhiteBox title="출결 관리">
     <div class="container mt-4">
@@ -119,9 +89,9 @@ const saveAttendance = async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="s in students" :key="s.enrollmentId">
-            <td>{{ s.name }}</td>
-            <td>{{ s.studentId }}</td>
+          <tr v-for="s in state.data" :key="s.enrollmentId">
+            <td>{{ s.userName }}</td>
+            <td>{{ s.loginId }}</td>
             <td>
               <select v-model="s.status" class="form-select">
                 <option disabled value="">선택</option>
@@ -145,13 +115,12 @@ const saveAttendance = async () => {
       </table>
       <div class="text-center mt-4">
         <button @click="saveAttendance" class="btn btn-primary px-4">
-          저장!
+          저장
         </button>
       </div>
     </div>
   </WhiteBox>
 </template>
-
 <style scoped lang="scss">
 // .attendance-wrapper {
 //   padding-left: 160px; // 사이드바 피해서
@@ -160,7 +129,6 @@ const saveAttendance = async () => {
 //   display: flex;
 //   justify-content: center;
 // }
-
 // .attendance-box {
 //   max-width: 800px;
 //   width: 100%; /* 최대 크기까지 확장 가능 */
@@ -168,27 +136,22 @@ const saveAttendance = async () => {
 //   padding: 24px;
 //   border-radius: 12px;
 //   box-shadow: 0 0 10px rgba(0,0,0,0.08);
-
 //   /* 중앙보다는 약간 오른쪽으로 밀고 싶으면 margin-left 조절 */
 //   margin-left: 80px;
 // }
-
 :deep(.attendance-table) {
   border-collapse: collapse;
   width: 100%;
-  border: 1px solid #ddd;  /* ✅ 테두리 전체 */
-
+  border: 1px solid #ddd;  /* :흰색_확인_표시: 테두리 전체 */
   th, td {
-    border: 1px solid #ddd !important; /* ✅ 셀 간 경계선 */
+    border: 1px solid #ddd !important; /* :흰색_확인_표시: 셀 간 경계선 */
     padding: 8px;
     text-align: center;
   }
-
   th {
     background-color: #364157;
     color: white;
   }
-
   input,
   select {
     padding: 4px 6px;

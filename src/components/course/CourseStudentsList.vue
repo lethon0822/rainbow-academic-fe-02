@@ -43,10 +43,11 @@ onMounted(async ()=>{
 })
 
 const attendance = () =>{
+  console.log("넘겨줄 데이터",state.data)
   const jsonBody = JSON.stringify(state.data)
 
   router.push({
-    path: '/attendance',
+    path: '/professor/attendance',
     state:{
       data: jsonBody
       ,id: route.params.id
@@ -56,6 +57,7 @@ const attendance = () =>{
 }
 
 const enrollmentGrade = () =>{
+  console.log("넘겨줄 데이터",state.data)
   const jsonBody = JSON.stringify(state.data)
 
   router.push({
@@ -138,13 +140,9 @@ const enrollmentGrade = () =>{
       </div>
     </div>
 
-    <div class="button d-flex">
-      <router-link to="/professor/attendance">
-        <button class="btn btn-primary">출결관리</button>
-      </router-link>
-      <router-link to="/EnrollmentGrade">
-        <button class="btn btn-primary">성적관리</button>
-      </router-link>
+    <div class="button">
+        <button class="btn btn-primary " @click="attendance">출결관리</button>
+        <button class="btn btn-primary" @click="enrollmentGrade">성적관리</button>
     </div>
 
     <div class="table-container">
@@ -196,13 +194,17 @@ const enrollmentGrade = () =>{
 }
 
 .button{
+  width: 100%;
   justify-content: flex-end;
-  margin-right: 26px;
+  display: flex;
+ padding-right: 12px;
+}
 
   .btn{
-    background-color: #2460CE
+    display: flex;
+    background-color: #2460CE;
   }
-}
+
 
 .student-table{
   display: flex;

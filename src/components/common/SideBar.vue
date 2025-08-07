@@ -159,11 +159,11 @@ watch(
               학적기본사항관리
             </router-link>
           </li>
-          <li>
+          <!-- <li>
             <router-link to="/grade/all" class="router-link"
               >학적변동관리</router-link
             >
-          </li>
+          </li> -->
           <li>
             <router-link to="/renewal/privacy" class="router-link">
               개인정보변경
@@ -171,18 +171,20 @@ watch(
           </li>
         </ul>
       </li>
+
       <template v-if="userStore.userRole !== 'professor'">
-      <li class="menu-sugang">
-        <a href="javascript:void(0);">수강</a>
-        <ul>
-          <li><a href="javascript:void(0);">수강조회</a></li>
-          <li>
-            <router-link to="/enrollment" class="router-link">수강신청 관리</router-link
-            >
-          </li>
-        </ul>
-      </li>
-    </template>
+        <li class="menu-sugang">
+          <a href="javascript:void(0);">수강</a>
+          <ul>
+            <!-- <li><a href="javascript:void(0);">수강조회</a></li> -->
+            <li>
+              <router-link to="/enrollment" class="router-link"
+                >수강신청 관리</router-link
+              >
+            </li>
+          </ul>
+        </li>
+      </template>
 
       <!-- 추후 v-if설정 해야함 -->
       <li class="menu-gangui">
@@ -194,15 +196,34 @@ watch(
             >
           </li>
           <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/course/status">강의개설신청 및 신청현황조회</router-link>
+            <router-link to="/professor/course/status"
+              >강의개설신청 및 신청현황조회</router-link
+            >
           </li>
           <li v-if="userStore.userRole !== 'student'">
             <router-link to="/professor/course/management"
               >강의관리</router-link
             >
           </li>
+          <li v-if="userStore.userRole !== 'student'">
+            <router-link to="/professor/survey/check">강의평가조회</router-link>
+          </li>
         </ul>
       </li>
+
+      <!-- 학적 -->
+      <template v-if="userStore.userRole !== 'professor'">
+        <li class="menu-score">
+          <a href="javascript:void(0);">성적</a>
+          <ul>
+            <li>
+              <router-link to="/grade/all" class="router-link"
+                >영구성적조회</router-link
+              >
+            </li>
+          </ul>
+        </li>
+      </template>
 
       <!-- <li class="menu-etc">
         <a href="javascript:void(0);">기타 다른 메뉴</a>
@@ -288,7 +309,8 @@ body {
 #accordian li.menu-sugang > a,
 #accordian li.menu-hakjeok > a,
 #accordian li.menu-gangui > a,
-#accordian li.menu-etc > a {
+#accordian li.menu-etc > a,
+#accordian li.menu-score > a {
   background-color: #febe3a;
   color: #364157;
   border: 1px solid #febe3a;
@@ -346,8 +368,8 @@ body {
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
 #accordian
-  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(
-    .menu-gangui
+  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
+    .menu-score
   ).active
   > a {
   background-color: transparent;
