@@ -121,7 +121,6 @@ const check = async (courseId, title) =>{
   align-items: center;
   margin-top: 50px;
   gap: 20px;
-  
   h3{
     margin: 0;
   }
