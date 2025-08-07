@@ -32,10 +32,13 @@ onMounted(async ()=>{
     state.course = nana
 
     const id = state.course.courseId
+    console.log('아이디',id)
     const res = await courseStudentList(id);
+    console.log('냐냐',res)
     
     if(res.data.length > 0){
       state.data =res.data
+      console.log('스테이트',state.data)
       return;
     }
     
