@@ -78,6 +78,7 @@ const handleEnroll = async (course) => {
       alert('수강신청이 완료되었습니다.');
 
       try{
+        // 강의 목록 리패치 시 신청 완료 버튼 띄우기 위함
         const fetchCourseListRes = await getCourseListByFilter(lastFilters.value);
         courseList.value = fetchCourseListRes.data.map((course) => {
           course.enrolled = mySugangList.value.some((c) => c.courseId === course.courseId);
@@ -103,30 +104,37 @@ const handleCancel = async (courseId) => {
   if (!confirm('수강신청을 취소하시겠습니까?')) return;
 
   try {
-    await deleteSugangCancel(courseId);
+    const res = await deleteSugangCancel(courseId);
 
-    // mySugangList에서 제거
-    mySugangList.value = mySugangList.value.filter(
-      (course) => course.courseId !== courseId
-    );
+    // 성공 시만 처리
+    if (res.status === 200) {
+      // mySugangList에서 제거
+      mySugangList.value = mySugangList.value.filter(
+        (course) => course.courseId !== courseId
+      );
 
-    // courseList에서도 enrolled = false, 잔여 인원 +1
-    const idx = courseList.value.findIndex(
-      (course) => course.courseId === courseId
-    );
-    if (idx !== -1) {
-      courseList.value[idx].enrolled = false;
-      courseList.value[idx].remStd += 1;
+      // courseList에서도 enrolled = false, 잔여 인원 +1
+      const idx = courseList.value.findIndex(
+        (course) => course.courseId === courseId
+      );
+      if (idx !== -1) {
+        courseList.value[idx].enrolled = false;
+        courseList.value[idx].remStd += 1;
+      }
+
+      alert('수강신청이 취소되었습니다.');
     }
-
-    alert('수강신청이 취소되었습니다.');
   } catch (error) {
-    alert(
-      '오류가 발생하였습니다. 현재 이 강의는 출석테이블이랑 연동되어 있어서 수강취소가 안 됨. db 수정필요'
-    );
+    if (error.response?.status === 400) {
+      alert(error.response?.data || '수강취소 실패');
+    } else {
+      alert('수강신청 취소 실패! 예기치 못한 오류가 발생했습니다.');
+    }
     console.error(error);
   }
 };
+
+
 </script>
 
 <template>
