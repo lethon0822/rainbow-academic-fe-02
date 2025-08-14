@@ -181,32 +181,30 @@ const saveGrade = async () => {
   </WhiteBox>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 :deep(.grade-table) {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 16px;
   border: 1px solid #ddd; /* 테이블 외곽선 */
-
   th,
   td {
     border: 1px solid #ddd !important; /* 셀 구분선 */
     padding: 8px;
     text-align: center;
   }
-
   th {
     background-color: #364157;
     color: white;
   }
-
   input {
     width: 100%;
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: center;
-    background-color: #f8f9fa; /* 입력 칸에 연한 회색 */
+    background-color: #F8F9FA; /* 입력 칸에 연한 회색 */
   }
 }
 </style>
+

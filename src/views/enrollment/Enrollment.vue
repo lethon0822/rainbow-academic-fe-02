@@ -15,6 +15,8 @@ const departments = ref([]);
 const years = ref([]);
 const courseList = ref([]); // 이번학기 개설 강의 목록
 const mySugangList = ref([]); // 수강신청한 강의 목록
+const lastFilters = ref({}); // 마지막 검색 필터 저장용 변수
+
 
 // 신청 학점 계산
 const totalCredit = computed(() =>
@@ -39,8 +41,10 @@ onMounted(async () => {
 
 // 필터에 따른 개설 강의 목록 조회
 const handleSearch = async (filters) => {
+  lastFilters.value = { ...filters }; 
   const courseListRes = await getCourseListByFilter(filters);
 
+  // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
   courseList.value = courseListRes.data.map((course) => {
     course.enrolled = mySugangList.value.some(
       (c) => c.courseId === course.courseId
@@ -72,21 +76,26 @@ const handleEnroll = async (course) => {
 
       mySugangList.value.push(updatedCourse);
       alert('수강신청이 완료되었습니다.');
+
+      try{
+        // 강의 목록 리패치 시 신청 완료 버튼 띄우기 위함
+        const fetchCourseListRes = await getCourseListByFilter(lastFilters.value);
+        courseList.value = fetchCourseListRes.data.map((course) => {
+          course.enrolled = mySugangList.value.some((c) => c.courseId === course.courseId);
+          return course;
+        });
+
+      }catch(error){
+        alert('목록 새로고침 실패. 페이지를 새로고침 해주세요.');
+        
+      }
+
+
+      
     }
   } catch (error) {
-    const err = error.response.data;
-    switch (err.code) {
-      case 4002:
-        alert('정원 초과! 수강신청에 실패하였습니다.');
-        break;
-      case 5001:
-        alert('서버 오류! 수강신청에 실패하였습니다.');
-        break;
-      default:
-        alert(
-          '오류가 발생하였습니다.'
-        );
-    }
+    const err = error.response?.data;
+    alert(err?.message || '예기치 못한 오류가 발생했습니다.');
   }
 };
 
@@ -95,28 +104,37 @@ const handleCancel = async (courseId) => {
   if (!confirm('수강신청을 취소하시겠습니까?')) return;
 
   try {
-    await deleteSugangCancel(courseId);
+    const res = await deleteSugangCancel(courseId);
 
-    // mySugangList에서 제거
-    mySugangList.value = mySugangList.value.filter(
-      (course) => course.courseId !== courseId
-    );
+    // 성공 시만 처리
+    if (res.status === 200) {
+      // mySugangList에서 제거
+      mySugangList.value = mySugangList.value.filter(
+        (course) => course.courseId !== courseId
+      );
 
-    // courseList에서도 enrolled = false, 잔여 인원 +1
-    const idx = courseList.value.findIndex(
-      (course) => course.courseId === courseId
-    );
-    if (idx !== -1) {
-      courseList.value[idx].enrolled = false;
-      courseList.value[idx].remStd += 1;
+      // courseList에서도 enrolled = false, 잔여 인원 +1
+      const idx = courseList.value.findIndex(
+        (course) => course.courseId === courseId
+      );
+      if (idx !== -1) {
+        courseList.value[idx].enrolled = false;
+        courseList.value[idx].remStd += 1;
+      }
+
+      alert('수강신청이 취소되었습니다.');
     }
-
-    alert('수강신청이 취소되었습니다.');
   } catch (error) {
-    alert('오류가 발생하였습니다. 현재 이 강의는 출석테이블이랑 연동되어 있어서 수강취소가 안 됨. db 수정필요');
+    if (error.response?.status === 400) {
+      alert(error.response?.data || '수강취소 실패');
+    } else {
+      alert('수강신청 취소 실패! 예기치 못한 오류가 발생했습니다.');
+    }
     console.error(error);
   }
 };
+
+
 </script>
 
 <template>
@@ -145,8 +163,8 @@ const handleCancel = async (courseId) => {
     />
 
     <!-- 나의 수강신청 내역 -->
-    <div class="creditInfo d-flex  mt-5 mb-0.3rem ms-3">
-      <h5 class="fw-bold ">신청 내역</h5>
+    <div class="creditInfo d-flex mt-5 mb-0.3rem ms-3">
+      <h5 class="fw-bold">신청 내역</h5>
       <div class="credit-box">
         <span>최대 학점: 18학점</span>
         <span>신청 학점: {{ totalCredit }}학점</span>
@@ -185,7 +203,7 @@ const handleCancel = async (courseId) => {
   font-weight: 500;
 }
 
-.table-container{
+.table-container {
   margin-top: 2px;
 }
 </style>
