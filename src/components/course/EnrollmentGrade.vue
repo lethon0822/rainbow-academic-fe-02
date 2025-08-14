@@ -9,7 +9,6 @@ import WhiteBox from '@/components/common/WhiteBox.vue';
 const router = useRouter();
 const isLoading = ref(false);
 
-
 // 라우터로부터 받은 데이터 보관용
 const state = reactive({
   data: [],
@@ -39,7 +38,6 @@ const getGrade = (total) => {
 
 // 페이지 진입 시 전달된 데이터 파싱 및 기본값 0 세팅
 onMounted(() => {
-  
   const passJson = history.state.data;
   const passid = history.state.id;
 
@@ -59,8 +57,6 @@ onMounted(() => {
   console.log('학생 목록(history):', state.data);
   console.log('코스 아이디:', state.courseId);
 });
-
-
 
 // 성적 저장 로직
 const saveGrade = async () => {
