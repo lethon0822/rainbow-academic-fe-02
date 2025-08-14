@@ -3,16 +3,13 @@ import { ref, reactive, onMounted} from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
-
 const router = useRouter();
 const attendDate = ref(new Date().toISOString().slice(0, 10));
 const students = ref([]);
-
 const state = reactive({
   data:[],
   courseId:''
 })
-
 console.log('출결 저장 데이터:', students.value)
 onMounted(async ()=>{
   const passJson = history.state.data;
@@ -80,12 +77,10 @@ const statusOptions = [
   <WhiteBox title="출결 관리">
     <div class="container mt-4">
       <h2 class="text-center fw-bold mb-4">출결 입력창</h2>
-
       <div class="mb-3">
         <label class="form-label">출결일자</label>
         <input type="date" v-model="attendDate" class="form-control w-25" />
       </div>
-
       <table class="attendance-table">
         <thead class="grade-table-header">
           <tr>
@@ -132,7 +127,6 @@ const statusOptions = [
           </tr>
         </tbody>
       </table>
-
       <div class="text-center mt-4">
         <button @click="saveAttendance" class="btn btn-primary px-4">
           저장

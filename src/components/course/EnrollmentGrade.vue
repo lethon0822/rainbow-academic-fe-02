@@ -9,7 +9,6 @@ import WhiteBox from '@/components/common/WhiteBox.vue';
 const router = useRouter();
 const isLoading = ref(false);
 
-
 // 라우터로부터 받은 데이터 보관용
 const state = reactive({
   data: [],
@@ -39,7 +38,6 @@ const getGrade = (total) => {
 
 // 페이지 진입 시 전달된 데이터 파싱 및 기본값 0 세팅
 onMounted(() => {
-  
   const passJson = history.state.data;
   const passid = history.state.id;
 
@@ -59,8 +57,6 @@ onMounted(() => {
   console.log('학생 목록(history):', state.data);
   console.log('코스 아이디:', state.courseId);
 });
-
-
 
 // 성적 저장 로직
 const saveGrade = async () => {
@@ -185,32 +181,30 @@ const saveGrade = async () => {
   </WhiteBox>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 :deep(.grade-table) {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 16px;
   border: 1px solid #ddd; /* 테이블 외곽선 */
-
   th,
   td {
     border: 1px solid #ddd !important; /* 셀 구분선 */
     padding: 8px;
     text-align: center;
   }
-
   th {
     background-color: #364157;
     color: white;
   }
-
   input {
     width: 100%;
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: center;
-    background-color: #f8f9fa; /* 입력 칸에 연한 회색 */
+    background-color: #F8F9FA; /* 입력 칸에 연한 회색 */
   }
 }
 </style>
+
