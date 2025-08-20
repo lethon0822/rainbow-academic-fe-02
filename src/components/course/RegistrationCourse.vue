@@ -22,8 +22,8 @@ const state = reactive({
     deptName: '',
     courseId: 0,
     classroom: "",
-    type: "전공",
-    semester: 1,
+    semesterId: 12,
+    type: "전공필수",
     time: "",
     title: "",
     credit: null,
@@ -38,7 +38,7 @@ const state = reactive({
 watch(
   () => state.form.type,
   (newType) => {
-    if (newType !== '전공') {
+    if (newType !== '전공필수') {
       state.form.grade = 0;
     }
   }
@@ -108,8 +108,10 @@ const back = () => {
           <div class="table-title">교과구분</div>
           <div class="table-content">
             <select v-model="state.form.type" required>
-              <option>전공</option>
-              <option>교양</option>
+              <option>전공필수</option>
+              <option>전공선택</option>
+              <option>교양필수</option>
+              <option>교양선택</option>
             </select>
           </div>
           <div class="table-title">학과명</div>
