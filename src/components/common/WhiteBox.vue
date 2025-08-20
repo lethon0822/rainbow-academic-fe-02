@@ -19,7 +19,8 @@ defineProps({
 .white-box {
   background-color: white;
   padding: 30px;
-  margin: 30px 30px 30px 250px;
+  margin: 30px 30px 30px; 
+  /* margin: 30px 30px 30px 250px;  */
   width: 100%;
   max-width: 1430px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

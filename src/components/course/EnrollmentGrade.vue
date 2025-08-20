@@ -9,28 +9,30 @@ import WhiteBox from '@/components/common/WhiteBox.vue';
 const router = useRouter();
 const isLoading = ref(false);
 
-
 // 라우터로부터 받은 데이터 보관용
 const state = reactive({
   data: [],
   courseId: '',
 });
+console.log('받은 데이터', state.data);
 
 // 총점 계산 함수
 const totalScore = (s) => {
   return (
-    (s.midterm || 0) +
-    (s.final || 0) +
-    (s.assignment || 0) +
-    (s.attendance || 0)
+    (s.attendance || 0) * 0.2 +
+    (s.midterm || 0) * 0.3 +
+    (s.final || 0) * 0.3 +
+    (s.assignment || 0) * 0.2
   );
 };
 
 const getGrade = (total) => {
+  if (total >= 95) return 'A+';
   if (total >= 90) return 'A';
+  if (total >= 85) return 'B+';
   if (total >= 80) return 'B';
+  if (total >= 75) return 'C+';
   if (total >= 70) return 'C';
-  if (total >= 60) return 'D';
   return 'F';
 };
 
@@ -56,8 +58,6 @@ onMounted(() => {
   console.log('코스 아이디:', state.courseId);
 });
 
-
-
 // 성적 저장 로직
 const saveGrade = async () => {
   isLoading.value = true;
@@ -66,27 +66,18 @@ const saveGrade = async () => {
     for (const s of state.data) {
       const data = {
         enrollmentId: s.enrollmentId,
-        attendance: s.attendance || 0,
-        midterm: s.midterm || 0,
-        final: s.final || 0,
-        assignment: s.assignment || 0,
-        total: totalScore(s),
+        attendanceScore: s.attendance || 0,
+        midScore: s.midterm || 0,
+        finScore: s.final || 0,
+        assignmentScore: s.assignment || 0,
+        rank: getGrade(totalScore(s)),
       };
 
-      const { data: exists } = await axios.post(
-        '/professor/grade/check/exist',
-        data
-      );
-
-      if (exists === 0) {
-        await axios.post('/professor/grade/save', data);
-      } else {
-        await axios.put('/professor/grade/update', data);
-      }
+      await axios.put('http://localhost:8080/api/professor/course/grade', data);
     }
 
     alert('성적 저장 완료!');
-    await router.push('/professor/grade');
+    await router.push('/enrollmentgrade');
   } catch (err) {
     console.error('성적 저장 오류:', err);
     alert('성적 저장 중 오류가 발생했습니다.');
@@ -122,7 +113,7 @@ const saveGrade = async () => {
           <tr v-for="s in state.data" :key="s.enrollmentId">
             <td>{{ s.userName }}</td>
             <td>{{ s.loginId }}</td>
-            <td>{{ s.departmentName }}</td>
+            <td>{{ s.deptName }}</td>
             <!-- 학과 -->
 
             <!-- 출석 점수 입력 -->
@@ -190,32 +181,30 @@ const saveGrade = async () => {
   </WhiteBox>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 :deep(.grade-table) {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 16px;
   border: 1px solid #ddd; /* 테이블 외곽선 */
-
   th,
   td {
     border: 1px solid #ddd !important; /* 셀 구분선 */
     padding: 8px;
     text-align: center;
   }
-
   th {
     background-color: #364157;
     color: white;
   }
-
   input {
     width: 100%;
     padding: 6px;
     border: 1px solid #ccc;
     border-radius: 4px;
     text-align: center;
-    background-color: #f8f9fa; /* 입력 칸에 연한 회색 */
+    background-color: #F8F9FA; /* 입력 칸에 연한 회색 */
   }
 }
 </style>
+

@@ -11,7 +11,8 @@ const state = reactive({
   visable: false,
   course: false,
   comment:[],
-  avg: 0
+  avg: 0,
+  title:'',
 });
 
 const courseList = ref([]); // 현재 유저의 전체 강의 목록
@@ -46,11 +47,14 @@ const myCourse = async (filters) => {
 
 
 
-const check = async (courseId) =>{
+const check = async (courseId, title) =>{
+
   const res = await checkSurvey(courseId)
   if(res.data.length > 0){
+    state.title = title;
     state.comment = res.data
     console.log(res.data)
+    console.log(state.comment)
 
     for (let item of state.comment) {
     state.avg += item.average
@@ -78,14 +82,19 @@ const check = async (courseId) =>{
       </div>
     </template>
 
-    <h3><b>강의평</b></h3>
+    <div class="d-flex check-comment">
+      <h3><b>강의평</b></h3> 
+      <span>{{ state.title }}</span>
+    </div>
     <hr>
     <template v-if="state.comment.length > 0 ">
-      <div class="comment-container">
-        <div class="comment" v-for="(item, index) in state.comment" :key="index">
-          <span>{{ item.review }}</span>
+      <template v-for="(item, index) in state.comment" :key="index">
+        <div class="comment-container" v-if="item.review !== null && item.review !=='' ">
+          <div class="comment">
+              <span>{{ item.review }}</span>
+          </div>
         </div>
-      </div>
+      </template>
     </template>
     <template v-if="state.visable">
       <div class="d-flex no-comment">
@@ -97,7 +106,7 @@ const check = async (courseId) =>{
 
 <style scoped lang="scss">
 .comment-container {
-  margin: 30px 0;
+  margin: 10px 0;
   margin-left: 15px;
   border-radius: 5px;
   width: 100%;
@@ -108,8 +117,13 @@ const check = async (courseId) =>{
   scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
 }
 
-h3{
+.check-comment{
+  align-items: center;
   margin-top: 50px;
+  gap: 20px;
+  h3{
+    margin: 0;
+  }
 }
 hr{
   margin-top: 5px;
