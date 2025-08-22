@@ -15,6 +15,7 @@ function sample6_execDaumPostcode() {
       let addr = ''; // 기본 주소
       let extraAddr = ''; // 참고 주소
 
+
       if (data.userSelectedType === 'R') {
         addr = data.roadAddress;
       } else {
@@ -40,6 +41,10 @@ function sample6_execDaumPostcode() {
       sample6_postcode.value = data.zonecode;
       sample6_address.value = addr;
 
+      // 맨처음에는 유저 테이블의 주소를 끌어와서 띄우고, 만약 api로 주소 변경시 그 값으로 갈아끼우는 작업 
+      state.data.address = `${addr} ${extraAddr}`.trim();
+
+
       // 상세주소 입력 칸에 포커스
       nextTick(() => {
         if (sample6_detailAddressRef.value) {
@@ -55,13 +60,15 @@ const state = reactive({
     loginId: '',
     userName: '',
     phone: '',
-    
+    address: '',
     email: '',
+    addDetail: '',
   },
 });
 
 onMounted(() => {
   selectPrivacy();
+  
 });
 
 const selectPrivacy = async () => {
@@ -70,7 +77,7 @@ const selectPrivacy = async () => {
     return;
   }
   state.data = res.data;
-  console.log(state.data);
+  console.log('셀렉트프라이버시: ', state.data);
 };
 
 const modifyPrivacy = async () => {
@@ -106,14 +113,14 @@ const modifyPrivacy = async () => {
             @click.prevent="sample6_execDaumPostcode"
             ></i>
 
-          <input type="text" class="name" v-model="sample6_address" disabled />
+          <input type="text" class="name" v-model="state.data.address" disabled />
         </div>
       </div>
 
       <div class="table d-flex">
         <div class="table-title">상세주소</div>
         <div class="table-content">
-          <input type="text" v-model="sample6_extraAddress" />
+          <input type="text" v-model="state.data.addDetail" />
         </div>
       </div>
 
