@@ -1,352 +1,304 @@
 <script setup>
-import WhiteBox from '@/components/common/WhiteBox.vue';
-import { reactive, ref, nextTick, onMounted } from 'vue';
-import { getPrivacy, putPrivacy } from '@/services/privacyService';
-
-const sample6_postcode = ref('');
-const sample6_address = ref('');
-const sample6_extraAddress = ref('');
-const sample6_detailAddress = ref('');
-const sample6_detailAddressRef = ref(null); // 포커싱 대상
-
-function sample6_execDaumPostcode() {
-  new window.daum.Postcode({
-    oncomplete: function (data) {
-      let addr = ''; // 기본 주소
-      let extraAddr = ''; // 참고 주소
-
-
-      if (data.userSelectedType === 'R') {
-        addr = data.roadAddress;
-      } else {
-        addr = data.jibunAddress;
-      }
-
-      if (data.userSelectedType === 'R') {
-        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-          extraAddr += data.bname;
-        }
-        if (data.buildingName !== '' && data.apartment === 'Y') {
-          extraAddr +=
-            extraAddr !== '' ? ', ' + data.buildingName : data.buildingName;
-        }
-        if (extraAddr !== '') {
-          extraAddr = ' (' + extraAddr + ')';
-        }
-        sample6_extraAddress.value = extraAddr;
-      } else {
-        sample6_extraAddress.value = '';
-      }
-
-      sample6_postcode.value = data.zonecode;
-      sample6_address.value = addr;
-
-      // 맨처음에는 유저 테이블의 주소를 끌어와서 띄우고, 만약 api로 주소 변경시 그 값으로 갈아끼우는 작업 
-      state.data.address = `${addr} ${extraAddr}`.trim();
-
-
-      // 상세주소 입력 칸에 포커스
-      nextTick(() => {
-        if (sample6_detailAddressRef.value) {
-          sample6_detailAddressRef.value.focus();
-        }
-      });
-    },
-  }).open();
-}
+import { sendEmailCode as sendEmailCodeApi,
+         verifyEmailCode as verifyEmailCodeApi,
+         changePassword as changePasswordApi } from '@/services/accountService'
+import { reactive, computed, watch } from 'vue'
+import WhiteBox from '@/components/common/WhiteBox.vue'
 
 const state = reactive({
-  data: {
-    loginId: '',
-    userName: '',
-    phone: '',
+  form: {
+    studentNumber: '',
+    name: '차은우',
+    zipcode: '',
     address: '',
+    detailAddress: '',
+    phone: '',
     email: '',
-    addDetail: '',
+
+    authCode: '',
+    newPassword: '',
+    confirmPassword: '',
+    isVerified: false,   // ✅ 인증 성공 플래그
   },
-});
+  verifiedToken: null,    // ✅ 서버가 주는 1회용 토큰
+})
 
-onMounted(() => {
-  selectPrivacy();
-  
-});
+const canChangePw = computed(() =>
+  !!state.form.newPassword &&
+  state.form.newPassword.length >= 8 &&
+  state.form.newPassword === state.form.confirmPassword &&
+  state.form.isVerified
+)
 
-const selectPrivacy = async () => {
-  const res = await getPrivacy();
-  if (res.data === undefined || res.status !== 200) {
-    return;
+function formatPhone(e) {
+  let v = (e?.target?.value ?? state.form.phone).replace(/\D/g, '').slice(0, 11)
+  if (v.length < 4) state.form.phone = v
+  else if (v.length < 8) state.form.phone = `${v.slice(0,3)}-${v.slice(3)}`
+  else state.form.phone = `${v.slice(0,3)}-${v.slice(3,7)}-${v.slice(7)}`
+}
+
+function openZipSearch() {
+  alert('우편번호 검색 팝업을 연결하세요.')
+}
+
+async function saveProfile() {
+  console.log('저장 payload:', { ...state.form })
+  alert('저장되었습니다.')
+}
+
+/** ✅ 이메일로 코드 발송 */
+async function sendCode() {
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(state.form.email)) {
+    alert('올바른 이메일을 입력하세요.')
+    return
   }
-  state.data = res.data;
-  console.log('셀렉트프라이버시: ', state.data);
-};
+  await sendEmailCodeApi(state.form.email)
+  alert('인증번호가 발송되었습니다.')
+}
 
-const modifyPrivacy = async () => {
-  const res = await putPrivacy(state.data);
-  if (res.data === undefined || res.status !== 200) {
-    return;
-  } 
-  alert('수정되었습니다.');
-};
+/** ✅ 코드 검증 → verifiedToken 수령 */
+async function verifyCode() {
+  if (!/^\d{6}$/.test(state.form.authCode)) {
+    alert('6자리 숫자를 입력하세요.')
+    return
+  }
+  try {
+    const { verifiedToken } = await verifyEmailCodeApi(state.form.email, state.form.authCode)
+    state.form.isVerified = true
+    state.verifiedToken = verifiedToken
+    alert('인증 성공')
+  } catch (e) {
+    state.form.isVerified = false
+    state.verifiedToken = null
+    alert('인증 실패')
+  }
+}
+
+/** ✅ 비번 변경 (서버에 verifiedToken 제출) */
+async function changePasswordClick() {
+  if (!canChangePw.value) return
+  await changePasswordApi(state.form.newPassword, state.verifiedToken)
+  alert('비밀번호가 변경되었습니다.')
+}
+
+/** 이메일/코드 변경 시 재인증 요구 */
+watch(() => state.form.email,      () => { state.form.isVerified = false; state.verifiedToken = null })
+watch(() => state.form.authCode,   () => { state.form.isVerified = false; state.verifiedToken = null })
 </script>
 
 <template>
-  <WhiteBox :title="'개인정보변경'">
-    <div class="d-flex top last">
-      <div class="table-title">학번</div>
-      <div class="table-content d-flex">
-        <input type="text" class="num" v-model="state.data.loginId" disabled/>
-        <i class="fas fa-search"></i>
-        <input type="text" class="name" v-model="state.data.userName" disabled />
+  <div class="page">
+    <h1 class="page-title">개인정보변경</h1>
+
+    <!-- 상단: 학번 / 이름 -->
+    <WhiteBox class="wb">
+      <div class="grid-2">
+        <div class="form-item">
+          <label>학번</label>
+          <input class="input" v-model="state.form.studentNumber" placeholder="20001" />
+        </div>
+        <div class="form-item">
+          <label>이름</label>
+          <input class="input" v-model="state.form.name" placeholder="차은우" readonly />
+        </div>
       </div>
-    </div>
+    </WhiteBox>
 
-    <form>
-      <!-- 본인정보 -->
-      <p>본인정보</p>
-      <div class="d-flex top last">
-        <div class="table-title">우편번호</div>
-        <div class="table-content d-flex">
-          <input type="text" class="num" v-model="sample6_postcode" disabled/>
-          <i
-            class="fas fa-search"
-            style="cursor: pointer"
-            @click.prevent="sample6_execDaumPostcode"
-            ></i>
+    <!-- 본인정보 -->
+    <WhiteBox class="wb wb--accent">
+      <div class="section-title">본인정보</div>
 
-          <input type="text" class="name" v-model="state.data.address" disabled />
+      <div class="grid-2">
+        <div class="form-item">
+          <label>우편번호</label>
+          <div class="hstack">
+            <input class="input" v-model="state.form.zipcode" placeholder="34158" />
+            <button class="btn btn-outline" @click="openZipSearch">주소찾기</button>
+          </div>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="form-item col-2">
+          <label>주소</label>
+          <input class="input" v-model="state.form.address" placeholder="전공/교양" />
+        </div>
+
+        <div class="form-item col-2">
+          <label>상세주소</label>
+          <input class="input" v-model="state.form.detailAddress" placeholder="예: 수 1,2,3 & 목 4,5" />
+        </div>
+
+        <div class="form-item">
+          <label>전화번호</label>
+          <input
+            class="input"
+            v-model="state.form.phone"
+            @input="formatPhone"
+            placeholder="010-1234-5678"
+          />
+        </div>
+
+        <div class="form-item">
+          <label>Email</label>
+          <input class="input" v-model="state.form.email" placeholder="example@univ.ac.kr" />
         </div>
       </div>
 
-      <div class="table d-flex">
-        <div class="table-title">상세주소</div>
-        <div class="table-content">
-          <input type="text" v-model="state.data.addDetail" />
-        </div>
+      <div class="actions">
+        <button class="btn btn-primary" @click="saveProfile">저장</button>
       </div>
+    </WhiteBox>
 
-      <div class="table d-flex last">
-        <div class="table-title">전화번호</div>
-        <div class="table-content">
-          <input type="text" v-model="state.data.phone" />
+    <!-- 비밀번호 변경 -->
+    <WhiteBox class="wb">
+      <div class="section-title">비밀번호 변경</div>
+
+      <div class="grid-2">
+        <div class="form-item col-2">
+          <label>인증번호</label>
+          <div class="hstack hstack-auth">
+            <input
+              type="text"
+              class="input input-auth"
+              v-model="state.form.authCode"
+              placeholder="인증번호 입력"
+              inputmode="numeric"
+              maxlength="6"
+            />
+            <button type="button" class="btn btn-blue" @click="sendCode">인증번호 발송</button>
+            <button class="btn btn-blue" :disabled="!/^\d{6}$/.test(state.form.authCode)"
+        @click="verifyCode">
+  인증번호 확인
+</button>
+          </div>
         </div>
-        <div class="table-title">Email</div>
-        <div class="table-content">
-          <input type="text" v-model="state.data.email" />
+
+        <div class="form-item">
+          <label>신규 비밀번호</label>
+          <input type="password" class="input" v-model="state.form.newPassword" placeholder="비밀번호" />
         </div>
-      </div>
 
-      <div class="d-flex justify-content-end">
-        <button
-          class="enroll-btn"
-          @click.prevent="modifyPrivacy">
-          저장
-        </button>
-      </div>
-    </form>
-
-    <form>
-      <!-- 비밀번호 변경 -->
-      <p>비밀번호 변경</p>
-
-      <div class="table d-flex">
-        <div class="table-title">새 비밀번호</div>
-        <div class="table-content">
+        <div class="form-item">
+          <label>신규 비밀번호 확인</label>
           <input
             type="password"
-            class="nwpw"
+            class="input"
+            v-model="state.form.confirmPassword"
+            placeholder="비밀번호 확인"
           />
         </div>
       </div>
 
-      <div class="table d-flex">
-        <div class="table-title">새 비밀번호 확인</div>
-        <div class="table-content">
-          <input
-            type="password"
-            class="nwpw"
-          />
-        </div>
+      <div class="actions">
+        <button class="btn btn-primary" :disabled="!canChangePw" @click="changePasswordClick">
+  비밀번호 변경
+</button>
       </div>
-
-      <div class="table d-flex">
-        <div class="table-title">인증번호</div>
-        <div class="table-content d-flex align-center">
-          <input
-            type="text"
-            class="certification-number"
-          />
-          <button class="send-button">인증번호 발송</button>
-          <button class="verify-button">인증번호 확인</button>
-        </div>
-      </div>
-      <div class="table d-flex">
-        <div class="table-title">비밀번호 변경</div>
-        <div class="table-content">
-          <button class="change-button">비밀번호변경</button>
-        </div>
-      </div>
-    </form>
-  </WhiteBox>
+    </WhiteBox>
+  </div>
 </template>
 
 <style scoped lang="scss">
-.container {
-  max-width: 180px;
-  min-width: 1280px;
-}
-.title {
-  font-size: 38px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-align: left;
+/* 브라우저 기본 외형 제거 (특히 사파리/크롬) */
+.input,
+input[type="text"],
+input[type="number"],
+input[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-p {
-  font-size: 20px;
-  font-weight: 400;
-  margin-top: 70px;
-  margin-bottom: 5px;
-}
+/* 인증번호 줄: 세 칸을 균등 분배 (인풋/버튼 모두 같은 폭) */
+.hstack-auth .input-auth,
+.hstack-auth .btn { flex: 0 0 140px; }
 
-.table {
-  display: flex;
-  align-items: center;
-  border: 1px solid #b7b7b7;
-  background-color: #fff;
-  border-right: 1px solid #fff;
-  border-left: 1px solid #364157;
-  margin-bottom: 0;
-  border-bottom: 0.5px;
+/* 인풋 높이 강제 통일 (버튼과 정확히 같게 하고 싶으면 btn 패딩과 맞춤) */
+.input-auth {
+  height: 40px;        /* 버튼과 동일 높이로 맞춤 */
+  line-height: 40px;
 }
+/* 페이지 */
+.page { padding: 16px 24px 48px; }
+.page-title { font-size: 22px; font-weight: 700; margin: 8px 0 16px; }
 
-.top {
-  border-top: 1px solid #000;
+/* WhiteBox 공통 + 변형 */
+.white-box{
+  min-height: auto;
 }
+.wb {
+  background: #fff;
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,.06);
 
-.last {
-  border-bottom: 1px solid #b7b7b7;
-}
-
-.table-title {
-  display: flex;
-  width: 150px;
-  background-color: #364157;
-  border-right: 1px solid #b7b7b7;
-  color: #fff;
-  padding: 5px;
-  align-content: center;
-}
-.table-content {
-  background-color: #fff;
-  align-content: center;
-  padding: 3px;
-  flex: 1;
-}
-input {
-  width: 100%;
-  box-sizing: border-box;
-  outline-color: #a2a2a2;
-}
-
-.btns {
-  display: flex;
-  justify-content: flex-end;
 }
 
 
-
-button.enroll-btn {
-  background-color: #2460CE;
-  color: #fff;
-  margin-top: 10px;
-  border:none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  &:hover {
-    background-color: #1F53B5;
-  }
+/* 섹션 헤더 */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e6eef7;
 }
 
-.detail {
-  height: 200px;
-  .table-content {
-    input {
-      height: 100%;
-    }
-  }
+/* 폼 레이아웃 */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+.col-2 { grid-column: span 2; }
+.form-item label {
+  display: block;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 6px;
+}
+.hstack { display: flex; gap: 8px; align-items: center; }
+.spacer { display: block; }
+
+/* 인풋/버튼 통일 스타일 */
+.input {
+  width: 100% ;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f7f8f9;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
 }
 
-i {
-  margin-left: -1px;
-  margin-right: 3px;
-  display: flex;
-  height: 30px;
-  width: 35px;
-  padding: 3px;
-  text-align: center;
-  align-items: center;
-  border: 2px solid #c2c2c2;
-  background-color: #e2e2e2;
-  color: #8a8a8a;
-  font-weight: 600;
+/* 버튼 */
+.btn {
+  border: 0; cursor: pointer;
+  padding: 10px 14px; border-radius: 10px;
+  font-weight: 600; font-size: 14px;
+  transition: transform .05s ease, filter .15s;
+  white-space: nowrap;
 }
-.num {
-  width: 150px;
-  background-color: #e2e2e2;
-}
-.name {
-  background-color: #c9c9c9;
-}
-.fa-search {
-  font-size: 20px;
-}
-.send-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  color: white;
-  height: 30px;
-  width: 300px;
-  padding: 8px 50px;
-  font-size: 14px;
-  background-color: #2460ce;
-  margin-right: 5px;
+.btn:active { transform: translateY(1px); }
+
+.btn-primary { background: #2f855a; color: #fff; }   /* 그린 */
+.btn-primary:disabled { filter: grayscale(.4); cursor: not-allowed; }
+.btn-blue { background: #2563eb; color: #fff; }      /* 파랑 */
+.btn-outline {
+  background: #fff; color: #374151; border: 1px solid #d1d5db;
 }
 
-.verify-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  color: white;
-  height: 30px;
-  width: 300px;
-  padding: 8px 50px;
-  font-size: 14px;
-  background-color: #2460ce;
-}
-.change-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  color: white;
-  height: 30px;
-  width: 300px;
-  padding: 8px 50px;
-  font-size: 14px;
-  background-color: #7d848fce;
-}
+/* 액션 영역: 가운데 정렬 */
+.actions { display: flex; justify-content: center; margin-top: 14px; }
 
-.nwpw {
-  width: 300px;
-  background-color: rgb(245, 244, 212);
-  border: 0.5px solid #ccc;
-}
-
-.certification-number {
-  width: 300px;
-  margin-right: 5px;
+/* 반응형 보완 */
+@media (max-width: 920px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .col-2 { grid-column: span 1; }
 }
 </style>
