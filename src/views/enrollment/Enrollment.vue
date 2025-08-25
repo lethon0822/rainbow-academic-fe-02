@@ -36,21 +36,25 @@ onMounted(async () => {
 
   // 수강 신청한 강의 목록 불러오기
   const mySugangListRes = await getMySugangList();
+  console.log("나의 수강 내역 백엔드 응답:", mySugangListRes.data);
   mySugangList.value = mySugangListRes.data;
 });
 
 // 필터에 따른 개설 강의 목록 조회
 const handleSearch = async (filters) => {
+  console.log("검색 필터 전달됨:", filters);
   lastFilters.value = { ...filters }; 
   const courseListRes = await getCourseListByFilter(filters);
+  console.log("개설 강의 내역 백엔드 응답:", courseListRes.data);
+  courseList.value = courseListRes.data;
 
-  // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
-  courseList.value = courseListRes.data.map((course) => {
-    course.enrolled = mySugangList.value.some(
+ // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
+   courseList.value = courseListRes.data.map((course) => {
+     course.enrolled = mySugangList.value.some(
       (c) => c.courseId === course.courseId
-    );
-    return course;
-  });
+     );
+     return course;
+   });
 };
 
 // 수강 신청 처리 함수
