@@ -382,6 +382,7 @@ const back = () => {
     .buttons {
         margin-top: 20px;
         text-align: center;
+        padding: 450px;
     }
     button {
         padding: 8px 20px;
