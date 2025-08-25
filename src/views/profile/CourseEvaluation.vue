@@ -165,9 +165,8 @@ const submitSurvey = async () => {
 
     const surveyData = {
       courseId: parseInt(courseId.value),
-      userId: userId.value, // 이제 안전하게 사용 가능
       review: additionalOpinion.value,
-      average: averageScore,
+      evScore: averageScore,
     };
 
     console.log("설문 결과:", surveyData);

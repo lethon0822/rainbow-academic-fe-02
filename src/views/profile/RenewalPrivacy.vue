@@ -229,7 +229,7 @@ const changePassword = async () => {
       </div>
       </form>
     </div>
- 
+
       <!-- 비밀번호 변경 -->
       <div class="white-box">  
       <h2>비밀번호 변경</h2>
@@ -260,7 +260,7 @@ const changePassword = async () => {
 <div class="table d-flex">
         <div class="table-title">비밀번호 변경</div>
         <div class="table-content">
-         
+        
           <button class="change-button">비밀번호변경</button>
         </div>
       </div>
