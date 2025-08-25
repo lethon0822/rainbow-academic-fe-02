@@ -36,3 +36,15 @@ export async function changePasswordApi(userId, newPassword) {
     newPassword,
   });
 }
+export function sendEmailCode(email) {
+  return axios.post('/api/auth/email/send', { email })
+}
+
+export async function verifyEmailCode(email, code) {
+  const { data } = await axios.post('/api/auth/email/verify', { email, code })
+  return data // { verifiedToken: '...' }
+}
+
+export function changePassword(newPassword, verifiedToken) {
+  return axios.post('/api/auth/password/change', { newPassword, verifiedToken })
+}
