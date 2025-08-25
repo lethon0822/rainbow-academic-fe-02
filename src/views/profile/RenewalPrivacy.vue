@@ -93,6 +93,7 @@ const modifyPrivacy = async () => {
       </div>
     </div>
 
+
     <form>
       <!-- 본인정보 -->
       <p>본인정보</p>

@@ -163,7 +163,7 @@ const back = () => {
           <template v-else>
             <div class="table-content">
               <select v-model="state.form.grade" class="fix" disabled>
-                <option value="0">수강희망자</option>
+                <option value="5">수강희망자</option>
               </select>
             </div>
           </template>
