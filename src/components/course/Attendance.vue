@@ -3,16 +3,14 @@ import { ref, reactive, onMounted} from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import WhiteBox from "@/components/common/WhiteBox.vue";
-
 const router = useRouter();
 const attendDate = ref(new Date().toISOString().slice(0, 10));
 const students = ref([]);
-
 const state = reactive({
   data:[],
   courseId:''
 })
-
+console.log('출결 저장 데이터:', students.value)
 onMounted(async ()=>{
   const passJson = history.state.data;
   const passid = history.state.id;
@@ -36,21 +34,21 @@ const saveAttendance = async () => {
   }
   isLoading.value = true; // 로딩 시작
   try {
-    for (const s of students.value) {
-      if (!s.status) {
-        alert(`학생 ${s.name}의 출결 상태를 선택해주세요.`);
-        return;
-      }
-      const data = {
-        attendDate: attendDate.value,
-        enrollmentId: s.enrollmentId,
-        status: s.status,
-        note: s.note,
-      };
-      const { data: exists } = await axios.post(
-        '/professor/course/check/exist',
-        data
-      );
+    for (const s of state.data) {
+  if (!s.status) {
+    alert(`학생 ${s.name}의 출결 상태를 선택해주세요.`);
+    return;
+  }
+  const data = {
+    attendDate: attendDate.value,
+    enrollmentId: s.enrollmentId,
+    status: s.status,
+    note: s.note,
+  };
+  const { data: exists } = await axios.post(
+    '/professor/course/check/exist',
+    data
+  );
       if (exists === 0) {
         await axios.post('/professor/course/check', data);
       } else {
@@ -66,6 +64,14 @@ const saveAttendance = async () => {
     isLoading.value = false; //로딩 끝
   }
 };
+// 출결 상태 옵션 리스트
+const statusOptions = [
+  { value: '출석', label: '출석' },
+  { value: '지각', label: '지각' },
+  { value: '결석', label: '결석' },
+  { value: '병가', label: '병가' },
+  { value: '경조사', label: '경조사' },
+]
 </script>
 <template>
   <WhiteBox title="출결 관리">
@@ -73,11 +79,7 @@ const saveAttendance = async () => {
       <h2 class="text-center fw-bold mb-4">출결 입력창</h2>
       <div class="mb-3">
         <label class="form-label">출결일자</label>
-        <input
-          type="date"
-          v-model="attendDate"
-          class="form-control w-25"
-        />
+        <input type="date" v-model="attendDate" class="form-control w-25" />
       </div>
       <table class="attendance-table">
         <thead class="grade-table-header">
@@ -93,14 +95,26 @@ const saveAttendance = async () => {
             <td>{{ s.userName }}</td>
             <td>{{ s.loginId }}</td>
             <td>
-              <select v-model="s.status" class="form-select">
-                <option disabled value="">선택</option>
-                <option value="출석">출석</option>
-                <option value="지각">지각</option>
-                <option value="결석">결석</option>
-                <option value="병가">병가</option>
-                <option value="경조사">경조사</option>
-              </select>
+              <div
+                v-for="option in statusOptions"
+                :key="option.value"
+                class="form-check form-check-inline"
+              >
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  :id="`${s.enrollmentId}-${option.value}`"
+                  :value="option.value"
+                  v-model="s.status"
+                  :name="`status-${s.enrollmentId}`"
+                />
+                <label
+                  class="form-check-label"
+                  :for="`${s.enrollmentId}-${option.value}`"
+                >
+                  {{ option.label }}
+                </label>
+              </div>
             </td>
             <td>
               <input
@@ -158,5 +172,14 @@ const saveAttendance = async () => {
     width: 100%;
     box-sizing: border-box;
   }
+  .form-check-input {
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+}
+.form-check-label {
+  margin-left: 0.3rem;
+  cursor: pointer;
+}
 }
 </style>

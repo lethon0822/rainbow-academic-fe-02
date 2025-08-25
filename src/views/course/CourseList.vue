@@ -42,7 +42,8 @@ const handleSearch = async (filters) => {
 
     <CourseTable
       :courseList="courseList"
-       
+       maxHeight="800px"
+
       :show="{
         professorName: true,
         semester: true,

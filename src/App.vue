@@ -81,7 +81,7 @@ watch(
 </script>
 <template>
   <div v-if="isInitializing.value" class="loading">로딩중...</div>
-  <template v-else>
+  <div v-else>
     <template v-if="show.modal">
       <div class="black-bg" @click="show.modal = false">
         <div class="cover">
@@ -93,7 +93,7 @@ watch(
       </div>
     </template>
     <router-view />
-  </template>
+  </div>
 </template>
 <style lang="scss">
 html,
