@@ -102,7 +102,7 @@ const check = async (courseId, title) =>{
 </WhiteBox>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .comment-container {
   margin: 10px 0;
   margin-left: 15px;
@@ -111,19 +111,21 @@ const check = async (courseId, title) =>{
   max-height: 350px;
   max-width: 1430px;
   min-width: 1350px;
-  overflow-y: auto; // 세로 스크롤
-  scrollbar-gutter: stable; //스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지
+  overflow-y: auto;  /*세로 스크롤*/
+  scrollbar-gutter: stable; /* 스크롤바로 인해 테이블 컬럼 정렬 깨짐 방지*/
 }
 
-.check-comment{
+.check-comment {
   align-items: center;
   margin-top: 50px;
   gap: 20px;
-  h3{
-    margin: 0;
-  }
 }
-hr{
+
+.check-comment h3 {
+  margin: 0;
+}
+
+hr {
   margin-top: 5px;
   margin-bottom: 20px;
 }

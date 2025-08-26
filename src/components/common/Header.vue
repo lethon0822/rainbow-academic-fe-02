@@ -82,7 +82,7 @@ const logoutAccount = async () => {
   </header>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .navbar {
   position: fixed;
   top: 0;

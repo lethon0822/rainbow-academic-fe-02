@@ -55,6 +55,6 @@ const handleSearch = async (filters) => {
     </WhiteBox>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 
 </style>
