@@ -9,6 +9,8 @@ const props = defineProps({
   },
 });
 
+/* 8 프로필 8 */
+
 // 이미지 관련 상태
 const selectedImage = ref(null);
 const imagePreview = ref(null);
@@ -141,30 +143,15 @@ const saveProfile = async () => {
   }
 };
 
-/*새로운 탭 확인용 */
+/* 8 탭 8 */
 const activeTab = ref("기본정보");
 
 const tabs = [
-  { id: "기본정보", label: "기본정보", icon: "bi-person" },
-  { id: "자기소개", label: "자기소개", icon: "bi-calendar" },
-  { id: "특징", label: "특징", icon: "bi-envelope" },
-  { id: "검색", label: "검색", icon: "bi-search" },
+  { id: "기본프로필", label: "기본프로필", icon: "bi-person-fill" },
+  { id: "개인정보", label: "개인정보", icon: "bi-clipboard-check" },
+  { id: "등록", label: "등록", icon: "bi-briefcase-fill" },
+  { id: "장학", label: "장학", icon: "bi-award" },
 ];
-
-const profileData = {
-  기본정보: {
-    이름: "김보름",
-    학번: "70001",
-    학과: "컴퓨터학과",
-    졸업연도: "2025",
-  },
-  자기소개: {
-    학번: "70001",
-    전공: "컴퓨터학과",
-    학년: "4학년",
-    취미사업: "개발",
-  },
-};
 
 const currentData = computed(() => {
   return profileData[activeTab.value] || {};
@@ -173,31 +160,15 @@ const currentData = computed(() => {
 const setActiveTab = (tabId) => {
   activeTab.value = tabId;
 };
+
+const progressPercent = 96; // 진행률 % (숫자)
 </script>
 
 <template>
+  <!-- 8 프로필 8 -->
   <div class="inner">
-    <div class="header-section">
-      <h2 class="title">학적기본사항관리</h2>
-      <div class="action-buttons">
-        <button
-          class="btn btn-primary"
-          @click="saveProfile"
-          v-if="imagePreview || currentProfileImage"
-        >
-          저장
-        </button>
-        <button
-          class="btn btn-secondary"
-          @click="removeImage"
-          v-if="imagePreview || currentProfileImage"
-        >
-          이미지 제거
-        </button>
-      </div>
-    </div>
-    <div class="line"></div>
-    <slot></slot>
+    <h class="titleMenu">학적 > 학적기본사항관리</h>
+    <h2 class="title">학적기본사항관리</h2>
   </div>
 
   <div class="profile-wrapper">
@@ -238,34 +209,55 @@ const setActiveTab = (tabId) => {
           style="display: none"
         />
       </div>
+
+      <div class="action-buttons">
+        <button
+          class="btn btn-success"
+          @click="saveProfile"
+          v-if="imagePreview || currentProfileImage"
+        >
+          저장
+        </button>
+        <button
+          class="btn btn-secondary"
+          @click="removeImage"
+          v-if="imagePreview || currentProfileImage"
+        >
+          이미지 제거
+        </button>
+      </div>
     </div>
 
-    <!-- 프로필 정보 영역 -->
+    <!-- 8 탭 8  -->
     <div class="profile-tabs">
       <!-- Tab Navigation -->
       <div class="tab-navigation">
         <button
-          v-for="tab in tabs"
+          v-for="(tab, index) in tabs"
           :key="tab.id"
           @click="setActiveTab(tab.id)"
-          :class="['tab-button', { active: activeTab === tab.id }]"
+          :class="[
+            'tab-button',
+            { active: activeTab === tab.id },
+            { 'first-tab': index === 0 },
+          ]"
         >
           <i :class="tab.icon"></i>
           {{ tab.label }}
         </button>
       </div>
 
-      <!-- Tab Content -->
       <div class="tab-content">
         <!-- 기본정보 Tab -->
         <div v-if="activeTab === '기본정보'" class="space-y-6">
           <div class="content-grid">
-            <div class="field-group">
+            <div class="field-group full-width">
               <label class="field-label">이름</label>
               <div class="field-value boxed-value">
                 {{ profile.studentName }}
               </div>
             </div>
+
             <div class="field-group">
               <label class="field-label">학번</label>
               <div class="field-value boxed-value">{{ profile.loginId }}</div>
@@ -274,44 +266,79 @@ const setActiveTab = (tabId) => {
               <label class="field-label">학년</label>
               <div class="field-value boxed-value">{{ profile.grade }}</div>
             </div>
+
             <div class="field-group">
               <label class="field-label">학과</label>
+              <div class="field-value boxed-value">{{ profile.deptName }}</div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">학기</label>
+              <div class="field-value boxed-value">{{ profile.semester }}</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">등록연도</label>
               <div class="field-value boxed-value">
-                {{ profile.deptName }}
+                {{ profile.registerYear }}
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">학적상태</label>
+              <div class="field-value boxed-value">{{ profile.status }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 개인정보 Tab -->
+        <div v-if="activeTab === '개인정보'" class="space-y-6">
+          <div class="content-grid">
+            <div class="field-group">
+              <label class="field-label">생년월일</label>
+              <div class="field-value boxed-value">{{ profile.loginId }}</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">연락처</label>
+              <div class="field-value boxed-value">{{ profile.loginId }}</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">이메일</label>
+              <div class="field-value boxed-value">{{ profile.grade }}</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">병역구분</label>
+              <div class="field-value boxed-value">{{ profile.deptName }}</div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">우편번호</label>
+              <div class="field-value boxed-value">{{ profile.semester }}</div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">주소</label>
+              <div class="field-value boxed-value">
+                {{ profile.registerYear }}
+              </div>
+            </div>
+
+            <div class="field-group full-width">
+              <label class="field-label">상세주소</label>
+              <div class="field-value boxed-value">
+                {{ profile.studentName }}
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 자기소개 Tab -->
-        <div v-if="activeTab === '자기소개'" class="space-y-6">
-          <div class="content-grid">
-            <div class="field-group">
-              <label class="field-label">학번</label>
-              <div class="field-value">70001</div>
-            </div>
-            <div class="field-group">
-              <label class="field-label">전공</label>
-              <div class="field-value">컴퓨터학과</div>
-            </div>
-            <div class="field-group">
-              <label class="field-label">학년</label>
-              <div class="field-value">4학년</div>
-            </div>
-            <div class="field-group">
-              <label class="field-label">취미사업</label>
-              <div class="field-value">개발</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 특징 Tab -->
+        <!-- 등록 Tab -->
         <div v-if="activeTab === '특징'" class="space-y-4">
           <h3 class="section-title">특징 정보</h3>
           <p class="section-description">특징 관련 정보가 여기에 표시됩니다.</p>
         </div>
 
-        <!-- 검색 Tab -->
+        <!-- 장학 Tab -->
         <div v-if="activeTab === '검색'" class="space-y-4">
           <div class="search-container">
             <i class="bi-search search-icon"></i>
@@ -328,37 +355,70 @@ const setActiveTab = (tabId) => {
       </div>
     </div>
   </div>
+
+  <!-- 8 프로그레스 8 -->
+  <div class="progress-container">
+    <h2
+      style="
+        font-size: 14px;
+        color: #4a5568;
+        margin-bottom: 12px;
+        font-weight: bold;
+      "
+    >
+      전체 졸업 달성률
+    </h2>
+
+    <div class="progress">
+      <div class="progress-bar" :style="{ width: progressPercent + '%' }"></div>
+    </div>
+
+    <div style="text-align: center; margin-top: -8px">
+      <span style="font-size: 12px; color: #718096">
+        135%달 완료 / 140%달 목표 (96.4% 달성)
+      </span>
+    </div>
+  </div>
+
+  <!-- 8 그래프 8 -->
+  <div class="graph">
+    <h2
+      style="
+        font-size: 14px;
+        color: #4a5568;
+        margin-bottom: 12px;
+        font-weight: bold;
+      "
+    >
+      학기별 이수학점 현황
+    </h2>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .inner {
-  padding: 0;
-  margin: 0;
-  width: 100%;
   padding: 30px;
   margin: 30px 30px 30px 250px;
-  width: 100%;
   max-width: 1430px;
-  margin-left: 250px;
-}
-
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
 }
 
 .title {
   font-size: 38px;
   font-weight: bold;
   text-align: left;
-  margin: 0;
+  margin-bottom: -100px;
+  margin-top: 10px;
+}
+
+.titleMenu {
+  color: #f8f9fa;
+  font-weight: 600;
 }
 
 .action-buttons {
   display: flex;
   gap: 10px;
+  margin-left: 50px;
 }
 
 .btn {
@@ -388,36 +448,22 @@ const setActiveTab = (tabId) => {
   }
 }
 
-.line {
-  border-bottom: 2px solid #1f2c5a;
-  margin-bottom: -30px;
-}
-
 body {
   font-family: "Malgun Gothic", sans-serif;
   background-color: #f5f5f5;
-  margin: 0;
-  padding: 20px;
 }
 
 .profile-wrapper {
-  max-width: 1500px;
-  margin: 30px auto;
-  padding: 20px;
-
   display: flex;
-  gap: 20px;
-  align-items: stretch;
+  gap: 180px;
+  align-items: flex-start;
 }
 
 /* 이미지 영역 */
 .image-box {
-  position: relative;
-  width: 300px;
-  left: -18px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin-top: -140px;
+  width: 200px;
+  flex-shrink: 0;
 }
 
 .profile-image {
@@ -425,7 +471,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 30px 12px 20px;
+  margin: 190px 150px;
 }
 
 /* 포트폴리오 안내 메시지 */
@@ -445,17 +491,6 @@ body {
 }
 
 /* 정보 영역 */
-.info-box {
-  flex: 1;
-  background-color: white;
-  border-radius: 8px;
-  margin-top: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
 .avatar {
   width: 200px;
@@ -484,8 +519,8 @@ body {
 
 .camera-icon {
   position: absolute;
-  bottom: 22px;
-  right: 55px;
+  bottom: 125px;
+  right: 40px;
   width: 60px;
   height: 60px;
   background-color: #6c757d;
@@ -515,105 +550,29 @@ body {
   min-width: 0;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.header-row {
-  background-color: #364157;
-  color: white;
-  font-weight: bold;
-}
-
-.subheader-row {
-  background-color: #6c757d;
-  color: white;
-  font-weight: bold;
-}
-
-.yellow-header {
-  background-color: #dee2e6;
-  color: #000;
-  font-weight: bold;
-}
-
-td {
-  padding: 8px 12px;
-  border: 1px solid #dee2e6;
-  vertical-align: middle;
-}
-
-.label-cell {
-  background-color: #364157;
-  color: white;
-  font-weight: bold;
-  width: 114px;
-}
-
-.value-cell {
-  background-color: white;
-}
-
-select {
-  width: 100%;
-  padding: 4px;
-  border: 1px solid #ced4da;
-  border-radius: 3px;
-  font-size: 13px;
-}
-
-.search-box {
-  position: relative;
-  display: inline-block;
-}
-
-.search-input {
-  padding: 4px 25px 4px 8px;
-  border: 1px solid #ced4da;
-  border-radius: 3px;
-  font-size: 13px;
-  width: 80px;
-}
-
-.search-icon {
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6c757d;
-}
-
-.dropdown-arrow {
-  float: right;
-  color: #6c757d;
-}
-
-td.one-cell {
-  padding: 12px;
-}
-
-/*새로운 탭 확인용 */
+/* 8 탭 8 */
 
 .profile-tabs {
-  width: 100%;
-  max-width: 672px;
-  margin: 0 auto;
+  flex: 1;
+  max-width: 600px;
+  margin-top: 50px;
+  margin-left: 60px;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .tab-navigation {
   display: flex;
   border-bottom: 1px solid #e5e7eb;
+  width: 100%;
 }
 
 .tab-button {
+  flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 12px 24px;
   font-size: 14px;
@@ -623,6 +582,7 @@ td.one-cell {
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
+  white-space: nowrap;
 }
 
 .tab-button:hover {
@@ -631,9 +591,13 @@ td.one-cell {
 }
 
 .tab-button.active {
-  color: #2563eb;
-  background-color: #eff6ff;
-  border-bottom: 2px solid #2563eb;
+  color: #00664f;
+  background-color: #e9f5e8;
+  border-bottom: 2px solid #00664f;
+}
+
+.first-tab {
+  border-radius: 6px 0px 0px 0px;
 }
 
 .tab-button:not(.active) {
@@ -647,7 +611,7 @@ td.one-cell {
 .content-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px 48px;
+  gap: 0px 48px;
 }
 
 .field-group {
@@ -663,6 +627,10 @@ td.one-cell {
 
 .field-value {
   color: #1f2937;
+}
+
+.full-width {
+  grid-column: span 2;
 }
 
 .boxed-value {
@@ -701,7 +669,7 @@ td.one-cell {
 .search-input:focus {
   ring: 2px solid #3b82f6;
   border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .search-icon {
@@ -723,5 +691,41 @@ td.one-cell {
 
 .space-y-4 > * + * {
   margin-top: 16px;
+}
+
+/* 8 프로그레스 8 */
+.progress-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress {
+  height: 10px;
+  background-color: #e2e8f0;
+  border-radius: 6px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #febe3a 0%, #ffd964 100%);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+  height: 100%;
+}
+
+/* 8 그래프 8 */
+.graph {
+  max-width: 500px;
+  margin: 20px auto 0 auto;
+  padding: 16px;
+  background: white;
+
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 </style>
