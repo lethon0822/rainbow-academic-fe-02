@@ -1,6 +1,15 @@
 <script setup>
-import { ref, reactive, onMounted, watch, computed } from "vue";
+import {
+  ref,
+  reactive,
+  onMounted,
+  watch,
+  computed,
+  nextTick,
+  onUnmounted,
+} from "vue";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Chart from "chart.js/auto";
 
 const props = defineProps({
   profile: {
@@ -23,6 +32,119 @@ const formData = reactive({
   department: "선택",
 });
 
+// 그래프 관련 상태
+const chartRef = ref(null);
+let chartInstance = null;
+
+// 그래프 데이터 (하드코딩)
+const chartData = {
+  labels: ["1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2"],
+  datasets: [
+    {
+      label: "전공필수",
+      data: [9, 6, 9, 6, 12, 9, 6, 3],
+      borderColor: "#739EEE",
+      backgroundColor: "rgba(115, 158, 238, 0.2)",
+      fill: true,
+      tension: 0.4,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      pointBackgroundColor: "#739EEE",
+    },
+    {
+      label: "전공선택",
+      data: [3, 6, 3, 6, 3, 6, 9, 12],
+      borderColor: "#97A7ED",
+      backgroundColor: "rgba(151, 167, 237, 0.2)",
+      fill: true,
+      tension: 0.4,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      pointBackgroundColor: "#97A7ED",
+    },
+    {
+      label: "교양",
+      data: [6, 6, 3, 3, 0, 0, 0, 0],
+      borderColor: "#A88ADF",
+      backgroundColor: "rgba(168, 138, 223, 0.2)",
+      fill: true,
+      tension: 0.4,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      pointBackgroundColor: "#A88ADF",
+    },
+  ],
+};
+
+const createChart = () => {
+  if (chartRef.value) {
+    chartInstance = new Chart(chartRef.value, {
+      type: "line",
+      data: chartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+            labels: {
+              usePointStyle: true,
+              padding: 20,
+              font: {
+                size: 12,
+              },
+            },
+          },
+          tooltip: {
+            backgroundColor: "white",
+            titleColor: "#374151",
+            bodyColor: "#6b7280",
+            borderColor: "#e5e7eb",
+            borderWidth: 1,
+            cornerRadius: 6,
+            titleFont: {
+              weight: "bold",
+            },
+          },
+        },
+        scales: {
+          x: {
+            grid: {
+              color: "#e2e8f0",
+              drawBorder: false,
+            },
+            ticks: {
+              color: "#6b7280",
+              font: {
+                size: 12,
+              },
+            },
+          },
+          y: {
+            beginAtZero: true,
+            max: 15,
+            grid: {
+              color: "#e2e8f0",
+              drawBorder: false,
+            },
+            ticks: {
+              color: "#6b7280",
+              font: {
+                size: 12,
+              },
+            },
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+      },
+    });
+  }
+};
+
 const loadUserProfileImage = () => {
   const sessionKey = `profileImage_${props.profile.loginId}`;
   const savedImage = sessionStorage.getItem(sessionKey);
@@ -41,6 +163,18 @@ const loadUserProfileImage = () => {
 onMounted(() => {
   if (props.profile.loginId) {
     loadUserProfileImage();
+  }
+
+  // 차트 생성을 nextTick으로 지연
+  nextTick(() => {
+    createChart();
+  });
+});
+
+// 컴포넌트 언마운트 시 차트 정리
+onUnmounted(() => {
+  if (chartInstance) {
+    chartInstance.destroy();
   }
 });
 
@@ -144,7 +278,7 @@ const saveProfile = async () => {
 };
 
 /* 8 탭 8 */
-const activeTab = ref("기본정보");
+const activeTab = ref("기본프로필");
 
 const tabs = [
   { id: "기본프로필", label: "기본프로필", icon: "bi-person-fill" },
@@ -230,8 +364,8 @@ const progressPercent = 96; // 진행률 % (숫자)
       </div>
 
       <div class="tab-content">
-        <!-- 기본정보 Tab -->
-        <div v-if="activeTab === '기본정보'" class="space-y-6">
+        <!-- 기본프로필 Tab -->
+        <div v-if="activeTab === '기본프로필'" class="space-y-6">
           <div class="content-grid">
             <div class="field-group full-width">
               <label class="field-label">이름</label>
@@ -315,13 +449,13 @@ const progressPercent = 96; // 진행률 % (숫자)
         </div>
 
         <!-- 등록 Tab -->
-        <div v-if="activeTab === '특징'" class="space-y-4">
-          <h3 class="section-title">특징 정보</h3>
-          <p class="section-description">특징 관련 정보가 여기에 표시됩니다.</p>
+        <div v-if="activeTab === '등록'" class="space-y-4">
+          <h3 class="section-title">등록 정보</h3>
+          <p class="section-description">등록 관련 정보가 여기에 표시됩니다.</p>
         </div>
 
         <!-- 장학 Tab -->
-        <div v-if="activeTab === '검색'" class="space-y-4">
+        <div v-if="activeTab === '장학'" class="space-y-4">
           <div class="search-container">
             <i class="bi-search search-icon"></i>
             <input
@@ -388,6 +522,10 @@ const progressPercent = 96; // 진행률 % (숫자)
     >
       학기별 이수학점 현황
     </h2>
+
+    <div class="chart-container">
+      <canvas ref="chartRef"></canvas>
+    </div>
   </div>
 </template>
 
@@ -434,6 +572,15 @@ const progressPercent = 96; // 진행률 % (숫자)
 
     &:hover {
       background-color: #545b62;
+    }
+  }
+
+  &.btn-success {
+    background-color: #198754;
+    color: white;
+
+    &:hover {
+      background-color: #157347;
     }
   }
 }
@@ -742,5 +889,12 @@ body {
   background: white;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  margin-bottom: 100px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
 }
 </style>
