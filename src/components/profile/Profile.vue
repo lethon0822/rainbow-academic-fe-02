@@ -166,9 +166,8 @@ const progressPercent = 96; // 진행률 % (숫자)
 
 <template>
   <!-- 8 프로필 8 -->
-  <div class="inner">
-    <h class="titleMenu">학적 > 학적기본사항관리</h>
-    <h2 class="title">학적기본사항관리</h2>
+  <div class="page">
+    <h1 class="page-title">학적기본사항관리</h1>
   </div>
 
   <div class="profile-wrapper">
@@ -208,23 +207,6 @@ const progressPercent = 96; // 진행률 % (숫자)
           @change="handleImageSelect"
           style="display: none"
         />
-      </div>
-
-      <div class="action-buttons">
-        <button
-          class="btn btn-success"
-          @click="saveProfile"
-          v-if="imagePreview || currentProfileImage"
-        >
-          저장
-        </button>
-        <button
-          class="btn btn-secondary"
-          @click="removeImage"
-          v-if="imagePreview || currentProfileImage"
-        >
-          이미지 제거
-        </button>
       </div>
     </div>
 
@@ -356,6 +338,20 @@ const progressPercent = 96; // 진행률 % (숫자)
     </div>
   </div>
 
+  <!-- 8 액션 버튼 8 -->
+  <div
+    class="action-buttons"
+    :class="{ visible: imagePreview || currentProfileImage }"
+  >
+    <button class="btn btn-success" @click="saveProfile">저장</button>
+    <button class="btn btn-secondary" @click="removeImage">이미지 제거</button>
+  </div>
+
+  <!-- 여백 -->
+  <div class="bin">
+    <h2>　</h2>
+  </div>
+
   <!-- 8 프로그레스 8 -->
   <div class="progress-container">
     <h2
@@ -402,23 +398,17 @@ const progressPercent = 96; // 진행률 % (숫자)
   max-width: 1430px;
 }
 
-.title {
-  font-size: 38px;
-  font-weight: bold;
-  text-align: left;
-  margin-bottom: -100px;
-  margin-top: 10px;
-}
-
-.titleMenu {
-  color: #f8f9fa;
-  font-weight: 600;
-}
-
 .action-buttons {
   display: flex;
   gap: 10px;
-  margin-left: 50px;
+  margin-top: -170px;
+  margin-left: 160px;
+  visibility: hidden;
+  transition: visibility 0.2s ease;
+}
+
+.action-buttons.visible {
+  visibility: visible;
 }
 
 .btn {
@@ -451,6 +441,16 @@ const progressPercent = 96; // 진행률 % (숫자)
 body {
   font-family: "Malgun Gothic", sans-serif;
   background-color: #f5f5f5;
+}
+
+/* 페이지 */
+.page {
+  padding: 16px 24px 48px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0 -100px;
 }
 
 .profile-wrapper {
@@ -496,12 +496,11 @@ body {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  border: 3px solid #6c757d;
+  border: 3px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
-  position: relative;
   overflow: hidden;
 }
 
@@ -517,10 +516,16 @@ body {
   border-radius: 50%;
 }
 
+.avatar-wrapper {
+  position: relative; // 기준 요소로 설정
+  width: 200px;
+  height: 200px;
+}
+
 .camera-icon {
   position: absolute;
-  bottom: 125px;
-  right: 40px;
+  bottom: 0px;
+  right: 10px;
   width: 60px;
   height: 60px;
   background-color: #6c757d;
@@ -535,7 +540,6 @@ body {
     background-color: #545b62;
   }
 }
-
 .profile-info {
   display: flex;
 }
@@ -554,7 +558,7 @@ body {
 
 .profile-tabs {
   flex: 1;
-  max-width: 600px;
+  max-width: 800px;
   margin-top: 50px;
   margin-left: 60px;
   background-color: white;
@@ -574,7 +578,6 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
   font-size: 14px;
   font-weight: 500;
   border: none;
@@ -634,7 +637,7 @@ body {
 }
 
 .boxed-value {
-  border: 1px solid #d1d5db;
+  border: 0 solid #d1d5db;
   padding: 8px 12px;
   border-radius: 8px;
   background-color: #f9fafb;
@@ -693,10 +696,23 @@ body {
   margin-top: 16px;
 }
 
+.bi-person-fill,
+.bi-clipboard-check,
+.bi-briefcase-fill,
+.bi-award {
+  font-size: 24px; /* 원하는 크기로 변경 */
+}
+
+/* 8 여백 8 */
+.bin {
+  margin-bottom: 40px;
+}
+
 /* 8 프로그레스 8 */
 .progress-container {
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin-left: 440px;
+  margin-bottom: 20px;
   padding: 16px;
   background: white;
   border-radius: 6px;
@@ -720,11 +736,10 @@ body {
 
 /* 8 그래프 8 */
 .graph {
-  max-width: 500px;
-  margin: 20px auto 0 auto;
+  max-width: 800px;
+  margin-left: 440px;
   padding: 16px;
   background: white;
-
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
