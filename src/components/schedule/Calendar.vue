@@ -1,8 +1,11 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { fmt2, ymd } from '@/utils/date';
+import { fmt2, ymd } from '@/services/date';
 import { getSchedulesByMonth } from '@/services/scheduleService';
-import { expandDates } from '@/utils/date';
+import { expandDates } from '@/services/date';
+
+// ✅ 아이콘: src/assets 에 있다면 이렇게 import 해서 사용
+import Icon from '@/assets/free-icon-arrow.png';
 
 const model = defineModel('selectedDate', { type: Date, default: () => new Date() });
 const emit = defineEmits(['month-loaded', 'date-click']);
@@ -65,9 +68,9 @@ watch([year, month], build);
 <template>
   <div class="calendar">
     <h3 class="cal-title">
-      <a href="#" @click.prevent="prev"><img src="/image/button.png" alt="prev" class="rot" /></a>
+      <a href="#" @click.prevent="prev"><img :src="Icon" alt="prev" class="rot" /></a>
       <b>{{ year }}</b>년 <b>{{ month }}</b>월
-      <a href="#" @click.prevent="next"><img src="/image/button.png" alt="next" /></a>
+      <a href="#" @click.prevent="next"><img :src="Icon" alt="next" /></a>
     </h3>
     <table class="tbl">
       <thead><tr><td v-for="d in dayNames" :key="d"><b>{{ d }}</b></td></tr></thead>

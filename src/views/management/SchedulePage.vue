@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import Calendar from '@/components/schedule/Calendar.vue';
 import ScheduleList from '@/components/schedule/ScheduleList.vue';
 import ScheduleModal from '@/components/schedule/ScheduleModal.vue';
-import { ymd } from '@/utils/date';
+import { ymd } from '@/services/date';
 
 const selectedDate = ref(new Date());
 const selectedYmd = ref(ymd(selectedDate.value));
