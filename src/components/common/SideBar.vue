@@ -176,8 +176,8 @@ watch(
             </router-link>
           </li>
           <li>
-            <router-link to="/profile" class="router-link">
-              학적기본사항관리
+            <router-link to="#" class="router-link">
+              휴·복학신청
             </router-link>
           </li>
         </ul>
