@@ -119,7 +119,7 @@ const send = (id, json) => {
   </div>
 </template>
 
-<style lang="scss">
+<style>
 .table-container {
   margin: 20px 0 0 15px;
   border-radius: 5px;
@@ -171,24 +171,29 @@ button {
 button.enroll-btn {
   background-color: #2460CE;
   color: #fff;
-  &:hover {
-    background-color: #1F53B5;
-  }
+}
+
+button.enroll-btn:hover {
+  background-color: #1F53B5;
 }
 
 .enroll-btn.enrolled {
   background-color: gray;
   cursor: not-allowed;
-  &:hover {
-    background-color: gray;
-  }
 }
+
+.enroll-btn.enrolled:hover {
+  background-color: gray;
+}
+
 button.cancel-btn {
   background-color: #F44336;
-  &:hover {
-    background-color: #D32F2F;
-  }
 }
+
+button.cancel-btn:hover {
+  background-color: #D32F2F;
+}
+
 .link {
   color: #2460ce;
   cursor: pointer;
@@ -211,46 +216,54 @@ button.cancel-btn {
   color: #2460ce;
   font-weight: 700;
 }
-// th.code, td.code {
-//   width: 90px;
-// }
-th.deptName, td.deptName {
+/* th.code, td.code {
+  width: 90px;
+} */
+th.deptName,
+td.deptName {
   width: 150px;
 }
-// th.title, td.title {
-//   width: 150px;
-// }
-// th.classroom, td.classroom {
-//   width: 140px;
-// }
-th.type, td.type {
+/* th.title, td.title {
+  width: 150px;
+} */
+/* th.classroom, td.classroom {
+  width: 140px;
+} */
+th.type,
+td.type {
   width: 100px;
 }
-th.professor, td.professor {
+th.professor,
+td.professor {
   width: 100px;
 }
-// th.grade, td.grade {
-//   width: 150px;
-// }
-th.time, td.time {
+/* th.grade, td.grade {
+  width: 150px;
+} */
+th.time,
+td.time {
   width: 80px;
 }
-th.credit, td.credit {
+th.credit,
+td.credit {
   width: 70px;
 }
-th.maxStd, td.maxStd {
+th.maxStd,
+td.maxStd {
   width: 70px;
 }
-th.remStd, td.remStd {
+th.remStd,
+td.remStd {
   width: 70px;
 }
-th.enroll-action, td.enroll-action {
+th.enroll-action,
+td.enroll-action {
   width: 100px;
 }
-.status{
+.status {
   width: 120px;
 }
-.button{
+.button {
   width: 150px;
 }
 </style>

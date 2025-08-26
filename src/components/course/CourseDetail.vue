@@ -155,7 +155,8 @@ const loadCourseDetail = async (id) => {
   </WhiteBox>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
+
 .white-box{
   max-width: 1080px;
   margin-left: 0;
@@ -173,14 +174,14 @@ const loadCourseDetail = async (id) => {
   color: #fff;
   display: flex;
 
-  div {
+}
+.title div{
     border-left: 1px solid #b7b7b7;
     border-right: 1px solid #b7b7b7;
     flex: 1;
     padding: 10px;
     text-align: center;
     font-size: 20px;
-  }
 }
 .per {
   display: flex;
@@ -189,19 +190,21 @@ const loadCourseDetail = async (id) => {
   height: 120px;
   align-items: center;
   border: 1px solid #b7b7b7;
-  div {
+}
+
+.per div{
     height: 100%;
     flex: 1;
     text-align: center;
     font-size: 20px;
+}
 
-    span {
+.per div span{
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-  }
+
 }
 .middle {
   border-left: 1px solid #b7b7b7;
@@ -251,6 +254,7 @@ select {
   padding: 3px;
   flex: 1;
 }
+
 input {
   width: 100%;
   box-sizing: border-box;
@@ -260,18 +264,20 @@ input {
 .button {
   display: flex;
   justify-content: flex-end;
-  .btn {
+  
+}
+
+.button .btn{
     background-color: #2460ce;
     margin-bottom: 100px;
-  }
 }
 
 .detail {
   height: 200px;
-  .table-content { 
-    input {
-      height: 100%;
-    }
-  }
 }
+
+.detail .table-content input{
+  height: 100%;
+}
+
 </style>
