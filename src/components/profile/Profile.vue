@@ -11,6 +11,7 @@ import {
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Chart from "chart.js/auto";
 
+
 const props = defineProps({
   profile: {
     type: Object,
@@ -584,7 +585,6 @@ const progressPercent = 96; // 진행률 % (숫자)
     }
   }
 }
-
 body {
   font-family: "Malgun Gothic", sans-serif;
   background-color: #f5f5f5;
