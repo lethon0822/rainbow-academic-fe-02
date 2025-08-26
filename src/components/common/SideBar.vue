@@ -376,7 +376,8 @@ body {
 #accordian li.menu-gangui > a,
 #accordian li.menu-etc > a,
 #accordian li.menu-score > a,
-#accordian li.menu-management > a {
+#accordian li.menu-management > a, 
+#accordian li.menu-graduate > a {
   background-color: #fff;
   color: #343A40;
   outline: 1px solid #D9D9D9;
