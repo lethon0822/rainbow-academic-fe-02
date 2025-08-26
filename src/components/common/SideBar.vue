@@ -59,7 +59,7 @@ const toggleMenu = (liElement) => {
         item.classList.contains("menu-sugang") ||
         item.classList.contains("menu-gangui") ||
         item.classList.contains("menu-score") ||
-        item.classList.contains("menu-setting")
+        item.classList.contains("menu-management")
 
       ) {
         item.classList.remove("active");
@@ -234,7 +234,21 @@ watch(
             </li>
             <!-- 라우팅처리 -->
             <li>
-              <router-link to="/grade/all" class="router-link"
+              <router-link to="#" class="router-link"
+                >금학기성적조회</router-link
+              >
+            </li>
+          </ul>
+        </li>
+      </template>
+
+      <template v-if="userStore.userRole == 'student'" >
+        <li class="menu-graduate">
+          <a href="javascript:void(0);">졸업</a>
+          <ul>
+            <!-- 라우팅처리 -->
+            <li>
+              <router-link to="#" class="router-link"
                 >금학기성적조회</router-link
               >
             </li>
@@ -243,12 +257,12 @@ watch(
       </template>
 
       <template v-if="userStore.userRole == 'staff'">
-        <li class="menu-setting">
+        <li class="menu-management">
           <a href="javascript:void(0);">시스템관리</a>
           <ul>
             <li>
               <!-- 라우팅처리 -->
-              <router-link to="#" class="router-link">
+              <router-link to="/schedule" class="router-link">
                 학사일정관리
               </router-link>
             </li>
@@ -362,7 +376,7 @@ body {
 #accordian li.menu-gangui > a,
 #accordian li.menu-etc > a,
 #accordian li.menu-score > a,
-#accordian li.menu-setting > a {
+#accordian li.menu-management > a {
   background-color: #fff;
   color: #343A40;
   outline: 1px solid #D9D9D9;
