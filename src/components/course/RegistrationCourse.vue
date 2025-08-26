@@ -83,90 +83,111 @@ const back = () => {
 
 
 <template>
-
   <WhiteBox :title="'강의등록'">
-    <div style= 
-      "border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 1px 1px #9e9e9e;">
+    <div
+      style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 1px 1px #ccc;"
+    >
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
-       <br>
-       <span style="font-size: 15px;">강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span>
-       </br>
+      <br />
+      <span style="font-size: 15px;"
+        >강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span
+      >
     </div>
 
-    <div class = "container">
-      <div class="fform-group " >
-        <div class="form-group " >
-            <label for="deptName">교과목명</label>
-            <input type="text" id="deptName" name="subject">
-        </div>
+    <div class="container">
+      <div class="fform-group">
         <div class="form-group">
-            <label for="type">이수구분</label>
-            <select id="type" name="type" >
-                <option>전공</option>
-                <option>교양</option>
-            </select>    
+          <label for="title">교과목명</label>
+          <input type="text" id="title" v-model="state.form.title" />
         </div>
+
         <div class="form-group">
-            <label for="credits">이수학점</label>
-            <select id="credits" name="credits">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-            </select>
+          <label for="type">이수구분</label>
+          <select id="type" v-model="state.form.type">
+            <option value="전공필수">전공필수</option>
+            <option value="전공선택">전공선택</option>
+            <option value="교양">교양</option>
+          </select>
         </div>
+
         <div class="form-group">
-            <label for="time">강의시간</label>
-            <input type="text" id="time" name="time" placeholder="예: 수 1,2,3 & 목 4,5">
+          <label for="credit">이수학점</label>
+          <select id="credit" v-model="state.form.credit">
+            <option :value="1">1</option>
+            <option :value="2">2</option>
+            <option :value="3">3</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="time">강의시간</label>
+          <input
+            type="text"
+            id="time"
+            v-model="state.form.time"
+            placeholder="예: 수 1,2,3 & 목 4,5"
+          />
         </div>
       </div>
-      
-      <div class="fform-group2" >
+
+      <div class="fform-group2">
         <div class="form-group">
-            <label for="students">수강인원</label>
-            <input type="number" id="students" name="students">
+          <label for="maxStd">수강인원</label>
+          <input type="number" id="maxStd" v-model="state.form.maxStd" />
         </div>
+
         <div class="form-group">
-            <label for="department">학과명</label>
-            <input type="text" id="department" name="department">
-        </div> 
-        <div class="form-group">
-            <label for="semester">학기</label>
-            <select id="semester" name="semester">
-                <option>전체</option>
-                <option>1학기</option>
-                <option>2학기</option>
-            </select>
+          <label for="deptName">학과명</label>
+          <input type="text" id="deptName" v-model="state.form.deptName" disabled />
         </div>
+
         <div class="form-group">
-            <label for="classroom">강의실</label>
-            <input type="text" id="classroom" name="classroom">
+          <label for="semesterId">학기</label>
+          <select id="semesterId" v-model="state.form.semesterId">
+            <option :value="0">전체</option>
+            <option :value="1">1학기</option>
+            <option :value="2">2학기</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="classroom">강의실</label>
+          <input type="text" id="classroom" v-model="state.form.classroom" />
         </div>
       </div>
-    
 
-    <div class="fform-group3">
+      <div class="fform-group3">
         <div class="form-group">
-            <label for="textbook">교재정보</label>
-            <input type="text" id="textbook" name="textbook">
-        </div>
-        <div class="form-group">
-            <label for="objective">강의목표</label>
-            <textarea id="objective" name="objective"></textarea>
+          <label for="textBook">교재정보</label>
+          <input type="text" id="textBook" v-model="state.form.textBook" />
         </div>
 
+        <div class="form-group">
+          <label for="goal">강의목표</label>
+          <textarea id="goal" v-model="state.form.goal"></textarea>
+        </div>
 
         <div class="form-group">
-            <label for="evaluation">평가방법</label>
-            <input type="text" id="evaluation" name="evaluation" placeholder="%를 입력해주세요.">
+          <label for="evaluation">평가방법</label>
+          <input
+            type="text"
+            id="evaluation"
+            v-model="state.form.weekPlan"
+            placeholder="%를 입력해주세요."
+          />
         </div>
 
         <div class="buttons">
-            <button type="reset" class="reset">초기화</button>
-            <button type="submit">강의개설 신청</button>
+          <button type="reset" class="reset">초기화</button>
+          <button type="button" @click="submit">강의개설 신청</button>
         </div>
+        
+      </div>
+        
 
     </div>
-  </div>
+  </WhiteBox>
+</template>
 
     
       
@@ -287,9 +308,7 @@ const back = () => {
         </div> -->
       <!-- </form>
     </div> -->
-  </WhiteBox>
-</template>
-
+ 
 
 <style scoped lang="scss">
 
