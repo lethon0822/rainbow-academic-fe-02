@@ -3,7 +3,6 @@ import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { getGrades, getProfile } from "@/services/GradeService.js";
-import StudentRecordTab from "@/components/profile/StudentRecordTab.vue";
 import Profile from "@/components/profile/Profile.vue";
 
 const account = useAccountStore();
@@ -37,7 +36,6 @@ onMounted(async () => {
 <template>
   <div class="content">
     <Profile :profile="profile" />
-    <StudentRecordTab :grades="grades" :profile="profile" />
   </div>
 </template>
 
