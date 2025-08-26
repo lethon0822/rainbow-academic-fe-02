@@ -48,7 +48,7 @@ const logoutAccount = async () => {
   <header>
     <div
       class="navbar navbar-dark text-white shadow-sm"
-      style="background-color: #364157; height: 60px"
+      style="background-color: #00664F; height: 60px"
     >
       <div
         class="container-fluid d-flex justify-content-between align-items-center px-4"
@@ -67,9 +67,6 @@ const logoutAccount = async () => {
         <!-- 메뉴 오른쪽 -->
         <template v-if="account.state.loggedIn">
           <div class="menus d-flex align-items-center gap-3">
-            <div class="info">
-              {{ userStore.loginId }}
-            </div>
             <span>{{ userStore.userName }}님 반갑습니다</span>
             <span class="divider">|</span>
             <a @click="logoutAccount()">로그아웃</a>

@@ -101,7 +101,7 @@ body,
 #app {
   height: 100%;
   margin: 0;
-  background-color: #dee2e5;
+  background-color: #F5F5F5;
   overflow-x: hidden;
 }
 div {
