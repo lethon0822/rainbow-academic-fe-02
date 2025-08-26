@@ -96,7 +96,7 @@ const router = createRouter({
         {
           path: "/course/survey",
           component: () => import("@/views/profile/CourseEvaluation.vue"),
-          name: "CourseEvaluation",
+          name: "CourseEvaluation"
         },
         {
           path: "/grade/all",
