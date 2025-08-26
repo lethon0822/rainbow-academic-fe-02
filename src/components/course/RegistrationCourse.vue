@@ -86,7 +86,7 @@ const back = () => {
 
   <WhiteBox :title="'강의등록'">
     <div style= 
-      "border: 1px solid gray; border-radius: 10px; background-color: #FAFAD2; margin: 100px; padding: 10px;">
+      "border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 1px 1px #9e9e9e;">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
        <br>
        <span style="font-size: 15px;">강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span>
@@ -155,12 +155,12 @@ const back = () => {
         </div>
 
 
-        <div class="form-group2">
+        <div class="form-group">
             <label for="evaluation">평가방법</label>
             <input type="text" id="evaluation" name="evaluation" placeholder="%를 입력해주세요.">
         </div>
 
-        <div class="buttonsAAD">
+        <div class="buttons">
             <button type="reset" class="reset">초기화</button>
             <button type="submit">강의개설 신청</button>
         </div>
@@ -294,9 +294,17 @@ const back = () => {
 <style scoped lang="scss">
 
 //2025-8-22
-  .container {
-   max-width: 1200px;
-   min-width: 200px;
+   .container {
+   border: 2px solid #ccc;   /* 테두리 */
+   border-radius: 8px;       /* 모서리 둥글게 */
+   padding: 20px;            /* 안쪽 여백 */
+   margin: 20px auto;        /* 바깥 여백 */
+   max-width: 1320px;         /* 최대 너비 */
+   background: #fdfdfd; 
+   height: 1000px;   
+  
+   bottom: 500px;
+   margin-left: 100px; 
   
    }
 
@@ -316,26 +324,26 @@ const back = () => {
       border: #9e9e9e;
       position: fixed;
       
-      left: 500px;
+      left: 550px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
     .fform-group2{
       position: fixed;
-     
-      left: 1050px;
+      
+      left: 1100px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group3 {
-       left: 410px;
+        left: 460px;
         margin: 50px ;
        
         padding: 20px 40px;
-        top:680px;
+        top:700px;
         
         position: fixed;
         //bottom:10px;
@@ -344,7 +352,7 @@ const back = () => {
         // flex-direction: column;
     }
     .form-group {
-       
+        border: #9e9e9e;
         display: flex;
         margin-bottom: 15px;
         
@@ -366,6 +374,7 @@ const back = () => {
     .form-group input, 
     .form-group select, 
     .form-group textarea {
+        background-color: #f0f0f0;
         flex: 1;
         padding: 6px 10px;
         border: 1px solid #ccc;
@@ -389,9 +398,9 @@ const back = () => {
         border-radius: 5px;
     }
     .buttons {
-        margin-top: 20px;
-        text-align: center;
-        padding: 450px;
+       position: relative;
+       left: 430px;
+       top:50px;
        
        
     }
@@ -420,11 +429,7 @@ const back = () => {
 }
 
 
-// .container {
-//   max-width: 1200px;
-//   min-width: 1200px;
-  
-// }
+
 .title {
   font-size: 38px;
   font-weight: bold;
