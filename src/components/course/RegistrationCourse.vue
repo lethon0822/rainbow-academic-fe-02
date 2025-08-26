@@ -96,12 +96,12 @@ const back = () => {
     <div class = "container">
       <div class="fform-group " >
         <div class="form-group " >
-            <label for="subject">교과목명</label>
-            <input type="text" id="subject" name="subject">
+            <label for="deptName">교과목명</label>
+            <input type="text" id="deptName" name="subject">
         </div>
         <div class="form-group">
-            <label for="category">이수구분</label>
-            <select id="category" name="category" >
+            <label for="type">이수구분</label>
+            <select id="type" name="type" >
                 <option>전공</option>
                 <option>교양</option>
             </select>    
