@@ -93,7 +93,7 @@ const back = () => {
        </br>
     </div>
 
-    
+    <div class = "container">
       <div class="fform-group " >
         <div class="form-group " >
             <label for="subject">교과목명</label>
@@ -101,7 +101,7 @@ const back = () => {
         </div>
         <div class="form-group">
             <label for="category">이수구분</label>
-            <select id="category" name="category">
+            <select id="category" name="category" >
                 <option>전공</option>
                 <option>교양</option>
             </select>    
@@ -160,13 +160,13 @@ const back = () => {
             <input type="text" id="evaluation" name="evaluation" placeholder="%를 입력해주세요.">
         </div>
 
-        <div class="buttons">
+        <div class="buttonsAAD">
             <button type="reset" class="reset">초기화</button>
             <button type="submit">강의개설 신청</button>
         </div>
 
-      </div>
-    
+    </div>
+  </div>
 
     
       
@@ -294,11 +294,13 @@ const back = () => {
 <style scoped lang="scss">
 
 //2025-8-22
-   .container1 {
-        max-width: 1200px;
-        min-width: 1200px;
+  .container {
+   max-width: 1200px;
+   min-width: 200px;
   
    }
+
+  
   body {
         font-family: Arial, sans-serif;
         background-color: #f7f7f7;
@@ -314,7 +316,7 @@ const back = () => {
       border: #9e9e9e;
       position: fixed;
       
-      left: 450px;
+      left: 500px;
       width: 540px;
       display: flex;
       flex-direction: column;
@@ -322,23 +324,24 @@ const back = () => {
     .fform-group2{
       position: fixed;
      
-      left: 1000px;
-      width: 600px;
+      left: 1050px;
+      width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group3 {
-       
+       left: 410px;
         margin: 50px ;
        
         padding: 20px 40px;
+        top:680px;
         
-       
         position: fixed;
-        bottom:150px;
-        max-width: 1225px;
-        min-width: 1225px;
+        //bottom:10px;
+         max-width: 1030px;
+         min-width: 1170px;
+        // flex-direction: column;
     }
     .form-group {
        
@@ -346,6 +349,12 @@ const back = () => {
         margin-bottom: 15px;
         
         flex-direction: column; /* 세로 정렬 */
+    }
+
+    .form-group select{
+      width: 540px;  /* 원하는 길이 */
+      padding: 6px;
+      box-sizing: border-box; /* padding 포함 길이 유지 */
     }
     
     .form-group label {
@@ -383,8 +392,11 @@ const back = () => {
         margin-top: 20px;
         text-align: center;
         padding: 450px;
+       
+       
     }
     button {
+        
         padding: 8px 20px;
         margin: 0 5px;
         border: none;
@@ -408,11 +420,11 @@ const back = () => {
 }
 
 
-.container {
-  max-width: 1200px;
-  min-width: 1200px;
+// .container {
+//   max-width: 1200px;
+//   min-width: 1200px;
   
-}
+// }
 .title {
   font-size: 38px;
   font-weight: bold;
