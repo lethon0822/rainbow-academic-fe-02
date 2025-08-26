@@ -13,6 +13,7 @@
     "@vue/compiler-sfc": "^3.5.17",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1",
     "bootstrap-vue-3": "^0.5.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^2.4.0",

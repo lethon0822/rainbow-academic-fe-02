@@ -170,14 +170,14 @@ watch(
               학적기본사항관리
             </router-link>
           </li>
-          <!-- <li>
-            <router-link to="/grade/all" class="router-link"
-              >학적변동관리</router-link
-            >
-          </li> -->
           <li>
             <router-link to="/renewal/privacy" class="router-link">
               개인정보변경
+            </router-link>
+          </li>
+          <li>
+            <router-link to="#" class="router-link">
+              휴·복학신청
             </router-link>
           </li>
         </ul>
@@ -249,7 +249,7 @@ watch(
             <!-- 라우팅처리 -->
             <li>
               <router-link to="#" class="router-link"
-                >금학기성적조회</router-link
+                >졸업자가진단</router-link
               >
             </li>
           </ul>
@@ -303,7 +303,7 @@ watch(
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 * {
   margin: 0;
   padding: 0;
@@ -360,8 +360,8 @@ body {
   font-size: 15px;
   display: block;
   padding: 13px 15px;
-  //outline: 1px solid #D9D9D9;
-  //box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* outline: 1px solid #D9D9D9; */
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
   margin-bottom: 1px;
   font-weight: 700;
   position: relative;
@@ -435,14 +435,14 @@ body {
 }
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-// #accordian
-//   li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
-//     .menu-score
-//   ).active
-//   > a {
-//   background-color: transparent;
-//   box-shadow: none;
-// }
+/* #accordian
+  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
+    .menu-score
+  ).active
+  > a {
+  background-color: transparent;
+  box-shadow: none;
+ } */
 
 /* 하위 메뉴 링크 포커스, 호버 시 배경색 유지 */
 #accordian ul li ul li a:hover,
