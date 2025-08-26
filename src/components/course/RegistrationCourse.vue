@@ -183,6 +183,18 @@ const back = () => {
         </div>
         
       </div>
+
+      <div class="fform-group4">
+        <div class="form-group">
+          <label for="evaluation">평가방법</label>
+          <input
+            
+            id="evaluation"
+            v-model="state.form.weekPlan"
+            placeholder="%를 입력해주세요."
+          />
+        </div>
+      </div>
         
 
     </div>
@@ -370,6 +382,20 @@ const back = () => {
          min-width: 1170px;
         // flex-direction: column;
     }
+    .fform-group4 {
+        left: 460px;
+        margin: 50px ;
+       
+        padding: 20px 40px;
+        top:950px;
+        
+        position: fixed;
+        //bottom:10px;
+         max-width: 200px;
+         min-width: 200px;
+        // flex-direction: column;
+         height: 200px;
+    }
     .form-group {
         border: #9e9e9e;
         display: flex;
@@ -419,7 +445,7 @@ const back = () => {
     .buttons {
        position: relative;
        left: 430px;
-       top:50px;
+       top:130px;
        
        
     }
