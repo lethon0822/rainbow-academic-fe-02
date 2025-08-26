@@ -53,11 +53,20 @@ const toggleMenu = (liElement) => {
     // 같은 레벨의 활성화 메뉴 모두 닫기
     const activeItems = parentUl.querySelectorAll("li.active");
     activeItems.forEach((item) => {
-      item.classList.remove("active");
-      const subMenu = item.querySelector("ul");
-      if (subMenu) {
-        slideUp(subMenu);
-        subMenu.classList.remove("show-dropdown");
+      // 🚨 여기 조건 추가: 상위 메뉴만 지우기
+      if (
+        item.classList.contains("menu-hakjeok") ||
+        item.classList.contains("menu-sugang") ||
+        item.classList.contains("menu-gangui") ||
+        item.classList.contains("menu-score") ||
+        item.classList.contains("menu-etc")
+      ) {
+        item.classList.remove("active");
+        const subMenu = item.querySelector("ul");
+        if (subMenu) {
+          slideUp(subMenu);
+          subMenu.classList.remove("show-dropdown");
+        }
       }
     });
 
@@ -97,6 +106,7 @@ const openMenuByRoute = () => {
   const activeItems = accordian.value.querySelectorAll("li.active");
   activeItems.forEach((item) => {
     item.classList.remove("active");
+    //handleMenuClick();
   });
   const shownSubMenus = accordian.value.querySelectorAll("ul.show-dropdown");
   shownSubMenus.forEach((ul) => {
@@ -248,7 +258,7 @@ watch(
 
 body {
   font-weight: 700;
-  background-color: #dee2e5;
+  background-color: #fff;
 }
 
 #accordian {
@@ -257,7 +267,8 @@ body {
   left: 0;
   width: 300px;
   height: 100vh;
-  background: #dee2e5;
+  background: #fff;
+  box-shadow:  0 6px 6px rgba(0,0,0,0.23);
   overflow-y: auto;
   z-index: 999;
 }
@@ -289,14 +300,14 @@ body {
 }
 
 #accordian ul li > a {
-  color: #333;
+  color: #343A40;
   background-color: white;
   text-decoration: none;
   font-size: 15px;
   display: block;
   padding: 13px 15px;
-  border: 1px solid #ddd;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  //outline: 1px solid #D9D9D9;
+  //box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 1px;
   font-weight: 700;
   position: relative;
@@ -311,9 +322,9 @@ body {
 #accordian li.menu-gangui > a,
 #accordian li.menu-etc > a,
 #accordian li.menu-score > a {
-  background-color: #febe3a;
-  color: #364157;
-  border: 1px solid #febe3a;
+  background-color: #fff;
+  color: #343A40;
+  outline: 1px solid #D9D9D9;
   font-weight: bold;
 }
 
@@ -328,15 +339,17 @@ body {
 
 /* 활성화된 하위 메뉴 보이기 */
 #accordian ul li.active > ul.show-dropdown {
+  
+  border-bottom: 1px solid #D9D9D9;
   display: block;
 }
 
 /* 하위 메뉴 링크 스타일 */
 #accordian ul li ul li a {
-  background-color: #ffffff !important;
-  color: #333;
-  border: 1px solid #ddd;
-  margin-top: -2px;
+  background-color: #F8F9FA !important;
+  color: #343A40;
+
+  margin-bottom: 0;
   padding-left: 15px;
   cursor: pointer; /* 클릭 커서 추가 */
 }
@@ -344,8 +357,8 @@ body {
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */
 #accordian ul li ul li.active > a,
 #accordian ul li ul li > a.active {
-  background-color: #ffffff !important;
-  color: inherit !important;
+  background-color: #E9F5E8 !important;
+  color: #00664F;
   box-shadow: none !important;
 }
 
@@ -367,20 +380,19 @@ body {
 }
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-#accordian
-  li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
-    .menu-score
-  ).active
-  > a {
-  background-color: transparent;
-  color: inherit;
-  box-shadow: none;
-}
+// #accordian
+//   li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
+//     .menu-score
+//   ).active
+//   > a {
+//   background-color: transparent;
+//   box-shadow: none;
+// }
 
 /* 하위 메뉴 링크 포커스, 호버 시 배경색 유지 */
 #accordian ul li ul li a:hover,
 #accordian ul li ul li a:focus {
-  background-color: #ffffff !important;
-  color: inherit !important;
+  background-color: #E9F5E8 !important;
+  color: #00664F;
 }
 </style>
