@@ -84,12 +84,18 @@ const router = createRouter({
           path: "/enrollment",
           component: () => import("@/views/enrollment/Enrollment.vue"),
         },
+        
+        //management
+        // {
+        //   path: "/schedule",
+        //   component: () => import("@/views/management/SchedulePage.vue"),
+        // },
 
         //profile
         {
           path: "/course/survey",
           component: () => import("@/views/profile/CourseEvaluation.vue"),
-          name: "CourseEvaluation",
+          name: "CourseEvaluation"
         },
         {
           path: "/grade/all",

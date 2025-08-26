@@ -199,7 +199,7 @@ watch(() => state.form.authCode,   () => { state.form.isVerified = false; state.
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped >
 /* 브라우저 기본 외형 제거 (특히 사파리/크롬) */
 .input,
 input[type="text"],
