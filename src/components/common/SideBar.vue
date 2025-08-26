@@ -59,7 +59,8 @@ const toggleMenu = (liElement) => {
         item.classList.contains("menu-sugang") ||
         item.classList.contains("menu-gangui") ||
         item.classList.contains("menu-score") ||
-        item.classList.contains("menu-etc")
+        item.classList.contains("menu-setting")
+
       ) {
         item.classList.remove("active");
         const subMenu = item.querySelector("ul");
@@ -182,7 +183,7 @@ watch(
         </ul>
       </li>
 
-      <template v-if="userStore.userRole !== 'professor'">
+      <template v-if="userStore.userRole == 'student'">
         <li class="menu-sugang">
           <a href="javascript:void(0);">수강</a>
           <ul>
@@ -205,24 +206,24 @@ watch(
               >강의조회</router-link
             >
           </li>
-          <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/course/status"
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/professor/course/status" class="router-link"
               >강의개설신청 및 신청현황조회</router-link
             >
           </li>
-          <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/course/management"
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/professor/course/management" class="router-link"
               >강의관리</router-link
             >
           </li>
-          <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/survey/check">강의평가조회</router-link>
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/professor/survey/check" class="router-link">강의평가조회</router-link>
           </li>
         </ul>
       </li>
 
       <!-- 학적 -->
-      <template v-if="userStore.userRole !== 'professor'">
+      <template v-if="userStore.userRole == 'student'">
         <li class="menu-score">
           <a href="javascript:void(0);">성적</a>
           <ul>
@@ -231,8 +232,47 @@ watch(
                 >영구성적조회</router-link
               >
             </li>
+            <!-- 라우팅처리 -->
+            <li>
+              <router-link to="/grade/all" class="router-link"
+                >금학기성적조회</router-link
+              >
+            </li>
           </ul>
         </li>
+      </template>
+
+      <template v-if="userStore.userRole == 'staff'">
+        <li class="menu-setting">
+          <a href="javascript:void(0);">시스템관리</a>
+          <ul>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="#" class="router-link">
+                학사일정관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="#" class="router-link">
+                신분변동관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="#" class="router-link">
+                강의개설승인관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="#" class="router-link">
+                구성원현황
+              </router-link>
+            </li>
+          </ul>
+        </li>
+
       </template>
 
       <!-- <li class="menu-etc">
@@ -321,7 +361,8 @@ body {
 #accordian li.menu-hakjeok > a,
 #accordian li.menu-gangui > a,
 #accordian li.menu-etc > a,
-#accordian li.menu-score > a {
+#accordian li.menu-score > a,
+#accordian li.menu-setting > a {
   background-color: #fff;
   color: #343A40;
   outline: 1px solid #D9D9D9;
