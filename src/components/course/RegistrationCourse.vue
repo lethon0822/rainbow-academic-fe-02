@@ -188,7 +188,7 @@ const back = () => {
         <div class="form-group">
           <label for="evaluation">평가방법</label>
           <input
-            
+            :type="pers"
             id="evaluation"
             v-model="state.form.weekPlan"
             placeholder="%를 입력해주세요."
