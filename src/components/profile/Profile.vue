@@ -20,11 +20,6 @@ const props = defineProps({
   },
 });
 
-<<<<<<< HEAD
-
-=======
-/* 8 프로필 8 */
->>>>>>> bb2416d690db1006d66a1fd5f398f8bae492622f
 
 // 이미지 관련 상태
 const selectedImage = ref(null);

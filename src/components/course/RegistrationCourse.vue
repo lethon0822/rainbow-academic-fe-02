@@ -187,8 +187,8 @@ const back = () => {
       <div class="fform-group4">
         <div class="form-group">
           <label for="evaluation">평가방법</label>
-          <input
-            :type="pers"
+          <input2
+            type="text"
             id="evaluation"
             v-model="state.form.weekPlan"
             placeholder="%를 입력해주세요."
@@ -385,7 +385,8 @@ const back = () => {
     .fform-group4 {
         left: 460px;
         margin: 50px ;
-       
+        width: 100px;
+        height: 300px;
         padding: 20px 40px;
         top:950px;
         
@@ -425,6 +426,14 @@ const back = () => {
         border: 1px solid #ccc;
         border-radius: 5px;
     }
+    .form-group input2 {
+      background-color: #f0f0f0;
+        flex: 1;
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
     textarea {
         resize: vertical;
         height: 60px;
@@ -462,6 +471,16 @@ const back = () => {
     button.reset {
         background-color: #9e9e9e;
     }
+    input, textarea {
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        outline-color: #A2A2A2;
+     }
+     .percent {
+       width: 100px;
+       height: 200px;
+     }
 //2025-8-22
 
 .table1 {
@@ -521,12 +540,7 @@ select {
   padding: 3px;
   flex: 1;
 }
-input, textarea {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  outline-color: #A2A2A2;
-}
+
 
 .button {
   display: flex;
