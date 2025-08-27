@@ -90,6 +90,10 @@ const router = createRouter({
           path: "/schedule",
           component: () => import("@/views/management/SchedulePage.vue"),
         },
+        {
+          path: "/deptmanage",
+          component: () => import("@/views/management/DepartmentManage.vue"),
+        },
 
         //profile
         {
