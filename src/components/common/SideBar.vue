@@ -59,7 +59,8 @@ const toggleMenu = (liElement) => {
         item.classList.contains("menu-sugang") ||
         item.classList.contains("menu-gangui") ||
         item.classList.contains("menu-score") ||
-        item.classList.contains("menu-management")
+        item.classList.contains("menu-management")||
+        item.classList.contains("menu-graduate")
 
       ) {
         item.classList.remove("active");
@@ -176,9 +177,7 @@ watch(
             </router-link>
           </li>
           <li>
-            <router-link to="#" class="router-link">
-              휴·복학신청
-            </router-link>
+            <router-link to="#" class="router-link"> 휴·복학신청 </router-link>
           </li>
         </ul>
       </li>
@@ -217,7 +216,9 @@ watch(
             >
           </li>
           <li v-if="userStore.userRole == 'professor'">
-            <router-link to="/professor/survey/check" class="router-link">강의평가조회</router-link>
+            <router-link to="/professor/survey/check" class="router-link"
+              >강의평가조회</router-link
+            >
           </li>
         </ul>
       </li>
@@ -242,15 +243,13 @@ watch(
         </li>
       </template>
 
-      <template v-if="userStore.userRole == 'student'" >
+      <template v-if="userStore.userRole == 'student'">
         <li class="menu-graduate">
           <a href="javascript:void(0);">졸업</a>
           <ul>
             <!-- 라우팅처리 -->
             <li>
-              <router-link to="#" class="router-link"
-                >졸업자가진단</router-link
-              >
+              <router-link to="#" class="router-link">졸업자가진단</router-link>
             </li>
           </ul>
         </li>
@@ -268,6 +267,12 @@ watch(
             </li>
             <li>
               <!-- 라우팅처리 -->
+              <router-link to="/deptmanage" class="router-link">
+                학과관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
               <router-link to="#" class="router-link">
                 신분변동관리
               </router-link>
@@ -280,13 +285,10 @@ watch(
             </li>
             <li>
               <!-- 라우팅처리 -->
-              <router-link to="#" class="router-link">
-                구성원현황
-              </router-link>
+              <router-link to="#" class="router-link"> 구성원현황 </router-link>
             </li>
           </ul>
         </li>
-
       </template>
 
       <!-- <li class="menu-etc">
@@ -322,7 +324,7 @@ body {
   width: 300px;
   height: 100vh;
   background: #fff;
-  box-shadow:  0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.23);
   overflow-y: auto;
   z-index: 999;
 }
@@ -354,7 +356,7 @@ body {
 }
 
 #accordian ul li > a {
-  color: #343A40;
+  color: #343a40;
   background-color: white;
   text-decoration: none;
   font-size: 15px;
@@ -379,8 +381,8 @@ body {
 #accordian li.menu-management > a, 
 #accordian li.menu-graduate > a {
   background-color: #fff;
-  color: #343A40;
-  outline: 1px solid #D9D9D9;
+  color: #343a40;
+  outline: 1px solid #d9d9d9;
   font-weight: bold;
 }
 
@@ -395,15 +397,14 @@ body {
 
 /* 활성화된 하위 메뉴 보이기 */
 #accordian ul li.active > ul.show-dropdown {
-  
-  border-bottom: 1px solid #D9D9D9;
+  border-bottom: 1px solid #d9d9d9;
   display: block;
 }
 
 /* 하위 메뉴 링크 스타일 */
 #accordian ul li ul li a {
-  background-color: #F8F9FA !important;
-  color: #343A40;
+  background-color: #f8f9fa !important;
+  color: #343a40;
 
   margin-bottom: 0;
   padding-left: 15px;
@@ -413,8 +414,8 @@ body {
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */
 #accordian ul li ul li.active > a,
 #accordian ul li ul li > a.active {
-  background-color: #E9F5E8 !important;
-  color: #00664F;
+  background-color: #e9f5e8 !important;
+  color: #00664f;
   box-shadow: none !important;
 }
 
@@ -448,7 +449,7 @@ body {
 /* 하위 메뉴 링크 포커스, 호버 시 배경색 유지 */
 #accordian ul li ul li a:hover,
 #accordian ul li ul li a:focus {
-  background-color: #E9F5E8 !important;
-  color: #00664F;
+  background-color: #e9f5e8 !important;
+  color: #00664f;
 }
 </style>
