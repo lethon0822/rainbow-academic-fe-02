@@ -14,7 +14,8 @@ const props = defineProps({
 const model = defineModel('selectedDate', { type: Date, default: () => new Date() });
 const emit = defineEmits(['month-loaded', 'date-click']);
 
-const dayNames = ['일','월','화','수','목','금','토'];
+
+const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
 const year = ref(model.value.getFullYear());
 const month = ref(model.value.getMonth() + 1);
 const matrix = ref([]);
@@ -29,7 +30,7 @@ const build = () => {
 
   const rows = [];
   let day = 1;
-  for (let r=0;r<6;r++){
+  for (let r = 0; r < 6; r++) {
     const row = [];
     for(let c=0;c<7;c++){
       if (r===0 && c<startIdx) row.push('');
@@ -61,11 +62,16 @@ const prev = () => { month.value===1 ? (month.value=12, year.value--) : month.va
 const next = () => { month.value===12 ? (month.value=1, year.value++) : month.value++; sync(); };
 const sync = () => { build(); fetchMonthMarks(); };
 
+
 const isToday = (d) => {
   const t = new Date();
-  return d && t.getFullYear()===year.value && t.getMonth()+1===month.value && t.getDate()===d;
+  return (
+    d &&
+    t.getFullYear() === year.value &&
+    t.getMonth() + 1 === month.value &&
+    t.getDate() === d
+  );
 };
-
 // 해당 날짜의 타입 배열
 const typesFor = (d) => {
   if (!d) return [];
@@ -77,7 +83,7 @@ const pick = (d) => {
   if (!d) return;
   const sel = new Date(`${year.value}-${fmt2(month.value)}-${fmt2(d)}`);
   model.value = sel;
-  emit('date-click', sel);
+  emit("date-click", sel);
 };
 
 onMounted(sync);
@@ -90,13 +96,23 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 <template>
   <div class="calendar">
     <h3 class="cal-title">
-      <a href="#" @click.prevent="prev"><img :src="Icon" alt="prev" class="rot" /></a>
-      <b>{{ year }}</b>년 <b>{{ month }}</b>월
+      <a href="#" @click.prevent="prev"
+        ><img :src="Icon" alt="prev" class="rot"
+      /></a>
+      <b>{{ year }}</b
+      >년 <b>{{ month }}</b
+      >월
       <a href="#" @click.prevent="next"><img :src="Icon" alt="next" /></a>
     </h3>
 
     <table class="tbl">
-      <thead><tr><td v-for="d in dayNames" :key="d"><b>{{ d }}</b></td></tr></thead>
+      <thead>
+        <tr>
+          <td v-for="d in dayNames" :key="d">
+            <b>{{ d }}</b>
+          </td>
+        </tr>
+      </thead>
       <tbody>
         <tr v-for="(row,ri) in matrix" :key="ri">
           <td v-for="(d,ci) in row" :key="ci"
@@ -128,8 +144,8 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 .calendar{border-radius:20px;border:#dedede 1px solid;margin-top:10px;width:640px;background:#fff;padding:35px 45px 25px;box-shadow:0 0 10px rgba(0,0,0,.1)}
 .cal-title{display:flex;align-items:center;justify-content:center;color:#000;gap:6px}
 .cal-title img{width:25px}
-.rot{transform:rotate(180deg)}
 
+.rot{transform:rotate(180deg)}
 .tbl{width:100%;font-size:20px;border-collapse:collapse;margin-top:10px}
 .tbl td{height:70px;text-align:center;vertical-align:top}
 .day{cursor:pointer;padding-top:8px}
@@ -146,3 +162,4 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 .legend{margin-top:10px;font-size:12px;color:#666;display:flex;gap:12px;flex-wrap:wrap}
 .leg{display:inline-flex;align-items:center;gap:6px}
 </style>
+

@@ -50,7 +50,7 @@ const move = () => {
     </div>
   </WhiteBox>
 </template>
-<style lang="scss" scoped>
+<style scoped>
 button {
   display: flex;
   margin-right: 26px;
@@ -61,7 +61,7 @@ button {
   border: none;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s ease; // 버튼 클릭시 툭 바뀌는 게 아닌 0.2초 동안 천천히 바뀜
+  transition: background-color 0.2s ease; /* 버튼 클릭시 툭 바뀌는 게 아닌 0.2초 동안 천천히 바뀜 */
 }
 button.enroll-btn {
   background-color: #364157;

@@ -19,7 +19,6 @@ const router = createRouter({
       component: () => import("@/views/login/RenewalPwd.vue"),
     },
 
-
     //홈
     {
       path: "/",
@@ -75,8 +74,8 @@ const router = createRouter({
           component: () => import("@/views/course/ProfessorCourseStatus.vue"),
         },
         {
-          path: '/professor/survey/check',
-          component: () => import('@/views/course/SurveyResultCheck.vue'),
+          path: "/professor/survey/check",
+          component: () => import("@/views/course/SurveyResultCheck.vue"),
         },
 
         //enrollment
@@ -96,7 +95,7 @@ const router = createRouter({
         {
           path: "/course/survey",
           component: () => import("@/views/profile/CourseEvaluation.vue"),
-          name: "CourseEvaluation",
+          name: "CourseEvaluation"
         },
         {
           path: "/grade/all",
