@@ -176,7 +176,7 @@ const send = (id, json) => {
   background-color: white;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding: 25px 0px 0 25px;
+  padding: 25px 25px 0 25px;
 }
 
 .table-wrapper {
