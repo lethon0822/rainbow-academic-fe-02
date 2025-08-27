@@ -25,11 +25,12 @@ const departments = reactive([
             <th>학과코드</th>
             <th>학과</th>
             <th>학과사무실</th>
-            <th>학과장명</th>
+            <th>학과장</th>
             <th>학과 전화번호</th>
             <th>학과 정원</th>
+            <th>학과 인원</th>
             <th>상태</th>
-            <th>수강</th>
+            <th>    </th>
           </tr>
         </thead>
         <tbody>
@@ -39,7 +40,7 @@ const departments = reactive([
             <td>{{ dept.office }}</td>
             <td>{{ dept.head }}</td>
             <td>{{ dept.phone }}</td>
-            <td>{{ dept.capacity }}명</td>
+            <td>{{ dept.capacity }}</td>
             <td>
               <span :class="dept.status === '처리중' ? 'status-processing' : 'status-complete'">{{ dept.status }}</span>
             </td>
@@ -58,8 +59,8 @@ const departments = reactive([
 .container {
   padding: 20px;
   background-color: #f8f9fa;
-  min-height: 100vh;
-  font-family: 'Noto Sans KR', sans-serif;
+  min-height: auto;
+  min-width: 1430px;
 }
 
 /* 가로 스크롤 가능 */

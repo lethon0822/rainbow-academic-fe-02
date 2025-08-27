@@ -27,12 +27,12 @@ import SideBar from "@/components/common/SideBar.vue";
   margin-top:60px;
 }
 .sidebar{
-  width:300px;
+  width:250px;
   box-sizing: border-box;
   
 }
 .dummy{
-  width: 300px;
+  width: 250px;
 }
 .content{
   flex:1;
