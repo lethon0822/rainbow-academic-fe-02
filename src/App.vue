@@ -124,7 +124,9 @@ div {
   padding: 20px;
   z-index: 9999;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 10px;
+  padding-left: 200px;
 }
 .cover {
   overflow: hidden;
