@@ -1,22 +1,21 @@
 <script setup>
-import WhiteBox from '@/components/common/WhiteBox.vue';
-import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
-import CourseTable from '@/components/course/CourseTable.vue';
-import { getDepartments, getYears } from '@/services/CourseService';
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
+import CourseTable from "@/components/course/CourseTable.vue";
+import { getDepartments, getYears } from "@/services/CourseService";
 import {
   getCourseListByFilter,
   getMySugangList,
-} from '@/services/CourseService';
-import { postEnrollCourse, deleteSugangCancel } from '@/services/SugangService';
+} from "@/services/CourseService";
+import { postEnrollCourse, deleteSugangCancel } from "@/services/SugangService";
 
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from "vue";
 
 const departments = ref([]);
 const years = ref([]);
 const courseList = ref([]); // 이번학기 개설 강의 목록
 const mySugangList = ref([]); // 수강신청한 강의 목록
 const lastFilters = ref({}); // 마지막 검색 필터 저장용 변수
-
 
 // 신청 학점 계산
 const totalCredit = computed(() =>
@@ -43,25 +42,25 @@ onMounted(async () => {
 // 필터에 따른 개설 강의 목록 조회
 const handleSearch = async (filters) => {
   console.log("검색 필터 전달됨:", filters);
-  lastFilters.value = { ...filters }; 
+  lastFilters.value = { ...filters };
   const courseListRes = await getCourseListByFilter(filters);
   console.log("개설 강의 내역 백엔드 응답:", courseListRes.data);
   courseList.value = courseListRes.data;
 
- // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
-   courseList.value = courseListRes.data.map((course) => {
-     course.enrolled = mySugangList.value.some(
+  // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
+  courseList.value = courseListRes.data.map((course) => {
+    course.enrolled = mySugangList.value.some(
       (c) => c.courseId === course.courseId
-     );
-     return course;
-   });
+    );
+    return course;
+  });
 };
 
 // 수강 신청 처리 함수
 const handleEnroll = async (course) => {
   const sugangReq = { courseId: course.courseId };
 
-  if (!confirm('수강신청을 하시겠습니까?')) return;
+  if (!confirm("수강신청을 하시겠습니까?")) return;
 
   try {
     const sugangRes = await postEnrollCourse(sugangReq);
@@ -79,33 +78,32 @@ const handleEnroll = async (course) => {
       }
 
       mySugangList.value.push(updatedCourse);
-      alert('수강신청이 완료되었습니다.');
+      alert("수강신청이 완료되었습니다.");
 
-      try{
+      try {
         // 강의 목록 리패치 시 신청 완료 버튼 띄우기 위함
-        const fetchCourseListRes = await getCourseListByFilter(lastFilters.value);
+        const fetchCourseListRes = await getCourseListByFilter(
+          lastFilters.value
+        );
         courseList.value = fetchCourseListRes.data.map((course) => {
-          course.enrolled = mySugangList.value.some((c) => c.courseId === course.courseId);
+          course.enrolled = mySugangList.value.some(
+            (c) => c.courseId === course.courseId
+          );
           return course;
         });
-
-      }catch(error){
-        alert('목록 새로고침 실패. 페이지를 새로고침 해주세요.');
-        
+      } catch (error) {
+        alert("목록 새로고침 실패. 페이지를 새로고침 해주세요.");
       }
-
-
-      
     }
   } catch (error) {
     const err = error.response?.data;
-    alert(err?.message || '예기치 못한 오류가 발생했습니다.');
+    alert(err?.message || "예기치 못한 오류가 발생했습니다.");
   }
 };
 
 // 수강 취소 처리 함수
 const handleCancel = async (courseId) => {
-  if (!confirm('수강신청을 취소하시겠습니까?')) return;
+  if (!confirm("수강신청을 취소하시겠습니까?")) return;
 
   try {
     const res = await deleteSugangCancel(courseId);
@@ -126,69 +124,92 @@ const handleCancel = async (courseId) => {
         courseList.value[idx].remStd += 1;
       }
 
-      alert('수강신청이 취소되었습니다.');
+      alert("수강신청이 취소되었습니다.");
     }
   } catch (error) {
     if (error.response?.status === 400) {
-      alert(error.response?.data || '수강취소 실패');
+      alert(error.response?.data || "수강취소 실패");
     } else {
-      alert('수강신청 취소 실패! 예기치 못한 오류가 발생했습니다.');
+      alert("수강신청 취소 실패! 예기치 못한 오류가 발생했습니다.");
     }
     console.error(error);
   }
 };
-
-
 </script>
 
 <template>
-  <WhiteBox title="수강 신청">
-    <SearchFilterBar
-      :state="true"
-      :departments="departments"
-      :enrollment="true"
-      :semester="1"
-      @search="handleSearch"
-    />
+  <!-- 페이지 -->
+  <div class="page">
+    <h1 class="page-title">수강 신청</h1>
+  </div>
+  <SearchFilterBar
+    :state="true"
+    :departments="departments"
+    :enrollment="true"
+    :semester="1"
+    @search="handleSearch"
+  />
 
-    <!-- 개설 과목 목록 -->
-    <h5 class="fw-bold mt-3 ms-3">개설 과목 목록</h5>
-    <CourseTable
-      :courseList="courseList"
-      maxHeight="500px"
-      :show="{
-        professorName: true,
-        remStd: true,
-        enroll: true,
-        cancel: false,
-        deptName: true,
-      }"
-      @enroll="handleEnroll"
-    />
+  <!-- 개설 과목 목록 -->
+  <h5
+    style="
+      font-size: 20px;
+      font-weight: 700;
+      color: #343a40;
+      margin-top: 40px;
+      margin-left: 70px;
+    "
+  >
+    개설 과목 목록
+  </h5>
+  <CourseTable
+    :courseList="courseList"
+    maxHeight="500px"
+    :show="{
+      professorName: true,
+      remStd: true,
+      enroll: true,
+      cancel: false,
+      deptName: true,
+    }"
+    @enroll="handleEnroll"
+  />
 
-    <!-- 나의 수강신청 내역 -->
-    <div class="creditInfo d-flex mt-5 mb-0.3rem ms-3">
-      <h5 class="fw-bold">신청 내역</h5>
-      <div class="credit-box">
-        <span>최대 학점: 18학점</span>
-        <span>신청 학점: {{ totalCredit }}학점</span>
-        <span>신청 과목 수: {{ courseCount }}개</span>
-      </div>
+  <!-- 나의 수강신청 내역 -->
+  <div class="creditInfo" style="margin-top: -30px">
+    <h5
+      style="
+        font-size: 20px;
+        font-weight: 700;
+        color: #343a40;
+        margin-top: 50px;
+        margin-left: 70px;
+      "
+    >
+      수강신청 내역
+    </h5>
+    <div
+      class="credit-box"
+      style="color: #343a40; margin-top: 60px; margin-right: 80px"
+    >
+      <span>최대 학점: 18학점</span>
+      <span>신청 학점: {{ totalCredit }}학점</span>
+      <span>신청 과목 수: {{ courseCount }}개</span>
     </div>
+  </div>
 
-    <CourseTable
-      :courseList="mySugangList"
-      maxHeight="500px"
-      :show="{
-        professorName: true,
-        remStd: true,
-        enroll: false,
-        cancel: true,
-        deptName: false,
-      }"
-      @cancel="handleCancel"
-    />
-  </WhiteBox>
+  <CourseTable
+    :courseList="mySugangList"
+    maxHeight="500px"
+    :show="{
+      professorName: true,
+      remStd: true,
+      enroll: false,
+      cancel: true,
+      deptName: false,
+    }"
+    @cancel="handleCancel"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -209,5 +230,15 @@ const handleCancel = async (courseId) => {
 
 .table-container {
   margin-top: 2px;
+}
+
+/* 페이지 */
+.page {
+  padding: 16px 24px 48px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0 -100px;
 }
 </style>
