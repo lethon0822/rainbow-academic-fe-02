@@ -285,7 +285,7 @@ watch(
             </li>
             <li>
               <!-- 라우팅처리 -->
-              <router-link to="#" class="router-link"> 구성원현황 </router-link>
+              <router-link to="/staff" class="router-link"> 구성원현황 </router-link>
             </li>
           </ul>
         </li>
