@@ -372,19 +372,6 @@ const progressPercent = 96; // 진행률 % (숫자)
       </div>
     </div>
 
-<<<<<<< HEAD
-    <!-- 프로필 정보 영역 -->
-    
-    <div class="info-box">
-      <div class="profile-info">
-        <div class="left-info">
-          <table>
-            <tbody>
-              <tr>
-                <td class="label-cell">학번</td>
-                <td class="value-cell">{{ profile.loginId }}</td>
-              </tr>
-=======
     <!-- 8 탭 8  -->
     <div class="profile-tabs">
       <!-- Tab Navigation -->
@@ -403,7 +390,6 @@ const progressPercent = 96; // 진행률 % (숫자)
           {{ tab.label }}
         </button>
       </div>
->>>>>>> bb2416d690db1006d66a1fd5f398f8bae492622f
 
       <div class="tab-content">
         <!-- 기본프로필 Tab -->
@@ -454,7 +440,7 @@ const progressPercent = 96; // 진행률 % (숫자)
               <label class="field-label">생년월일</label>
               <div class="field-value boxed-value">{{ profile.loginId }}</div>
             </div>
-
+          
             <div class="field-group">
               <label class="field-label">연락처</label>
               <div class="field-value boxed-value">{{ profile.loginId }}</div>
@@ -473,7 +459,7 @@ const progressPercent = 96; // 진행률 % (숫자)
               <label class="field-label">우편번호</label>
               <div class="field-value boxed-value">{{ profile.semester }}</div>
             </div>
-
+           
 <<<<<<< HEAD
             <tr>
               <td class="label-cell">졸업충족학점</td>

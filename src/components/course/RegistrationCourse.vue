@@ -423,7 +423,7 @@ const back = () => {
 
     .fform-group3 {
       position: absolute;
-      left: 50px;
+      left: 100px;
       bottom:380px;
       max-width: 1140px;
       min-width: 1140px;
