@@ -10,13 +10,13 @@ const router = useRouter();
 /* 상단 컨트롤 */
 const attendDate = ref(new Date().toISOString().slice(0, 10));
 const search = ref("");
-const filter = ref("전체");      // 전체/출석/결석/지각/병가/경조사
+const filter = ref("전체");            // 전체/출석/결석/지각/병가/경조사
 const allChecked = ref(false);
 const isLoading = ref(false);
 
 /* 전달 데이터 */
 const state = reactive({
-  data: [],        // [{ enrollmentId, loginId, userName, gradeYear, departmentName, semester, status, note, ... }]
+  data: [],        // [{ enrollmentId, loginId, userName, gradeYear, departmentName, semester, status, note, checked }]
   courseId: ""
 });
 
@@ -74,9 +74,7 @@ const filtered = computed(() => {
 /* 전체선택 토글 */
 const toggleAll = () => filtered.value.forEach((s) => (s.checked = allChecked.value));
 
-
-
-/* 저장 (네가 쓰던 exist -> post/put 로직 유지) */
+/* 저장 */
 const saveAttendance = async () => {
   if (!attendDate.value) {
     alert("출결일자를 선택해주세요.");
@@ -85,11 +83,6 @@ const saveAttendance = async () => {
   isLoading.value = true;
   try {
     for (const s of state.data) {
-      if (!s.status) {
-        alert(`학생 ${s.userName}의 출결 상태를 선택해주세요.`);
-        isLoading.value = false;
-        return;
-      }
       const payload = {
         attendDate: attendDate.value,
         enrollmentId: s.enrollmentId,
@@ -108,7 +101,9 @@ const saveAttendance = async () => {
   } finally {
     isLoading.value = false;
   }
-  // CSV 내보내기 (UTF-8 BOM 추가해서 엑셀 한글 깨짐 방지)
+};
+
+/* CSV 내보내기 (UTF-8 BOM) */
 const exportCsv = () => {
   const header = ["학번","이름","학년","학과","출결상태","비고","학기","일자"];
   const rows = state.data.map((s) => [
@@ -122,34 +117,6 @@ const exportCsv = () => {
     attendDate.value
   ]);
 
-  // 핵심: BOM(\uFEFF) 붙이기
-  const csvContent = "\uFEFF" + [header, ...rows].map(r => r.join(",")).join("\n");
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `attendance_${state.courseId}_${attendDate.value}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-};
-};
-
-// CSV 내보내기 (UTF-8 BOM 추가해서 엑셀 한글 깨짐 방지)
-const exportCsv = () => {
-  const header = ["학번","이름","학년","학과","출결상태","비고","학기","일자"];
-  const rows = state.data.map((s) => [
-    s.loginId ?? "",
-    s.userName ?? "",
-    s.gradeYear ?? s.grade ?? "",
-    s.departmentName ?? "",
-    s.status ?? "",
-    s.note ?? "",
-    s.semester ?? "",
-    attendDate.value
-  ]);
-
-  //  BOM(\uFEFF) 붙이기
   const csvContent = "\uFEFF" + [header, ...rows].map(r => r.join(",")).join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
@@ -207,18 +174,16 @@ const exportCsv = () => {
         <table class="tbl">
           <thead>
             <tr>
-              <th style="width:44px">
+              <th style="width:40px">
                 <input type="checkbox" v-model="allChecked" @change="toggleAll" />
               </th>
-              <th style="width:60px">학번</th>
-              <th style="width:60px">이름</th>
-              <th style="width:60px">학년</th>
-              <th style="width:80px">학과</th>
-              <!-- 배지로만 표시 -->
-              <th style="width:180px">출결상태</th>
-              <th style="width:120px">비고(사유)</th>
-              <!-- 여기서 출결 드롭다운 선택 -->
-              <th style="width:120px">학기</th>
+              <th style="width:30px">학번</th>
+              <th style="width:30px">이름</th>
+              <th style="width:30px">학년</th>
+              <th style="width:50px">학과</th>
+              <th style="width:50px">출결상태</th>
+              <th style="width:90px">비고(사유)</th>
+              <th style="width:100px">학기</th>
             </tr>
           </thead>
 
@@ -232,12 +197,13 @@ const exportCsv = () => {
 
               <!-- 배지 -->
               <td>
-                <span :class="['badge', statusMeta(s.status).cls]">
+                <span :class="['att-badge', statusMeta(s.status).cls]">
                   <span class="i">{{ statusMeta(s.status).icon }}</span>
                   {{ statusMeta(s.status).label }}
                 </span>
               </td>
 
+              <!-- 비고(사유) -->
               <td>
                 <input
                   v-model="s.note"
@@ -247,13 +213,19 @@ const exportCsv = () => {
                 />
               </td>
 
-              <!-- 드롭다운을 학기 칼럼에서 -->
+              <!-- 학기(라디오 버튼: 출석/지각/결석/병가/경조사) -->
               <td>
-                <select v-model="s.status" class="status">
-                  <option v-for="o in statusOptions" :key="o.value" :value="o.value">
+                <div class="radio-group">
+                  <label v-for="o in statusOptions" :key="o.value" class="radio-label">
+                    <input
+                      type="radio"
+                      :name="`status-${s.enrollmentId}`"
+                      :value="o.value"
+                      v-model="s.status"
+                    />
                     {{ o.label }}
-                  </option>
-                </select>
+                  </label>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -314,43 +286,50 @@ const exportCsv = () => {
   outline:none; border-color:#1e90ff; box-shadow:0 0 0 3px rgba(30,144,255,.12);
 }
 
-/* 배지 */
-.badge {
-  display:inline-flex; align-items:center; gap:6px;
-  height:24px; padding:0 10px; border-radius:999px;
-  font-size:12px; font-weight:700; line-height:24px;
+/* 라디오 그룹(학기) */
+.radio-group {
+  display:flex; 
+  align-items:center;  
+  justify-content:flex-start;
+  gap: 16px;
+  width: fit-content;
+  margin: 0 auto;
+}
+.radio-label {
+  display:flex; 
+  align-items:center; 
+  gap:4px; 
+  font-size:13px; 
+  white-space:nowrap;
+}
+.radio-label input { 
+  width:14px; 
+  height:14px; 
+  cursor:pointer; 
+}
+
+/* 배지 — Bootstrap .badge 와 충돌 안 나게 격리 */
+.att-badge {
+  display:inline-flex; align-items:center; gap:8px;
+
+  /* ▶ 크기 조절 포인트 */
+  height: 32px;          /* 원하면 36/40 등으로 변경 */
+  padding: 0 16px;       /* 좌우 여백 */
+  border-radius: 999px;
+  font-size: 14px;       /* 텍스트 크기 */
+  font-weight: 700;
+  line-height: 32px;     /* height와 동일 */
+
   border:1px solid transparent; user-select:none;
 }
-.badge .i { font-size:12px; line-height:1; }
-.badge.success { background:#ecfdf5; color:#065f46; border-color:#a7f3d0; }
-.badge.danger  { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
-.badge.warning { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
-.badge.info    { background:#eff6ff; color:#1e3a8a; border-color:#bfdbfe; }
-.badge.neutral { background:#f3f4f6; color:#374151; border-color:#e5e7eb; }
+.att-badge .i { font-size:16px; line-height:1; }
 
-
-.attendance-table {
-  table-layout: fixed;   /* 테이블 셀 너비 고정 */
-  width: 100%;
-
-  th, td {
-    padding: 8px;
-    text-align: center;
-  }
-
-  /* 🔽 비고(사유) 열만 좁게 */
-  td.note-cell, th.note-cell {
-    width: 180px;  /* 원하는 값으로 줄이기 (예: 150px, 200px 등) */
-    max-width: 180px;
-  }
-
-  /* 입력칸 자체 줄이기 */
-  input.note-input {
-    width: 100%;   /* 셀 안에서만 꽉 차도록 */
-    font-size: 13px;
-    padding: 4px 6px;
-  }
-}
+/* 상태별 색상 */
+.att-badge.success { background:#ecfdf5; color:#065f46; border-color:#a7f3d0; }
+.att-badge.danger  { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
+.att-badge.warning { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+.att-badge.info    { background:#304868; color:#1e3a8a; border-color:#bfdbfe; }
+.att-badge.neutral { background:#f3f4f6; color:#374151; border-color:#e5e7eb; }
 
 /* 반응형 */
 @media (max-width: 1280px) { .search { width:200px; } }
