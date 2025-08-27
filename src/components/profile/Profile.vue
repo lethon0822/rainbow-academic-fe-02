@@ -11,8 +11,6 @@ import {
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Chart from "chart.js/auto";
 
-
-
 const props = defineProps({
   profile: {
     type: Object,
@@ -300,36 +298,9 @@ const progressPercent = 96; // 진행률 % (숫자)
 </script>
 
 <template>
-<<<<<<< HEAD
- 
-  
-  <div class="inner">
-    <div class="header-section">
-      <h2 class="title">학적기본사항관리</h2>
-      <div class="action-buttons">
-        <button
-          class="btn btn-primary"
-          @click="saveProfile"
-          v-if="imagePreview || currentProfileImage"
-        >
-          저장
-        </button>
-        <button
-          class="btn btn-secondary"
-          @click="removeImage"
-          v-if="imagePreview || currentProfileImage"
-        >
-          이미지 제거
-        </button>
-      </div>
-    </div>
-    <div class="line"></div>
-    <slot></slot>
-=======
   <!-- 8 프로필 8 -->
   <div class="page">
     <h1 class="page-title">학적기본사항관리</h1>
->>>>>>> bb2416d690db1006d66a1fd5f398f8bae492622f
   </div>
 
   <div class="profile-wrapper">
@@ -460,16 +431,6 @@ const progressPercent = 96; // 진행률 % (숫자)
               <div class="field-value boxed-value">{{ profile.semester }}</div>
             </div>
            
-<<<<<<< HEAD
-            <tr>
-              <td class="label-cell">졸업충족학점</td>
-              <td class="value-cell" colspan="2">
-                {{ profile.totalCredits }}(이수) / 130(총)
-              </td>
-            </tr>
-          </table>
-          
-=======
             <div class="field-group">
               <label class="field-label">주소</label>
               <div class="field-value boxed-value">
@@ -505,7 +466,6 @@ const progressPercent = 96; // 진행률 % (숫자)
           <div class="search-result">
             <p>검색 결과가 여기에 표시됩니다.</p>
           </div>
->>>>>>> bb2416d690db1006d66a1fd5f398f8bae492622f
         </div>
       </div>
     </div>

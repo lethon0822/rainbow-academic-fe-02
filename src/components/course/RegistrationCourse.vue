@@ -103,7 +103,7 @@ const back = () => {
 <template>
   <WhiteBox :title="'강의등록'">
     <div
-      style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 1px 1px #ccc;"
+      style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 5px 10px #ccc;"
     >
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
       <br />
@@ -531,7 +531,7 @@ const back = () => {
     }
     .buttons {
        position: relative;
-       left: 470px;
+       left: 420px;
        top:130px;
        
        
