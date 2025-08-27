@@ -39,7 +39,7 @@ const departments = reactive([
             <td>{{ dept.office }}</td>
             <td>{{ dept.head }}</td>
             <td>{{ dept.phone }}</td>
-            <td>{{ dept.capacity }}명</td>
+            <td>{{ dept.capacity }}</td>
             <td>
               <span :class="dept.status === '처리중' ? 'status-processing' : 'status-complete'">{{ dept.status }}</span>
             </td>
@@ -58,8 +58,8 @@ const departments = reactive([
 .container {
   padding: 20px;
   background-color: #f8f9fa;
-  min-height: 100vh;
-  font-family: 'Noto Sans KR', sans-serif;
+  min-height: auto;
+  min-width: 1430px;
 }
 
 /* 가로 스크롤 가능 */
