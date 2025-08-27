@@ -64,8 +64,10 @@ const state = reactive({
 
   <whiteBox class="white2">
     <div>
-      <div>
-        <i class="bi bi-alarm"></i>
+      <div class="d-flex">
+        <div class="search-icon">
+          <i class="bi bi-search"></i>
+        </div>
         <input type="text">
       </div>
       <select name="filter">
@@ -127,4 +129,6 @@ input{
 .white2{
   max-height: 500px;
 }
+
+
 </style>
