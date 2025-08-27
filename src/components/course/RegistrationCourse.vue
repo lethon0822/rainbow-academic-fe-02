@@ -32,8 +32,18 @@ const state = reactive({
     goal: "",
     maxStd: null,
     grade: 1,
+    
   },
 });
+
+const evaluations = {
+    middleExam: "",
+    lastExam:"",
+    assignment:"",
+    attendanCerate:"",
+    participationRate:"",
+
+};
 
 const initialForm = {
   deptName: '',
@@ -205,47 +215,47 @@ const back = () => {
       <div class="fform-group4">
         <div class="form-group4">
           <label for="evaluation">중간고사</label>
-          <input2
+          <input
             type="text"
             id="evaluation"
-            v-model="state.form.weekPlan"
-            placeholder="%를 입력해주세요."
+            v-model="evaluations.middleExam"
+            placeholder="0%"
           />
         </div>
         <div class="form-group4">
           <label for="evaluation">기말고사</label>
-          <input2
+          <input
             type="text"
             id="evaluation"
-            v-model="state.form.weekPlan"
-            placeholder="%를 입력해주세요."
+            v-model="evaluations.lastExam"
+            placeholder="0%"
           />
         </div>
         <div class="form-group4">
           <label for="evaluation">과제</label>
-          <input2
+          <input
             type="text"
             id="evaluation"
-            v-model="state.form.weekPlan"
-            placeholder="%를 입력해주세요."
+            v-model="evaluations.assignment"
+            placeholder="0%"
           />
         </div>
         <div class="form-group4">
           <label for="evaluation">출석률</label>
-          <input2
+          <input
             type="text"
             id="evaluation"
-            v-model="state.form.weekPlan"
-            placeholder="%를 입력해주세요."
+            v-model="evaluations.attendanCerate"
+            placeholder="0%"
           />
         </div>
         <div class="form-group4">
           <label for="evaluation">참여율</label>
-          <input2
+          <input
             type="text"
             id="evaluation"
-            v-model="state.form.weekPlan"
-            placeholder="%를 입력해주세요."
+            v-model="evaluations.participationRate"
+            placeholder="0%"
           />
         </div>
       </div>
@@ -486,30 +496,30 @@ const back = () => {
         border-radius: 5px;
 
     }
-     .input2 {
-    //    width: 80px;   /* 원하는 크기 */
-    //    height:80px;  /* width와 동일하게 */
-    //    box-sizing: border-box; /* 패딩/보더 포함해서 정사각형 유지 */
-    //    text-align: center;     /* 텍스트 중앙 정렬 */
-    //    border: 1px solid #ccc;
-    //    border-radius: 100px;  /* 선택: 모서리 둥글게 */
-    //    border: #9e9e9e;  
-    background-color: #f0f0f0; /* 회색 배경 */
-    border: 1px solid #ccc;    /* 테두리도 회색 */
-    color: #333;               /* 글자색 진한 회색 */
-    padding: 8px 10px;
-    border-radius: 6px;
-    box-sizing: border-box;
-     }
-     .fform-group4 input2 {
+    //  .input2 {
+    // //    width: 80px;   /* 원하는 크기 */
+    // //    height:80px;  /* width와 동일하게 */
+    // //    box-sizing: border-box; /* 패딩/보더 포함해서 정사각형 유지 */
+    // //    text-align: center;     /* 텍스트 중앙 정렬 */
+    // //    border: 1px solid #ccc;
+    // //    border-radius: 100px;  /* 선택: 모서리 둥글게 */
+    // //    border: #9e9e9e;  
+    // background-color: #f0f0f0; /* 회색 배경 */
+    // border: 1px solid #ccc;    /* 테두리도 회색 */
+    // color: #333;               /* 글자색 진한 회색 */
+    // padding: 8px 10px;
+    // border-radius: 6px;
+    // box-sizing: border-box;
+    //  }
+     .fform-group4 input {
   display: block;              /* 블록 형태 */
   width: 100%;                 /* 기본 input이랑 맞춤 */
   background-color: #f0f0f0;   /* 회색 배경 */
-  border: 1px solid #ccc;
-  color: #333;
-  padding: 8px 10px;
-  border-radius: 6px;
-  box-sizing: border-box;
+  border: 1px solid #f0f0f0;
+  //color: #333;
+  padding: 5px 10px;
+  //border-radius: 6px;
+  //box-sizing: border-box;
 }
 
     textarea {
