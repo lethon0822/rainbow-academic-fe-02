@@ -407,7 +407,7 @@ const back = () => {
     
     .fform-group {
       position: absolute; 
-      left: 50px;
+      left: 100px;
       width: 540px;
       display: flex;
       flex-direction: column;
@@ -425,8 +425,8 @@ const back = () => {
       position: absolute;
       left: 100px;
       bottom:380px;
-      max-width: 1140px;
-      min-width: 1140px;
+      max-width: 1090px;
+      min-width: 1090px;
       flex-direction: column;
     }
 
@@ -454,13 +454,14 @@ const back = () => {
     }
 
     .form-group4 {
-      background-color: #f5f5f5;
-      width: 80px;   /* 원하는 크기 */
+       background-color: #f5f5f5;
+       width: 80px;   /* 원하는 크기 */
        height:80px;  /* width와 동일하게 */
        box-sizing: border-box; /* 패딩/보더 포함해서 정사각형 유지 */
        text-align: center;     /* 텍스트 중앙 정렬 */
        border: 1px solid #ccc;
        border-radius: 8px;     /* 선택: 모서리 둥글게 */
+       left: 100px;
     }
 
     .form-group select{
@@ -530,7 +531,7 @@ const back = () => {
     }
     .buttons {
        position: relative;
-       left: 430px;
+       left: 470px;
        top:130px;
        
        
