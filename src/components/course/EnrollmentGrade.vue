@@ -1,6 +1,6 @@
 <!-- EnrollmentGradeView.vue -->
 <script setup>
-import { reactive, computed, onMounted } from "vue";
+import { reactive, computed, onMounted, ref } from "vue";
 import axios from "axios";
 
 /** 가중치 (필요 시 조정) */
@@ -15,10 +15,13 @@ const st = reactive({
   error: ""
 });
 
+const isSaving = ref(false);
+
+/** 숫자 보정 */
 const toNum = v => Number.isFinite(+v) ? +v : 0;
 const clip100 = v => Math.min(100, Math.max(0, toNum(v)));
 
-/** 자동계산: 출결평가·중간·기말·기타 → 총점/등급/평점 */
+/** 자동계산 */
 const calc = (r) => {
   r.attendanceEval = clip100(r.attendanceEval);
   r.midterm        = clip100(r.midterm);
@@ -48,14 +51,14 @@ onMounted(async () => {
     const passJson = history.state?.data;
     if (passId) st.courseId = JSON.parse(passId);
 
-    // 1) history.state.data 우선
+    // 학생조회 (기존대로 두기)
     if (passJson) {
       const base = JSON.parse(passJson);
       st.rows = base.map(x => ({
         ...x,
-        attendanceDays: x.attendanceDays ?? 0, // 출석일수
-        absence:        x.absence ?? 0,        // 결석일수
-        attendanceEval: x.attendanceEval ?? 0, // 출결평가(%)
+        attendanceDays: x.attendanceDays ?? 0,
+        absence:        x.absence ?? 0,
+        attendanceEval: x.attendanceEval ?? 0,
         midterm:        x.midterm ?? 0,
         finalExam:      x.finalExam ?? 0,
         etcScore:       x.etcScore ?? x.assignment ?? 0,
@@ -64,7 +67,6 @@ onMounted(async () => {
       }));
     }
 
-    // 2) 코스ID가 있으면 API 조회(팀별 경로 차이 커버)
     if (st.courseId) {
       const tryFetch = async (url) => {
         try {
@@ -90,7 +92,6 @@ onMounted(async () => {
         || await tryFetch(`/api/professor/courses/${st.courseId}/students`);
     }
 
-    // 초기 계산
     st.rows.forEach(calc);
   } catch (e) {
     st.error = "학생 목록을 불러오지 못했습니다.";
@@ -112,6 +113,96 @@ const filtered = computed(() => {
 
 /** 전체선택 */
 const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked));
+
+/* =========================================
+   CSV 내보내기
+   ========================================= */
+function exportCsv() {
+  const header = [
+    "학번", "이름", "학년", "학과",
+    "출석일수", "결석일수",
+    "출결평가", "중간", "기말", "기타",
+    "원점수", "환산점수", "등급", "평점"
+  ];
+
+  const rows = filtered.value.map(r => ([
+    r.loginId ?? "",
+    r.userName ?? "",
+    r.gradeYear ?? r.grade ?? "",
+    r.departmentName ?? "",
+    r.attendanceDays ?? 0,
+    r.absence ?? 0,
+    r.attendanceEval ?? 0,
+    r.midterm ?? 0,
+    r.finalExam ?? 0,
+    r.etcScore ?? 0,
+    (r.total ?? 0).toFixed(1),
+    (r.total ?? 0).toFixed(1),
+    r.grade ?? "",
+    (r.gpa ?? 0).toFixed(1)
+  ]));
+
+  const csvContent =
+    "\uFEFF" + [header, ...rows].map(r => r.join(",")).join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `grades_${st.courseId || "course"}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* =========================================
+   성적 저장 (console.log 추가)
+   ========================================= */
+async function saveAll() {
+  if (st.rows.length === 0) return;
+  isSaving.value = true;
+
+  try {
+    const toPost = [];
+    const toPut = [];
+
+    for (const r of st.rows) {
+      // 🔍 디버깅용 로그
+      console.log("저장 직전 데이터:", {
+        enrollmentId: r.enrollmentId,
+        midterm: r.midterm,
+        finalExam: r.finalExam,
+        grade: r.grade,
+        gpa: r.gpa
+      });
+
+      const midScore = Math.round(Number(r.midterm) ?? 0);
+      const finScore = Math.round(Number(r.finalExam) ?? 0);
+      const rank     = r.grade ?? "F";
+
+      if (r.scoreId) {
+        toPut.push({ scoreId: r.scoreId, midScore, finScore, rank });
+      } else {
+        toPost.push({ enrollmentId: r.enrollmentId, midScore, finScore, rank });
+      }
+    }
+
+    if (toPost.length) {
+      console.log("POST payload:", toPost);
+      await axios.post("/professor/course/grade", toPost);
+    }
+    if (toPut.length) {
+      console.log("PUT payload:", toPut);
+      await axios.put("/professor/course/grade", toPut);
+    }
+
+    alert("성적 저장 완료!");
+  } catch (err) {
+    console.error("[성적 저장 실패]", err?.response?.status, err?.response?.data);
+    alert(`성적 저장 중 오류 발생: ${err?.response?.data?.message ?? ""}`);
+  } finally {
+    isSaving.value = false;
+  }
+}
 </script>
 
 <template>
@@ -120,19 +211,23 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
       <h1 class="page-title">성적 관리</h1>
       <h3 class="subtitle">컴퓨터 과학개론 성적 입력 및 정정</h3>
 
-      
+      <!-- 툴바 -->
       <div class="toolbar">
         <div class="left">
           <button class="btn btn-light"
-                  @click="st.allChecked=!st.allChecked; toggleAll()">전체선택</button>
-          <button class="btn btn-light">내보내기</button>
+                  @click="st.allChecked=!st.allChecked; toggleAll()">
+            전체선택
+          </button>
+          <button class="btn btn-light" @click="exportCsv">내보내기</button>
         </div>
         <div class="right">
           <div class="search">
             <span class="icon">🔍</span>
             <input v-model="st.q" placeholder="이름 또는 학번 검색" />
           </div>
-          <button class="btn btn-primary">저장</button>
+          <button class="btn btn-primary" :disabled="isSaving" @click="saveAll">
+            {{ isSaving ? "저장 중..." : "저장" }}
+          </button>
         </div>
       </div>
 
@@ -152,11 +247,8 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
               <th style="width:90px">이름</th>
               <th style="width:80px">학년</th>
               <th style="width:160px">학과</th>
-
-              <!-- 추가된 두 컬럼 -->
               <th style="width:92px">출석일수</th>
               <th style="width:92px">결석일수</th>
-
               <th style="width:92px">출결평가</th>
               <th style="width:92px">중간평가</th>
               <th style="width:92px">기말평가</th>
@@ -168,7 +260,6 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
               <th style="width:76px">수정</th>
             </tr>
           </thead>
-
           <tbody>
             <tr v-for="r in filtered" :key="r.enrollmentId">
               <td><input type="checkbox" v-model="r.checked" /></td>
@@ -176,32 +267,21 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
               <td>{{ r.userName }}</td>
               <td>{{ r.gradeYear ?? r.grade }}</td>
               <td class="left-cell">{{ r.departmentName }}</td>
-
-              <!-- 출석일수/결석일수 -->
               <td><input class="num" type="number" min="0" v-model.number="r.attendanceDays" /></td>
               <td><input class="num" type="number" min="0" v-model.number="r.absence" /></td>
-
-              <!-- 점수 입력 + 자동계산 -->
               <td><input class="num" type="number" min="0" max="100" v-model.number="r.attendanceEval" @input="calc(r)" /></td>
-              <td><input class="num" type="number" min="0" max="100" v-model.number="r.midterm"        @input="calc(r)" /></td>
-              <td><input class="num" type="number" min="0" max="100" v-model.number="r.finalExam"      @input="calc(r)" /></td>
-              <td><input class="num" type="number" min="0" max="100" v-model.number="r.etcScore"       @input="calc(r)" /></td>
-
+              <td><input class="num" type="number" min="0" max="100" v-model.number="r.midterm" @input="calc(r)" /></td>
+              <td><input class="num" type="number" min="0" max="100" v-model.number="r.finalExam" @input="calc(r)" /></td>
+              <td><input class="num" type="number" min="0" max="100" v-model.number="r.etcScore" @input="calc(r)" /></td>
               <td>{{ r.total.toFixed(1) }}</td>
-              <td>{{ r.total.toFixed(1) }}</td> <!-- 환산점수 규칙 있으면 변경 -->
+              <td>{{ r.total.toFixed(1) }}</td>
               <td>{{ r.grade }}</td>
               <td>{{ r.gpa.toFixed(1) }}</td>
-
               <td><button class="btn btn-gray w-full">수정</button></td>
             </tr>
           </tbody>
         </table>
-
         <div v-else class="state">표시할 학생이 없습니다.</div>
-      </div>
-
-      <div class="bottom-save">
-        <button class="btn btn-green">저장</button>
       </div>
     </div>
   </div>
@@ -214,7 +294,7 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
 .page-title { font-size:28px; font-weight:800; color:#1f2937; margin:0 0 20px; }
 .subtitle   { color:#0d5c3e;  font-weight:800; margin:0 0 12px; }
 
-/* 툴바(피그마 정렬) */
+/* 툴바 */
 .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
 .left, .right { display:flex; align-items:center; gap:8px; }
 .search { position:relative; height:34px; }
@@ -232,7 +312,7 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
 /* 테이블 */
 .table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .tbl {
-  min-width: 1400px;  /* 출석/결석 2열 추가로 조금 넓힘 */
+  min-width: 1400px;
   width:100%;
   border-collapse:collapse; table-layout:fixed;
   border:1px solid #e5e7eb; border-radius:8px; overflow:hidden;
@@ -245,48 +325,31 @@ const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked))
 .tbl tbody td { border-top:1px solid #e5e7eb; padding:6px 8px; text-align:center; color:#111827; }
 .tbl tbody td.left-cell { text-align:left; }
 
-/* 입력칸 */
+/* 숫자 입력 */
 .num {
   width:72px; height:30px; text-align:center;
   border:1px solid #cbd5e1; border-radius:6px; outline:none;
 }
 .num:focus { border-color:#1e90ff; box-shadow:0 0 0 3px rgba(30,144,255,.12); }
 
-/* 상태/하단 */
-.state { padding:18px; color:#475569; }
-.state.error { color:#b91c1c; }
-.bottom-save { display:flex; justify-content:center; padding-top:14px; }
-
-.tbl {
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-}
-
-/* 2) 셀 기본 border 제거 */
-.tbl thead th,
-.tbl tbody td { border: 0 !important; }
-
-/* 3) 라인은 box-shadow로 그리기 (겹침/틈 없음) */
+/* 상태/보더 */
+.tbl { border-collapse: separate !important; border-spacing: 0 !important; }
+.tbl thead th, .tbl tbody td { border: 0 !important; }
 .tbl thead th {
   background: #0d5c3e;
   color: #fff;
-  /* 아래선 + 우측선 */
-  box-shadow:
-    inset 0 -1px #0b4b32,
-    inset -1px 0 #0b4b32;
+  box-shadow: inset 0 -1px #0b4b32, inset -1px 0 #0b4b32;
 }
 .tbl thead th:last-child { box-shadow: inset 0 -1px #0b4b32; }
-
 .tbl tbody td {
   background: #fff;
-  /* 위선 + 우측선 */
-  box-shadow:
-    inset 0 1px #e5e7eb,
-    inset -1px 0 #e5e7eb;
+  box-shadow: inset 0 1px #e5e7eb, inset -1px 0 #e5e7eb;
 }
 .tbl tbody td:last-child { box-shadow: inset 0 1px #e5e7eb; }
 
-
+/* 포커스 outline 제거 */
 .tbl thead input[type="checkbox"]:focus,
 .tbl thead button:focus { outline: none !important; box-shadow: none !important; }
+.state { padding:18px; color:#475569; }
+.state.error { color:#b91c1c; }
 </style>

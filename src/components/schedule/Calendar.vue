@@ -68,6 +68,16 @@ const pick = (d) => {
   model.value = sel;
   emit('date-click', sel);
 };
+
+// 오늘 체크처럼 선택(모델) 체크도 하나 추가
+const isSelected = (d) => {
+  if (!d || !model.value) return false;
+  return (
+    model.value.getFullYear() === year.value &&
+    model.value.getMonth() + 1 === month.value &&
+    model.value.getDate() === d
+  );
+};
 onMounted(sync);
 // 년/월은 달력 그리드만 다시 구성
 watch([year, month], build);
@@ -106,7 +116,7 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
           <td
             v-for="(d,ci) in row" :key="ci"
             class="day"
-            :class="{ sun: ci===0, sat: ci===6, today: isToday(d) }"
+            :class="{ sun: ci===0, sat: ci===6, today: isToday(d), selected: isSelected(d) }"
             @click="pick(d)"
           >
             <div class="num">{{ d }}</div>
@@ -219,6 +229,19 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
   background: #FFF6D6;               /* 은은한 노랑 */
   box-shadow: inset 0 0 0 1px #FFE4A3;
 }
+/* 선택한 날짜: 파란 톤 박스 */
+.day.selected{
+  background:#EEF5FF;
+  box-shadow: inset 0 0 0 1.5px #BFD9FF, 0 2px 0 rgba(0,0,0,.02);
+}
+.day.selected:hover{ background:#E8F1FF; }
+
+/* 오늘이면서 선택되어 있으면 노랑 채움은 유지하고 파란 링만 추가 */
+.day.selected.today{
+  background:#FFF6D6; /* today 색 유지 */
+  box-shadow: inset 0 0 0 2px #7BB9FF, 0 2px 0 rgba(0,0,0,.02);
+}
+
 .num{ font-weight:700; color:#343A40; }
 /* 주말 색상(오늘은 검정 유지) */
 .sun .num{ color:tomato; }
