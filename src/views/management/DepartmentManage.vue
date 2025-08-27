@@ -99,36 +99,42 @@ onMounted(async()=>{
     <!-- 학과목록 -->
     <div class="container">
     <div class="table-wrapper">
-      <table class="dept-table">
-        <thead>
-          <tr>
-            <th>학과코드</th>
-            <th>학과</th>
-            <th>학과사무실</th>
-            <th>학과장명</th>
-            <th>학과 전화번호</th>
-            <th>학과 정원</th>
-            <th>학과 인원</th>
-            <th>상태</th>
-            <th>수강</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in state.deptList" :key="item.deptId">
-            <td>{{ item.deptCode }}</td>
-            <td>{{ item.deptName }}</td>
-            <td>{{ item.deptOffice }}</td>
-            <td>{{ item.userName }}</td>
-            <td>{{ item.deptTel }}</td>
-            <td>{{ item.deptMaxStd }}</td>
-            <td>{{ item.deptPeople }}</td>
-            <td> {{item.status === '1' ? "운영중" : "폐지"}}</td>
-            <td>
-              <button class="btn btn-primary">수정</button>
-            </td>
-          </tr>
-        </tbody>
+      <div class="title-line">
+        <table class="dept-table">
+          <thead>
+            <tr>
+              <th>학과코드</th>
+              <th>학과</th>
+              <th>학과사무실</th>
+              <th>학과장명</th>
+              <th>학과 전화번호</th>
+              <th>학과 정원</th>
+              <th>학과 인원</th>
+              <th>상태</th>
+              <th>수강</th>
+            </tr>
+          </thead>
+        </table>
+        </div>
+        <div class="body-line">
+          <table class="dept_table">
+            <tbody>
+              <tr v-for="item in state.deptList" :key="item.deptId">
+                <td>{{ item.deptCode }}</td>
+                <td>{{ item.deptName }}</td>
+                <td>{{ item.deptOffice }}</td>
+                <td>{{ item.userName }}</td>
+                <td>{{ item.deptTel }}</td>
+                <td>{{ item.deptMaxStd }}</td>
+                <td>{{ item.deptPeople }}</td>
+                <td> {{item.status === '1' ? "운영중" : "폐지"}}</td>
+                <td>
+                  <button class="btn btn-primary">수정</button>
+                </td>
+              </tr>
+            </tbody>
       </table>
+    </div>
     </div>
   </div>
  
@@ -242,11 +248,9 @@ input{
 
 /* 가로 스크롤 가능 */
 /* 컨테이너 높이 조절 */
-.table-wrapper {
-  max-height: 300px; /* tbody 스크롤 높이 */
-  overflow-y: auto;  /* 세로 스크롤 */
-  overflow-x: auto;  /* 가로 스크롤 유지 */
-}
+/* .table-wrapper {
+  max-height: 360px; 
+} */
 
 /* 테이블 레이아웃 고정 */
 
@@ -255,21 +259,19 @@ input{
   border-collapse: collapse;
 }
 
-/* table {
-    width: "100%",
-    border-collapse: "separate",
-    borderSpacing: 0,
-  } */
 
 /* thead 고정 */
-.dept-table thead th {
-  position: sticky;     /* 헤더 고정 */
-  top: 0;               /* 상단 0px 고정 */
+.title-line{            
   background-color: #fff; /* 헤더 배경색 지정 */
-  z-index: 10;          /* 스크롤 내용 위에 표시 */
   border-top: 2px solid #7B7B7B;
   border-bottom: 1px solid #7B7B7B;
 }
+
+.body-line{
+
+  overflow-y: scroll;
+}
+
 
 
 /* tbody 높이 제한 + 스크롤은 위 .table-wrapper에서 */

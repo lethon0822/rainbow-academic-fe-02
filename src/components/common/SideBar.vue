@@ -359,7 +359,6 @@ body {
   color: #343a40;
   background-color: white;
   text-decoration: none;
-  font-size: 15px;
   display: block;
   padding: 13px 15px;
   /* outline: 1px solid #D9D9D9; */
