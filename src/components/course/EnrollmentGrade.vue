@@ -15,13 +15,14 @@ const st = reactive({
   error: ""
 });
 
+
 const isSaving = ref(false);
 
 /** 숫자 보정 */
 const toNum = v => Number.isFinite(+v) ? +v : 0;
 const clip100 = v => Math.min(100, Math.max(0, toNum(v)));
 
-/** 자동계산 */
+/** 자동계산: 출결평가·중간·기말·기타 → 총점/등급/평점 */
 const calc = (r) => {
   r.attendanceEval = clip100(r.attendanceEval);
   r.midterm        = clip100(r.midterm);
@@ -51,7 +52,7 @@ onMounted(async () => {
     const passJson = history.state?.data;
     if (passId) st.courseId = JSON.parse(passId);
 
-    // 학생조회 (기존대로 두기)
+    // 1) history.state.data 우선
     if (passJson) {
       const base = JSON.parse(passJson);
       st.rows = base.map(x => ({
@@ -67,31 +68,30 @@ onMounted(async () => {
       }));
     }
 
+    // 2) API 조회
     if (st.courseId) {
-      const tryFetch = async (url) => {
-        try {
-          const { data } = await axios.get(url);
-          if (Array.isArray(data)) {
-            st.rows = data.map(x => ({
-              ...x,
-              attendanceDays: x.attendanceDays ?? 0,
-              absence:        x.absence ?? 0,
-              attendanceEval: x.attendanceEval ?? 0,
-              midterm:        x.midterm ?? 0,
-              finalExam:      x.finalExam ?? 0,
-              etcScore:       x.etcScore ?? x.assignment ?? 0,
-              total: 0, grade: "", gpa: 0,
-              checked: false
-            }));
-            return true;
-          }
-        } catch {}
-        return false;
-      };
-      await tryFetch(`/professor/course/${st.courseId}/students`)
-        || await tryFetch(`/api/professor/courses/${st.courseId}/students`);
+      try {
+        const { data } = await axios.get(`/api/professor/course/grade/students?courseId=${st.courseId}`);
+        if (Array.isArray(data)) {
+          st.rows = data.map(x => ({
+            ...x,
+            attendanceDays: x.attendanceDays ?? 0,
+            absence:        x.absence ?? 0,
+            attendanceEval: x.attendanceEval ?? 0,
+            midterm:        x.midterm ?? 0,
+            finalExam:      x.finalExam ?? 0,
+            etcScore:       x.etcScore ?? x.assignment ?? 0,
+            total: 0, grade: "", gpa: 0,
+            checked: false
+          }));
+          console.log("학생 데이터 로드됨:", st.rows); 
+        }
+      } catch (err) {
+        console.error("학생 목록 API 오류:", err);
+      }
     }
 
+    // 초기 계산
     st.rows.forEach(calc);
   } catch (e) {
     st.error = "학생 목록을 불러오지 못했습니다.";
@@ -115,66 +115,22 @@ const filtered = computed(() => {
 const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked));
 
 /* =========================================
-   CSV 내보내기
+    성적 저장 (선택된 학생만)
    ========================================= */
-function exportCsv() {
-  const header = [
-    "학번", "이름", "학년", "학과",
-    "출석일수", "결석일수",
-    "출결평가", "중간", "기말", "기타",
-    "원점수", "환산점수", "등급", "평점"
-  ];
+async function saveSelected() {
+  const selected = st.rows.filter(r => r.checked);
+  if (selected.length === 0) {
+    alert("수정할 학생을 선택하세요.");
+    return;
+  }
 
-  const rows = filtered.value.map(r => ([
-    r.loginId ?? "",
-    r.userName ?? "",
-    r.gradeYear ?? r.grade ?? "",
-    r.departmentName ?? "",
-    r.attendanceDays ?? 0,
-    r.absence ?? 0,
-    r.attendanceEval ?? 0,
-    r.midterm ?? 0,
-    r.finalExam ?? 0,
-    r.etcScore ?? 0,
-    (r.total ?? 0).toFixed(1),
-    (r.total ?? 0).toFixed(1),
-    r.grade ?? "",
-    (r.gpa ?? 0).toFixed(1)
-  ]));
-
-  const csvContent =
-    "\uFEFF" + [header, ...rows].map(r => r.join(",")).join("\n");
-
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `grades_${st.courseId || "course"}_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-/* =========================================
-   성적 저장 (console.log 추가)
-   ========================================= */
-async function saveAll() {
-  if (st.rows.length === 0) return;
   isSaving.value = true;
 
   try {
     const toPost = [];
     const toPut = [];
 
-    for (const r of st.rows) {
-      // 🔍 디버깅용 로그
-      console.log("저장 직전 데이터:", {
-        enrollmentId: r.enrollmentId,
-        midterm: r.midterm,
-        finalExam: r.finalExam,
-        grade: r.grade,
-        gpa: r.gpa
-      });
-
+    for (const r of selected) {
       const midScore = Math.round(Number(r.midterm) ?? 0);
       const finScore = Math.round(Number(r.finalExam) ?? 0);
       const rank     = r.grade ?? "F";
@@ -187,18 +143,16 @@ async function saveAll() {
     }
 
     if (toPost.length) {
-      console.log("POST payload:", toPost);
-      await axios.post("/professor/course/grade", toPost);
+      await axios.post("/api/professor/course/grade", toPost);
     }
     if (toPut.length) {
-      console.log("PUT payload:", toPut);
-      await axios.put("/professor/course/grade", toPut);
+      await axios.put("/api/professor/course/grade", toPut);
     }
 
-    alert("성적 저장 완료!");
+    alert("선택한 학생 성적이 저장되었습니다!");
   } catch (err) {
     console.error("[성적 저장 실패]", err?.response?.status, err?.response?.data);
-    alert(`성적 저장 중 오류 발생: ${err?.response?.data?.message ?? ""}`);
+    alert(`성적 저장 중 오류: ${err?.response?.data?.message ?? ""}`);
   } finally {
     isSaving.value = false;
   }
@@ -218,15 +172,14 @@ async function saveAll() {
                   @click="st.allChecked=!st.allChecked; toggleAll()">
             전체선택
           </button>
-          <button class="btn btn-light" @click="exportCsv">내보내기</button>
         </div>
         <div class="right">
           <div class="search">
             <span class="icon">🔍</span>
             <input v-model="st.q" placeholder="이름 또는 학번 검색" />
           </div>
-          <button class="btn btn-primary" :disabled="isSaving" @click="saveAll">
-            {{ isSaving ? "저장 중..." : "저장" }}
+          <button class="btn btn-primary" :disabled="isSaving" @click="saveSelected">
+            {{ isSaving ? "저장 중..." : "선택 저장" }}
           </button>
         </div>
       </div>
@@ -260,12 +213,13 @@ async function saveAll() {
               <th style="width:76px">수정</th>
             </tr>
           </thead>
+
           <tbody>
             <tr v-for="r in filtered" :key="r.enrollmentId">
               <td><input type="checkbox" v-model="r.checked" /></td>
               <td>{{ r.loginId }}</td>
               <td>{{ r.userName }}</td>
-              <td>{{ r.gradeYear ?? r.grade }}</td>
+              <td>{{ r.gradeYear }}</td> <!-- 학년 -->
               <td class="left-cell">{{ r.departmentName }}</td>
               <td><input class="num" type="number" min="0" v-model.number="r.attendanceDays" /></td>
               <td><input class="num" type="number" min="0" v-model.number="r.absence" /></td>
@@ -275,7 +229,7 @@ async function saveAll() {
               <td><input class="num" type="number" min="0" max="100" v-model.number="r.etcScore" @input="calc(r)" /></td>
               <td>{{ r.total.toFixed(1) }}</td>
               <td>{{ r.total.toFixed(1) }}</td>
-              <td>{{ r.grade }}</td>
+              <td>{{ r.grade }}</td> <!-- 성적 등급 -->
               <td>{{ r.gpa.toFixed(1) }}</td>
               <td><button class="btn btn-gray w-full">수정</button></td>
             </tr>
@@ -286,6 +240,7 @@ async function saveAll() {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 /* 레이아웃/타이틀 */
