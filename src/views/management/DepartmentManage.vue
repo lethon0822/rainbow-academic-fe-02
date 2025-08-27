@@ -65,6 +65,7 @@ const state = reactive({
   <whiteBox class="white2">
     <div>
       <div>
+        <i class="bi bi-alarm"></i>
         <input type="text">
       </div>
       <select name="filter">
