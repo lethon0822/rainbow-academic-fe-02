@@ -4,14 +4,16 @@ import Calendar from '@/components/schedule/Calendar.vue';
 import ScheduleList from '@/components/schedule/ScheduleList.vue';
 import ScheduleModal from '@/components/schedule/ScheduleModal.vue';
 import { ymd } from '@/services/date';
+import { TYPE_ORDER, TYPE_META } from '@/constants/scheduleTypes';
 
 const selectedDate = ref(new Date());
 const selectedYmd = ref(ymd(selectedDate.value));
 const modalOpen = ref(false);
 const editItem = ref(null);
-
-// 백엔드 정책상 semesterId가 필요 → 로그인/설정에서 가져오거나, 임시 고정
 const DEFAULT_SEMESTER_ID = 12;
+
+// ✅ 타입 필터(초기값: 전체 선택)
+const selectedTypes = ref([...TYPE_ORDER]);
 
 const onDateClick = (d) => {
   selectedDate.value = d;
@@ -28,33 +30,76 @@ const openEdit = (item) => {
   modalOpen.value = true;
 };
 
-// 목록/달력 재조회는 자식 컴포넌트들이 각각 처리(모달 saved 이벤트 시 강제 리프레시가 필요하면
-// 간단히 key 바꿔 재마운트하거나, Pinia로 공통 reload flag를 둬도 됩니다)
+const handleSaved = () => {
+  // 필요한 경우 재조회 트리거
+  onDateClick(selectedDate.value);
+};
+
+// 필터 칩 토글
+const toggleType = (t) => {
+  const i = selectedTypes.value.indexOf(t);
+  if (i >= 0) selectedTypes.value.splice(i, 1);
+  else selectedTypes.value.push(t);
+};
+const selectAll = () => { selectedTypes.value = [...TYPE_ORDER]; };
 </script>
 
 <template>
   <div class="wrap">
     <div class="left">
-      <Calendar v-model:selectedDate="selectedDate"
-                @date-click="onDateClick" />
-    </div>
-    <div class="right">
-      <ScheduleList :date="selectedDate"
-                    :selected-ymd="selectedYmd"
-                    @add-click="openCreate"
-                    @edit-click="openEdit" />
+      <Calendar
+        v-model:selectedDate="selectedDate"
+        :selected-types="selectedTypes"
+        @date-click="onDateClick"
+      />
     </div>
 
-    <ScheduleModal v-model="modalOpen"
-                   :edit-item="editItem"
-                   :picked-date="selectedYmd"
-                   :default-semester-id="DEFAULT_SEMESTER_ID"
-                   @saved="onDateClick(selectedDate)" />
+    <div class="right">
+      <!-- 타입 필터 칩 -->
+      <div class="filters">
+        <button
+          v-for="t in TYPE_ORDER" :key="t"
+          class="chip" :class="{ on: selectedTypes.includes(t) }"
+          @click="toggleType(t)"
+        >
+          <i class="dot" :style="{ background: TYPE_META[t]?.color }"></i>{{ t }}
+        </button>
+        <button class="chip ghost" @click="selectAll">전체</button>
+      </div>
+
+      <ScheduleList
+        :date="selectedDate"
+        :selected-ymd="selectedYmd"
+        :selected-types="selectedTypes"
+        @add-click="openCreate"
+        @edit-click="openEdit"
+      />
+    </div>
+
+    <ScheduleModal
+      v-model="modalOpen"
+      :edit-item="editItem"
+      :picked-date="selectedYmd"
+      :default-semester-id="DEFAULT_SEMESTER_ID"
+      @saved="handleSaved"
+    />
   </div>
 </template>
 
 <style scoped>
-.wrap{display:flex;gap:40px;margin:20px 0}
-.left{margin-left:20px}
-.right{margin-top:10px;display:flex;flex-direction:column;align-items:flex-end}
+/* 달력 640 + 목록 380 두 칼럼 */
+.wrap{
+  display:grid;
+  grid-template-columns: 640px 380px;
+  gap:32px; align-items:start; width:100%;
+}
+
+.filters{display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px}
+.chip{
+  border:1px solid #ddd; background:#fff; padding:6px 10px; border-radius:999px;
+  cursor:pointer; font-size:13px; display:inline-flex; align-items:center; gap:6px;
+}
+.chip.on{ border-color:#3BBEFF; background:#E7F6FF }
+.chip.ghost{ background:#f5f5f5 }
+.dot{ width:8px; height:8px; border-radius:50% }
 </style>
