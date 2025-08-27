@@ -97,7 +97,7 @@ const loadCourseDetail = async (id) => {
 
   <div class="section">
     <div class="section-title">주차별계획</div>
-    <div class="value" style="white-space: pre-line; color: #343a40">
+    <div class="value" style="white-space: pre-line">
       {{ state.form.weekPlan }}
     </div>
   </div>
@@ -141,12 +141,11 @@ const loadCourseDetail = async (id) => {
 
 .section {
   margin-top: 20px;
-  margin-bottom: 32px;
-  padding: 10px 30px 10px 30px;
+  margin-bottom: 20px;
+  padding: 10px 30px 20px 30px;
   border-radius: 8px;
   border: 0.2px solid #74747450;
   background-color: #f8f9fa;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
@@ -186,8 +185,7 @@ const loadCourseDetail = async (id) => {
   padding: 8px;
   background: #e9f5e8;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  border: 0.2px solid #00664f50;
 }
 
 .eval-label {
