@@ -164,7 +164,7 @@ const send = (id, json) => {
   </div>
 </template>
 
-<style>
+<style scoped lang="scss">
 .table-container {
   margin: 20px auto;
   border-radius: 8px;
@@ -220,11 +220,11 @@ thead th::after {
 }
 
 thead th::before {
-  top: 0; /* 위쪽 줄 */
+  top: 0;
 }
 
 thead th::after {
-  bottom: 0; /* 아래쪽 줄 */
+  bottom: 0;
 }
 
 tbody {
@@ -341,10 +341,14 @@ td.classroom,
 th.type,
 td.type,
 th.professor,
-td.professor,
+td.professor {
+  width: 130px;
+  text-align: center;
+}
+
 th.grade,
 td.grade {
-  width: 130px;
+  width: 150px;
   text-align: center;
 }
 
@@ -364,6 +368,11 @@ th.maxStd,
 td.maxStd,
 th.remStd,
 td.remStd {
+  width: 120px;
+  text-align: center;
+}
+
+td.enroll-action {
   width: 120px;
   text-align: center;
 }
