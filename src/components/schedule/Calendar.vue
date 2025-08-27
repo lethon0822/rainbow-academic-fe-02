@@ -4,29 +4,23 @@ import { fmt2 } from '@/services/date';
 import { getSchedulesByMonth } from '@/services/scheduleService';
 import { expandDates } from '@/services/date';
 import { TYPE_META } from '@/constants/scheduleTypes';
-
 // 아이콘(좌/우 동일 이미지면 하나만 가져다 rotate)
 import Icon from '@/assets/free-icon-arrow.png';
-
 const props = defineProps({
-  selectedTypes: { type: Array, default: () => [] }, // ✅ 타입 필터
+  selectedTypes: { type: Array, default: () => [] }, // :흰색_확인_표시: 타입 필터
 });
 const model = defineModel('selectedDate', { type: Date, default: () => new Date() });
 const emit = defineEmits(['month-loaded', 'date-click']);
-
 const dayNames = ['일','월','화','수','목','금','토'];
 const year = ref(model.value.getFullYear());
 const month = ref(model.value.getMonth() + 1);
 const matrix = ref([]);
-
-// ✅ 날짜별 타입 Set 저장 (YYYY-MM-DD => Set(types))
+// :흰색_확인_표시: 날짜별 타입 Set 저장 (YYYY-MM-DD => Set(types))
 const marksByDate = ref(new Map());
-
 const build = () => {
   const first = new Date(year.value, month.value - 1, 1);
   const startIdx = first.getDay();
   const lastDay = new Date(year.value, month.value, 0).getDate();
-
   const rows = [];
   let day = 1;
   for (let r=0;r<6;r++){
@@ -41,12 +35,11 @@ const build = () => {
   }
   matrix.value = rows;
 };
-
 const fetchMonthMarks = async () => {
   const { data } = await getSchedulesByMonth(year.value, month.value);
   const map = new Map();
   data.forEach(it => {
-    // ✅ 타입 필터 반영
+    // :흰색_확인_표시: 타입 필터 반영
     if (props.selectedTypes.length && !props.selectedTypes.includes(it.scheduleType)) return;
     expandDates(it.startDate, it.endDate).forEach(d => {
       if (!map.has(d)) map.set(d, new Set());
@@ -56,53 +49,44 @@ const fetchMonthMarks = async () => {
   marksByDate.value = map;
   emit('month-loaded', data);
 };
-
 const prev = () => { month.value===1 ? (month.value=12, year.value--) : month.value--; sync(); };
 const next = () => { month.value===12 ? (month.value=1, year.value++) : month.value++; sync(); };
 const sync = () => { build(); fetchMonthMarks(); };
-
 const isToday = (d) => {
   const t = new Date();
   return d && t.getFullYear()===year.value && t.getMonth()+1===month.value && t.getDate()===d;
 };
-
 // 해당 날짜의 타입 배열
 const typesFor = (d) => {
   if (!d) return [];
   const key = `${year.value}-${fmt2(month.value)}-${fmt2(d)}`;
   return Array.from(marksByDate.value.get(key) || []);
 };
-
 const pick = (d) => {
   if (!d) return;
   const sel = new Date(`${year.value}-${fmt2(month.value)}-${fmt2(d)}`);
   model.value = sel;
   emit('date-click', sel);
 };
-
 onMounted(sync);
 // 년/월은 달력 그리드만 다시 구성
 watch([year, month], build);
 // 타입 필터는 마킹만 다시 산출
 watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 </script>
-
 <template>
   <div class="calendar">
     <h3 class="cal-title">
   <button type="button" class="nav prev" @click.prevent="prev">
     <img :src="Icon" alt="prev" class="rot" />
   </button>
-
   <span class="ym"><b>{{ year }}</b> 년 <b>{{ month }}</b> 월</span>
-
   <button type="button" class="nav next" @click.prevent="next">
     <img :src="Icon" alt="next" />
   </button>
 </h3>
-
     <table class="tbl">
-  <!-- ✅ 7열을 정확히 1/7로 고정 -->
+  <!-- :흰색_확인_표시: 7열을 정확히 1/7로 고정 -->
   <colgroup>
     <col style="width:14.2857143%">
     <col style="width:14.2857143%">
@@ -117,7 +101,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
           <th v-for="d in dayNames" :key="d"><b>{{ d }}</b></th>
         </tr>
       </thead>
-
       <tbody>
         <tr v-for="(row,ri) in matrix" :key="ri">
           <td
@@ -127,7 +110,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
             @click="pick(d)"
           >
             <div class="num">{{ d }}</div>
-
             <div class="dots" v-if="typesFor(d).length">
               <i v-for="t in typesFor(d).slice(0,3)" :key="t" class="dot"
                  :style="{ background: (TYPE_META[t]?.color || '#bbb') }"/>
@@ -137,7 +119,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
         </tr>
       </tbody>
     </table>
-
     <div class="legend">
       <span v-for="(meta,t) in TYPE_META" :key="t" class="leg">
         <i class="dot" :style="{background: meta.color}"></i>{{ t }}
@@ -145,7 +126,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
     </div>
   </div>
 </template>
-
 <style scoped>
 /* 컨테이너 */
 .calendar{
@@ -159,7 +139,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
   box-shadow:0 0 10px rgba(0,0,0,.1);
   color:#343A40;
 }
-
 /* 타이틀 중앙, 양 끝 화살표 */
 .cal-title{
   position: relative;
@@ -173,7 +152,7 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
   font-weight: 800;
   color:#343A40;
 }
-/* ✅ 버튼에 맞춘 규칙 (기존 .cal-title > a … 를 전부 이걸로 교체) */
+/* :흰색_확인_표시: 버튼에 맞춘 규칙 (기존 .cal-title > a … 를 전부 이걸로 교체) */
 .cal-title .nav{
   position: absolute;
   top: 50%;
@@ -192,7 +171,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 .cal-title .nav:hover{ background:#f5f7fa; }
 .cal-title .nav img{ width:22px; } /* 아이콘 크기 */
 .rot{ transform:rotate(180deg); }
-
 /* ===== 테이블: 균등열 + 요일바 회색 제거 & 구분선 추가 ===== */
 .tbl{
   width:100%;
@@ -201,7 +179,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
   table-layout: fixed;        /* 열 너비를 콘텐츠와 무관하게 고정 */
   font-size:20px;
 }
-
 /* 열 너비 1/7 고정(안전망) */
 .tbl thead th,
 .tbl tbody td{
@@ -209,11 +186,10 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
   box-sizing:border-box;
   overflow:hidden;
 }
-
 /* 요일 행: 배경 제거 + 하단 얇은 실선 */
 .tbl thead tr{
   background: transparent;
-  border-bottom: 1px solid #e7e9ee;   /* ✅ 요일/날짜 구분선 */
+  border-bottom: 1px solid #E7E9EE;   /* :흰색_확인_표시: 요일/날짜 구분선 */
 }
 .tbl thead th{
   color:#111;
@@ -223,7 +199,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 }
 .tbl thead th:first-child,
 .tbl thead th:last-child{ border-radius:0; } /* 기존 라운드 무력화 */
-
 /* ===== 날짜 셀 ===== */
 .tbl tbody td{
   height:78px;
@@ -239,20 +214,16 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
   transition: background .15s ease;
 }
 .day:hover{ background:#f8fafc; }
-
 /* 오늘: 칸을 색칠해 강조 */
 .day.today{
   background: #FFF6D6;               /* 은은한 노랑 */
   box-shadow: inset 0 0 0 1px #FFE4A3;
 }
-
 .num{ font-weight:700; color:#343A40; }
-
 /* 주말 색상(오늘은 검정 유지) */
 .sun .num{ color:tomato; }
 .sat .num{ color:#1e90ff; }
 .day.today .num{ color:#343A40 !important; }
-
 /* 타입 점 */
 .dots{
   margin-top:6px;
@@ -263,7 +234,6 @@ watch(() => props.selectedTypes.slice(), fetchMonthMarks);
 }
 .dot{ width:8px; height:8px; border-radius:50%; }
 .more{ font-size:11px; color:#666 }
-
 /* 범례 */
 .legend{
   margin-top:12px;
