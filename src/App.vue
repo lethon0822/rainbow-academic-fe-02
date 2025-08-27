@@ -86,12 +86,13 @@ watch(
       <div class="black-bg" @click="show.modal = false">
         <div class="cover">
           <div class="white-bg" @click.stop>
-            <div @click="show.modal = false" class="close">⨯</div>
+            <i class="bi bi-x close-icon" @click="show.modal = false"></i>
             <CourseDetail :id="show.id" />
           </div>
         </div>
       </div>
     </template>
+
     <router-view />
   </div>
 </template>
@@ -101,7 +102,7 @@ body,
 #app {
   height: 100%;
   margin: 0;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   overflow-x: hidden;
 }
 div {
@@ -143,14 +144,30 @@ div {
   line-height: 30px;
   margin-right: 28px;
 }
+
 .white-bg {
-  justify-content: center;
-  width: 100%;
-  height: 80vh;
+  width: 800px;
+  height: 800px;
   background: white;
-  padding: 20px;
-  z-index: 99999;
+  padding: 50px 20px 0 20px;
   overflow-y: auto;
-  padding-right: 10px;
+  position: relative;
+  border-radius: 8px;
+}
+
+.close-icon {
+  position: absolute;
+  top: -5px;
+  right: 20px;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #343a40;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.close-icon:hover {
+  color: #495057 !important;
+  transform: scale(1.1);
 }
 </style>
