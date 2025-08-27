@@ -321,7 +321,7 @@ body {
   position: fixed;
   top: 60px;
   left: 0;
-  width: 300px;
+  width: 250px;
   height: 100vh;
   background: #fff;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.23);

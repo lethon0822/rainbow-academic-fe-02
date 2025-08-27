@@ -104,6 +104,7 @@ body,
   background-color: #F5F5F5;
   overflow-x: hidden;
   color: #343A40;
+  font-size: 14px;
 }
 div {
   box-sizing: border-box;

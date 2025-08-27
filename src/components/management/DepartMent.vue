@@ -25,11 +25,12 @@ const departments = reactive([
             <th>학과코드</th>
             <th>학과</th>
             <th>학과사무실</th>
-            <th>학과장명</th>
+            <th>학과장</th>
             <th>학과 전화번호</th>
             <th>학과 정원</th>
+            <th>학과 인원</th>
             <th>상태</th>
-            <th>수강</th>
+            <th>    </th>
           </tr>
         </thead>
         <tbody>

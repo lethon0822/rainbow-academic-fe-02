@@ -1,7 +1,7 @@
 <script setup>
 import whiteBox from '@/components/common/WhiteBox.vue';
-import departMent from '@/components/common/DepartMent.vue';
-import { reactive } from 'vue';
+import { reactive, onMounted } from 'vue';
+import { deptlist } from '@/services/DeptManageService';
 
 const state = reactive({
   form:{
@@ -11,8 +11,22 @@ const state = reactive({
     deptTel: "",
     deptMaxStd:0,
     deptCode: "",
+  },
+  deptList:[]
+})
 
+onMounted(async()=>{
+
+  const params = {
+    status:"",
+    text:""
   }
+
+  const res = await deptlist(params);
+  console.log("알이에수",res);
+
+  state.deptList = res.data;
+  console.log('list',state.deptList)
 })
 
 </script>
@@ -63,20 +77,61 @@ const state = reactive({
   </whiteBox>
 
   <whiteBox class="white2">
-    <div>
-      <div class="d-flex">
-        <div class="search-icon">
+    <div class="d-flex filter-bar">
+      <div class="cover d-flex">
+        <div class="search">
           <i class="bi bi-search"></i>
         </div>
-        <input type="text">
+        <input type="text" placeholder="학과명을 입력하세요">
       </div>
-      <select name="filter">
-        <option value="전체"></option>
-        <option value="1">운영중</option>
-        <option value="0">폐지</option>
-      </select>
+      <div class="cover d-flex" >
+        <div class="search">
+          <i class="bi bi-funnel"></i>
+        </div>
+        <select name="filter" class="filter">
+          <option value="null">상태/전체</option>
+          <option value="1">운영중</option>
+          <option value="0">폐지</option>
+        </select>
+      </div>
+      <button class="btn btn-success">조회</button>
     </div>
-    <departMent></departMent>
+    <!-- 학과목록 -->
+    <div class="container">
+    <div class="table-wrapper">
+      <table class="dept-table">
+        <thead>
+          <tr>
+            <th>학과코드</th>
+            <th>학과</th>
+            <th>학과사무실</th>
+            <th>학과장명</th>
+            <th>학과 전화번호</th>
+            <th>학과 정원</th>
+            <th>학과 인원</th>
+            <th>상태</th>
+            <th>수강</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in state.deptList" :key="item.deptId">
+            <td>{{ item.deptCode }}</td>
+            <td>{{ item.deptName }}</td>
+            <td>{{ item.deptOffice }}</td>
+            <td>{{ item.userName }}</td>
+            <td>{{ item.deptTel }}</td>
+            <td>{{ item.deptMaxStd }}</td>
+            <td>{{ item.deptPeople }}</td>
+            <td> {{item.status === '1' ? "운영중" : "폐지"}}</td>
+            <td>
+              <button class="btn btn-primary">수정</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+ 
   </whiteBox>
 
 </template>
@@ -91,9 +146,6 @@ const state = reactive({
   .line{
     margin-bottom: 10px;
   }
-
-
-
 
 .dept-form-grid {
   margin-top: 18px;
@@ -114,9 +166,9 @@ label{
 }
 
 input{
-  border-radius: 10px;
+  border-radius:10px ;
   background-color: #F8F9FA;
-  border: 1px solid #E5E7EB;
+  border: 2px solid #E5E7EB;
   
 }
 
@@ -127,8 +179,136 @@ input{
 }
 
 .white2{
-  max-height: 500px;
+  max-height: 400px;
 }
 
+.filter-bar{
+  gap:20px;
+  justify-content: end;
+  margin-bottom: 10px;
+}
+
+.cover{
+  padding: 5px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  background-color: #F8F9FA;
+}
+
+.cover input{
+  border: none;
+  border-radius: 0;
+  color: #7B7B7B;
+  outline: none;
+}
+
+.cover input::placeholder{
+  color: #9e9e9e;
+}
+
+.cover select{
+  width:150px;
+  border: none;
+  outline: none;
+  color: #7B7B7B;
+}
+
+.bi-search{
+  color: #7B7B7B;
+}
+
+
+.search{
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter{
+  border-radius: 10px;
+  background-color: #F8F9FA;
+  border: 2px solid #E5E7EB;
+}
+
+/* 학과 목록 표 */
+
+.container {
+  min-height: auto;
+  min-width: 1430px;
+  height: 360px;
+  
+}
+
+/* 가로 스크롤 가능 */
+/* 컨테이너 높이 조절 */
+.table-wrapper {
+  max-height: 300px; /* tbody 스크롤 높이 */
+  overflow-y: auto;  /* 세로 스크롤 */
+  overflow-x: auto;  /* 가로 스크롤 유지 */
+}
+
+/* 테이블 레이아웃 고정 */
+
+.dept-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* table {
+    width: "100%",
+    border-collapse: "separate",
+    borderSpacing: 0,
+  } */
+
+/* thead 고정 */
+.dept-table thead th {
+  position: sticky;     /* 헤더 고정 */
+  top: 0;               /* 상단 0px 고정 */
+  background-color: #fff; /* 헤더 배경색 지정 */
+  z-index: 10;          /* 스크롤 내용 위에 표시 */
+  border-top: 2px solid #7B7B7B;
+  border-bottom: 1px solid #7B7B7B;
+}
+
+
+/* tbody 높이 제한 + 스크롤은 위 .table-wrapper에서 */
+.dept-table th,
+.dept-table td {
+  padding: 12px 16px;
+  text-align: center;
+}
+
+/* 행 호버 효과 */
+.dept-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* 상태 색상 */
+.status-processing {
+  color: #e53e3e; /* 빨간색 */
+  font-weight: 500;
+}
+
+.status-complete {
+  color: #38a169; /* 초록색 */
+  font-weight: 500;
+}
+
+/* 버튼 스타일 */
+.btn-edit {
+  background-color: #3182ce;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btn-edit:hover {
+  background-color: #2b6cb0;
+}
 
 </style>
