@@ -10,34 +10,40 @@ const router = useRouter();
 /* 상단 컨트롤 */
 const attendDate = ref(new Date().toISOString().slice(0, 10));
 const search = ref("");
-const filter = ref("전체");            // 전체/출석/결석/지각/병가/경조사
+const filter = ref("전체"); // 전체/출석/결석/지각/병가/경조사
 const allChecked = ref(false);
 const isLoading = ref(false);
 
 /* 전달 데이터 */
 const state = reactive({
-  data: [],        // [{ enrollmentId, loginId, userName, gradeYear, departmentName, semester, status, note, checked }]
-  courseId: ""
+  data: [], // [{ enrollmentId, loginId, userName, gradeYear, departmentName, semester, status, note, checked }]
+  courseId: "",
 });
 
-/* 상태 옵션 */
-const statusOptions = [
-  { value: "출석", label: "출석" },
-  { value: "지각", label: "지각" },
-  { value: "결석", label: "결석" },
-  { value: "병가", label: "병가" },
-  { value: "경조사", label: "경조사" }
+/* 상태 옵션 - attendanceOptions로 이름 통일 */
+const attendanceOptions = [
+  { value: "출석", label: "출석", icon: "✅" },
+  { value: "지각", label: "지각", icon: "⚠️" },
+  { value: "결석", label: "결석", icon: "⛔" },
+  { value: "병가", label: "병가", icon: "🩺" },
+  { value: "경조사", label: "경조사", icon: "🎗️" },
 ];
 
 /* 상태 → 배지 메타 */
 const statusMeta = (st) => {
   switch (st) {
-    case "출석":   return { label: "출석",   cls: "success", icon: "✅" };
-    case "결석":   return { label: "결석",   cls: "danger",  icon: "⛔" };
-    case "지각":   return { label: "지각",   cls: "warning", icon: "⚠️" };
-    case "병가":   return { label: "병가",   cls: "info",    icon: "🩺" };
-    case "경조사": return { label: "경조사", cls: "neutral", icon: "🎗️" };
-    default:       return { label: st || "미지정", cls: "neutral", icon: "•" };
+    case "출석":
+      return { label: "출석", cls: "success", icon: "✅" };
+    case "결석":
+      return { label: "결석", cls: "danger", icon: "⛔" };
+    case "지각":
+      return { label: "지각", cls: "warning", icon: "⚠️" };
+    case "병가":
+      return { label: "병가", cls: "info", icon: "🩺" };
+    case "경조사":
+      return { label: "경조사", cls: "neutral", icon: "🎗️" };
+    default:
+      return { label: st || "미지정", cls: "neutral", icon: "•" };
   }
 };
 
@@ -52,7 +58,7 @@ onMounted(() => {
       ...s,
       status: s.status ?? "결석",
       note: s.note ?? "",
-      checked: false
+      checked: false,
     }));
   }
   if (passid) state.courseId = JSON.parse(passid);
@@ -72,7 +78,8 @@ const filtered = computed(() => {
 });
 
 /* 전체선택 토글 */
-const toggleAll = () => filtered.value.forEach((s) => (s.checked = allChecked.value));
+const toggleAll = () =>
+  filtered.value.forEach((s) => (s.checked = allChecked.value));
 
 /* 저장 */
 const saveAttendance = async () => {
@@ -87,9 +94,12 @@ const saveAttendance = async () => {
         attendDate: attendDate.value,
         enrollmentId: s.enrollmentId,
         status: s.status,
-        note: s.note
+        note: s.note,
       };
-      const { data: exists } = await axios.post("/professor/course/check/exist", payload);
+      const { data: exists } = await axios.post(
+        "/professor/course/check/exist",
+        payload
+      );
       if (exists === 0) await axios.post("/professor/course/check", payload);
       else await axios.put("/professor/course/check", payload);
     }
@@ -105,7 +115,16 @@ const saveAttendance = async () => {
 
 /* CSV 내보내기 (UTF-8 BOM) */
 const exportCsv = () => {
-  const header = ["학번","이름","학년","학과","출결상태","비고","학기","일자"];
+  const header = [
+    "학번",
+    "이름",
+    "학년",
+    "학과",
+    "출결상태",
+    "비고",
+    "학기",
+    "일자",
+  ];
   const rows = state.data.map((s) => [
     s.loginId ?? "",
     s.userName ?? "",
@@ -114,10 +133,11 @@ const exportCsv = () => {
     s.status ?? "",
     s.note ?? "",
     s.semester ?? "",
-    attendDate.value
+    attendDate.value,
   ]);
 
-  const csvContent = "\uFEFF" + [header, ...rows].map(r => r.join(",")).join("\n");
+  const csvContent =
+    "\uFEFF" + [header, ...rows].map((r) => r.join(",")).join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
@@ -163,7 +183,11 @@ const exportCsv = () => {
             <option value="병가">병가</option>
             <option value="경조사">경조사</option>
           </select>
-          <button class="btn btn-primary" :disabled="isLoading" @click="saveAttendance">
+          <button
+            class="btn btn-primary"
+            :disabled="isLoading"
+            @click="saveAttendance"
+          >
             {{ isLoading ? "저장 중..." : "저장" }}
           </button>
         </div>
@@ -174,16 +198,20 @@ const exportCsv = () => {
         <table class="tbl">
           <thead>
             <tr>
-              <th style="width:40px">
-                <input type="checkbox" v-model="allChecked" @change="toggleAll" />
+              <th style="width: 40px">
+                <input
+                  type="checkbox"
+                  v-model="allChecked"
+                  @change="toggleAll"
+                />
               </th>
-              <th style="width:30px">학번</th>
-              <th style="width:30px">이름</th>
-              <th style="width:30px">학년</th>
-              <th style="width:50px">학과</th>
-              <th style="width:50px">출결상태</th>
-              <th style="width:90px">비고(사유)</th>
-              <th style="width:100px">학기</th>
+              <th style="width: 30px">학번</th>
+              <th style="width: 30px">이름</th>
+              <th style="width: 30px">학년</th>
+              <th style="width: 50px">학과</th>
+              <th style="width: 50px">출결상태</th>
+              <th style="width: 90px">상태 변경</th>
+              <th style="width: 100px">비고</th>
             </tr>
           </thead>
 
@@ -195,7 +223,7 @@ const exportCsv = () => {
               <td>{{ s.gradeYear ?? s.grade }}</td>
               <td class="left-cell">{{ s.departmentName }}</td>
 
-              <!-- 배지 -->
+              <!-- 현재 상태 배지 -->
               <td>
                 <span :class="['att-badge', statusMeta(s.status).cls]">
                   <span class="i">{{ statusMeta(s.status).icon }}</span>
@@ -203,29 +231,35 @@ const exportCsv = () => {
                 </span>
               </td>
 
-              <!-- 비고(사유) -->
+              <!-- 상태 변경 라디오 버튼 -->
               <td>
-                <input
-                  v-model="s.note"
-                  class="note"
-                  :placeholder="['결석','지각','병가','경조사'].includes(s.status) ? '사유 입력' : ''"
-                  :disabled="!['결석','지각','병가','경조사'].includes(s.status)"
-                />
-              </td>
-
-              <!-- 학기(라디오 버튼: 출석/지각/결석/병가/경조사) -->
-              <td>
-                <div class="radio-group">
-                  <label v-for="o in statusOptions" :key="o.value" class="radio-label">
+                <div class="att-selector">
+                  <label
+                    v-for="opt in attendanceOptions"
+                    :key="opt.value"
+                    class="att-option"
+                    :class="{ selected: s.status === opt.value }"
+                  >
                     <input
                       type="radio"
                       :name="`status-${s.enrollmentId}`"
-                      :value="o.value"
+                      :value="opt.value"
                       v-model="s.status"
                     />
-                    {{ o.label }}
+                    <span class="icon">{{ opt.icon }}</span>
+                    <span class="label">{{ opt.label }}</span>
                   </label>
                 </div>
+              </td>
+
+              <!-- 비고 입력 -->
+              <td>
+                <input
+                  type="text"
+                  v-model="s.note"
+                  class="note"
+                  placeholder="비고 입력"
+                />
               </td>
             </tr>
           </tbody>
@@ -236,101 +270,235 @@ const exportCsv = () => {
 </template>
 
 <style scoped lang="scss">
-.full-width { width: 100%; max-width: none; }
+.full-width {
+  width: 100%;
+  max-width: none;
+}
 
-.att-wrap { padding-top: 6px; }
-.page-subtitle { color:#0d5c3e; font-weight:800; margin-bottom: 12px; }
+.att-wrap {
+  padding-top: 6px;
+}
+.page-subtitle {
+  color: #0d5c3e;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
 
 /* 툴바 */
 .toolbar {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; margin-bottom:12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
 }
-.left, .right { display:flex; align-items:center; gap:8px; }
-.chk-all { display:flex; align-items:center; gap:6px; font-weight:600; }
-.date input { height:34px; padding:0 10px; border:1px solid #cbd5e1; border-radius:6px; }
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chk-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.date input {
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
 .search {
-  width:240px; height:34px; padding:0 12px; border:1px solid #cbd5e1; border-radius:6px;
+  width: 240px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
 }
 .filter {
-  height:34px; padding:0 10px; border:1px solid #cbd5e1; border-radius:6px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
 }
-.btn { height:34px; padding:0 12px; border-radius:6px; border:0; cursor:pointer; font-weight:600; }
-.btn-light { background:#eaf2ee; color:#0d5c3e; }
-.btn-primary { background:#1e90ff; color:#fff; }
+.btn {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 6px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-light {
+  background: #eaf2ee;
+  color: #0d5c3e;
+}
+.btn-primary {
+  background: #1e90ff;
+  color: #fff;
+}
 
 /* 표 */
-.table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .tbl {
-  min-width: 1100px; width:100%;
-  border-collapse: separate; border-spacing: 0;
-  border:1px solid #e5e7eb; border-radius:8px; overflow:hidden;
+  min-width: 1200px;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
 }
 .tbl thead th {
-  background:#0d5c3e; color:#fff; font-weight:700; height:40px; padding:0 8px; text-align:center;
+  background: #0d5c3e;
+  color: #fff;
+  font-weight: 700;
+  height: 40px;
+  padding: 0 8px;
+  text-align: center;
   box-shadow: inset 0 -1px #0b4b32, inset -1px 0 #0b4b32;
 }
-.tbl thead th:last-child { box-shadow: inset 0 -1px #0b4b32; }
-.tbl tbody td {
-  background:#fff; padding:6px 8px; text-align:center; color:#111827;
-  box-shadow: inset 0 1px #e5e7eb, inset -1px 0 #e5e7eb;
+.tbl thead th:last-child {
+  box-shadow: inset 0 -1px #0b4b32;
 }
-.tbl tbody td.left-cell { text-align:left; }
+.tbl tbody td {
+  background: #fff;
+  padding: 6px 8px;
+  text-align: center;
+  color: #111827;
+  box-shadow: inset 0 1px #e5e7eb, inset -1px 0 #e5e7eb;
+  vertical-align: middle;
+}
+.tbl tbody td.left-cell {
+  text-align: left;
+}
 
 /* 입력 */
-.status, .note {
-  width:100%; height:30px; border:1px solid #cbd5e1; border-radius:6px; padding:0 8px;
+.note {
+  width: 100%;
+  min-width: 80px;
+  height: 30px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0 8px;
 }
-.note:disabled { background:#f8fafc; color:#94a3b8; }
-.status:focus, .note:focus, .search:focus, .filter:focus, .date input:focus {
-  outline:none; border-color:#1e90ff; box-shadow:0 0 0 3px rgba(30,144,255,.12);
+.note:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
 }
-
-/* 라디오 그룹(학기) */
-.radio-group {
-  display:flex; 
-  align-items:center;  
-  justify-content:flex-start;
-  gap: 16px;
-  width: fit-content;
-  margin: 0 auto;
-}
-.radio-label {
-  display:flex; 
-  align-items:center; 
-  gap:4px; 
-  font-size:13px; 
-  white-space:nowrap;
-}
-.radio-label input { 
-  width:14px; 
-  height:14px; 
-  cursor:pointer; 
+.search:focus,
+.filter:focus,
+.date input:focus,
+.note:focus {
+  outline: none;
+  border-color: #1e90ff;
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.12);
 }
 
-/* 배지 — Bootstrap .badge 와 충돌 안 나게 격리 */
+/* 라디오 그룹 */
+.att-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.att-option {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background: #fff;
+  position: relative;
+}
+
+.att-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.att-option:hover {
+  transform: scale(1.05);
+  background-color: #f8f9fa;
+}
+
+.att-option .icon {
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.att-option .label {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.att-option.selected {
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-width: 2px;
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  color: #0d47a1;
+}
+
+/* 배지 */
 .att-badge {
-  display:inline-flex; align-items:center; gap:8px;
-
-  /* ▶ 크기 조절 포인트 */
-  height: 32px;          /* 원하면 36/40 등으로 변경 */
-  padding: 0 16px;       /* 좌우 여백 */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
   border-radius: 999px;
-  font-size: 14px;       /* 텍스트 크기 */
+  font-size: 12px;
   font-weight: 700;
-  line-height: 32px;     /* height와 동일 */
-
-  border:1px solid transparent; user-select:none;
+  line-height: 28px;
+  border: 1px solid transparent;
+  user-select: none;
 }
-.att-badge .i { font-size:16px; line-height:1; }
+.att-badge .i {
+  font-size: 14px;
+  line-height: 1;
+}
 
 /* 상태별 색상 */
-.att-badge.success { background:#ecfdf5; color:#065f46; border-color:#a7f3d0; }
-.att-badge.danger  { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
-.att-badge.warning { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
-.att-badge.info    { background:#304868; color:#1e3a8a; border-color:#bfdbfe; }
-.att-badge.neutral { background:#f3f4f6; color:#374151; border-color:#e5e7eb; }
-
-/* 반응형 */
-@media (max-width: 1280px) { .search { width:200px; } }
+.att-badge.success {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+.att-badge.danger {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+.att-badge.warning {
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: #fed7aa;
+}
+.att-badge.info {
+  background: #eff6ff;
+  color: #1e3a8a;
+  border-color: #bfdbfe;
+}
+.att-badge.neutral {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #e5e7eb;
+}
 </style>
