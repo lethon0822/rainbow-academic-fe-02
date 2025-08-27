@@ -59,7 +59,9 @@ const toggleMenu = (liElement) => {
         item.classList.contains("menu-sugang") ||
         item.classList.contains("menu-gangui") ||
         item.classList.contains("menu-score") ||
-        item.classList.contains("menu-management")
+        item.classList.contains("menu-management")||
+        item.classList.contains("menu-graduate")
+
       ) {
         item.classList.remove("active");
         const subMenu = item.querySelector("ul");
@@ -261,6 +263,12 @@ watch(
               <!-- 라우팅처리 -->
               <router-link to="/schedule" class="router-link">
                 학사일정관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="/deptmanage" class="router-link">
+                학과관리
               </router-link>
             </li>
             <li>
