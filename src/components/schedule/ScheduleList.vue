@@ -7,6 +7,7 @@ const props = defineProps({
   date: { type: Date, required: true },        // 현재 달 기준
   selectedYmd: { type: String, default: '' },  // 달력에서 클릭한 날짜(필터)
   selectedTypes: { type: Array, default: () => [] }, // ✅ 타입 필터
+  flat: { type: Boolean, default: false }, 
 });
 
 const emit = defineEmits(['add-click', 'edit-click']);
@@ -49,7 +50,7 @@ const groups = computed(() => {
 </script>
 
 <template>
-  <div class="panel">
+  <div class="panel" :class="{ flat: props.flat }">  <!-- ✅ 변경 -->
     <div class="hdr">
       <div class="title">학사일정 목록</div>
       <button class="add" @click="$emit('add-click')">+ 일정 추가</button>
@@ -82,12 +83,43 @@ const groups = computed(() => {
 </template>
 
 <style scoped>
-.panel{border-radius:20px;background:#fff;width:380px;min-height:480px;box-shadow:0 0 10px rgba(0,0,0,.08)}
-.hdr{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #f1f1f1}
+/* ✅ 루트: 고정폭/최소높이 제거, 플렉스로 내부 스크롤 계산 */
+.panel{
+  display:flex;
+  flex-direction:column;
+  width:100%;                 /* 380px → 100% */
+  height:100%;                /* 오른쪽 컬럼 높이 채움 */
+  border-radius:20px;
+  background:#fff;
+  border:1px solid #dedede;
+  box-shadow:0 0 10px rgba(0,0,0,.08);
+}
+
+/* ✅ flat 모드: 카드 제거(투명), 여백만 간단히 */
+.panel.flat{
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  border-radius:0;
+}
+
+/* 헤더 */
+.hdr{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 24px;          /* 칩과 라인 맞추기: 좌우 24px */
+  border-bottom:1px solid #f1f1f1;
+  color:#343A40;
+}
 .title{font-weight:700}
 .add{background:#3BBEFF;border:none;color:#fff;border-radius:20px;padding:8px 12px;cursor:pointer;font-weight:700}
 
-.groups{max-height:520px;overflow:auto;padding:12px 16px 18px}
+/* 본문: 플렉스 남는 영역 스크롤 */
+.groups{
+  flex:1;                     /* ✅ 남는 높이 채움 */
+  overflow:auto;              /* 내용 많으면 내부 스크롤 */
+  padding:12px 24px 18px;     /* 칩/헤더와 좌우 라인 일치 */
+}
+
 .group{margin-bottom:12px}
 .g-title{display:flex;align-items:center;gap:8px;font-weight:700;margin:6px 0}
 .g-dot{width:10px;height:10px;border-radius:50%}
@@ -96,7 +128,7 @@ const groups = computed(() => {
 .card{background:#f9f9ff;border:1px solid #eef0ff;border-radius:14px;padding:12px 14px;cursor:pointer}
 .card:hover{background:#f2f8ff}
 .row1{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px}
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px;color:#fff}
 .row2{color:#555;font-size:13px}
 .empty{padding:30px 12px;color:#777}
 </style>

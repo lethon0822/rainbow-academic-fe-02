@@ -119,7 +119,7 @@ const send = (id, json) => {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .table-container {
   margin: 20px 0 0 15px;
   border-radius: 5px;
