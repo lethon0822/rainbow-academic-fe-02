@@ -35,6 +35,22 @@ const state = reactive({
   },
 });
 
+const initialForm = {
+  deptName: '',
+  courseId: 0,
+  classroom: "",
+  semesterId: 12,
+  type: "전공필수",
+  time: "",
+  title: "",
+  credit: null,
+  weekPlan: "",
+  textBook: "",
+  goal: "",
+  maxStd: null,
+  grade: 1,
+};
+
 watch(
   () => state.form.type,
   (newType) => {
@@ -79,6 +95,8 @@ const back = () => {
     router.push('/professor/course/status')
     return};
 }
+
+
 </script>
 
 
@@ -178,7 +196,7 @@ const back = () => {
         </div>
 
         <div class="buttons">
-          <button type="reset" class="reset">초기화</button>
+          <button type="button" class="reset" @click="resetForm">초기화</button>
           <button type="button" @click="submit">강의개설 신청</button>
         </div>
         
