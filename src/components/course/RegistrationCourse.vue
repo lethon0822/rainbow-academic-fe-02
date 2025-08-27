@@ -185,8 +185,44 @@ const back = () => {
       </div>
 
       <div class="fform-group4">
-        <div class="form-group">
-          <label for="evaluation">평가방법</label>
+        <div class="form-group4">
+          <label for="evaluation">중간고사</label>
+          <input2
+            type="text"
+            id="evaluation"
+            v-model="state.form.weekPlan"
+            placeholder="%를 입력해주세요."
+          />
+        </div>
+        <div class="form-group4">
+          <label for="evaluation">기말고사</label>
+          <input2
+            type="text"
+            id="evaluation"
+            v-model="state.form.weekPlan"
+            placeholder="%를 입력해주세요."
+          />
+        </div>
+        <div class="form-group4">
+          <label for="evaluation">과제</label>
+          <input2
+            type="text"
+            id="evaluation"
+            v-model="state.form.weekPlan"
+            placeholder="%를 입력해주세요."
+          />
+        </div>
+        <div class="form-group4">
+          <label for="evaluation">출석률</label>
+          <input2
+            type="text"
+            id="evaluation"
+            v-model="state.form.weekPlan"
+            placeholder="%를 입력해주세요."
+          />
+        </div>
+        <div class="form-group4">
+          <label for="evaluation">참여율</label>
           <input2
             type="text"
             id="evaluation"
@@ -333,8 +369,8 @@ const back = () => {
    max-width: 1320px;         /* 최대 너비 */
    background: #fdfdfd; 
    height: 1000px;   
-  
-   bottom: 500px;
+   position: relative;
+   
    margin-left: 100px; 
   
    }
@@ -352,57 +388,61 @@ const back = () => {
     }
     
     .fform-group {
-      border: #9e9e9e;
-      position: fixed;
-      
-      left: 550px;
+      position: absolute; 
+      left: 50px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
+
     .fform-group2{
-      position: fixed;
-      
-      left: 1100px;
+      position: absolute;
+      left: 650px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group3 {
-        left: 460px;
-        margin: 50px ;
-       
-        padding: 20px 40px;
-        top:700px;
-        
-        position: fixed;
-        //bottom:10px;
-         max-width: 1030px;
-         min-width: 1170px;
-        // flex-direction: column;
+      position: absolute;
+      left: 50px;
+      bottom:380px;
+      max-width: 1140px;
+      min-width: 1140px;
+      flex-direction: column;
     }
+
     .fform-group4 {
-        left: 460px;
-        margin: 50px ;
-        width: 100px;
-        height: 300px;
-        padding: 20px 40px;
-        top:950px;
-        
-        position: fixed;
-        //bottom:10px;
-         max-width: 200px;
-         min-width: 200px;
+      
+      position: absolute;
+      border: #9e9e9e;
+      display: grid;
+      left: 400px;
+      bottom:200px;
+      max-width: 200px;
+      min-width: 200px;
         // flex-direction: column;
-         height: 200px;
+      height: 200px;
+      grid-template-columns: repeat(5, 1fr);
+      grid-gap: 20px;
     }
+
     .form-group {
         border: #9e9e9e;
         display: flex;
         margin-bottom: 15px;
         
         flex-direction: column; /* 세로 정렬 */
+    }
+
+    .form-group4 {
+      background-color: #f5f5f5;
+      width: 80px;   /* 원하는 크기 */
+       height:80px;  /* width와 동일하게 */
+       box-sizing: border-box; /* 패딩/보더 포함해서 정사각형 유지 */
+       text-align: center;     /* 텍스트 중앙 정렬 */
+       border: 1px solid #ccc;
+       border-radius: 8px;     /* 선택: 모서리 둥글게 */
     }
 
     .form-group select{
@@ -425,14 +465,33 @@ const back = () => {
         padding: 6px 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
+
     }
-    .form-group input2 {
-      background-color: #f0f0f0;
-        flex: 1;
-        padding: 6px 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+     .input2 {
+    //    width: 80px;   /* 원하는 크기 */
+    //    height:80px;  /* width와 동일하게 */
+    //    box-sizing: border-box; /* 패딩/보더 포함해서 정사각형 유지 */
+    //    text-align: center;     /* 텍스트 중앙 정렬 */
+    //    border: 1px solid #ccc;
+    //    border-radius: 100px;  /* 선택: 모서리 둥글게 */
+    //    border: #9e9e9e;  
+    background-color: #f0f0f0; /* 회색 배경 */
+    border: 1px solid #ccc;    /* 테두리도 회색 */
+    color: #333;               /* 글자색 진한 회색 */
+    padding: 8px 10px;
+    border-radius: 6px;
+    box-sizing: border-box;
+     }
+     .fform-group4 input2 {
+  display: block;              /* 블록 형태 */
+  width: 100%;                 /* 기본 input이랑 맞춤 */
+  background-color: #f0f0f0;   /* 회색 배경 */
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 8px 10px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
 
     textarea {
         resize: vertical;
@@ -473,7 +532,7 @@ const back = () => {
     }
     input, textarea {
         width: 100%;
-        height: 100%;
+       
         box-sizing: border-box;
         outline-color: #A2A2A2;
      }
