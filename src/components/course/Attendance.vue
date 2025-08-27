@@ -22,28 +22,46 @@ const state = reactive({
 
 /* 상태 옵션 - attendanceOptions로 이름 통일 */
 const attendanceOptions = [
-  { value: "출석", label: "출석", icon: "✅" },
-  { value: "지각", label: "지각", icon: "⚠️" },
-  { value: "결석", label: "결석", icon: "⛔" },
-  { value: "병가", label: "병가", icon: "🩺" },
-  { value: "경조사", label: "경조사", icon: "🎗️" },
+  {
+    value: "출석",
+    label: "출석",
+    icon: "bi bi-check-circle-fill",
+    cls: "success",
+  },
+  {
+    value: "지각",
+    label: "지각",
+    icon: "bi bi bi-alarm-fill",
+    cls: "warning",
+  },
+  { value: "결석", label: "결석", icon: "bi bi-x-circle-fill", cls: "danger" },
+  { value: "병가", label: "병가", icon: "bi bi-emoji-dizzy-fill", cls: "info" },
+  { value: "경조사", label: "경조사", icon: "bi bi-flower1", cls: "neutral" },
 ];
 
 /* 상태 → 배지 메타 */
 const statusMeta = (st) => {
   switch (st) {
     case "출석":
-      return { label: "출석", cls: "success", icon: "✅" };
+      return { label: "출석", cls: "success", icon: "bi bi-check-circle-fill" };
     case "결석":
-      return { label: "결석", cls: "danger", icon: "⛔" };
+      return { label: "결석", cls: "danger", icon: "bi bi-x-circle-fill" };
     case "지각":
-      return { label: "지각", cls: "warning", icon: "⚠️" };
+      return {
+        label: "지각",
+        cls: "warning",
+        icon: "bi bi-alarm-fill",
+      };
     case "병가":
-      return { label: "병가", cls: "info", icon: "🩺" };
+      return { label: "병가", cls: "info", icon: "bi bi-emoji-dizzy-fill" };
     case "경조사":
-      return { label: "경조사", cls: "neutral", icon: "🎗️" };
+      return { label: "경조사", cls: "neutral", icon: "bi bi-flower1" };
     default:
-      return { label: st || "미지정", cls: "neutral", icon: "•" };
+      return {
+        label: st || "미지정",
+        cls: "neutral",
+        icon: "bi bi-question-circle",
+      };
   }
 };
 
@@ -226,7 +244,7 @@ const exportCsv = () => {
               <!-- 현재 상태 배지 -->
               <td>
                 <span :class="['att-badge', statusMeta(s.status).cls]">
-                  <span class="i">{{ statusMeta(s.status).icon }}</span>
+                  <i :class="statusMeta(s.status).icon"></i>
                   {{ statusMeta(s.status).label }}
                 </span>
               </td>
@@ -246,7 +264,7 @@ const exportCsv = () => {
                       :value="opt.value"
                       v-model="s.status"
                     />
-                    <span class="icon">{{ opt.icon }}</span>
+                    <i :class="opt.icon"></i>
                     <span class="label">{{ opt.label }}</span>
                   </label>
                 </div>
@@ -418,7 +436,7 @@ const exportCsv = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 40px;
+  min-width: 50px;
   text-align: center;
   transition: all 0.2s ease;
   background: #fff;
@@ -437,7 +455,7 @@ const exportCsv = () => {
   background-color: #f8f9fa;
 }
 
-.att-option .icon {
+.att-option i {
   font-size: 16px;
   line-height: 1.2;
 }
@@ -470,35 +488,35 @@ const exportCsv = () => {
   border: 1px solid transparent;
   user-select: none;
 }
-.att-badge .i {
+.att-badge i {
   font-size: 14px;
   line-height: 1;
 }
 
 /* 상태별 색상 */
 .att-badge.success {
-  background: #ecfdf5;
-  color: #065f46;
-  border-color: #a7f3d0;
+  background: #f1fdf4;
+  color: #2c803a;
+  border-color: #2c803a;
 }
 .att-badge.danger {
-  background: #fef2f2;
-  color: #991b1b;
-  border-color: #fecaca;
+  background: #fdf2f2;
+  color: #b11815;
+  border-color: #b11815ab;
 }
 .att-badge.warning {
-  background: #fff7ed;
-  color: #9a3412;
-  border-color: #fed7aa;
+  background: #fefce7;
+  color: #9c6100;
+  border-color: #ffe600;
 }
 .att-badge.info {
-  background: #eff6ff;
-  color: #1e3a8a;
-  border-color: #bfdbfe;
+  background: #faf5ff;
+  color: #7b24d1;
+  border-color: #7b24d1;
 }
 .att-badge.neutral {
-  background: #f3f4f6;
-  color: #374151;
-  border-color: #e5e7eb;
+  background: #f0f6ff;
+  color: #2d53e2;
+  border-color: #2d53e2;
 }
 </style>
