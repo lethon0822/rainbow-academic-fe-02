@@ -1,56 +1,73 @@
 <script setup>
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
-import { login } from "@/services/accountService";
-import { useUserStore } from "@/stores/account";
-import Modal from "@/components/common/Modal.vue";
-import Id from "@/views/login/Id.vue";
-import RenewalPwd from "@/views/login/RenewalPwd.vue";
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { login } from '@/services/accountService'
+import { useUserStore /*, useAccountStore*/ } from '@/stores/account'
+import Modal from '@/components/common/Modal.vue'
+import Id from '@/views/login/Id.vue'
+import RenewalPwd from '@/views/login/RenewalPwd.vue'
 
-const router = useRouter();
+const router = useRouter()
 
-const isModalOpen = ref(false);
-const modalContent = ref(null);
+const isModalOpen = ref(false)
+const modalContent = ref(null)
 
 const state = reactive({
-  form: {
-    loginId: "",
-    password: "",
-  },
-});
-//모달
+  form: { loginId: '', password: '' },
+})
+
+// 모달
 const openModal = (type) => {
-  if (type === "id") {
-    modalContent.value = "id";
-  } else if (type === "renewal") {
-    modalContent.value = "renewal";
-  }
-  isModalOpen.value = true;
-};
+  modalContent.value = type === 'id' ? 'id' : 'renewal'
+  isModalOpen.value = true
+}
 const closeModal = () => {
-  isModalOpen.value = false;
-  modalContent.value = null;
-};
+  isModalOpen.value = false
+  modalContent.value = null
+}
 
 const submit = async () => {
-  const res = await login(state.form);
+  try {
+    const res = await login(state.form)
 
-  switch (res.status) {
-    case 200:
-      const userStore = useUserStore();
-      userStore.userName = res.data.userName;
-      userStore.userId = res.data.userId;
-      userStore.userRole = res.data.userRole;
-      userStore.loginId = res.data.loginId;
-      await router.push({
-        path: "/",
-      });
-      break;
-    case 404:
-      alert("아이디/비밀번호를 확인해주세요.");
-      break;
+    if (res && res.status === 200 && res.data) {
+      const userStore = useUserStore()
+
+      // 한 번에 패치(가독성 + 누락 방지)
+      userStore.$patch({
+        userName: res.data.userName ?? '',
+        userId: res.data.userId ?? '',
+        userRole: res.data.userRole ?? '',
+        loginId: res.data.loginId ?? '',
+        semesterId: res.data.semesterId ?? '',
+      })
+
+      // (선택) 전역 로그인 플래그
+      // const accountStore = useAccountStore()
+      // accountStore.setLoggedIn(true)
+      // accountStore.setChecked(true)
+
+      // 비밀번호는 즉시 비우기
+      state.form.password = ''
+
+      // 목록 페이지로
+      await router.replace({ path: '/' })
+      return
+    }
+
+    if (res && (res.status === 404 || res.status === 401)) {
+      alert('아이디/비밀번호를 확인해주세요.')
+      return
+    }
+
+    alert('로그인 처리 중 문제가 발생했습니다.')
+  } catch (e) {
+    console.error(e)
+    alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
   }
-};
+}
+
+
 </script>
 
 <template>
