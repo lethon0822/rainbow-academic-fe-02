@@ -26,7 +26,6 @@ const logoutAccount = async () => {
   }
   const res = await logout();
 
-  
   if (res === undefined || res.status !== 200) {
     return;
   }
@@ -48,16 +47,13 @@ const logoutAccount = async () => {
   <header>
     <div
       class="navbar navbar-dark text-white shadow-sm"
-      style="background-color: #00664F; height: 60px"
+      style="background-color: #00664f; height: 60px"
     >
       <div
         class="container-fluid d-flex justify-content-between align-items-center px-4"
       >
         <!-- 로고 왼쪽 -->
-        <div
-          class="logo d-flex align-items-center"
-          @click="$router.push('/')"
-        >
+        <div class="logo d-flex align-items-center" @click="$router.push('/')">
           <img :src="logo" alt="로고 아이콘" height="40" />
           <span class="systemText" @click="$router.push('/')"
             >학사관리시스템</span
@@ -129,11 +125,11 @@ a {
   text-decoration: none;
 }
 
-.info{
-  padding:3px 15px;
+.info {
+  padding: 3px 15px;
   margin-right: 3px;
   border-radius: 25px;
-  background-color: #2460CE;
+  background-color: #2460ce;
   color: #fff;
 }
 
