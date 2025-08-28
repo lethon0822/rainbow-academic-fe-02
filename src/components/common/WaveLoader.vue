@@ -1,6 +1,4 @@
-<script setup>
-// Vue 컴포넌트 로직이 필요하면 여기에 추가
-</script>
+<script setup></script>
 
 <template>
   <div class="wave-loader">
