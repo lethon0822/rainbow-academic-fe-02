@@ -23,7 +23,7 @@ onMounted(async () => {
 const handleSearch = async (filters) => {
   console.log("필터: ", filters);
   const courseListRes = await getCourseListByFilter(filters);
-  console.log("영구성적조회: ", courseListRes.data);
+  console.log("금학기 성적조회: ", courseListRes.data);
   courseList.value = courseListRes.data.filter(
     (course) => course.status === "승인"
   );
@@ -33,7 +33,7 @@ const handleSearch = async (filters) => {
 <template>
   <!-- 페이지 -->
   <div class="page">
-    <h1 class="page-title">영구 성적조회</h1>
+    <h1 class="page-title">금학기 성적조회</h1>
   </div>
 
   <SearchFilterBar
