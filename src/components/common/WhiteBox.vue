@@ -8,8 +8,7 @@ defineProps({
 <template>
   <div class="white-box">
     <div class="inner">
-      <h2 class="title">{{ title }}</h2>
-      <div class="line"></div>
+      <span class="title">{{ title }}</span>
       <slot></slot>
     </div>
   </div>
@@ -34,10 +33,10 @@ defineProps({
   width: 100%;
 }
 .title {
-  font-size: 38px;
   font-weight: bold;
   margin-bottom: 10px;
   text-align: left;
+  font-size: 1.5rem;
 }
 .line {
   border-bottom: 2px solid #1f2c5a;

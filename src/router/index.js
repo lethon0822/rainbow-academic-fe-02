@@ -55,10 +55,10 @@ const router = createRouter({
         //profile
         {
           path: "/rank",
-          component: () => import("@/components/profile/StudentRecordTab.vue"),
+          component: () => import("@/components/profile/Profile.vue"),
         },
 
-        //vies
+        //views
         //course
         {
           path: "/course/history",
@@ -84,7 +84,7 @@ const router = createRouter({
           path: "/enrollment",
           component: () => import("@/views/enrollment/Enrollment.vue"),
         },
-        
+
         //management
         {
           path: "/schedule",
@@ -94,12 +94,17 @@ const router = createRouter({
           path: "/deptmanage",
           component: () => import("@/views/management/DepartmentManage.vue"),
         },
+        //staff
+        {
+          path: "/staff",
+          component: () => import("@/views/staff/MemberListPage.vue"),
+        },
 
         //profile
         {
           path: "/course/survey",
           component: () => import("@/views/profile/CourseEvaluation.vue"),
-          name: "CourseEvaluation"
+          name: "CourseEvaluation",
         },
         {
           path: "/grade/all",

@@ -285,7 +285,7 @@ watch(
             </li>
             <li>
               <!-- 라우팅처리 -->
-              <router-link to="#" class="router-link"> 구성원현황 </router-link>
+              <router-link to="/staff" class="router-link"> 구성원현황 </router-link>
             </li>
           </ul>
         </li>
@@ -321,7 +321,7 @@ body {
   position: fixed;
   top: 60px;
   left: 0;
-  width: 300px;
+  width: 250px;
   height: 100vh;
   background: #fff;
   box-shadow: 0 6px 6px rgba(0, 0, 0, 0.23);
@@ -359,7 +359,6 @@ body {
   color: #343a40;
   background-color: white;
   text-decoration: none;
-  font-size: 15px;
   display: block;
   padding: 13px 15px;
   /* outline: 1px solid #D9D9D9; */

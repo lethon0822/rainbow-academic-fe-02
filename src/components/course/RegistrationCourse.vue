@@ -360,6 +360,7 @@ const back = () => {
 <style scoped lang="scss">
 
 //2025-8-22
+
    .container {
    border: 2px solid #ccc;   /* 테두리 */
    border-radius: 8px;       /* 모서리 둥글게 */
@@ -405,7 +406,7 @@ const back = () => {
     .fform-group3 {
       position: absolute;
       left: 100px;
-      bottom:160px;
+      bottom:260px;
       max-width: 1090px;
       min-width: 1090px;
       flex-direction: column;
@@ -417,7 +418,7 @@ const back = () => {
       border: #9e9e9e;
       display: grid;
       left: 400px;
-      bottom:20px;
+      bottom:70px;
       max-width: 200px;
       min-width: 200px;
         // flex-direction: column;
@@ -549,7 +550,7 @@ const back = () => {
   border-radius: 12px;
   padding: 30px;
   height: 10px;               /* 높이 확보 */
-  background-color: #f5f5f5;
+  background-color:#f5f5f5
   }
 //2025-8-22
 
