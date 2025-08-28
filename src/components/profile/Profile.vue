@@ -31,46 +31,55 @@ const formData = reactive({
   department: "선택",
 });
 
-// 그래프 관련 상태
+// 8 그래프 데이터 8
 const chartRef = ref(null);
 let chartInstance = null;
 
-// 그래프 데이터 (하드코딩)
 const chartData = {
   labels: ["1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2"],
   datasets: [
     {
-      label: "전공필수",
-      data: [9, 6, 9, 6, 12, 9, 6, 3],
-      borderColor: "#739EEE",
-      backgroundColor: "rgba(115, 158, 238, 0.2)",
-      fill: true,
-      tension: 0.4,
-      pointRadius: 5,
-      pointHoverRadius: 8,
-      pointBackgroundColor: "#739EEE",
+      label: "전체평점",
+      data: [3.0, 3.7, 3.2, 3.8, 3.4, 4.1, 3.7, 4.3],
+      borderColor: "#A3C1E1",
+      backgroundColor: "rgba(255, 154, 162, 0.1)",
+      fill: false,
+      tension: 0,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      pointBackgroundColor: "#A3C1E1",
+      pointBorderColor: "#FFFFFF",
+      pointBorderWidth: 2,
+      borderWidth: 3,
     },
     {
-      label: "전공선택",
-      data: [3, 6, 3, 6, 3, 6, 9, 12],
-      borderColor: "#97A7ED",
-      backgroundColor: "rgba(151, 167, 237, 0.2)",
-      fill: true,
-      tension: 0.4,
-      pointRadius: 5,
-      pointHoverRadius: 8,
-      pointBackgroundColor: "#97A7ED",
+      label: "전공평점",
+      data: [1.9, 2.5, 1.1, 2.7, 1.3, 2.0, 1.6, 2.4],
+      borderColor: "#A8D5BA",
+      backgroundColor: "rgba(181, 234, 215, 0.1)",
+      fill: false,
+      tension: 0,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      pointBackgroundColor: "#A8D5BA",
+      pointBorderColor: "#FFFFFF",
+      pointBorderWidth: 2,
+      borderWidth: 3,
     },
     {
-      label: "교양",
-      data: [6, 6, 3, 3, 0, 0, 0, 0],
-      borderColor: "#A88ADF",
-      backgroundColor: "rgba(168, 138, 223, 0.2)",
-      fill: true,
-      tension: 0.4,
-      pointRadius: 5,
-      pointHoverRadius: 8,
-      pointBackgroundColor: "#A88ADF",
+      label: "취득학점",
+      data: [15, 28, 40, 38, 70, 60, 85, 130],
+      borderColor: "#F3B57A",
+      backgroundColor: "rgba(199, 206, 219, 0.1)",
+      fill: false,
+      tension: 0,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      pointBackgroundColor: "#F3B57A",
+      pointBorderColor: "#FFFFFF",
+      pointBorderWidth: 2,
+      borderWidth: 3,
+      yAxisID: "y1",
     },
   ],
 };
@@ -89,55 +98,93 @@ const createChart = () => {
             position: "top",
             labels: {
               usePointStyle: true,
+              pointStyle: "circle",
               padding: 20,
               font: {
                 size: 12,
+                family: "'Malgun Gothic', sans-serif",
               },
+              color: "#4A5568",
             },
           },
           tooltip: {
-            backgroundColor: "white",
-            titleColor: "#374151",
-            bodyColor: "#6b7280",
-            borderColor: "#e5e7eb",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            titleColor: "#2D3748",
+            bodyColor: "#4A5568",
+            borderColor: "#E2E8F0",
             borderWidth: 1,
             cornerRadius: 6,
-            titleFont: {
-              weight: "bold",
+            callbacks: {
+              label: function (context) {
+                if (context.dataset.label === "취득학점") {
+                  return `${context.dataset.label}: ${context.parsed.y}학점`;
+                } else {
+                  return `${context.dataset.label}: ${context.parsed.y}점`;
+                }
+              },
             },
           },
         },
         scales: {
           x: {
+            offset: true,
             grid: {
-              color: "#e2e8f0",
-              drawBorder: false,
+              display: false,
             },
             ticks: {
-              color: "#6b7280",
+              color: "#718096",
               font: {
-                size: 12,
+                size: 11,
               },
             },
           },
           y: {
+            position: "left",
             beginAtZero: true,
-            max: 15,
+            min: 0,
+            max: 4.5,
             grid: {
-              color: "#e2e8f0",
-              drawBorder: false,
+              display: false,
             },
             ticks: {
-              color: "#6b7280",
+              color: "#718096",
               font: {
-                size: 12,
+                size: 11,
+              },
+              callback: function (value) {
+                return value.toFixed(1);
+              },
+            },
+          },
+          y1: {
+            position: "right",
+            beginAtZero: true,
+            min: 0,
+            max: 140,
+            grid: {
+              display: false,
+            },
+            ticks: {
+              color: "#718096",
+              font: {
+                size: 11,
+              },
+              callback: function (value) {
+                return value;
               },
             },
           },
         },
-        interaction: {
-          intersect: false,
-          mode: "index",
+        elements: {
+          point: {
+            radius: 4,
+            hoverRadius: 6,
+            borderWidth: 2,
+          },
+          line: {
+            borderWidth: 2,
+            tension: 0,
+          },
         },
       },
     });
@@ -504,7 +551,7 @@ const progressPercent = 96; // 진행률 % (숫자)
 
     <div style="text-align: center; margin-top: -8px">
       <span style="font-size: 12px; color: #718096">
-        135%달 완료 / 140%달 목표 (96.4% 달성)
+        135학점 취득 / 140학점 졸업 (96.4% 달성)
       </span>
     </div>
   </div>
@@ -519,7 +566,7 @@ const progressPercent = 96; // 진행률 % (숫자)
         font-weight: bold;
       "
     >
-      학기별 이수학점 현황
+      학기별 학점 현황
     </h2>
 
     <div class="chart-container">
@@ -850,7 +897,7 @@ body {
 
 /* 8 여백 8 */
 .bin {
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 }
 
 /* 8 프로그레스 8 */
