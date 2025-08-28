@@ -1,4 +1,5 @@
 <script setup>
+//설문지
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
