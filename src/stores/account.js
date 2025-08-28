@@ -16,9 +16,10 @@ export const useAccountStore = defineStore("account", () => {
 export const useUserStore = defineStore("user", {
   state: () => ({
     userName: "",
-    userId: "",
+    userId: 0,
     loginId: "",
     userRole: "",
+    semesterId: 0,
   }),
   persist: true, // 옵션: 새로고침 후에도 유지하고 싶으면
 });
