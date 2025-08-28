@@ -27,7 +27,16 @@ onMounted(async()=>{
 
   state.deptList = res.data;
   console.log('list',state.deptList)
-})
+
+  const ths = document.querySelectorAll('.title-line th');
+  const tds = document.querySelectorAll('.body-line td');
+  ths.forEach((th, i) => {
+    const width = th.offsetWidth + 'px';
+    tds.forEach((td, idx) => {
+      if(idx % ths.length === i) td.style.width = width;
+    });
+  })
+});
 
 </script>
 
@@ -103,23 +112,23 @@ onMounted(async()=>{
         <table class="dept-table">
           <thead>
             <tr>
-              <th>학과코드</th>
-              <th>학과</th>
-              <th>학과사무실</th>
-              <th>학과장명</th>
-              <th>학과 전화번호</th>
-              <th>학과 정원</th>
-              <th>학과 인원</th>
-              <th>상태</th>
-              <th>수강</th>
+              <th class="dept-code">학과코드</th>
+              <th class="dept-name">학과</th>
+              <th class="dept-office">학과사무실</th>
+              <th class="dept-head">학과장명</th>
+              <th class="dept-tel">학과 전화번호</th>
+              <th class="dept-max">학과 정원</th>
+              <th class="dept-people">학과 인원</th>
+              <th class="dept-status">상태</th>
+              <th class="dept-btn"><span v-for="n in 10" :key="n">&nbsp;</span></th>
             </tr>
           </thead>
         </table>
         </div>
         <div class="body-line">
-          <table class="dept_table">
+          <table class="dept-table">
             <tbody>
-              <tr v-for="item in state.deptList" :key="item.deptId">
+              <tr v-for="item in state.deptList" :key="item.deptId" class="tr-line">
                 <td>{{ item.deptCode }}</td>
                 <td>{{ item.deptName }}</td>
                 <td>{{ item.deptOffice }}</td>
@@ -128,16 +137,16 @@ onMounted(async()=>{
                 <td>{{ item.deptMaxStd }}</td>
                 <td>{{ item.deptPeople }}</td>
                 <td> {{item.status === '1' ? "운영중" : "폐지"}}</td>
-                <td>
+                <td class="btn-td">
                   <button class="btn btn-primary">수정</button>
                 </td>
               </tr>
             </tbody>
-      </table>
-    </div>
+          </table>
+        </div>
     </div>
   </div>
- 
+
   </whiteBox>
 
 </template>
@@ -268,7 +277,8 @@ input{
 }
 
 .body-line{
-
+  width: 100%;
+  height: 250px;
   overflow-y: scroll;
 }
 
@@ -298,6 +308,8 @@ input{
 }
 
 /* 버튼 스타일 */
+
+
 .btn-edit {
   background-color: #3182ce;
   color: #fff;
@@ -313,4 +325,28 @@ input{
   background-color: #2b6cb0;
 }
 
+/* th */
+.dept-table th.dept-code{
+  width:128px;
+
+}
+.dept-table th.dept-name{
+  width: 247px;
+}
+.dept-table th.dept-office{
+  width: 216px;
+}
+.dept-table th.dept-max{
+  width: 95px;
+}
+.dept-table th.dept-people{
+  width: 110px;
+}
+
+.dept-table th.dept-btn{
+  width: 190px;
+}
+.tr-line{
+  border-bottom: 1px solid #c4c4c4;
+}
 </style>
