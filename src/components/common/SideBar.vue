@@ -59,9 +59,8 @@ const toggleMenu = (liElement) => {
         item.classList.contains("menu-sugang") ||
         item.classList.contains("menu-gangui") ||
         item.classList.contains("menu-score") ||
-        item.classList.contains("menu-management")||
+        item.classList.contains("menu-management") ||
         item.classList.contains("menu-graduate")
-
       ) {
         item.classList.remove("active");
         const subMenu = item.querySelector("ul");
@@ -229,13 +228,13 @@ watch(
           <a href="javascript:void(0);">성적</a>
           <ul>
             <li>
-              <router-link to="/grade/all" class="router-link"
+              <router-link to="/grade/permanent" class="router-link"
                 >영구성적조회</router-link
               >
             </li>
             <!-- 라우팅처리 -->
             <li>
-              <router-link to="#" class="router-link"
+              <router-link to="/grade/current" class="router-link"
                 >금학기성적조회</router-link
               >
             </li>
@@ -285,7 +284,9 @@ watch(
             </li>
             <li>
               <!-- 라우팅처리 -->
-              <router-link to="/staff" class="router-link"> 구성원현황 </router-link>
+              <router-link to="/staff" class="router-link">
+                구성원현황
+              </router-link>
             </li>
           </ul>
         </li>
@@ -377,7 +378,7 @@ body {
 #accordian li.menu-gangui > a,
 #accordian li.menu-etc > a,
 #accordian li.menu-score > a,
-#accordian li.menu-management > a, 
+#accordian li.menu-management > a,
 #accordian li.menu-graduate > a {
   background-color: #fff;
   color: #343a40;

@@ -1,4 +1,5 @@
 <script setup>
+//학생 프로필 사진
 import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
