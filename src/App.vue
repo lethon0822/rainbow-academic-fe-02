@@ -24,7 +24,7 @@ provide("openModal", openModal);
 
 const route = useRoute();
 const account = useAccountStore();
-const loading = useLoadingStore(); // 로딩 스토어 사용
+const loading = useLoadingStore();
 const router = useRouter();
 
 // 초기 로딩 상태 관리
@@ -52,7 +52,7 @@ const checkAccount = async () => {
 
 // 초기화 및 라우팅 처리
 const initializeApp = async () => {
-  loading.showLoading(); // 로딩 시작
+  //loading.showLoading();
 
   const isLoggedIn = await checkAccount();
   isInitializing.value = false;
@@ -70,7 +70,7 @@ const initializeApp = async () => {
     }
   }
 
-  loading.hideLoading(); // 로딩 종료
+  //loading.hideLoading();
 };
 
 onMounted(() => {
@@ -83,7 +83,7 @@ watch(
   async (newPath) => {
     // 초기화 중이 아닐 때만 체크
     if (!isInitializing.value) {
-      loading.showLoading(); // 페이지 이동 시 로딩
+      //loading.showLoading();
 
       const isLoggedIn = await checkAccount();
       // 로그인 페이지가 아닌데 로그인되지 않은 경우
@@ -97,7 +97,7 @@ watch(
 
       // 약간의 딜레이 후 로딩 종료 (자연스러운 UX를 위해)
       setTimeout(() => {
-        loading.hideLoading();
+        //loading.hideLoading();
       }, 500);
     }
   }
@@ -115,8 +115,6 @@ watch(
         <WaveLoader />
       </div>
     </div>
-
-    <!-- 메인 콘텐츠 -->
     <div v-show="!isInitializing.value && !loading.isLoading">
       <template v-if="show.modal">
         <div class="black-bg" @click="show.modal = false">
