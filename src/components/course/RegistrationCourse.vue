@@ -7,16 +7,12 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 import { useUserStore } from "@/stores/account";
 import { professorDept } from "@/services/professorService"
-
 const props = defineProps({
   id: Number,
 });
-
 const userStore = useUserStore();
-
 console.log('이름', userStore.userName)
 console.log('아이디', userStore.userId)
-
 const state = reactive({
   form: {
     deptName: '',
@@ -32,35 +28,8 @@ const state = reactive({
     goal: "",
     maxStd: null,
     grade: 1,
-    
   },
 });
-
-const evaluations = {
-    middleExam: "",
-    lastExam:"",
-    assignment:"",
-    attendanCerate:"",
-    participationRate:"",
-
-};
-
-const initialForm = {
-  deptName: '',
-  courseId: 0,
-  classroom: "",
-  semesterId: 12,
-  type: "전공필수",
-  time: "",
-  title: "",
-  credit: null,
-  weekPlan: "",
-  textBook: "",
-  goal: "",
-  maxStd: null,
-  grade: 1,
-};
-
 watch(
   () => state.form.type,
   (newType) => {
@@ -69,7 +38,6 @@ watch(
     }
   }
 );
-
 onMounted(async () => {
   const name = await professorDept();
   state.form.deptName = name.data;
@@ -82,11 +50,8 @@ onMounted(async () => {
 });
 const router = useRouter();
 const submit = async () => {
-
-
   let data = null;
   if (state.form.courseId > 0) {
-
     const res = await modify(state.form);
     data = res;
   } else {
@@ -99,14 +64,11 @@ const submit = async () => {
   }
   router.push("/professor/course/status");
 };
-
 const back = () => {
   if(!confirm('제출하시겠습니까?')){
     router.push('/professor/course/status')
     return};
 }
-
-
 </script>
 
 
@@ -202,6 +164,7 @@ const back = () => {
             id="evaluation"
             v-model="state.form.weekPlan"
             placeholder="%를 입력해주세요."
+            disabled
           />
         </div>
 
@@ -214,48 +177,53 @@ const back = () => {
 
       <div class="fform-group4">
         <div class="form-group4">
-          <label for="evaluation">중간고사</label>
+          <label for="middleExam">중간고사</label>
           <input
             type="text"
-            id="evaluation"
-            v-model="evaluations.middleExam"
+            id="emiddleExam"
+            v-model="state.form.middleExam"
             placeholder="0%"
+            disabled
           />
         </div>
         <div class="form-group4">
-          <label for="evaluation">기말고사</label>
+          <label for="lastExam">기말고사</label>
           <input
             type="text"
-            id="evaluation"
-            v-model="evaluations.lastExam"
+            id="lastExam"
+            v-model="state.form.lastExam"
             placeholder="0%"
+            disabled
           />
         </div>
         <div class="form-group4">
-          <label for="evaluation">과제</label>
+          <label for="assignment">과제</label>
           <input
             type="text"
-            id="evaluation"
-            v-model="evaluations.assignment"
+            id="assignment"
+            v-model="state.form.assignment"
             placeholder="0%"
+            disabled
           />
         </div>
         <div class="form-group4">
-          <label for="evaluation">출석률</label>
+          <label for="attendanCerate">출석률</label>
           <input
             type="text"
-            id="evaluation"
-            v-model="evaluations.attendanCerate"
+            id="attendanCerate"
+            v-model="state.form.attendanCerate"
             placeholder="0%"
+            disabled
           />
         </div>
         <div class="form-group4">
-          <label for="evaluation">참여율</label>
+          <label for="participationRate">참여율</label>
           <input
             type="text"
-            id="evaluation"
-            v-model="evaluations.participationRate"
+            id="participationRate"
+            v-model="state.form.participationRate"
             placeholder="0%"
+            disabled
           />
         </div>
       </div>
