@@ -273,7 +273,7 @@ watch(
             </li>
             <li>
               <!-- 라우팅처리 -->
-              <router-link to="#" class="router-link">
+              <router-link to="/staff/approval" class="router-link">
                 신분변동관리
               </router-link>
             </li>
