@@ -53,11 +53,22 @@ const toggleMenu = (liElement) => {
     // 같은 레벨의 활성화 메뉴 모두 닫기
     const activeItems = parentUl.querySelectorAll("li.active");
     activeItems.forEach((item) => {
-      item.classList.remove("active");
-      const subMenu = item.querySelector("ul");
-      if (subMenu) {
-        slideUp(subMenu);
-        subMenu.classList.remove("show-dropdown");
+      // 🚨 여기 조건 추가: 상위 메뉴만 지우기
+      if (
+        item.classList.contains("menu-hakjeok") ||
+        item.classList.contains("menu-sugang") ||
+        item.classList.contains("menu-gangui") ||
+        item.classList.contains("menu-score") ||
+        item.classList.contains("menu-management")||
+        item.classList.contains("menu-graduate")
+
+      ) {
+        item.classList.remove("active");
+        const subMenu = item.querySelector("ul");
+        if (subMenu) {
+          slideUp(subMenu);
+          subMenu.classList.remove("show-dropdown");
+        }
       }
     });
 
@@ -97,6 +108,7 @@ const openMenuByRoute = () => {
   const activeItems = accordian.value.querySelectorAll("li.active");
   activeItems.forEach((item) => {
     item.classList.remove("active");
+    //handleMenuClick();
   });
   const shownSubMenus = accordian.value.querySelectorAll("ul.show-dropdown");
   shownSubMenus.forEach((ul) => {
@@ -159,20 +171,18 @@ watch(
               학적기본사항관리
             </router-link>
           </li>
-          <!-- <li>
-            <router-link to="/grade/all" class="router-link"
-              >학적변동관리</router-link
-            >
-          </li> -->
           <li>
             <router-link to="/renewal/privacy" class="router-link">
               개인정보변경
             </router-link>
           </li>
+          <li>
+            <router-link to="#" class="router-link"> 휴·복학신청 </router-link>
+          </li>
         </ul>
       </li>
 
-      <template v-if="userStore.userRole !== 'professor'">
+      <template v-if="userStore.userRole == 'student'">
         <li class="menu-sugang">
           <a href="javascript:void(0);">수강</a>
           <ul>
@@ -195,24 +205,26 @@ watch(
               >강의조회</router-link
             >
           </li>
-          <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/course/status"
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/professor/course/status" class="router-link"
               >강의개설신청 및 신청현황조회</router-link
             >
           </li>
-          <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/course/management"
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/professor/course/management" class="router-link"
               >강의관리</router-link
             >
           </li>
-          <li v-if="userStore.userRole !== 'student'">
-            <router-link to="/professor/survey/check">강의평가조회</router-link>
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/professor/survey/check" class="router-link"
+              >강의평가조회</router-link
+            >
           </li>
         </ul>
       </li>
 
       <!-- 학적 -->
-      <template v-if="userStore.userRole !== 'professor'">
+      <template v-if="userStore.userRole == 'student'">
         <li class="menu-score">
           <a href="javascript:void(0);">성적</a>
           <ul>
@@ -220,6 +232,60 @@ watch(
               <router-link to="/grade/all" class="router-link"
                 >영구성적조회</router-link
               >
+            </li>
+            <!-- 라우팅처리 -->
+            <li>
+              <router-link to="#" class="router-link"
+                >금학기성적조회</router-link
+              >
+            </li>
+          </ul>
+        </li>
+      </template>
+
+      <template v-if="userStore.userRole == 'student'">
+        <li class="menu-graduate">
+          <a href="javascript:void(0);">졸업</a>
+          <ul>
+            <!-- 라우팅처리 -->
+            <li>
+              <router-link to="#" class="router-link">졸업자가진단</router-link>
+            </li>
+          </ul>
+        </li>
+      </template>
+
+      <template v-if="userStore.userRole == 'staff'">
+        <li class="menu-management">
+          <a href="javascript:void(0);">시스템관리</a>
+          <ul>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="/schedule" class="router-link">
+                학사일정관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="/deptmanage" class="router-link">
+                학과관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="#" class="router-link">
+                신분변동관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="#" class="router-link">
+                강의개설승인관리
+              </router-link>
+            </li>
+            <li>
+              <!-- 라우팅처리 -->
+              <router-link to="/staff" class="router-link"> 구성원현황 </router-link>
             </li>
           </ul>
         </li>
@@ -239,7 +305,7 @@ watch(
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 * {
   margin: 0;
   padding: 0;
@@ -248,16 +314,17 @@ watch(
 
 body {
   font-weight: 700;
-  background-color: #dee2e5;
+  background-color: #fff;
 }
 
 #accordian {
   position: fixed;
   top: 60px;
   left: 0;
-  width: 300px;
+  width: 250px;
   height: 100vh;
-  background: #dee2e5;
+  background: #fff;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.23);
   overflow-y: auto;
   z-index: 999;
 }
@@ -289,14 +356,13 @@ body {
 }
 
 #accordian ul li > a {
-  color: #333;
+  color: #343a40;
   background-color: white;
   text-decoration: none;
-  font-size: 15px;
   display: block;
   padding: 13px 15px;
-  border: 1px solid #ddd;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* outline: 1px solid #D9D9D9; */
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
   margin-bottom: 1px;
   font-weight: 700;
   position: relative;
@@ -310,10 +376,12 @@ body {
 #accordian li.menu-hakjeok > a,
 #accordian li.menu-gangui > a,
 #accordian li.menu-etc > a,
-#accordian li.menu-score > a {
-  background-color: #febe3a;
-  color: #364157;
-  border: 1px solid #febe3a;
+#accordian li.menu-score > a,
+#accordian li.menu-management > a, 
+#accordian li.menu-graduate > a {
+  background-color: #fff;
+  color: #343a40;
+  outline: 1px solid #d9d9d9;
   font-weight: bold;
 }
 
@@ -328,15 +396,16 @@ body {
 
 /* 활성화된 하위 메뉴 보이기 */
 #accordian ul li.active > ul.show-dropdown {
+  border-bottom: 1px solid #d9d9d9;
   display: block;
 }
 
 /* 하위 메뉴 링크 스타일 */
 #accordian ul li ul li a {
-  background-color: #ffffff !important;
-  color: #333;
-  border: 1px solid #ddd;
-  margin-top: -2px;
+  background-color: #f8f9fa !important;
+  color: #343a40;
+
+  margin-bottom: 0;
   padding-left: 15px;
   cursor: pointer; /* 클릭 커서 추가 */
 }
@@ -344,8 +413,8 @@ body {
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */
 #accordian ul li ul li.active > a,
 #accordian ul li ul li > a.active {
-  background-color: #ffffff !important;
-  color: inherit !important;
+  background-color: #e9f5e8 !important;
+  color: #00664f;
   box-shadow: none !important;
 }
 
@@ -367,20 +436,19 @@ body {
 }
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-#accordian
+/* #accordian
   li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
     .menu-score
   ).active
   > a {
   background-color: transparent;
-  color: inherit;
   box-shadow: none;
-}
+ } */
 
 /* 하위 메뉴 링크 포커스, 호버 시 배경색 유지 */
 #accordian ul li ul li a:hover,
 #accordian ul li ul li a:focus {
-  background-color: #ffffff !important;
-  color: inherit !important;
+  background-color: #e9f5e8 !important;
+  color: #00664f;
 }
 </style>

@@ -8,8 +8,7 @@ defineProps({
 <template>
   <div class="white-box">
     <div class="inner">
-      <h2 class="title">{{ title }}</h2>
-      <div class="line"></div>
+      <span class="title">{{ title }}</span>
       <slot></slot>
     </div>
   </div>
@@ -22,7 +21,7 @@ defineProps({
   margin: 30px 30px 30px; 
   /* margin: 30px 30px 30px 250px;  */
   width: 100%;
-  max-width: 1430px;
+  min-width: 1430px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-height: calc(100vh - 120px);
   box-sizing: border-box;
@@ -34,10 +33,10 @@ defineProps({
   width: 100%;
 }
 .title {
-  font-size: 38px;
   font-weight: bold;
   margin-bottom: 10px;
   text-align: left;
+  font-size: 1.5rem;
 }
 .line {
   border-bottom: 2px solid #1f2c5a;

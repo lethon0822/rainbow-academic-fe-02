@@ -27,32 +27,20 @@ import SideBar from "@/components/common/SideBar.vue";
   margin-top:60px;
 }
 .sidebar{
-  width:300px;
+  width:250px;
   box-sizing: border-box;
   
 }
 .dummy{
-  width: 300px;
+  width: 250px;
 }
 .content{
   flex:1;
-  //justify-content: center;
+
   
 }
 .router{
   min-width: 1580px;
 }
 
-// .content {
-//   position: relative;
-//   top: 65px;
-//   left: 150px;
-// }
-
-// .sidebar {
-//   position: absolute;
-//   left: 0;
-//   top: 65px;
-//   width: 140px;
-// }
 </style>

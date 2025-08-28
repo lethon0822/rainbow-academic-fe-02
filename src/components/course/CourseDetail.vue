@@ -1,277 +1,213 @@
 <script setup>
-import WhiteBox from "@/components/common/WhiteBox.vue";
-
-import { reactive , onMounted} from "vue";
+import { reactive, onMounted } from "vue";
 import { loadCourse } from "@/services/CourseService";
 
-
 const props = defineProps({
-  id: Number
-})
+  id: Number,
+});
 
 const state = reactive({
   form: {
-    classroom: '',
-    type: '전공',
+    classroom: "",
+    type: "전공",
     semester: 1,
-    time: '',
-    title: '',
+    time: "",
+    title: "",
     credit: null,
-    weekPlan: '',
-    textBook: '',
-    goal: '',
+    weekPlan: "",
+    textBook: "",
+    goal: "",
     maxStd: null,
     deptName: "",
-    userName:"",
-    grade: null
+    userName: "",
+    grade: null,
   },
 });
 
-
-onMounted(()=>{  
+onMounted(() => {
   loadCourseDetail(props.id);
-
-})
+});
 
 const loadCourseDetail = async (id) => {
-  console.log('아이디',id)
+  console.log("아이디", id);
   const res = await loadCourse(id);
-  console.log('res:',res)
+  console.log("res:", res);
   if (res === undefined || res.status !== 200) {
-    alert('오류 발생. 잠시 후 다시 실행해주십시오.');
+    alert("오류 발생. 잠시 후 다시 실행해주십시오.");
     return;
   }
   state.form = res.data;
-  if(state.form.type === '교양'){
-    state.form.deptName ='교양학부'
+  if (state.form.type === "교양") {
+    state.form.deptName = "교양학부";
   }
-
-
 };
 </script>
 
 <template>
-  <WhiteBox :title="'강의계획서'" class="white-box">
-    <div class="container">
-      
-      <div class="table d-flex top">
-        <div class="table-title">교과목명</div>
-        <div class="table-content">
-          {{state.form.title}}
-        </div>
-        <div class="table-title">담당교수</div>
-        <div class="table-content">
-          {{ state.form.userName }}
-        </div>
-      </div>
+  <div class="course-plan-title" title="강의계획서">강의계획서</div>
+  <div class="section">
+    <div class="info-grid">
+      <div class="label"><i class="bi bi-book"></i> 교과목명:</div>
+      <div class="value">{{ state.form.title }}</div>
 
-      <div class="table d-flex">
-        <div class="table-title">이수구분</div>
-        <div class="table-content">
-          {{ state.form.type }}
-        </div>
+      <div class="label"><i class="bi bi-person"></i> 담당교수:</div>
+      <div class="value">{{ state.form.userName }}</div>
 
-        <div class="table-title">학과명</div>
-        <div class="table-content">
-          {{ state.form.deptName }}
-        </div>
-      </div>
+      <div class="label"><i class="bi bi-bookmark-dash"></i> 이수구분:</div>
+      <div class="value">{{ state.form.type }}</div>
 
-      <div class="table d-flex">
-        <div class="table-title">이수학점</div>
-        <div class="table-content">
-          {{ state.form.credit}}
-        </div>
-        <div class="table-title">학기</div>
-        <div class="table-content">
-          {{ state.form.semester}}
-        </div>
-      </div>
+      <div class="label"><i class="bi bi-archive"></i> 학과명:</div>
+      <div class="value">{{ state.form.deptName }}</div>
 
-      <div class="table d-flex">
-        <div class="table-title">강의시간</div>
-        <div class="table-content">
-          {{ state.form.time}}
-        </div>
-        <div class="table-title">수강대상</div>
+      <div class="label"><i class="bi bi-bookmark-dash"></i> 이수학점:</div>
+      <div class="value">{{ state.form.credit }}</div>
+
+      <div class="label"><i class="bi bi-archive"></i> 학기:</div>
+      <div class="value">{{ state.form.semester }}</div>
+
+      <div class="label"><i class="bi bi-stopwatch"></i> 강의시간:</div>
+      <div class="value">{{ state.form.time }}</div>
+
+      <div class="label"><i class="bi bi-people"></i> 수강대상:</div>
+      <div class="value">
         <template v-if="state.form.type === '전공'">
-          <div class="table-content">
-            {{ state.form.deptName +" "+ state.form.grade}}학년
-          </div>
+          {{ state.form.deptName + " " + state.form.grade }}학년
         </template>
-        <template v-else>
-          <div class="table-content">
-            수강희망자
-          </div>
-        </template>
+        <template v-else>수강희망자</template>
       </div>
 
-      <div class="table d-flex last">
-        <div class="table-title">수강정원</div>
-        <div class="table-content">
-          {{ state.form.maxStd}}
-        </div>
-        <div class="table-title">강의실</div>
-        <div class="table-content">
-          {{ state.form.classroom}}
-        </div>
-      </div>
+      <div class="label"><i class="bi bi-binoculars"></i> 수강정원:</div>
+      <div class="value">{{ state.form.maxStd }}</div>
 
-      <p>강의 계획서</p>
-      <div class="table d-flex top">
-        <div class="table-title">교재</div>
-        <div class="table-content">
-          {{ state.form.textBook}}
-        </div>
-      </div>
-      <div class="table d-flex detail">
-        <div class="table-title">강의목표</div>
-        <div class="table-content">
-          {{ state.form.goal}}
-        </div>
-      </div>
-      <div class="table d-flex detail last">
-        <div class="table-title">주차별계획</div>
-        <div class="table-content">
-          {{ state.form.weekPlan}}
-        </div>
-      </div>
+      <div class="label"><i class="bi bi-geo-alt"></i> 강의실:</div>
+      <div class="value">{{ state.form.classroom }}</div>
+    </div>
+  </div>
 
-      <p>평가방법</p>
+  <div class="section">
+    <div class="section-title">교재</div>
+    <div class="label"><i class="bi bi-book"></i> 교과목명:</div>
+    <div class="value">{{ state.form.textBook }}</div>
+  </div>
 
-      <div class="score">
-        <div class="title">
-          <div>출석</div>
-          <div>중간고사</div>
-          <div>기말고사</div>
-        </div>
-        <div class="per">
-          <div><span>20%</span></div>
-          <div class="middle"><span>40%</span></div>
-          <div><span> 40%</span></div>
-        </div>
+  <div class="section">
+    <div class="section-title">강의목표</div>
+    <div class="value">{{ state.form.goal }}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">주차별계획</div>
+    <div class="value" style="white-space: pre-line">
+      {{ state.form.weekPlan }}
+    </div>
+  </div>
+
+  <!-- 평가방법 -->
+  <div class="section">
+    <h3 class="section-title">평가방법</h3>
+    <div class="evaluation">
+      <div class="eval-item">
+        <div class="eval-label">출석</div>
+        <div class="eval-score">20%</div>
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">중간고사</div>
+        <div class="eval-score">40%</div>
+      </div>
+      <div class="eval-item">
+        <div class="eval-label">기말고사</div>
+        <div class="eval-score">40%</div>
       </div>
     </div>
-  </WhiteBox>
+  </div>
 </template>
 
-<style scoped lang="scss">
-.white-box{
-  max-width: 1080px;
-  margin-left: 0;
-}
-.container {
-  margin-top: 70px;
-  max-width: 1080px;
-  min-width: 1028px;
+<style scoped>
+.course-plan-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #e0e0e0;
+  margin-bottom: 15px;
 }
 
-.title {
-  width: 100%;
-  background-color: #364157;
-  border-top: #000;
-  color: #fff;
-  display: flex;
-
-  div {
-    border-left: 1px solid #b7b7b7;
-    border-right: 1px solid #b7b7b7;
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    font-size: 20px;
-  }
-}
-.per {
-  display: flex;
+.white-box {
+  border-radius: 8px;
   background-color: #fff;
-  margin-bottom: 70px;
-  height: 120px;
-  align-items: center;
-  border: 1px solid #b7b7b7;
-  div {
-    height: 100%;
-    flex: 1;
-    text-align: center;
-    font-size: 20px;
-
-    span {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-}
-.middle {
-  border-left: 1px solid #b7b7b7;
-  border-right: 1px solid #b7b7b7;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
-p {
-  font-size: 20px;
+.section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px 30px 20px 30px;
+  border-radius: 8px;
+  border: 0.2px solid #74747450;
+  background-color: #f8f9fa;
+}
+
+.section-title {
+  font-size: 18px;
   font-weight: 700;
-  margin-top: 70px;
-  margin-bottom: 5px;
+  margin-bottom: 12px;
+  color: #343a40;
 }
 
-.table {
-  border: 1px solid #b7b7b7;
-  background-color: #fff;
-  border-right: 1px solid #fff;
-  border-left: 1px solid #364157;
-  margin-bottom: 0;
-  border-bottom: 0.5px;
-}
-select {
-  width: 120px;
-  background-color: #e2e2e2;
-  color: #4d4d4d;
+.info-grid {
+  display: grid;
+  grid-template-columns: 110px 250px 110px 150px;
+  row-gap: 12px;
+  column-gap: 16px;
+  font-size: 15px;
 }
 
-.top {
-  border-top: 3px solid #000;
-}
-.last {
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #b7b7b7;
+.label {
+  font-weight: 600;
+  color: #747474;
 }
 
-.table-title {
-  width: 150px;
-  background-color: #364157;
-  border-right: 1px solid #b7b7b7;
-  color: #fff;
-  padding: 5px;
-  align-content: center;
-}
-.table-content {
-  background-color: #fff;
-  align-content: center;
-  padding: 3px;
-  flex: 1;
-}
-input {
-  width: 100%;
-  box-sizing: border-box;
-  outline-color: #a2a2a2;
+.value {
+  color: #747474;
 }
 
-.button {
+.evaluation {
   display: flex;
-  justify-content: flex-end;
-  .btn {
-    background-color: #2460ce;
-    margin-bottom: 100px;
-  }
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.detail {
-  height: 200px;
-  .table-content { 
-    input {
-      height: 100%;
-    }
-  }
+.eval-item {
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+  padding: 8px;
+  background: #e9f5e8;
+  border-radius: 8px;
+  border: 0.2px solid #00664f50;
+}
+
+.eval-label {
+  font-size: 12px;
+  color: #343a40;
+  margin-bottom: 4px;
+}
+
+.eval-score {
+  font-size: 20px;
+  font-weight: 600;
+  color: #00664f;
+}
+
+.course-plan-title {
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #e0e0e0;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

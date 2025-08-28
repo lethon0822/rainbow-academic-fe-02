@@ -19,7 +19,6 @@ const router = createRouter({
       component: () => import("@/views/login/RenewalPwd.vue"),
     },
 
-
     //홈
     {
       path: "/",
@@ -59,7 +58,7 @@ const router = createRouter({
           component: () => import("@/components/profile/StudentRecordTab.vue"),
         },
 
-        //vies
+        //views
         //course
         {
           path: "/course/history",
@@ -75,8 +74,8 @@ const router = createRouter({
           component: () => import("@/views/course/ProfessorCourseStatus.vue"),
         },
         {
-          path: '/professor/survey/check',
-          component: () => import('@/views/course/SurveyResultCheck.vue'),
+          path: "/professor/survey/check",
+          component: () => import("@/views/course/SurveyResultCheck.vue"),
         },
 
         //enrollment
@@ -85,12 +84,27 @@ const router = createRouter({
           path: "/enrollment",
           component: () => import("@/views/enrollment/Enrollment.vue"),
         },
+        
+        //management
+        {
+          path: "/schedule",
+          component: () => import("@/views/management/SchedulePage.vue"),
+        },
+        {
+          path: "/deptmanage",
+          component: () => import("@/views/management/DepartmentManage.vue"),
+        },
+        //staff
+        {
+          path: "/staff",
+          component: () => import("@/views/staff/MemberListPage.vue"),
+        },
 
         //profile
         {
           path: "/course/survey",
           component: () => import("@/views/profile/CourseEvaluation.vue"),
-          name: "CourseEvaluation",
+          name: "CourseEvaluation"
         },
         {
           path: "/grade/all",
