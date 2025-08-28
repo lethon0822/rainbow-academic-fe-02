@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { inject } from "vue";
+import axios from "axios";
 
 defineProps({
   courseList: Array,
@@ -43,6 +44,20 @@ const send = (id, json) => {
     path: `/professor/course/${id}/students`,
     state: { data: jsonBody },
   });
+};
+const patchCourseStatus = async (courseId, status, userId = 0) => {
+  try {
+    const payload = { appId: courseId, status, userId };
+    await axios.patch("/api/professor/course/course", payload);
+    alert(`강의가 ${status} 처리되었습니다.`);
+
+    // 화면에서도 반영
+    const target = courseList.find(c => c.courseId === courseId);
+    if (target) target.status = status;
+  } catch (err) {
+    console.error("승인/거부 실패:", err);
+    alert("처리 중 오류가 발생했습니다.");
+  }
 };
 </script>
 
@@ -156,6 +171,11 @@ const send = (id, json) => {
               >
                 <button class="enroll-btn d-flex">수정</button>
               </router-link>
+            </td>
+            <td v v-if="show.modify" class="button">
+              <button class="enroll-btn" @click="patchCourseStatus(course.courseId, '승인')">승인
+              </button>
+              <button class="cancel-btn" @click="patchCourseStatus(course.courseId, '거부')">거부</button>
             </td>
           </tr>
         </tbody>
