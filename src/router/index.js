@@ -107,7 +107,7 @@ const router = createRouter({
           name: "CourseEvaluation",
         },
         {
-          path: "/grade/all",
+          path: "/grade/permanent",
           component: () => import("@/views/profile/GetAllGrades.vue"),
         },
         {
@@ -117,6 +117,11 @@ const router = createRouter({
         {
           path: "/profile",
           component: () => import("@/views/profile/StudentRecord.vue"),
+        },
+        {
+          path: "/grade/current",
+          component: () =>
+            import("@/views/profile/StudentTranscriptHistory.vue"),
         },
       ],
     },
