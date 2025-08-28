@@ -55,7 +55,7 @@ const router = createRouter({
         //profile
         {
           path: "/rank",
-          component: () => import("@/components/profile/StudentRecordTab.vue"),
+          component: () => import("@/components/profile/Profile.vue"),
         },
 
         //views
@@ -84,7 +84,7 @@ const router = createRouter({
           path: "/enrollment",
           component: () => import("@/views/enrollment/Enrollment.vue"),
         },
-        
+
         //management
         {
           path: "/schedule",
@@ -104,7 +104,7 @@ const router = createRouter({
         {
           path: "/course/survey",
           component: () => import("@/views/profile/CourseEvaluation.vue"),
-          name: "CourseEvaluation"
+          name: "CourseEvaluation",
         },
         {
           path: "/grade/all",
