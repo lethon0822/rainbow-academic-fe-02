@@ -85,10 +85,11 @@ async function load() {
       q: filters.q || undefined,
       searchBy: filters.searchBy !== 'all' ? filters.searchBy : undefined,
     }
-    if (isStudent.value) {
-      if (filters.grade) params.grade = Number(filters.grade)
-    } else {
-      if (filters.gender) params.gender = filters.gender
+    if (isStudent.value && filters.grade) {
+      params.grade = Number(filters.grade)
+    }
+    if (filters.gender) {
+   params.gender = filters.gender          // ✅ 역할과 무관하게 항상 포함
     }
 
     const res = await getMemberList(params)
@@ -147,7 +148,8 @@ onMounted(async () => {
             <option value="">학년: 전체</option>
             <option v-for="n in 4" :key="n" :value="n">{{ n }}학년</option>
           </select>
-          <select v-else v-model="filters.gender" class="inp w120">
+          <!-- 성별은 학생/교수 공통으로 노출 -->
+          <select v-model="filters.gender" class="inp w100">
             <option value="">성별: 전체</option>
             <option value="M">남</option>
             <option value="F">여</option>
