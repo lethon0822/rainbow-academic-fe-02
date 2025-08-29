@@ -39,8 +39,6 @@ async function loadDepts() {
     deptLoading.value = false
   }
 }
-
-
 const STUDENT_STATUS = [
   { value: '', label: '상태: 전체' },
   { value: '재학', label: '재학' },
