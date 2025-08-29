@@ -6,7 +6,8 @@ import { useAccountStore } from "@/stores/account";
 import { useLoadingStore } from "@/stores/loading";
 import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";
-import WaveLoader from "./components/common/WaveLoader.vue";
+import WaveLoader from "@/components/common/WaveLoader.vue";
+
 
 const show = reactive({
   modal: false,

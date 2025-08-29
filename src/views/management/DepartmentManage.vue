@@ -1,7 +1,7 @@
 <script setup>
 import whiteBox from '@/components/common/WhiteBox.vue';
 import { reactive, onMounted } from 'vue';
-import { deptlist } from '@/services/DeptManageService';
+import { deptGet, deptPost } from '@/services/deptManageService';
 
 const state = reactive({
   form:{
@@ -12,31 +12,40 @@ const state = reactive({
     deptMaxStd:0,
     deptCode: "",
   },
-  deptList:[]
+  deptList:[],
+  search:{
+    keyword:"",
+    status: null,
+  }
 })
 
-onMounted(async()=>{
+const deptList = async(params) =>{
 
-  const params = {
-    status:"",
-    text:""
-  }
-
-  const res = await deptlist(params);
+  const res = await deptGet(params);
   console.log("알이에수",res);
 
   state.deptList = res.data;
   console.log('list',state.deptList)
+};
 
-  const ths = document.querySelectorAll('.title-line th');
-  const tds = document.querySelectorAll('.body-line td');
-  ths.forEach((th, i) => {
-    const width = th.offsetWidth + 'px';
-    tds.forEach((td, idx) => {
-      if(idx % ths.length === i) td.style.width = width;
-    });
-  })
+const searchDept = async() =>{
+ 
+  deptList(state.search);
+}
+
+onMounted(async()=>{
+  deptList();
+
 });
+
+const newDept = async() =>{
+  if(!confirm('학과를 개설 하시겠습니까?')){return;}
+  if(state.form.headProfId === 0){
+    state.form.headProfId = null;
+  }
+  const res = await deptPost(state.form);
+  console.log(res)
+}
 
 </script>
 
@@ -48,12 +57,12 @@ onMounted(async()=>{
         <div class="dept-form-grid">
           <div class="tab">
             <label for="deptCode" class="form-label"><b>학과코드</b></label>
-            <input type="text" class="form-control" id="deptCode" v-model="state.form.deptCode" />
+            <input type="text" class="form-control" id="deptCode" maxlength="4" v-model="state.form.deptCode" required />
           </div>
 
           <div class="tab">
             <label for="deptName" class="form-label"><b>학과명</b></label>
-            <input type="text" class="form-control" id="deptName" v-model="state.form.deptName" />
+            <input type="text" class="form-control" id="deptName" v-model="state.form.deptName" required/>
           </div>
 
           <div class="tab">
@@ -63,23 +72,23 @@ onMounted(async()=>{
 
           <div class="tab">
             <label for="deptOffice" class="form-label"><b>학과 사무실</b></label>
-            <input type="text" class="form-control" id="deptOffice" v-model="state.form.deptOffice" />
+            <input type="text" class="form-control" id="deptOffice" v-model="state.form.deptOffice" required/>
           </div>
 
           <div class="tab">
             <label for="deptPhone" class="form-label"><b>학과 전화번호</b></label>
-            <input type="text" class="form-control" id="deptPhone" v-model="state.form.deptTel" />
+            <input type="text" class="form-control" id="deptPhone" v-model="state.form.deptTel" required/>
           </div>
 
           <div class="tab">
             <label for="deptCapacity" class="form-label"><b>학과 정원</b></label>
-            <input type="text" class="form-control" id="deptCapacity" v-model="state.form.deptMaxStd" />
+            <input type="text" class="form-control" id="deptCapacity" v-model="state.form.deptMaxStd" required/>
           </div>
         </div>
 
         <!-- 버튼은 grid 바깥 -->
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">학과개설</button>
+          <button type="submit" class="btn btn-primary" @click="newDept">학과개설</button>
         </div>
       </form>
     </div>
@@ -91,19 +100,19 @@ onMounted(async()=>{
         <div class="search">
           <i class="bi bi-search"></i>
         </div>
-        <input type="text" placeholder="학과명을 입력하세요">
+        <input type="text" placeholder="학과명을 입력하세요" v-model="state.search.keyword">
       </div>
       <div class="cover d-flex" >
         <div class="search">
           <i class="bi bi-funnel"></i>
         </div>
-        <select name="filter" class="filter">
+        <select name="filter" class="filter" v-model="state.search.status">
           <option value="null">상태/전체</option>
           <option value="1">운영중</option>
           <option value="0">폐지</option>
         </select>
       </div>
-      <button class="btn btn-success">조회</button>
+      <button class="btn btn-success" @click="searchDept" @keyup.enter="searchDept">조회</button>
     </div>
     <!-- 학과목록 -->
     <div class="container">
@@ -132,7 +141,7 @@ onMounted(async()=>{
                 <td>{{ item.deptCode }}</td>
                 <td>{{ item.deptName }}</td>
                 <td>{{ item.deptOffice }}</td>
-                <td>{{ item.userName }}</td>
+                <td>{{ item.userName === null ? "-" : item.userName }}</td>
                 <td>{{ item.deptTel }}</td>
                 <td>{{ item.deptMaxStd }}</td>
                 <td>{{ item.deptPeople }}</td>
