@@ -1,12 +1,59 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import WhiteBox from '@/components/common/WhiteBox.vue'
-import { fetchMemberList } from '@/services/memberService'
-/* (선택) 학과 옵션을 서버에서 가져오고 싶으면 fetchDeptOptions 추가 */
+import { getMemberList } from '@/services/memberService'
+import { deptGet } from '@/services/deptManageService'
+
 const depts = ref([
   { id: '', name: '전체' },
   // { id: 10, name: '컴퓨터공학과' } ... 실제 옵션으로 교체
 ])
+const deptLoading = ref(false)
+
+async function loadDepts() {
+  deptLoading.value = true
+  try {
+    const raw = await deptGet()
+    // ① 배열이 직접 오나? ② data가 배열? ③ list가 배열?
+    const arr =
+      Array.isArray(raw)      ? raw
+      : Array.isArray(raw?.data) ? raw.data
+      : Array.isArray(raw?.list) ? raw.list
+      : []
+
+    if (!Array.isArray(arr)) throw new Error('Invalid department response')
+
+    const mapped = arr.map(d => ({
+      id: d.deptId ?? d.id,
+      name: d.deptName ?? d.name
+    }))
+
+    depts.value = [{ id: '', name: '전체' }].concat(
+      mapped
+        .filter(d => d.id != null && d.name)
+        .sort((a, b) => String(a.name).localeCompare(String(b.name), 'ko'))
+    )
+  } catch (e) {
+    console.error('학과 로딩 실패', e, '(응답=', await Promise.resolve(deptGet()).catch(() => 'N/A'), ')')
+  } finally {
+    deptLoading.value = false
+  }
+}
+
+
+const STUDENT_STATUS = [
+  { value: '', label: '상태: 전체' },
+  { value: '재학', label: '재학' },
+  { value: '휴학', label: '휴학' },
+  { value: '졸업', label: '졸업' },
+  // 필요 시 { value: '제적', label: '제적' } 등 추가
+]
+const PROFESSOR_STATUS = [
+  { value: '', label: '상태: 전체' },
+  { value: '재직', label: '재직' },
+  { value: '휴직', label: '휴직' },
+  { value: '퇴직', label: '퇴직' },
+]
 
 const role = ref('student')
 const loading = ref(false)
@@ -25,14 +72,15 @@ const filters = reactive({
 
 const isStudent = computed(() => role.value === 'student')
 const roleLabel = computed(() => (isStudent.value ? '학생' : '교수'))
+const statusOptions = computed(() => (isStudent.value ? STUDENT_STATUS : PROFESSOR_STATUS))
 
 async function load() {
   loading.value = true
   error.value = ''
   try {
     const params = {
-      role: role.value,
-      deptId: filters.deptId || undefined,
+      userRole: role.value, 
+      deptId: filters.deptId !== '' ? Number(filters.deptId) : undefined, 
       status: filters.status || undefined,
       q: filters.q || undefined,
       searchBy: filters.searchBy !== 'all' ? filters.searchBy : undefined,
@@ -42,7 +90,9 @@ async function load() {
     } else {
       if (filters.gender) params.gender = filters.gender
     }
-    const res = await fetchMemberList(params)
+
+    const res = await getMemberList(params)
+    // rows.value = res.list ?? res   // 응답 형태에 맞춰 한 줄 선택
     rows.value = res
   } catch (e) {
     console.error(e)
@@ -51,18 +101,21 @@ async function load() {
     loading.value = false
   }
 }
-
 function setRole(r) {
   if (role.value === r) return
   role.value = r
   // 역할 바뀌면 서로 다른 필터 초기화
   filters.gender = ''
   filters.grade = ''
+  filters.status = ''
 }
 function clearQ(){ filters.q = '' }
 
 watch([role, () => filters.deptId, () => filters.status, () => filters.gender, () => filters.grade], load)
-onMounted(load)
+onMounted(async () => {
+  await loadDepts()
+  await load()
+})
 </script>
 
 <template>
@@ -83,10 +136,10 @@ onMounted(load)
 
           <!-- 상태(공통) -->
           <select v-model="filters.status" class="inp w120">
-            <option value="">상태: 전체</option>
-            <option value="재학">재학</option>
-            <option value="휴학">휴학</option>
-            <option value="졸업">졸업</option>
+          <option v-for="opt in statusOptions" :key="opt.value" :value="opt.value">
+            {{ opt.label }}
+            </option>
+            <!-- 필요 시 :disabled="opt.disabled" 같은 속성도 쓸 수 있어요 -->
           </select>
 
           <!-- ✅ 역할에 따라 토글되는 드롭다운 -->
