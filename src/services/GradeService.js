@@ -22,3 +22,7 @@ export const getProfile = () => {
     withCredentials: true,
   });
 };
+
+export const getGrades = (userId) => {
+  return axios.get("/student/rank", { params: { userId } });
+};
