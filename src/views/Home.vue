@@ -1,6 +1,7 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
+import DeptUpdateModal from "@/components/management/DeptUpdateModal.vue";
 </script>
 
 <template>
@@ -15,7 +16,7 @@ import SideBar from "@/components/common/SideBar.vue";
       <SideBar/>
     </div>
     <div class="content d-flex">
-
+      <DeptUpdateModal/>
       <div class="router">
         <router-view />
       </div>
