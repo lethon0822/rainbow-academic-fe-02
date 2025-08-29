@@ -1,9 +1,6 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
-import Confrim from "@/components/common/Confrim.vue";
-import Alert from "@/components/common/Alert.vue";
-
 </script>
 
 <template>
@@ -18,7 +15,7 @@ import Alert from "@/components/common/Alert.vue";
       <SideBar/>
     </div>
     <div class="content d-flex">
-      <Confrim></Confrim>
+
       <div class="router">
         <router-view />
       </div>

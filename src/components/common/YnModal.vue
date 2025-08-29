@@ -16,7 +16,7 @@
 </div>
 </template>
 
-<style>
+<style scoped>
 .frame{
   margin-left: 30px;
   width: 450px;
