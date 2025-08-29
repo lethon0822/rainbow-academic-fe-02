@@ -1,8 +1,10 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { inject } from "vue";
+import axios from "axios";
 
-defineProps({
+//  props는 반드시 변수에 담아 사용
+const props = defineProps({
   courseList: Array,
   maxHeight: {
     type: String,
@@ -30,19 +32,37 @@ const change = (status) => {
 };
 
 const openModal = inject("openModal");
-const openLink = (id) => {
-  console.log(id);
-  openModal(id);
-};
+const openLink = (id) => openModal(id);
 
 const router = useRouter();
 const send = (id, json) => {
-  console.log("먀오:", json);
   const jsonBody = JSON.stringify(json);
   router.push({
     path: `/professor/course/${id}/students`,
     state: { data: jsonBody },
   });
+};
+
+//  승인/거부 API 호출
+const patchCourseStatus = async (courseId, status, userId = 0) => {
+  try {
+    const payload = { courseId, status, userId };
+    const res = await axios.patch("/staff/approval/course", payload);
+
+    if (res.status === 200) {
+      alert(`강의가 ${status} 처리되었습니다.`);
+
+      //  props.courseList 로 접근해야 함
+      const target = props.courseList.find(c => c.courseId === courseId);
+      if (target) target.status = status;
+    } else {
+      console.error("응답 오류:", res);
+      alert("승인/거부 실패 (서버 응답 오류)");
+    }
+  } catch (err) {
+    console.error("승인/거부 실패:", err);
+    alert("처리 중 오류가 발생했습니다.");
+  }
 };
 </script>
 
@@ -57,105 +77,74 @@ const send = (id, json) => {
             <th class="title">교과목명</th>
             <th class="classroom">강의실</th>
             <th class="type">이수구분</th>
-            <th class="professor" v-if="show.professorName">담당교수</th>
+            <th class="professor" v-if="props.show.professorName">담당교수</th>
             <th class="grade">수강대상</th>
             <th class="time">강의시간</th>
             <th class="credit">학점</th>
             <th class="maxStd">정원</th>
-            <th class="remStd" v-if="show.remStd">잔여</th>
-            <th v-if="show.enroll || show.cancel" class="enroll-action">
-              수강
-            </th>
-            <th v-if="show.modify" class="status">승인여부</th>
-            <th
-              v-if="show.setting || show.modify || show.check"
-              class="button"
-            ></th>
+            <th class="remStd" v-if="props.show.remStd">잔여</th>
+            <th v-if="props.show.enroll || props.show.cancel" class="enroll-action">수강</th>
+            <th v-if="props.show.modify" class="status">승인여부</th>
+            <th v-if="props.show.setting || props.show.modify || props.show.check" class="button"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="course in courseList" :key="course.id">
+          <tr v-for="course in props.courseList" :key="course.courseId">
             <td class="code">{{ course.courseCode }}</td>
             <td class="deptName">
               <div v-if="course.type === '교양'">교양학부</div>
               <div v-else>{{ course.deptName }}</div>
             </td>
             <td class="title">
-              <div @click="openLink(course.courseId)" class="link">
-                {{ course.title }}
-              </div>
+              <div @click="openLink(course.courseId)" class="link">{{ course.title }}</div>
             </td>
             <td class="classroom">{{ course.classroom }}</td>
             <td class="type">{{ course.type }}</td>
-            <td class="professor" v-if="show.professorName">
+            <td class="professor" v-if="props.show.professorName">
               {{ course.professorName }}
             </td>
             <template v-if="course.grade === 0">
               <td>수강희망자</td>
             </template>
             <template v-else>
-              <td class="grade">
-                {{ course.deptName + " " + course.grade }}학년
-              </td>
+              <td class="grade">{{ course.deptName + " " + course.grade }}학년</td>
             </template>
             <td class="time">{{ course.time }}</td>
             <td class="credit">{{ course.credit }}</td>
             <td class="maxStd">
               <span class="remaining-count">{{ course.maxStd }}</span>
             </td>
-            <td
-              v-if="show.modify"
-              class="status"
-              :class="change(course.status)"
-            >
+            <td v-if="props.show.modify" class="status" :class="change(course.status)">
               {{ course.status }}
             </td>
-            <td class="remStd" v-if="show.remStd">
+            <td class="remStd" v-if="props.show.remStd">
               <span class="remaining-count">{{ course.remStd }}</span>
             </td>
-            <td v-if="show.enroll" class="enroll-action">
-              <button
-                class="enroll-btn"
-                :class="{ enrolled: course.enrolled }"
-                :disabled="course.enrolled"
-                @click="$emit('enroll', course)"
-              >
+            <td v-if="props.show.enroll" class="enroll-action">
+              <button class="enroll-btn"
+                      :class="{ enrolled: course.enrolled }"
+                      :disabled="course.enrolled"
+                      @click="$emit('enroll', course)">
                 {{ course.enrolled ? "신청완료" : "수강신청" }}
               </button>
             </td>
-            <td v-else-if="show.cancel" class="enroll-action">
-              <button
-                class="cancel-btn"
-                @click="$emit('cancel', course.courseId)"
-              >
-                수강취소
-              </button>
+            <td v-else-if="props.show.cancel" class="enroll-action">
+              <button class="cancel-btn" @click="$emit('cancel', course.courseId)">수강취소</button>
             </td>
-            <td v-else-if="show.setting" class="button">
-              <button class="enroll-btn" @click="send(course.courseId, course)">
-                관리
-              </button>
+            <td v-else-if="props.show.setting" class="button">
+              <button class="enroll-btn" @click="send(course.courseId, course)">관리</button>
             </td>
-            <td v-else-if="show.check" class="button">
-              <!-- 학생관리 라우팅 처리해야함 -->
-              <button
-                class="enroll-btn"
-                @click="$emit('check', course.courseId, course.title)"
-              >
-                강의평 보기
-              </button>
+            <td v-else-if="props.show.check" class="button">
+              <button class="enroll-btn" @click="$emit('check', course.courseId, course.title)">강의평 보기</button>
             </td>
-            <td
-              v-else-if="show.modify"
-              class="button"
-              v-if="course.status !== '승인'"
-            >
-              <router-link
-                :to="{ name: 'ModifyCourse', params: { id: course.courseId } }"
-                class="setting"
-              >
+            <td v-else-if="props.show.modify" class="button" v-if="course.status !== '승인'">
+              <router-link :to="{ name: 'ModifyCourse', params: { id: course.courseId } }" class="setting">
                 <button class="enroll-btn d-flex">수정</button>
               </router-link>
+            </td>
+            <td v-if="props.show.modify" class="button">
+              <button class="enroll-btn" @click="patchCourseStatus(course.courseId, '승인')">승인</button>
+              <button class="cancel-btn" @click="patchCourseStatus(course.courseId, '거부')">거부</button>
             </td>
           </tr>
         </tbody>
