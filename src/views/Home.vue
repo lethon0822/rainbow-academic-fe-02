@@ -1,10 +1,10 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
-
 </script>
 
 <template>
+ 
   <div>
     <Header />
   </div>
@@ -15,6 +15,7 @@ import SideBar from "@/components/common/SideBar.vue";
       <SideBar/>
     </div>
     <div class="content d-flex">
+
       <div class="router">
         <router-view />
       </div>
