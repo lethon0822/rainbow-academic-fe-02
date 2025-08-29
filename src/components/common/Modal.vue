@@ -1,9 +1,28 @@
+<script setup>
+import { defineEmits } from "vue";
+
+const props = defineProps({
+  title: { type: String, default: '' }
+
+})
+
+const emit = defineEmits(["close"]);
+const close = () => {
+  emit("close");
+};
+
+
+
+</script>
 <!-- Modal.vue -->
 <template>
-  <div class="modal-overlay" @click.self="close">
+  <div class="modal-overlay">
     <div class="modal-window">
       <div class="title-bar">
-        <button class="close-btn" @click="close">X</button>
+        <h3>{{ props.title }}</h3>
+        <div class="close-btn" @click="close">
+          <i class="fa-solid fa-xmark"></i>
+        </div>
       </div>
       <div class="modal-body">
         <slot />
@@ -11,14 +30,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { defineEmits } from "vue";
-const emit = defineEmits(["close"]);
-const close = () => {
-  emit("close");
-};
-</script>
 
 <style scoped>
 .modal-overlay {
@@ -39,19 +50,21 @@ const close = () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   width: 400px;
   max-width: 90vw;
+  border-radius: 10px;
 }
 .title-bar {
-  background: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
   border-bottom: 1px solid #ccc;
   height: 32px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 0 8px;
+  justify-content: space-between;
+  padding: 20px 10px;
+}
+
+h3{
+  margin:0
 }
 .close-btn {
-  background: #f0f0f0;
-  border: 1px solid #999;
   width: 28px;
   height: 28px;
   font-size: 18px;
@@ -67,6 +80,7 @@ const close = () => {
 }
 .close-btn:hover {
   background: #e0e0e0;
+  border-radius: 10px;
 }
 .close-btn:active {
   background: #d0d0d0;
@@ -74,7 +88,6 @@ const close = () => {
 }
 .modal-body {
   padding: 16px;
-  background: white;
 }
 @media (max-width: 480px) {
   .modal-window {
