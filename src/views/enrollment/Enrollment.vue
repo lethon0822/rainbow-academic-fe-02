@@ -1,15 +1,15 @@
 <script setup>
-import WhiteBox from "@/components/common/WhiteBox.vue";
-import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
-import CourseTable from "@/components/course/CourseTable.vue";
-import { getDepartments, getYears } from "@/services/CourseService";
+import WhiteBox from '@/components/common/WhiteBox.vue';
+import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
+import CourseTable from '@/components/course/CourseTable.vue';
+import { getDepartments, getYears } from '@/services/CourseService';
 import {
   getCourseListByFilter,
   getMySugangList,
-} from "@/services/CourseService";
-import { postEnrollCourse, deleteSugangCancel } from "@/services/SugangService";
+} from '@/services/CourseService';
+import { postEnrollCourse, deleteSugangCancel } from '@/services/SugangService';
 
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed } from 'vue';
 
 const departments = ref([]);
 const years = ref([]);
@@ -35,16 +35,16 @@ onMounted(async () => {
 
   // 수강 신청한 강의 목록 불러오기
   const mySugangListRes = await getMySugangList();
-  console.log("나의 수강 내역 백엔드 응답:", mySugangListRes.data);
+  console.log('나의 수강 내역 백엔드 응답:', mySugangListRes.data);
   mySugangList.value = mySugangListRes.data;
 });
 
 // 필터에 따른 개설 강의 목록 조회
 const handleSearch = async (filters) => {
-  console.log("검색 필터 전달됨:", filters);
+  console.log('검색 필터 전달됨:', filters);
   lastFilters.value = { ...filters };
   const courseListRes = await getCourseListByFilter(filters);
-  console.log("개설 강의 내역 백엔드 응답:", courseListRes.data);
+  console.log('개설 강의 내역 백엔드 응답:', courseListRes.data);
   courseList.value = courseListRes.data;
 
   // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
@@ -60,7 +60,7 @@ const handleSearch = async (filters) => {
 const handleEnroll = async (course) => {
   const sugangReq = { courseId: course.courseId };
 
-  if (!confirm("수강신청을 하시겠습니까?")) return;
+  if (!confirm('수강신청을 하시겠습니까?')) return;
 
   try {
     const sugangRes = await postEnrollCourse(sugangReq);
@@ -78,7 +78,7 @@ const handleEnroll = async (course) => {
       }
 
       mySugangList.value.push(updatedCourse);
-      alert("수강신청이 완료되었습니다.");
+      alert('수강신청이 완료되었습니다.');
 
       try {
         // 강의 목록 리패치 시 신청 완료 버튼 띄우기 위함
@@ -92,18 +92,18 @@ const handleEnroll = async (course) => {
           return course;
         });
       } catch (error) {
-        alert("목록 새로고침 실패. 페이지를 새로고침 해주세요.");
+        alert('목록 새로고침 실패. 페이지를 새로고침 해주세요.');
       }
     }
   } catch (error) {
     const err = error.response?.data;
-    alert(err?.message || "예기치 못한 오류가 발생했습니다.");
+    alert(err?.message || '예기치 못한 오류가 발생했습니다.');
   }
 };
 
 // 수강 취소 처리 함수
 const handleCancel = async (courseId) => {
-  if (!confirm("수강신청을 취소하시겠습니까?")) return;
+  if (!confirm('수강신청을 취소하시겠습니까?')) return;
 
   try {
     const res = await deleteSugangCancel(courseId);
@@ -124,13 +124,13 @@ const handleCancel = async (courseId) => {
         courseList.value[idx].remStd += 1;
       }
 
-      alert("수강신청이 취소되었습니다.");
+      alert('수강신청이 취소되었습니다.');
     }
   } catch (error) {
     if (error.response?.status === 400) {
-      alert(error.response?.data || "수강취소 실패");
+      alert(error.response?.data || '수강취소 실패');
     } else {
-      alert("수강신청 취소 실패! 예기치 못한 오류가 발생했습니다.");
+      alert('수강신청 취소 실패! 예기치 못한 오류가 발생했습니다.');
     }
     console.error(error);
   }

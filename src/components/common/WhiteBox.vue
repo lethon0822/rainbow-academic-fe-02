@@ -66,10 +66,10 @@ const props = defineProps({
 }
 
 /* Body (scroll) */
-.white-box__body {
-  overflow: auto; /* ✅ 내부 스크롤 */
+/* .white-box__body {
+  overflow: auto; 
   padding: var(--wb-body-pad, 0);
-}
+} */
 
 /* Footer (sticky bottom: 필요 시) */
 .white-box__footer {
@@ -80,4 +80,6 @@ const props = defineProps({
   border-top: 1px solid #eee;
   padding: 10px 12px;
 }
+
+
 </style>

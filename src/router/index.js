@@ -99,6 +99,10 @@ const router = createRouter({
           path: "/staff",
           component: () => import("@/views/staff/MemberListPage.vue"),
         },
+        {
+          path: "/staff/approval",
+          component: () => import("@/views/staff/ManageApproval.vue")
+        },
 
         //profile
         {

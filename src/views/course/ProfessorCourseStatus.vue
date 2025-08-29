@@ -1,16 +1,14 @@
 <!-- 강의 신청 현황  -->
 <script setup>
-import WhiteBox from "@/components/common/WhiteBox.vue";
-import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
-import CourseTable from "@/components/course/CourseTable.vue";
-import { findMyCourse } from "@/services/professorService";
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-
+import WhiteBox from '@/components/common/WhiteBox.vue';
+import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
+import CourseTable from '@/components/course/CourseTable.vue';
+import { findMyCourse } from '@/services/professorService';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const courseList = ref([]);
 const router = useRouter();
-
 
 // onMounted(async ()=>{
 
@@ -20,33 +18,28 @@ const router = useRouter();
 // });
 
 const myCourse = async (filters) => {
-  
   const json = {
     year: filters.year,
     semester: filters.semester,
   };
   const res = await findMyCourse(json);
-  courseList.value= res.data;
-
+  courseList.value = res.data;
 };
 
 const move = () => {
-  router.push('/professor/course/registration')
-}
+  router.push('/professor/course/registration');
+};
 </script>
 <template>
   <WhiteBox :title="'강의개설신청 및 신청현황조회'">
-    <SearchFilterBar @search="myCourse"/>
+    <SearchFilterBar @search="myCourse" />
     <CourseTable
       :course-list="courseList"
       :show="{ modify: true }"
       class="some"
     />
     <div>
-        <button class="enroll-btn" @click="move">
-          개설신청
-        </button>  
-
+      <button class="enroll-btn" @click="move">개설신청</button>
     </div>
   </WhiteBox>
 </template>
@@ -76,9 +69,3 @@ button.enroll-btn {
   justify-content: flex-end;
 }
 </style>
-
-
-
-
-
-
