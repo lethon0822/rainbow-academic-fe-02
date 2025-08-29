@@ -1,10 +1,10 @@
 <script setup>
-import WhiteBox from "@/components/common/WhiteBox.vue";
-import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
-import GradeTable from "@/components/profile/GradeTable.vue";
-import { getDepartments, getYears } from "@/services/CourseService";
-import { ref, onMounted } from "vue";
-import { getCourseListByFilter } from "@/services/CourseService";
+import WhiteBox from '@/components/common/WhiteBox.vue';
+import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
+import GradeTable from '@/components/profile/GradeTable.vue';
+import { getDepartments, getYears } from '@/services/CourseService';
+import { ref, onMounted } from 'vue';
+import { getCourseListByFilter } from '@/services/CourseService';
 
 const departments = ref([]);
 const years = ref([]);
@@ -21,11 +21,11 @@ onMounted(async () => {
 });
 
 const handleSearch = async (filters) => {
-  console.log("필터: ", filters);
+  console.log('필터: ', filters);
   const courseListRes = await getCourseListByFilter(filters);
-  console.log("금학기 성적조회: ", courseListRes.data);
+  console.log('금학기 성적조회: ', courseListRes.data);
   courseList.value = courseListRes.data.filter(
-    (course) => course.status === "승인"
+    (course) => course.status === '승인'
   );
 };
 </script>

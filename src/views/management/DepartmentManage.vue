@@ -1,7 +1,8 @@
 <script setup>
 import whiteBox from '@/components/common/WhiteBox.vue';
 import { reactive, onMounted } from 'vue';
-import { deptlist } from '@/services/DeptManageService';
+import { deptGet, deptPost } from '@/services/deptManageService';
+import DeptUpdateModal from '@/components/management/DeptUpdateModal.vue';
 
 const state = reactive({
   form:{
@@ -12,26 +13,58 @@ const state = reactive({
     deptMaxStd:0,
     deptCode: "",
   },
-  deptList:[]
+  deptList:[],
+  search:{
+    keyword:"",
+    status: null,
+  },
+  showModal:false,
+  selectItem: null
 })
 
-onMounted(async()=>{
+const deptList = async(params) =>{
 
-  const params = {
-    status:"",
-    text:""
-  }
-
-  const res = await deptlist(params);
+  const res = await deptGet(params);
   console.log("알이에수",res);
 
   state.deptList = res.data;
   console.log('list',state.deptList)
-})
+};
 
+const searchDept = async() =>{
+ 
+  deptList(state.search);
+}
+
+onMounted(async()=>{
+  deptList();
+
+});
+
+const newDept = async() =>{
+  if(!confirm('학과를 개설 하시겠습니까?')){return;}
+  if(state.form.headProfId === 0){
+    state.form.headProfId = null;
+  }
+  const res = await deptPost(state.form);
+  console.log(res)
+}
+
+const modal = (item) =>{
+  state.selectItem = item
+  state.showModal = true;
+}
+
+const closeModal = () =>{
+  state.showModal = false;
+  deptList();
+}
 </script>
 
 <template>
+  <template v-if="state.showModal === true">
+    <DeptUpdateModal @close="closeModal" :dept="state.selectItem"/>
+  </template>
   <whiteBox :title="'학과관리'" class="white1" >
     <div class="dept-form-container">
       <form>
@@ -39,12 +72,12 @@ onMounted(async()=>{
         <div class="dept-form-grid">
           <div class="tab">
             <label for="deptCode" class="form-label"><b>학과코드</b></label>
-            <input type="text" class="form-control" id="deptCode" v-model="state.form.deptCode" />
+            <input type="text" class="form-control" id="deptCode" maxlength="4" v-model="state.form.deptCode" required />
           </div>
 
           <div class="tab">
             <label for="deptName" class="form-label"><b>학과명</b></label>
-            <input type="text" class="form-control" id="deptName" v-model="state.form.deptName" />
+            <input type="text" class="form-control" id="deptName" v-model="state.form.deptName" required/>
           </div>
 
           <div class="tab">
@@ -54,23 +87,23 @@ onMounted(async()=>{
 
           <div class="tab">
             <label for="deptOffice" class="form-label"><b>학과 사무실</b></label>
-            <input type="text" class="form-control" id="deptOffice" v-model="state.form.deptOffice" />
+            <input type="text" class="form-control" id="deptOffice" v-model="state.form.deptOffice" required/>
           </div>
 
           <div class="tab">
             <label for="deptPhone" class="form-label"><b>학과 전화번호</b></label>
-            <input type="text" class="form-control" id="deptPhone" v-model="state.form.deptTel" />
+            <input type="text" class="form-control" id="deptPhone" v-model="state.form.deptTel" required/>
           </div>
 
           <div class="tab">
             <label for="deptCapacity" class="form-label"><b>학과 정원</b></label>
-            <input type="text" class="form-control" id="deptCapacity" v-model="state.form.deptMaxStd" />
+            <input type="text" class="form-control" id="deptCapacity" v-model="state.form.deptMaxStd" required/>
           </div>
         </div>
 
         <!-- 버튼은 grid 바깥 -->
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">학과개설</button>
+          <button type="submit" class="btn btn-primary" @click="newDept">학과개설</button>
         </div>
       </form>
     </div>
@@ -82,19 +115,19 @@ onMounted(async()=>{
         <div class="search">
           <i class="bi bi-search"></i>
         </div>
-        <input type="text" placeholder="학과명을 입력하세요">
+        <input type="text" placeholder="학과명을 입력하세요" v-model="state.search.keyword">
       </div>
       <div class="cover d-flex" >
         <div class="search">
           <i class="bi bi-funnel"></i>
         </div>
-        <select name="filter" class="filter">
+        <select name="filter" class="filter" v-model="state.search.status">
           <option value="null">상태/전체</option>
           <option value="1">운영중</option>
           <option value="0">폐지</option>
         </select>
       </div>
-      <button class="btn btn-success">조회</button>
+      <button class="btn btn-success" @click="searchDept" @keyup.enter="searchDept">조회</button>
     </div>
     <!-- 학과목록 -->
     <div class="container">
@@ -103,41 +136,44 @@ onMounted(async()=>{
         <table class="dept-table">
           <thead>
             <tr>
-              <th>학과코드</th>
-              <th>학과</th>
-              <th>학과사무실</th>
-              <th>학과장명</th>
-              <th>학과 전화번호</th>
-              <th>학과 정원</th>
-              <th>학과 인원</th>
-              <th>상태</th>
-              <th>수강</th>
+              <th class="dept-code">학과코드</th>
+              <th class="dept-name">학과</th>
+              <th class="dept-office">학과사무실</th>
+              <th class="dept-head">학과장명</th>
+              <th class="dept-tel">학과 전화번호</th>
+              <th class="dept-max">학과 정원</th>
+              <th class="dept-people">학과 인원</th>
+              <th class="dept-status">상태</th>
+              <th class="dept-btn"><span v-for="n in 10" :key="n">&nbsp;</span></th>
             </tr>
           </thead>
         </table>
         </div>
         <div class="body-line">
-          <table class="dept_table">
+          <table class="dept-table">
             <tbody>
-              <tr v-for="item in state.deptList" :key="item.deptId">
+              <tr v-for="item in state.deptList" :key="item.deptId" class="tr-line">
                 <td>{{ item.deptCode }}</td>
                 <td>{{ item.deptName }}</td>
                 <td>{{ item.deptOffice }}</td>
-                <td>{{ item.userName }}</td>
+                <td>{{ item.userName === null ? "-" : item.userName }}</td>
                 <td>{{ item.deptTel }}</td>
                 <td>{{ item.deptMaxStd }}</td>
                 <td>{{ item.deptPeople }}</td>
-                <td> {{item.status === '1' ? "운영중" : "폐지"}}</td>
-                <td>
-                  <button class="btn btn-primary">수정</button>
+                <td :class="item.status === '0'? 'not-do': 'do'"> {{item.status === '1' ? "운영중" : "폐지"}}</td>
+                <td class="btn-td">
+                  <template v-if="item.status === '1'">
+                    <button class="btn btn-primary" @click="modal(item)">수정</button>
+                  </template>
+
                 </td>
               </tr>
             </tbody>
-      </table>
-    </div>
+          </table>
+        </div>
     </div>
   </div>
- 
+
   </whiteBox>
 
 </template>
@@ -175,7 +211,6 @@ input{
   border-radius:10px ;
   background-color: #F8F9FA;
   border: 2px solid #E5E7EB;
-  
 }
 
 .form-actions {
@@ -268,11 +303,14 @@ input{
 }
 
 .body-line{
-
+  width: 100%;
+  height: 250px;
   overflow-y: scroll;
 }
 
-
+.not-do{
+  color:#DB3619
+}
 
 /* tbody 높이 제한 + 스크롤은 위 .table-wrapper에서 */
 .dept-table th,
@@ -298,6 +336,8 @@ input{
 }
 
 /* 버튼 스타일 */
+
+
 .btn-edit {
   background-color: #3182ce;
   color: #fff;
@@ -313,4 +353,28 @@ input{
   background-color: #2b6cb0;
 }
 
+/* th */
+.dept-table th.dept-code{
+  width:128px;
+
+}
+.dept-table th.dept-name{
+  width: 247px;
+}
+.dept-table th.dept-office{
+  width: 216px;
+}
+.dept-table th.dept-max{
+  width: 95px;
+}
+.dept-table th.dept-people{
+  width: 110px;
+}
+
+.dept-table th.dept-btn{
+  width: 190px;
+}
+.tr-line{
+  border-bottom: 1px solid #c4c4c4;
+}
 </style>

@@ -5,11 +5,11 @@ import SideBar from "@/components/common/SideBar.vue";
 </script>
 
 <template>
+ 
   <div>
     <Header />
   </div>
   <div class="d-flex main">
-    
     <div class="sidebar">
       <div class="dummy"></div>
       <SideBar/>
