@@ -143,10 +143,10 @@ async function saveSelected() {
     }
 
     if (toPost.length) {
-      await axios.post("/api/professor/course/grade", toPost);
+      await axios.post("/professor/course/grade", toPost);
     }
     if (toPut.length) {
-      await axios.put("/api/professor/course/grade", toPut);
+      await axios.put("/professor/course/grade", toPut);
     }
 
     alert("선택한 학생 성적이 저장되었습니다!");
