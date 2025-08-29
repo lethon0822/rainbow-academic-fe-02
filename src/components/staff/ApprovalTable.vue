@@ -92,7 +92,7 @@ function openModal(approval) {
                   approval.approvalState !== '승인' &&
                   approval.approvalState !== '거부'
                 "
-                @click="openModal()"
+                @click="openModal(approval)"
               >
                 처리하기
               </button>
@@ -104,8 +104,6 @@ function openModal(approval) {
       </table>
     </div>
   </div>
-
-  <Modal v-if="showModal"><AppDetail/> </Modal>
 </template>
 
 <style scoped>
