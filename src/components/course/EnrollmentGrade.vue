@@ -157,6 +157,42 @@ async function saveSelected() {
     isSaving.value = false;
   }
 }
+/** CSV 내보내기 */
+function exportCsv() {
+  const header = [
+    "학번","이름","학년","학과",
+    "출석일수","결석일수","출결평가",
+    "중간평가","기말평가","기타평가",
+    "총점","등급","평점"
+  ];
+
+  const rows = st.rows.map(r => [
+    r.loginId ?? "",
+    r.userName ?? "",
+    r.gradeYear ?? r.grade ?? "",
+    r.departmentName ?? "",
+    r.attendanceDays ?? 0,
+    r.absence ?? 0,
+    r.attendanceEval ?? 0,
+    r.midterm ?? 0,
+    r.finalExam ?? 0,
+    r.etcScore ?? 0,
+    r.total ?? 0,
+    r.grade ?? "",
+    r.gpa ?? 0
+  ]);
+
+  const csvContent =
+    "\uFEFF" + [header, ...rows].map(r => r.join(",")).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `grades_${st.courseId}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 </script>
 
 <template>
@@ -172,6 +208,7 @@ async function saveSelected() {
                   @click="st.allChecked=!st.allChecked; toggleAll()">
             전체선택
           </button>
+          <button class="btn btn-light" @click="exportCsv">내보내기</button>
         </div>
         <div class="right">
           <div class="search">
@@ -232,6 +269,7 @@ async function saveSelected() {
               <td>{{ r.grade }}</td> <!-- 성적 등급 -->
               <td>{{ r.gpa.toFixed(1) }}</td>
               <td><button class="btn btn-gray w-full">수정</button></td>
+              
             </tr>
           </tbody>
         </table>
