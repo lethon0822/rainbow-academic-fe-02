@@ -1,7 +1,7 @@
 <script setup>
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
-import DeptUpdateModal from "@/components/management/DeptUpdateModal.vue";
+
 </script>
 
 <template>
@@ -10,13 +10,11 @@ import DeptUpdateModal from "@/components/management/DeptUpdateModal.vue";
     <Header />
   </div>
   <div class="d-flex main">
-    
     <div class="sidebar">
       <div class="dummy"></div>
       <SideBar/>
     </div>
     <div class="content d-flex">
-      <DeptUpdateModal/>
       <div class="router">
         <router-view />
       </div>

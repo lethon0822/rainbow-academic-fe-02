@@ -2,6 +2,7 @@
 import whiteBox from '@/components/common/WhiteBox.vue';
 import { reactive, onMounted } from 'vue';
 import { deptGet, deptPost } from '@/services/deptManageService';
+import DeptUpdateModal from '@/components/management/DeptUpdateModal.vue';
 
 const state = reactive({
   form:{
@@ -16,7 +17,9 @@ const state = reactive({
   search:{
     keyword:"",
     status: null,
-  }
+  },
+  showModal:false,
+  selectItem: null
 })
 
 const deptList = async(params) =>{
@@ -47,9 +50,21 @@ const newDept = async() =>{
   console.log(res)
 }
 
+const modal = (item) =>{
+  state.selectItem = item
+  state.showModal = true;
+}
+
+const closeModal = () =>{
+  state.showModal = false;
+  deptList();
+}
 </script>
 
 <template>
+  <template v-if="state.showModal === true">
+    <DeptUpdateModal @close="closeModal" :dept="state.selectItem"/>
+  </template>
   <whiteBox :title="'학과관리'" class="white1" >
     <div class="dept-form-container">
       <form>
@@ -145,9 +160,12 @@ const newDept = async() =>{
                 <td>{{ item.deptTel }}</td>
                 <td>{{ item.deptMaxStd }}</td>
                 <td>{{ item.deptPeople }}</td>
-                <td> {{item.status === '1' ? "운영중" : "폐지"}}</td>
+                <td :class="item.status === '0'? 'not-do': 'do'"> {{item.status === '1' ? "운영중" : "폐지"}}</td>
                 <td class="btn-td">
-                  <button class="btn btn-primary">수정</button>
+                  <template v-if="item.status === '1'">
+                    <button class="btn btn-primary" @click="modal(item)">수정</button>
+                  </template>
+
                 </td>
               </tr>
             </tbody>
@@ -193,7 +211,6 @@ input{
   border-radius:10px ;
   background-color: #F8F9FA;
   border: 2px solid #E5E7EB;
-  
 }
 
 .form-actions {
@@ -291,7 +308,9 @@ input{
   overflow-y: scroll;
 }
 
-
+.not-do{
+  color:#DB3619
+}
 
 /* tbody 높이 제한 + 스크롤은 위 .table-wrapper에서 */
 .dept-table th,
