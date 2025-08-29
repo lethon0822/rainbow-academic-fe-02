@@ -12,7 +12,7 @@ const api = axios.create({ baseURL: '' });
  * @param {{ role: 'student'|'professor', deptId?: number|string|null }} params
  * @returns {Promise<Array>} MemberGetRes[]
  */
-export async function fetchMemberList(params) {
+export const fetchMemberList = async (params)=> {
   const query = {
     user_role: params.role, // 필수
   };
