@@ -23,12 +23,6 @@ const imagePreview = ref(null);
 const fileInput = ref(null);
 const currentProfileImage = ref(null); // 세션 저장용 프로필 이미지
 
-// 폼 데이터 상태
-const formData = reactive({
-  studentType: "대학생",
-  department: "선택",
-});
-
 // 8 그래프 데이터 8
 const chartRef = ref(null);
 let chartInstance = null;

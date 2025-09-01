@@ -1,19 +1,17 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
+
 const emit = defineEmits(["search"]);
 
 const props = defineProps({
-  semester: String,
-  enrollment: Boolean,
+  departments: Array,
+  years: Array,
 });
 
-let today = new Date();
-let year = today.getFullYear();
-
 const filters = reactive({
-  year: year,
+  semester: "",
   grade: "",
-  semester: props.semester || "",
+  semesterId: 0,
 });
 
 const gradeOptions = [
@@ -24,34 +22,41 @@ const gradeOptions = [
   { value: "4", label: "4학년" },
 ];
 
-const emitSearch = () => {
-  emit("search", {
-    year: filters.year,
-    grade: filters.grade,
-    semester: filters.semester,
-  });
-};
+const semesterOptions = [
+  { semesterId: 0, semester: "", label: "전체" },
+  { semesterId: 1, semester: "1", label: "1학기" },
+  { semesterId: 2, semester: "2", label: "2학기" },
+];
 
+// 학기 변경 감지
+watch(
+  () => filters.semester,
+  (newSemester) => {
+    const selected = semesterOptions.find(
+      (opt) => opt.semester === newSemester
+    );
+    filters.semesterId = selected ? selected.semesterId : 0;
+    emitSearch();
+  }
+);
+
+// 학년 버튼 클릭
 const selectGrade = (grade) => {
   filters.grade = grade;
   emitSearch();
 };
 
-const onSemesterChange = () => {
-  emitSearch();
-};
-
-const onSearch = () => {
-  if (filters.year < year - 5) {
-    filters.year = year - 5;
-  }
-  emitSearch();
+const emitSearch = () => {
+  emit("search", {
+    semester: filters.semester === "" ? null : filters.semester,
+    grade: filters.grade === "" ? null : filters.grade,
+    semesterId: filters.semesterId,
+  });
 };
 </script>
 
 <template>
   <div class="filter-bar">
-    <!-- 학년 버튼들 -->
     <div class="grade-buttons">
       <button
         v-for="option in gradeOptions"
@@ -63,23 +68,16 @@ const onSearch = () => {
       </button>
     </div>
 
-    <!-- 학기 선택 -->
     <div class="filter-group">
       <label>학기</label>
-      <select
-        v-model="filters.semester"
-        class="select-input"
-        :disabled="props.semester"
-        @change="onSemesterChange"
-      >
-        <template v-if="props.semester">
-          <option :value="props.semester">{{ props.semester }}학기</option>
-        </template>
-        <template v-else>
-          <option value="">전체</option>
-          <option value="1">1학기</option>
-          <option value="2">2학기</option>
-        </template>
+      <select v-model="filters.semester" class="select-input">
+        <option
+          v-for="option in semesterOptions"
+          :key="option.semesterId"
+          :value="option.semester"
+        >
+          {{ option.label }}
+        </option>
       </select>
     </div>
   </div>
