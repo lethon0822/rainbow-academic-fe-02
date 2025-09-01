@@ -1,15 +1,9 @@
 <script setup>
-<<<<<<< HEAD
 import { confirmCode, renewalPwd, sendMail } from '@/services/emailService';
 import { reactive } from 'vue';
-=======
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
->>>>>>> c6e2fce4127ed599599774c61b0ae1332df3f906
 
 const state = reactive({
   data: {
-<<<<<<< HEAD
     email: '',
     authCode: '',
     renewalTap: false,
@@ -72,17 +66,6 @@ async function renewal() {
     // 메세지
   }
 }
-=======
-    email: "",
-    auth: "",
-  },
-});
-
-const submit = async () => {
-  router.push("/new");
-  isModalOpen.value = true;
-};
->>>>>>> c6e2fce4127ed599599774c61b0ae1332df3f906
 </script>
 
 <template>

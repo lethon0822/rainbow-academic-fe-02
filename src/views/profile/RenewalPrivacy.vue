@@ -3,23 +3,24 @@ import {
   sendEmailCode as sendEmailCodeApi,
   verifyEmailCode as verifyEmailCodeApi,
   changePassword as changePasswordApi,
-} from "@/services/accountService";
-import { reactive, computed, watch } from "vue";
-import WhiteBox from "@/components/common/WhiteBox.vue";
+} from '@/services/accountService';
+import { reactive, computed, watch } from 'vue';
+import WhiteBox from '@/components/common/WhiteBox.vue';
+import { defaultModifiers } from '@popperjs/core/lib/popper-lite';
 
 const state = reactive({
   form: {
-    studentNumber: "",
-    name: "차은우",
-    zipcode: "",
-    address: "",
-    detailAddress: "",
-    phone: "",
-    email: "",
+    studentNumber: '',
+    name: '',
+    zipcode: '',
+    address: '',
+    detailAddress: '',
+    phone: '',
+    email: '',
 
-    authCode: "",
-    newPassword: "",
-    confirmPassword: "",
+    authCode: '',
+    newPassword: '',
+    confirmPassword: '',
     isVerified: false, // ✅ 인증 성공 플래그
   },
   verifiedToken: null, // ✅ 서버가 주는 1회용 토큰
@@ -35,36 +36,75 @@ const canChangePw = computed(
 
 function formatPhone(e) {
   let v = (e?.target?.value ?? state.form.phone)
-    .replace(/\D/g, "")
+    .replace(/\D/g, '')
     .slice(0, 11);
   if (v.length < 4) state.form.phone = v;
   else if (v.length < 8) state.form.phone = `${v.slice(0, 3)}-${v.slice(3)}`;
   else state.form.phone = `${v.slice(0, 3)}-${v.slice(3, 7)}-${v.slice(7)}`;
 }
 
+let sample6_postcode;
+let sample6_address;
+let sample6_detailAddress;
+function sample6_execDaumPostcode() {
+  new daum.Postcode({
+    oncomplete: function (data) {
+      let addr = ''; // 주소
+      let extraAddr = ''; // 참고항목
+
+      if (data.userSelectedType === 'R') {
+        addr = data.roadAddress;
+      } else {
+        addr = data.jibunAddress;
+      }
+
+      if (data.userSelectedType === 'R') {
+        if (data.bname !== '' && /(동|로|가)$/.test(data.bname)) {
+          extraAddr += data.bname;
+        }
+        if (data.buildingName !== '' && data.apartment === 'Y') {
+          extraAddr +=
+            extraAddr !== '' ? ', ' + data.buildingName : data.buildingName;
+        }
+        if (extraAddr !== '') {
+          extraAddr = ' (' + extraAddr + ')';
+        }
+      }
+
+      // ✅ Vue state에 직접 반영
+      state.form.zipcode = data.zonecode;
+      state.form.address = addr + extraAddr;
+      // 상세주소 입력칸에 포커스
+      setTimeout(() => {
+        document.getElementById('sample6_detailAddress')?.focus();
+      }, 0);
+    },
+  }).open();
+}
+
 function openZipSearch() {
-  alert("우편번호 검색 팝업을 연결하세요.");
+  sample6_execDaumPostcode();
 }
 
 async function saveProfile() {
-  console.log("저장 payload:", { ...state.form });
-  alert("저장되었습니다.");
+  console.log('저장 payload:', { ...state.form });
+  alert('저장되었습니다.');
 }
 
 /** ✅ 이메일로 코드 발송 */
 async function sendCode() {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(state.form.email)) {
-    alert("올바른 이메일을 입력하세요.");
+    alert('올바른 이메일을 입력하세요.');
     return;
   }
   await sendEmailCodeApi(state.form.email);
-  alert("인증번호가 발송되었습니다.");
+  alert('인증번호가 발송되었습니다.');
 }
 
 /** ✅ 코드 검증 → verifiedToken 수령 */
 async function verifyCode() {
   if (!/^\d{6}$/.test(state.form.authCode)) {
-    alert("6자리 숫자를 입력하세요.");
+    alert('6자리 숫자를 입력하세요.');
     return;
   }
   try {
@@ -74,11 +114,11 @@ async function verifyCode() {
     );
     state.form.isVerified = true;
     state.verifiedToken = verifiedToken;
-    alert("인증 성공");
+    alert('인증 성공');
   } catch (e) {
     state.form.isVerified = false;
     state.verifiedToken = null;
-    alert("인증 실패");
+    alert('인증 실패');
   }
 }
 
@@ -86,7 +126,7 @@ async function verifyCode() {
 async function changePasswordClick() {
   if (!canChangePw.value) return;
   await changePasswordApi(state.form.newPassword, state.verifiedToken);
-  alert("비밀번호가 변경되었습니다.");
+  alert('비밀번호가 변경되었습니다.');
 }
 
 /** 이메일/코드 변경 시 재인증 요구 */
@@ -118,7 +158,6 @@ watch(
           <input
             class="input"
             v-model="state.form.studentNumber"
-            placeholder="20001"
           />
         </div>
         <div class="form-item">
@@ -126,8 +165,6 @@ watch(
           <input
             class="input"
             v-model="state.form.name"
-            placeholder="차은우"
-            readonly
           />
         </div>
       </div>
@@ -141,34 +178,24 @@ watch(
         <div class="form-item">
           <label>우편번호</label>
           <div class="hstack">
-            <input
-              class="input"
-              v-model="state.form.zipcode"
-              placeholder="34158"
-            />
+            <input class="input" v-model="state.form.zipcode" readonly />
             <button class="btn btn-outline" @click="openZipSearch">
               주소찾기
             </button>
           </div>
         </div>
 
-        <div class="spacer"></div>
-
         <div class="form-item col-2">
           <label>주소</label>
-          <input
-            class="input"
-            v-model="state.form.address"
-            placeholder="전공/교양"
-          />
+          <input class="input" v-model="state.form.address" readonly />
         </div>
 
         <div class="form-item col-2">
           <label>상세주소</label>
           <input
+            id="sample6_detailAddress"
             class="input"
             v-model="state.form.detailAddress"
-            placeholder="예: 수 1,2,3 & 목 4,5"
           />
         </div>
 
@@ -178,7 +205,6 @@ watch(
             class="input"
             v-model="state.form.phone"
             @input="formatPhone"
-            placeholder="010-1234-5678"
           />
         </div>
 
@@ -187,7 +213,6 @@ watch(
           <input
             class="input"
             v-model="state.form.email"
-            placeholder="example@univ.ac.kr"
           />
         </div>
       </div>
@@ -263,9 +288,9 @@ watch(
 <style scoped>
 /* 브라우저 기본 외형 제거 (특히 사파리/크롬) */
 .input,
-input[type="text"],
-input[type="number"],
-input[type="search"] {
+input[type='text'],
+input[type='number'],
+input[type='search'] {
   -webkit-appearance: none;
   appearance: none;
 }
