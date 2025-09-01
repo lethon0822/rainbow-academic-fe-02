@@ -8,18 +8,23 @@ import Notices from "@/components/common/Notices.vue";
   <div>
     <Header />
   </div>
+
   <div class="d-flex main">
     <div class="sidebar">
       <div class="dummy"></div>
       <SideBar />
     </div>
+
     <div class="content d-flex">
       <div class="router">
         <router-view />
         <WaveLoader />
-        <Notices />
       </div>
     </div>
+  </div>
+
+  <div id="notices-root">
+    <Notices />
   </div>
 </template>
 
