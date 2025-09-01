@@ -40,6 +40,7 @@ const submit = async () => {
         userRole: res.data.userRole ?? '',
         loginId: res.data.loginId ?? '',
         semesterId: res.data.semesterId ?? '',
+        deptName: res.data.deptName ?? '',
       })
       
 

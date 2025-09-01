@@ -66,6 +66,11 @@ const router = createRouter({
         },
 
         //views
+        //application
+        {
+          path: "/application",
+          component: () => import("@/views/Application.vue"),
+        },
         //course
         {
           path: "/course/history",
