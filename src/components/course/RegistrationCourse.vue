@@ -74,9 +74,7 @@ const back = () => {
 
 <template>
   <WhiteBox :title="'강의등록'">
-    <div
-      style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 5px 10px #ccc;"
-    >
+    <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 5px 10px #ccc;">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
       <br />
       <span style="font-size: 15px;"
@@ -359,7 +357,7 @@ const back = () => {
 
 <style scoped lang="scss">
 
-//2025-8-22
+//2025-8-22`
 
    .container {
    border: 2px solid #ccc;   /* 테두리 */
@@ -368,12 +366,12 @@ const back = () => {
    margin: 20px auto;        /* 바깥 여백 */
    max-width: 1320px;         /* 최대 너비 */
    background: #fdfdfd; 
-   height: 1000px;   
+   height: auto;   
    position: relative;
-   
+   min-height: 1000px; 
    margin-left: 100px; 
-  
-   }
+   overflow-y: auto;
+   } 
 
   
   body {
@@ -406,7 +404,7 @@ const back = () => {
     .fform-group3 {
       position: absolute;
       left: 100px;
-      bottom:260px;
+      bottom:240px;
       max-width: 1090px;
       min-width: 1090px;
       flex-direction: column;
