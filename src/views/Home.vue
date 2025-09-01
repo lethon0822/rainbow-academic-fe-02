@@ -17,6 +17,7 @@ import Notices from "@/components/common/Notices.vue";
       <div class="router">
         <router-view />
         <WaveLoader />
+        <Notices />
       </div>
     </div>
   </div>
