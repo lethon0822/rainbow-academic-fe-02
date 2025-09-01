@@ -286,7 +286,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- 공지사항 내용 -->
   <div class="notice-page">
     <!-- 메인 컨텐츠 -->
     <main class="main-content">
