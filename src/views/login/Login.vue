@@ -1,37 +1,37 @@
 <script setup>
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { login } from '@/services/accountService'
-import { useUserStore /*, useAccountStore*/ } from '@/stores/account'
-import Modal from '@/components/common/Modal.vue'
-import Id from '@/views/login/Id.vue'
-import RenewalPwd from '@/views/login/RenewalPwd.vue'
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { login } from '@/services/accountService';
+import { useUserStore /*, useAccountStore*/ } from '@/stores/account';
+import Modal from '@/components/common/Modal.vue';
+import Id from '@/views/login/Id.vue';
+import RenewalPwd from '@/views/login/RenewalPwd.vue';
 
-const router = useRouter()
+const router = useRouter();
 
-const isModalOpen = ref(false)
-const modalContent = ref(null)
+const isModalOpen = ref(false);
+const modalContent = ref(null);
 
 const state = reactive({
   form: { loginId: '', password: '' },
-})
+});
 
 // 모달
 const openModal = (type) => {
-  modalContent.value = type === 'id' ? 'id' : 'renewal'
-  isModalOpen.value = true
-}
+  modalContent.value = type === 'id' ? 'id' : 'renewal';
+  isModalOpen.value = true;
+};
 const closeModal = () => {
-  isModalOpen.value = false
-  modalContent.value = null
-}
+  isModalOpen.value = false;
+  modalContent.value = null;
+};
 
 const submit = async () => {
   try {
-    const res = await login(state.form)
+    const res = await login(state.form);
 
     if (res && res.status === 200 && res.data) {
-      const userStore = useUserStore()
+      const userStore = useUserStore();
 
       // 한 번에 패치(가독성 + 누락 방지)
       userStore.$patch({
@@ -40,8 +40,7 @@ const submit = async () => {
         userRole: res.data.userRole ?? '',
         loginId: res.data.loginId ?? '',
         semesterId: res.data.semesterId ?? '',
-      })
-      
+      });
 
       // (선택) 전역 로그인 플래그
       // const accountStore = useAccountStore()
@@ -49,26 +48,24 @@ const submit = async () => {
       // accountStore.setChecked(true)
 
       // 비밀번호는 즉시 비우기
-      state.form.password = ''
+      state.form.password = '';
 
       // 목록 페이지로
-      await router.replace({ path: '/' })
-      return
+      await router.replace({ path: '/' });
+      return;
     }
 
     if (res && (res.status === 404 || res.status === 401)) {
-      alert('아이디/비밀번호를 확인해주세요.')
-      return
+      alert('아이디/비밀번호를 확인해주세요.');
+      return;
     }
 
-    alert('로그인 처리 중 문제가 발생했습니다.')
+    alert('로그인 처리 중 문제가 발생했습니다.');
   } catch (e) {
-    console.error(e)
-    alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+    console.error(e);
+    alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
   }
-}
-
-
+};
 </script>
 
 <template>
@@ -77,23 +74,27 @@ const submit = async () => {
       <h2 class="login-title">로그인</h2>
       <form class="login-form" @submit.prevent="submit">
         <div class="input-group">
-          ID <input
+          ID
+          <input
             type="text"
             class="login-input"
             id="loginId"
             placeholder="아이디"
             v-model="state.form.loginId"
-            required/>
+            required
+          />
         </div>
         <div class="input-group">
-          PW <input
+          PW
+          <input
             type="password"
             class="login-input"
             id="password"
             placeholder="패스워드"
             v-model="state.form.password"
             autocomplete="off"
-            required/>
+            required
+          />
         </div>
         <button type="submit" class="login-button">로그인</button>
       </form>

@@ -1,55 +1,39 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { getList } from '@/services/Application';
-
-const props = defineProps({
-  year: 0,
-  semester: 0,
-  scheduleType: ''
-});
 
 const state = reactive({
   approvalList: [
-    // // 더미데이터
-    // {
-    //   id: 1,
-    //   userName: '김연주',
-    //   departmentName: '컴퓨터공학과',
-    //   approval: '휴직',
-    //   reason: '과목 변경',
-    //   approvalDate: '2025-08-29',
-    //   checkDate: '2025-08-30',
-    //   approvalState: '처리중',
-    // },
-    // {
-    //   id: 2,
-    //   userName: '이민호',
-    //   departmentName: '전자공학과',
-    //   approval: '휴학',
-    //   reason: '개인사유',
-    //   approvalDate: '2025-08-28',
-    //   checkDate: '2025-08-29',
-    //   approvalState: '승인',
-    // },
+    // 더미데이터
+    {
+      id: 1,
+      year: 2025,
+      semester: 1,
+      userName: '김연주',
+      departmentName: '컴퓨터공학과',
+      approval: '휴직',
+      reason: '과목 변경',
+      approvalDate: '2025-08-29',
+      checkDate: '2025-08-30',
+      approvalState: '처리중',
+    },
+    {
+      id: 2,
+      year: 2025,
+      semester: 1,
+      userName: '이민호',
+      departmentName: '전자공학과',
+      approval: '휴학',
+      reason: '개인사유',
+      approvalDate: '2025-08-28',
+      checkDate: '2025-08-29',
+      approvalState: '승인',
+    },
+
+
   ],
 });
 
-onMounted(async () => {
-  try {
-    const params = {
-      year: props.year,
-      semester: props.semester,
-      scheduleType: props.scheduleType
-    };
-    const res = await getList(params);
-    if (res && res.data) {
-      state.approvalList = res.data;
-      console.log(res.data)
-    }
-  } catch (error) {
-    console.error('승인 신청서 조회 실패:', error);
-  }
-});
 
 // 모달 상태
 const showModal = ref(false);
@@ -68,6 +52,8 @@ function openModal(approval) {
       <table>
         <thead>
           <tr>
+            <th class="year">연도</th>
+            <th class="semester">학기</th>
             <th class="userName">이름</th>
             <th class="departmentName">학과</th>
             <th class="approval">신청구분</th>
@@ -80,6 +66,8 @@ function openModal(approval) {
         </thead>
         <tbody>
           <tr v-for="approval in state.approvalList" :key="approval.id">
+            <td class="year">{{ approval.year }}</td>
+            <td class="semester">{{ approval.semester }}</td>
             <td class="userName">{{ approval.userName }}</td>
             <td class="departmentName">{{ approval.departmentName }}</td>
             <td class="approval">{{ approval.approval }}</td>
