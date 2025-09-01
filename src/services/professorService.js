@@ -12,6 +12,7 @@ export const findMyCourse = params =>{
 export const modify = jsonBody =>{
   return axios.put ("/professor/course", jsonBody).catch(e => e.response);
 }
+
 //강의별 학생 리스트 조회
 export const courseStudentList = id =>{
   return axios.get(`/professor/student?id=${id}`).catch(e => e.response);

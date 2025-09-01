@@ -2,6 +2,16 @@
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
 import Notices from "@/components/common/Notices.vue";
+import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+onMounted(()=>{
+  // router.push({path:'/notice'})
+});
+
+
 </script>
 
 <template>
@@ -17,7 +27,6 @@ import Notices from "@/components/common/Notices.vue";
       <div class="router">
         <router-view />
         <WaveLoader />
-        <Notices />
       </div>
     </div>
   </div>

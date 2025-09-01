@@ -1,46 +1,40 @@
 <script setup>
 import { reactive, onMounted } from "vue";
-import { courseStudentList } from "@/services/professorService";
+import { courseStudentList, findMyCourse } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
 import { useRoute, useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
-/*
+
+
 const state = reactive({
   data: [],
-  course: {
-    classroom: "",
-    courseId: null,
-    credit: null,
-    deptName: "",
-    grade: "",
-    maxStd: "",
-    time: "",
-    title: "",
-    type: "",
-  },
+  semester_id: userStore.semesterId
 });
-*/
+
 
 onMounted(async () => {
-  const passJson = history.state.data;
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.course = nana;
+  const res = await findMyCourse(state.semester_id);
+  console.log('알이에스:', res)
+  
+  // const passJson = history.state.data;
+  // if (passJson) {
+  //   const nana = JSON.parse(passJson);
+  //   state.course = nana;
 
-    const id = state.course.courseId;
-    console.log("아이디", id);
-    const res = await courseStudentList(id);
-    console.log("냐냐", res);
+  //   const id = state.course.courseId;
+  //   console.log("아이디", id);
+  //   const res = await courseStudentList(id);
+  //   console.log("냐냐", res);
 
-    if (res.data.length > 0) {
-      state.data = res.data;
-      console.log("스테이트", state.data);
-      return;
-    }
-  }
+  //   if (res.data.length > 0) {
+  //     state.data = res.data;
+  //     console.log("스테이트", state.data);
+  //     return;
+  //   }
+  // }
 });
 
 const attendance = () => {
@@ -69,30 +63,6 @@ const enrollmentGrade = () => {
   });
 };
 
-const state = reactive({
-  courses: [
-    {
-      id: 1,
-      title: "컴퓨터 네트워크",
-      professor: "홍길동",
-      time: "월 9:00-12:00, 수요일 9:00-12:00",
-      credits: "3학점 3시간",
-      semester: "2024년 2학기",
-      classroom: "공학관 101호",
-      students: 25,
-    },
-    {
-      id: 2,
-      title: "데이터구조 및 알고리즘",
-      professor: "김철수",
-      time: "화 13:00-16:00, 목요일 13:00-16:00",
-      credits: "3학점 3시간",
-      semester: "2024년 2학기",
-      classroom: "공학관 102호",
-      students: 30,
-    },
-  ],
-});
 
 const handleStudentManagement = (courseId) => {
   console.log(`학생 관리: ${courseId}`);
