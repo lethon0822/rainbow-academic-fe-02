@@ -25,6 +25,12 @@ const router = createRouter({
       component: () => import('@/views/Home.vue'),
       children: [
         //components
+        //common
+        {
+          path: "/notice",
+          component: () => import("@/components/common/Notices.vue"),
+        },
+
         //course
         {
           path: '/professor/attendance',
