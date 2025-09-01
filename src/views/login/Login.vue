@@ -41,6 +41,7 @@ const submit = async () => {
         loginId: res.data.loginId ?? '',
         semesterId: res.data.semesterId ?? '',
       })
+      
 
       // (선택) 전역 로그인 플래그
       // const accountStore = useAccountStore()
