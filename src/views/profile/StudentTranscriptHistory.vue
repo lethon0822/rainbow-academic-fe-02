@@ -139,15 +139,15 @@ const handleAttendanceManagement = (courseId) => {
             <span class="stat-value">{{ course.attendance }}</span>
           </div>
           <div class="stat-item">
-            <span class="stat-label">출석률</span>
+            <span class="stat-label">중간고사</span>
             <span class="stat-value">{{ course.attendanceRate }}</span>
           </div>
           <div class="stat-item">
-            <span class="stat-label">지각+결석</span>
+            <span class="stat-label">기말고사</span>
             <span class="stat-value">{{ course.lateCount }}</span>
           </div>
           <div class="stat-item">
-            <span class="stat-label">과제</span>
+            <span class="stat-label">기타</span>
             <span class="stat-value">{{ course.assignments }}</span>
           </div>
         </div>
@@ -169,7 +169,6 @@ const handleAttendanceManagement = (courseId) => {
   max-width: 1000px;
   margin: 0 auto;
   padding: 24px;
-  background-color: #f5f5f5;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -294,19 +293,32 @@ const handleAttendanceManagement = (courseId) => {
 }
 
 .btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #6c757d;
   color: white;
+  margin-right: 600px;
+  width: 120px;
+  height: 36px;
 }
 
 .btn-danger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #dc3545;
   color: white;
+  margin-right: 600px;
+  width: 120px;
+  height: 36px;
 }
 
 .grade-stats {
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding: 16px 20px;
+  padding: 20px 19px;
   background: #f8f9fa;
   gap: 40px;
   border-radius: 0 0 8px 8px;
@@ -314,19 +326,19 @@ const handleAttendanceManagement = (courseId) => {
 
 .stat-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 14px;
   color: #666;
   font-weight: 500;
 }
 
 .stat-value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: #333;
 }
@@ -336,11 +348,13 @@ const handleAttendanceManagement = (courseId) => {
 }
 
 .warning-message {
-  padding: 16px 20px;
-  background: #fff3cd;
   display: flex;
+  justify-content: center;
   align-items: center;
-  font-size: 13px;
+  padding: 20px 19px;
+  background: #fff3cd;
+  font-size: 15px;
+  text-align: center;
 }
 
 .text-danger {
