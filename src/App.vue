@@ -1,12 +1,11 @@
 <script setup>
-// import Header from "@/components/Header.vue";
 import { reactive, provide, onMounted, watch } from "vue";
 import CourseDetail from "@/components/course/CourseDetail.vue";
 import { useAccountStore } from "@/stores/account";
 import { useLoadingStore } from "@/stores/loading";
 import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";
-import WaveLoader from "@/components/common/WaveLoader.vue";
+
 
 const show = reactive({
   modal: false,
@@ -114,7 +113,6 @@ watch(
       <div class="loading-content"></div>
     </div>
     <div v-show="!isInitializing.value && !loading.isLoading">
-      <Notices />
       <template v-if="show.modal">
         <div class="black-bg" @click="show.modal = false">
           <div class="cover">

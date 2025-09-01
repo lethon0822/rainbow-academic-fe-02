@@ -1,11 +1,14 @@
 <!-- AttendanceView.vue -->
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { courseStudentList } from "@/services/professorService";
 import WhiteBox from "@/components/common/WhiteBox.vue";
+import axios from "axios";
+
 
 const router = useRouter();
+const route = useRoute();
 
 /* 상단 컨트롤 */
 const attendDate = ref(new Date().toISOString().slice(0, 10));
@@ -16,8 +19,8 @@ const isLoading = ref(false);
 
 /* 전달 데이터 */
 const state = reactive({
-  data: [], // [{ enrollmentId, loginId, userName, gradeYear, departmentName, semester, status, note, checked }]
-  courseId: "",
+  data: [], //
+  courseId:route.query.id
 });
 
 /* 상태 옵션 - attendanceOptions로 이름 통일 */
@@ -65,23 +68,25 @@ const statusMeta = (st) => {
   }
 };
 
-/* 초기화 */
-onMounted(() => {
-  const passJson = history.state?.data;
-  const passid = history.state?.id;
 
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.data = nana.map((s) => ({
-      ...s,
-      status: s.status ?? "결석",
-      note: s.note ?? "",
-      checked: false,
-    }));
-  }
-  if (passid) state.courseId = JSON.parse(passid);
+onMounted(async() => {
+  const res = await courseStudentList(state.courseId)
+  console.log('알이에쓰:', res)
+
+  state.data = res.data
+
+  // const passJson = history.state?.data;
+  // const passid = history.state?.id;
+
+  state.data = res.data.map(student => ({
+    ...student,
+    checked: false,        // 새 속성 추가
+    status: student.status ?? "결석", // 필요하면 다른 기본값도 넣기
+    note: student.note ?? ""           // 필요하면 note 기본값
+  }));
 });
 
+// 아래 필터 부분 오류 때문에 주석 처리 했습니다 
 /* 필터/검색 */
 const filtered = computed(() => {
   const kw = search.value.trim();
@@ -234,12 +239,12 @@ const exportCsv = () => {
           </thead>
 
           <tbody>
-            <tr v-for="s in filtered" :key="s.enrollmentId">
+            <tr v-for="s in state.data" :key="s.enrollmentId">
               <td><input type="checkbox" v-model="s.checked" /></td>
-              <td>{{ s.loginId }}</td>
+              <td>{{ s.loginId}}</td>
               <td>{{ s.userName }}</td>
-              <td>{{ s.gradeYear ?? s.grade }}</td>
-              <td class="left-cell">{{ s.departmentName }}</td>
+              <td>{{ s.grade }}</td>
+              <td class="left-cell">{{ s.deptName }}</td>
 
               <!-- 현재 상태 배지 -->
               <td>

@@ -21,11 +21,7 @@ const route = useRoute();
     <div class="content d-flex">
       <div class="router">
         <router-view />
-        <WaveLoader />
-<<<<<<< HEAD
-=======
         <Notices v-if="route.path === '/'" />
->>>>>>> d8620a4aaed4359bff7f7ed6b59c953c9328b010
       </div>
     </div>
   </div>
