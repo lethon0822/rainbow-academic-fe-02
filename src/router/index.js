@@ -66,6 +66,11 @@ const router = createRouter({
         },
 
         //views
+        //application
+        {
+          path: "/application",
+          component: () => import("@/views/Application.vue"),
+        },
         //course
         {
           path: "/course/history",
@@ -127,7 +132,7 @@ const router = createRouter({
         },
         {
           path: "/profile",
-          component: () => import("@/views/profile/StudentRecord.vue"),
+          component: () => import("@/components/profile/Profile.vue"),
         },
         {
           path: "/grade/current",

@@ -1,17 +1,17 @@
 <script setup>
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const state = reactive({
   data: {
-    email: '',
-    auth: '',
+    email: "",
+    auth: "",
   },
 });
 
 const submit = async () => {
-  router.push('/new');
+  router.push("/new");
   isModalOpen.value = true;
 };
 </script>

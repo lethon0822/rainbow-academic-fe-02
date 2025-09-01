@@ -6,7 +6,6 @@ import { useLoadingStore } from "@/stores/loading";
 import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";
 
-
 const show = reactive({
   modal: false,
   id: null,
