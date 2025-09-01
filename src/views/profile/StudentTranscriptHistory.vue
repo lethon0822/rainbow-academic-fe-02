@@ -180,11 +180,12 @@ const handleAttendanceManagement = (courseId) => {
   margin-bottom: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
+
 }
 
 .header-card h1 {
-  font-size: 22px;
-  font-weight: 600px;
+  font-size: 20px;
+  font-weight: 600;
   color: #333;
   margin-bottom: 8px;
 }

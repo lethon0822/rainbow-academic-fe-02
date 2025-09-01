@@ -17,7 +17,6 @@ const props = defineProps({
   },
 });
 
-/* 8 프로필 8 */
 
 // 이미지 관련 상태
 const selectedImage = ref(null);
@@ -458,7 +457,7 @@ const progressPercent = 96; // 진행률 % (숫자)
               <label class="field-label">생년월일</label>
               <div class="field-value boxed-value">{{ profile.loginId }}</div>
             </div>
-
+          
             <div class="field-group">
               <label class="field-label">연락처</label>
               <div class="field-value boxed-value">{{ profile.loginId }}</div>
@@ -477,7 +476,7 @@ const progressPercent = 96; // 진행률 % (숫자)
               <label class="field-label">우편번호</label>
               <div class="field-value boxed-value">{{ profile.semester }}</div>
             </div>
-
+           
             <div class="field-group">
               <label class="field-label">주소</label>
               <div class="field-value boxed-value">
