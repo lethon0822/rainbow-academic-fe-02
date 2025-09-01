@@ -2,31 +2,30 @@
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
 import Notices from "@/components/common/Notices.vue";
-import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
-const router = useRouter();
-
-onMounted(()=>{
-  // router.push({path:'/notice'})
-});
-
-
+const route = useRoute();
 </script>
 
 <template>
   <div>
     <Header />
   </div>
+
   <div class="d-flex main">
     <div class="sidebar">
       <div class="dummy"></div>
       <SideBar />
     </div>
+
     <div class="content d-flex">
       <div class="router">
         <router-view />
         <WaveLoader />
+<<<<<<< HEAD
+=======
+        <Notices v-if="route.path === '/'" />
+>>>>>>> d8620a4aaed4359bff7f7ed6b59c953c9328b010
       </div>
     </div>
   </div>
