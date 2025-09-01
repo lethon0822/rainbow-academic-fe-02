@@ -1,48 +1,54 @@
 <script setup>
+import { onMounted, reactive, ref } from 'vue';
 import { getList } from '@/services/Application';
-import { reactive, ref } from 'vue';
-import AppDetail from './AppDetail.vue';
+
+const props = defineProps({
+  year: 0,
+  semester: 0,
+  scheduleType: ''
+});
 
 const state = reactive({
   approvalList: [
-    // 더미데이터
-    {
-      id: 1,
-      year: 2025,
-      semester: 1,
-      userName: '김연주',
-      departmentName: '컴퓨터공학과',
-      approval: '휴직',
-      reason: '과목 변경',
-      approvalDate: '2025-08-29',
-      checkDate: '2025-08-30',
-      approvalState: '처리중',
-    },
-    {
-      id: 2,
-      year: 2025,
-      semester: 1,
-      userName: '이민호',
-      departmentName: '전자공학과',
-      approval: '휴학',
-      reason: '개인사유',
-      approvalDate: '2025-08-28',
-      checkDate: '2025-08-29',
-      approvalState: '승인',
-    },
+    // // 더미데이터
+    // {
+    //   id: 1,
+    //   userName: '김연주',
+    //   departmentName: '컴퓨터공학과',
+    //   approval: '휴직',
+    //   reason: '과목 변경',
+    //   approvalDate: '2025-08-29',
+    //   checkDate: '2025-08-30',
+    //   approvalState: '처리중',
+    // },
+    // {
+    //   id: 2,
+    //   userName: '이민호',
+    //   departmentName: '전자공학과',
+    //   approval: '휴학',
+    //   reason: '개인사유',
+    //   approvalDate: '2025-08-28',
+    //   checkDate: '2025-08-29',
+    //   approvalState: '승인',
+    // },
   ],
-  // data: {
-  //   id: 0,
-  //   year: 0,
-  //   semester: 0,
-  //   userName: '',
-  //   departmentName: '',
-  //   approval: '',
-  //   reason: '',
-  //   approvalDate: '',
-  //   checkDate: '',
-  //   approvalState: '',
-  // },
+});
+
+onMounted(async () => {
+  try {
+    const params = {
+      year: props.year,
+      semester: props.semester,
+      scheduleType: props.scheduleType
+    };
+    const res = await getList(params);
+    if (res && res.data) {
+      state.approvalList = res.data;
+      console.log(res.data)
+    }
+  } catch (error) {
+    console.error('승인 신청서 조회 실패:', error);
+  }
 });
 
 // 모달 상태
@@ -62,22 +68,18 @@ function openModal(approval) {
       <table>
         <thead>
           <tr>
-            <th class="year">연도</th>
-            <th class="semester">학기</th>
             <th class="userName">이름</th>
             <th class="departmentName">학과</th>
             <th class="approval">신청구분</th>
             <th class="reason">변동사유</th>
             <th class="approvalDate">신청일자</th>
             <th class="checkDate">접수일자</th>
-            <th class="approvalState">접수여부</th>
+            <th class="approvalState">처리여부</th>
             <th class="button">　</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="approval in state.approvalList" :key="approval.id">
-            <td class="year">{{ approval.year }}</td>
-            <td class="semester">{{ approval.semester }}</td>
             <td class="userName">{{ approval.userName }}</td>
             <td class="departmentName">{{ approval.departmentName }}</td>
             <td class="approval">{{ approval.approval }}</td>
@@ -93,11 +95,11 @@ function openModal(approval) {
                   approval.approvalState !== '거부'
                 "
                 @click="openModal(approval)"
-              >
+                class="red">
                 처리하기
               </button>
 
-              <button class="not-pointer" v-else>접수완료</button>
+              <button class="not-pointer gray" v-else>처리완료</button>
             </td>
           </tr>
         </tbody>
@@ -197,7 +199,6 @@ tbody td {
 /* 버튼 */
 button {
   color: white;
-  background-color: #000;
   padding: 6px 12px;
   font-size: 12px;
   border-radius: 4px;
@@ -221,15 +222,15 @@ button {
   justify-content: center;
 }
 .red {
-  color: #d61421;
+  background-color: #d61421;
   font-weight: 600;
 }
 .gray {
-  color: #666;
+  background-color: #666;
   font-weight: 600;
 }
 .blue {
-  color: #2460ce;
+  background-color: #2460ce;
   font-weight: 700;
 }
 
