@@ -1,28 +1,25 @@
 import axios from "./httpRequester";
 
-// 영구 성적 조회
-export function GradesbyCourse(userId) {
-  const parsedUserId = Number(userId);
-  if (!userId || isNaN(parsedUserId)) {
-    console.error("❌ userId가 없거나 숫자가 아닙니다:", userId);
-    return Promise.reject(new Error("userId가 유효하지 않습니다."));
-  }
-
+// 영구 성적 조회 (금학기 제외)
+export function GradesbyCourse({ year, semester, semesterId }) {
   return axios.get("/student/grade/permanent", {
-    params: { userId: parsedUserId },
+    // /api 제거
+    params: {
+      year,
+      semester,
+      semesterId,
+    },
     withCredentials: true,
   });
 }
 
-//금학기 성적 조회
-
-// 학생 프로필
+// 기존에 있던 함수들 유지
 export const getProfile = () => {
-  return axios.get("/student/profile", {
+  return axios.get("/api/student/profile", {
     withCredentials: true,
   });
 };
 
 export const getGrades = (userId) => {
-  return axios.get("/student/rank", { params: { userId } });
+  return axios.get("/api/student/rank", { params: { userId } });
 };

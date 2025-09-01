@@ -1,49 +1,48 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { inject } from "vue";
+import { ref, onMounted, watch } from "vue";
+import axios from "axios";
+import { useUserStore } from "@/stores/user";
 
-defineProps({
-  courseList: Array,
-  maxHeight: {
-    type: String,
-    default: "700px",
-  },
-  show: {
-    type: Object,
-    default: () => ({
-      professorName: false,
-      remStd: false,
-      enroll: false,
-      cancel: false,
-      deptName: true,
-      setting: false,
-      modify: false,
-    }),
-  },
+const courseList = ref([]);
+
+const userStore = useUserStore();
+const semesterId = ref(userStore.semester); // 필요하면 수정
+
+async function fetchPermanentGrades(semesterId) {
+  try {
+    const res = await axios.get("/student/grade/permanent", {
+      params: { semesterId },
+    });
+
+    courseList.value = res.data.map((item) => ({
+      courseId: item.courseId,
+      courseCode: item.courseCode,
+      deptName: item.deptName,
+      title: item.courseTitle,
+      classroom: item.classroom,
+      type: item.category,
+      grade: item.grade,
+      time: item.time,
+      credit: item.credit,
+      rank: item.rank,
+      point: item.point,
+      professorName: item.professorName,
+    }));
+  } catch (error) {
+    console.error("영구 성적 조회 실패", error);
+  }
+}
+
+onMounted(() => {
+  fetchPermanentGrades(semesterId.value);
 });
-defineEmits(["enroll", "cancel", "check"]);
 
-const change = (status) => {
-  if (status === "거부") return "gray";
-  if (status === "승인") return "blue";
-  return "red";
-};
-
-const openModal = inject("openModal");
-const openLink = (id) => {
-  console.log(id);
-  openModal(id);
-};
-
-const router = useRouter();
-const send = (id, json) => {
-  console.log("먀오:", json);
-  const jsonBody = JSON.stringify(json);
-  router.push({
-    path: `/professor/course/${id}/students`,
-    state: { data: jsonBody },
-  });
-};
+// semesterId가 변경될 때 재조회가 필요하면 watch 사용
+watch(semesterId, (newVal) => {
+  if (newVal) {
+    fetchPermanentGrades(newVal);
+  }
+});
 </script>
 
 <template>
@@ -52,111 +51,30 @@ const send = (id, json) => {
       <table>
         <thead>
           <tr>
-            <th class="code">과목코드</th>
-            <th class="deptName">학과</th>
-            <th class="title">교과목명</th>
-            <th class="classroom">강의실</th>
-            <th class="type">이수구분</th>
-            <th class="professor" v-if="show.professorName">담당교수</th>
-            <th class="grade">수강대상</th>
-            <th class="time">강의시간</th>
-            <th class="credit">학점</th>
-            <th class="maxStd">정원</th>
-            <th class="remStd" v-if="show.remStd">잔여</th>
-            <th v-if="show.enroll || show.cancel" class="enroll-action">
-              수강
-            </th>
-            <th v-if="show.modify" class="status">승인여부</th>
-            <th
-              v-if="show.setting || show.modify || show.check"
-              class="button"
-            ></th>
+            <th>연도</th>
+            <th>학기</th>
+            <th>이수구분</th>
+            <th>학년</th>
+            <th>담당교수</th>
+            <th>과목코드</th>
+            <th>교과목명</th>
+            <th>학점</th>
+            <th>등급</th>
+            <th>평점</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="course in courseList" :key="course.id">
-            <td class="code">{{ course.courseCode }}</td>
-            <td class="deptName">
-              <div v-if="course.type === '교양'">교양학부</div>
-              <div v-else>{{ course.deptName }}</div>
-            </td>
-            <td class="title">
-              <div @click="openLink(course.courseId)" class="link">
-                {{ course.title }}
-              </div>
-            </td>
-            <td class="classroom">{{ course.classroom }}</td>
-            <td class="type">{{ course.type }}</td>
-            <td class="professor" v-if="show.professorName">
-              {{ course.professorName }}
-            </td>
-            <template v-if="course.grade === 0">
-              <td>수강희망자</td>
-            </template>
-            <template v-else>
-              <td class="grade">
-                {{ course.deptName + " " + course.grade }}학년
-              </td>
-            </template>
-            <td class="time">{{ course.time }}</td>
-            <td class="credit">{{ course.credit }}</td>
-            <td class="maxStd">
-              <span class="remaining-count">{{ course.maxStd }}</span>
-            </td>
-            <td
-              v-if="show.modify"
-              class="status"
-              :class="change(course.status)"
-            >
-              {{ course.status }}
-            </td>
-            <td class="remStd" v-if="show.remStd">
-              <span class="remaining-count">{{ course.remStd }}</span>
-            </td>
-            <td v-if="show.enroll" class="enroll-action">
-              <button
-                class="enroll-btn"
-                :class="{ enrolled: course.enrolled }"
-                :disabled="course.enrolled"
-                @click="$emit('enroll', course)"
-              >
-                {{ course.enrolled ? "신청완료" : "수강신청" }}
-              </button>
-            </td>
-            <td v-else-if="show.cancel" class="enroll-action">
-              <button
-                class="cancel-btn"
-                @click="$emit('cancel', course.courseId)"
-              >
-                수강취소
-              </button>
-            </td>
-            <td v-else-if="show.setting" class="button">
-              <button class="enroll-btn" @click="send(course.courseId, course)">
-                관리
-              </button>
-            </td>
-            <td v-else-if="show.check" class="button">
-              <!-- 학생관리 라우팅 처리해야함 -->
-              <button
-                class="enroll-btn"
-                @click="$emit('check', course.courseId, course.title)"
-              >
-                강의평 보기
-              </button>
-            </td>
-            <td
-              v-else-if="show.modify"
-              class="button"
-              v-if="course.status !== '승인'"
-            >
-              <router-link
-                :to="{ name: 'ModifyCourse', params: { id: course.courseId } }"
-                class="setting"
-              >
-                <button class="enroll-btn d-flex">수정</button>
-              </router-link>
-            </td>
+          <tr v-for="course in courseList" :key="course.courseId">
+            <td>{{ course.year }}</td>
+            <td>{{ course.semester }}</td>
+            <td>{{ course.type }}</td>
+            <td>{{ course.grade }}학년</td>
+            <td>{{ course.professorName }}</td>
+            <td>{{ course.courseCode }}</td>
+            <td>{{ course.title }}</td>
+            <td>{{ course.credit }}</td>
+            <td>{{ course.rank }}</td>
+            <td>{{ course.point?.toFixed(2) ?? "-" }}</td>
           </tr>
         </tbody>
       </table>

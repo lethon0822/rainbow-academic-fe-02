@@ -32,7 +32,8 @@ const router = createRouter({
         },
         {
           path: "/professor/course/:id/students",
-          component: () => import("@/views/course/ProfessorCourseManagement.vue"),
+          component: () =>
+            import("@/views/course/ProfessorCourseManagement.vue"),
         },
         {
           path: "/enrollmentgrade",
@@ -101,7 +102,7 @@ const router = createRouter({
         },
         {
           path: "/staff/approval",
-          component: () => import("@/views/staff/ManageApproval.vue")
+          component: () => import("@/views/staff/ManageApproval.vue"),
         },
 
         //profile
