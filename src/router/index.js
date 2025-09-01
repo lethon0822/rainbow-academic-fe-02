@@ -130,10 +130,6 @@ const router = createRouter({
           component: () => import("@/views/profile/StudentRecord.vue"),
         },
         {
-          path: '/profile/test',
-          component: () => import('@/views/profile/StudentRecord.vue'),
-        },
-        {
           path: "/grade/current",
           component: () =>
             import("@/views/profile/StudentTranscriptHistory.vue"),
