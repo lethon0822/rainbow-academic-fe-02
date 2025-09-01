@@ -96,8 +96,8 @@ const onSearch = () => {
   border: 0.2px solid #74747480;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
-  margin-left: 75px;
-  margin-right: 73px;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .filter-group {
