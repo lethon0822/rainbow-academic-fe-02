@@ -2,21 +2,27 @@
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
 import Notices from "@/components/common/Notices.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 </script>
 
 <template>
   <div>
     <Header />
   </div>
+
   <div class="d-flex main">
     <div class="sidebar">
       <div class="dummy"></div>
       <SideBar />
     </div>
+
     <div class="content d-flex">
       <div class="router">
         <router-view />
         <WaveLoader />
+        <Notices v-if="route.path === '/'" />
       </div>
     </div>
   </div>
