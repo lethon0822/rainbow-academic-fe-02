@@ -20,6 +20,7 @@ const props = defineProps({
       deptName: true,
       setting: false,
       modify: false,
+      approve:false,
     }),
   },
 });
@@ -142,7 +143,7 @@ const patchCourseStatus = async (courseId, status, userId = 0) => {
                 <button class="enroll-btn d-flex">수정</button>
               </router-link>
             </td>
-            <td v-if="props.show.modify" class="button">
+            <td v-if="props.show.approve" class="button">
               <button class="enroll-btn" @click="patchCourseStatus(course.courseId, '승인')">승인</button>
               <button class="cancel-btn" @click="patchCourseStatus(course.courseId, '거부')">거부</button>
             </td>

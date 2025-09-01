@@ -1,6 +1,6 @@
 <script setup>
 import whiteBox from '@/components/common/WhiteBox.vue';
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, watch } from 'vue';
 import { deptGet, deptPost } from '@/services/deptManageService';
 import DeptUpdateModal from '@/components/management/DeptUpdateModal.vue';
 
@@ -13,17 +13,25 @@ const state = reactive({
     deptMaxStd:0,
     deptCode: "",
   },
+  errors: {
+    deptName: null,
+    headProfId: null,
+    deptOffice: null,
+    deptTel: null,
+    deptMaxStd: null,
+    deptCode: null
+  },
   deptList:[],
   search:{
     keyword:"",
-    status: null,
+    status: "",
   },
   showModal:false,
   selectItem: null
 })
 
-const deptList = async(params) =>{
 
+const deptList = async(params) =>{
   const res = await deptGet(params);
   console.log("알이에수",res);
 
@@ -32,7 +40,6 @@ const deptList = async(params) =>{
 };
 
 const searchDept = async() =>{
- 
   deptList(state.search);
 }
 
@@ -41,14 +48,66 @@ onMounted(async()=>{
 
 });
 
+const regex = data => {
+  switch(data) {
+    case 'deptCode':
+      const codePattern = /^[A-Z]{4}$/;
+      state.errors.deptCode = codePattern.test(state.form.deptCode) ? null : '학과코드는 영어 대문자 4자로 구성되어야 합니다.';
+      break;
+    case 'deptTel':
+      const telPattern = /^\d{2,3}-\d{3,4}-\d{4}$/;
+      state.errors.deptTel = state.form.deptTel && !telPattern.test(state.form.deptTel) ? '전화번호 형식이 올바르지 않습니다 (예: 02-123-4567).' : null;
+      break;
+    case 'deptMaxStd':
+      const capacity = Number(state.form.deptMaxStd);
+      state.errors.deptMaxStd = (isNaN(capacity) || capacity < 300 || capacity >= 500) ? '학과 정원은 300명 이상 500명 미만이어야 합니다.' : null;
+      break;
+    case 'deptName':
+      state.errors.deptName = state.form.deptName ? null : '학과명은 필수 항목입니다.';
+      break;
+    case 'deptOffice':
+      state.errors.deptOffice = state.form.deptOffice ? null : '학과 사무실은 필수 항목입니다.';
+      break;
+  }
+};
+
+
+Object.keys(state.form).forEach((field) => {
+  watch(
+    () => state.form[field],
+    () => regex(field)
+  );
+});
+
 const newDept = async() =>{
-  if(!confirm('학과를 개설 하시겠습니까?')){return;}
-  if(state.form.headProfId === 0){
+  // 제출 전 전체 필드 검증
+  Object.keys(state.form).forEach(field => regex(field));
+
+ // 2. 에러가 있으면 제출 중단
+ if (Object.values(state.errors).some(e => e)) {
+    alert('입력값을 확인해주세요.');
+    return;
+  }
+
+  // 3. 사용자 확인
+  if (!confirm('학과를 개설 하시겠습니까?')) return;
+
+  // 4. 학과장 ID가 0이면 null 처리
+  if (state.form.headProfId === 0) {
     state.form.headProfId = null;
   }
-  const res = await deptPost(state.form);
-  console.log(res)
-}
+
+  try {
+    const res = await deptPost(state.form);
+    console.log(res);
+    // 필요 시 리스트 갱신
+    deptList();
+    alert('학과가 성공적으로 개설되었습니다.');
+  } catch (err) {
+    console.error('학과 개설 중 에러:', err);
+    alert('학과 개설 중 오류가 발생했습니다.');
+  }
+};
 
 const modal = (item) =>{
   state.selectItem = item
@@ -67,43 +126,56 @@ const closeModal = () =>{
   </template>
   <whiteBox :title="'학과관리'" class="white1" >
     <div class="dept-form-container">
-      <form>
-        <!-- 입력 필드들을 감싸는 grid -->
+      <form  @submit.prevent="newDept">
         <div class="dept-form-grid">
           <div class="tab">
             <label for="deptCode" class="form-label"><b>학과코드</b></label>
-            <input type="text" class="form-control" id="deptCode" maxlength="4" v-model="state.form.deptCode" required />
+            <input type="text" id="deptCode" maxlength="4" class="form-control" v-model="state.form.deptCode" />
+            <span class="error" v-if="state.errors.deptCode">{{ state.errors.deptCode }}</span>
           </div>
 
           <div class="tab">
             <label for="deptName" class="form-label"><b>학과명</b></label>
-            <input type="text" class="form-control" id="deptName" v-model="state.form.deptName" required/>
+            <input type="text" id="deptName" class="form-control" v-model="state.form.deptName" />
+            <span class="error" v-if="state.errors.deptName">{{ state.errors.deptName }}</span>
           </div>
 
           <div class="tab">
-            <label for="deptCourse" class="form-label"><b>학과장명</b></label>
-            <input type="text" class="form-control" id="deptCourse" v-model="state.form.headProfId" />
+            <label for="headProfId" class="form-label"><b>학과장명</b></label>
+            <input type="text" id="headProfId" class="form-control" v-model="state.form.headProfId" />
           </div>
 
           <div class="tab">
             <label for="deptOffice" class="form-label"><b>학과 사무실</b></label>
-            <input type="text" class="form-control" id="deptOffice" v-model="state.form.deptOffice" required/>
+            <input type="text" id="deptOffice" class="form-control" v-model="state.form.deptOffice" />
+            <span class="error" v-if="state.errors.deptOffice">{{ state.errors.deptOffice }}</span>
           </div>
 
           <div class="tab">
-            <label for="deptPhone" class="form-label"><b>학과 전화번호</b></label>
-            <input type="text" class="form-control" id="deptPhone" v-model="state.form.deptTel" required/>
+            <label for="deptTel" class="form-label"><b>학과 전화번호</b></label>
+            <input
+            type="text"
+            class="form-control"
+            v-model="state.form.deptTel"
+            @input="state.form.deptTel = state.form.deptTel
+              .replace(/\D/g, '') // 숫자만 남기기
+              .replace(/^(\d{0,2})(\d{0,3})(\d{0,4}).*/, (_, p1, p2, p3) => {
+                return [p1, p2, p3].filter(Boolean).join('-');
+              })"
+          />
+            <span class="error" v-if="state.errors.deptTel">{{ state.errors.deptTel }}</span>
           </div>
 
           <div class="tab">
-            <label for="deptCapacity" class="form-label"><b>학과 정원</b></label>
-            <input type="text" class="form-control" id="deptCapacity" v-model="state.form.deptMaxStd" required/>
+            <label for="deptMaxStd" class="form-label"><b>학과 정원</b></label>
+            <input type="text" id="deptMaxStd" class="form-control" v-model="state.form.deptMaxStd" />
+            <span class="error" v-if="state.errors.deptMaxStd">{{ state.errors.deptMaxStd }}</span>
           </div>
         </div>
 
         <!-- 버튼은 grid 바깥 -->
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary" @click="newDept">학과개설</button>
+          <button type="submit" class="btn btn-primary">학과개설</button>
         </div>
       </form>
     </div>
@@ -122,7 +194,7 @@ const closeModal = () =>{
           <i class="bi bi-funnel"></i>
         </div>
         <select name="filter" class="filter" v-model="state.search.status">
-          <option value="null">상태/전체</option>
+          <option value="">상태/전체</option>
           <option value="1">운영중</option>
           <option value="0">폐지</option>
         </select>
@@ -211,6 +283,12 @@ input{
   border-radius:10px ;
   background-color: #F8F9FA;
   border: 2px solid #E5E7EB;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-left: 4px;
 }
 
 .form-actions {
