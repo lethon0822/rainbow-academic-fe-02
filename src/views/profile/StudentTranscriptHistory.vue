@@ -183,8 +183,8 @@ const handleAttendanceManagement = (courseId) => {
 }
 
 .header-card h1 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 600px;
   color: #333;
   margin-bottom: 8px;
 }

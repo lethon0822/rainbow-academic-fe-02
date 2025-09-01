@@ -641,7 +641,7 @@ body {
 }
 .page-title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 600px;
   margin: 8px 0 -100px;
 }
 
