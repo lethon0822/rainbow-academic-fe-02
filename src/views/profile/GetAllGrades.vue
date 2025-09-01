@@ -1,62 +1,65 @@
 <script setup>
-import WhiteBox from '@/components/common/WhiteBox.vue';
-import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
-import GradeTable from '@/components/profile/GradeTable.vue';
-import { getDepartments, getYears } from '@/services/CourseService';
-import { ref, onMounted } from 'vue';
-import { getCourseListByFilter } from '@/services/CourseService';
+import { ref, onMounted } from "vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import AcademicFilterBar from "@/components/common/AcademicFilterBar.vue";
+import GradeTable from "@/components/profile/GradeTable.vue";
+
+// 영구 성적 조회는 GradeService에서
+import { GradesbyCourse } from "@/services/GradeService";
+// 학과, 연도 조회는 CourseService에서
+import { getDepartments, getYears } from "@/services/CourseService";
 
 const departments = ref([]);
 const years = ref([]);
 const courseList = ref([]);
 
 onMounted(async () => {
-  const departmentRes = await getDepartments();
-  console.log(departmentRes.data);
-  departments.value = departmentRes.data;
+  try {
+    const departmentRes = await getDepartments();
+    departments.value = departmentRes.data;
 
-  const yearRes = await getYears();
-  console.log(yearRes.data);
-  years.value = yearRes.data;
+    const yearRes = await getYears();
+    years.value = yearRes.data;
+  } catch (e) {
+    console.error("초기 데이터 로드 실패", e);
+  }
 });
 
 const handleSearch = async (filters) => {
-  console.log('필터: ', filters);
-  const courseListRes = await getCourseListByFilter(filters);
-  console.log('영구성적조회: ', courseListRes.data);
-  courseList.value = courseListRes.data.filter(
-    (course) => course.status === '승인'
-  );
+  console.log("검색 필터:", filters);
+  try {
+    const res = await GradesbyCourse({
+      year: filters.year,
+      semester: filters.grade,
+      semesterId: filters.semesterId || 0,
+    });
+    courseList.value = res.data.filter((course) => course.status === "승인");
+  } catch (error) {
+    console.error("강의 목록 조회 실패", error);
+  }
 };
 </script>
 
 <template>
-  <!-- 페이지 -->
   <div class="page">
     <h1 class="page-title">영구 성적조회</h1>
   </div>
 
-  <SearchFilterBar
+  <AcademicFilterBar
     :state="true"
     :departments="departments"
     :years="years"
     @search="handleSearch"
-  ></SearchFilterBar>
+  />
 
   <GradeTable
     :courseList="courseList"
     maxHeight="800px"
-    :show="{
-      professorName: true,
-      semester: true,
-    }"
-    @enroll="handleEnroll"
-    @cancel="handleCancel"
-  ></GradeTable>
+    :show="{ professorName: true, semester: true }"
+  />
 </template>
 
 <style scoped>
-/* 페이지 */
 .page {
   padding: 16px 24px 48px;
 }
@@ -64,11 +67,5 @@ const handleSearch = async (filters) => {
   font-size: 22px;
   font-weight: 700;
   margin: 8px 0 -100px;
-}
-
-.profile-wrapper {
-  display: flex;
-  gap: 180px;
-  align-items: flex-start;
 }
 </style>
