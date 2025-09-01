@@ -5,12 +5,14 @@ import ScheduleList from '@/components/schedule/ScheduleList.vue';
 import ScheduleModal from '@/components/schedule/ScheduleModal.vue';
 import { ymd } from '@/services/date';
 import { TYPE_ORDER, TYPE_META } from '@/constants/scheduleTypes';
+import { useUserStore } from '@/stores/account'
 
+const userStore = useUserStore();
 const selectedDate = ref(new Date());
 const selectedYmd = ref(ymd(selectedDate.value));
 const modalOpen = ref(false);
 const editItem = ref(null);
-const DEFAULT_SEMESTER_ID = 12;
+const DEFAULT_SEMESTER_ID = userStore.semesterId;
 
 // 타입 필터
 const selectedTypes = ref([...TYPE_ORDER]);

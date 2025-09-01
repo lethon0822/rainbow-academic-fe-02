@@ -7,7 +7,6 @@ import { useLoadingStore } from "@/stores/loading";
 import { check } from "@/services/accountService";
 import { useRoute, useRouter } from "vue-router";
 import WaveLoader from "@/components/common/WaveLoader.vue";
-import Notices from "@/components/common/Notices.vue";
 
 const show = reactive({
   modal: false,
@@ -112,9 +111,7 @@ watch(
       v-if="loading.isLoading || isInitializing.value"
       class="loading-overlay"
     >
-      <div class="loading-content">
-        <WaveLoader />
-      </div>
+      <div class="loading-content"></div>
     </div>
     <div v-show="!isInitializing.value && !loading.isLoading">
       <Notices />
@@ -128,7 +125,6 @@ watch(
           </div>
         </div>
       </template>
-
       <router-view />
     </div>
   </div>
