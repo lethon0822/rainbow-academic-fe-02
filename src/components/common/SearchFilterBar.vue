@@ -25,8 +25,8 @@ const filters = reactive({
 filters.year = year;
 
 const onSearch = () => {
-  if (filters.year < year - 5) {
-    filters.year = year - 5;
+  if (filters.year < year - 4) {
+    filters.year = year - 4;
   }
   emit("search", { ...filters });
 };
@@ -145,7 +145,10 @@ watch(
 
     <div v-if="props.state" class="filter-group">
       <label>학년</label>
-      <select v-model="filters.grade" class="select-input">
+      <select 
+          v-model="filters.grade" 
+          :disabled="filters.type === '교양'"
+          class="select-input">
         <option value="">전체</option>
         <option value="1">1학년</option>
         <option value="2">2학년</option>

@@ -1,98 +1,51 @@
 <script setup>
 import { reactive, onMounted } from "vue";
-import { courseStudentList } from "@/services/professorService";
+import { courseStudentList, findMyCourse } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
 import { useRoute, useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
-/*
+
+
 const state = reactive({
   data: [],
-  course: {
-    classroom: "",
-    courseId: null,
-    credit: null,
-    deptName: "",
-    grade: "",
-    maxStd: "",
-    time: "",
-    title: "",
-    type: "",
-  },
+  result:[],
+  semester_id: userStore.semesterId
 });
-*/
+
 
 onMounted(async () => {
-  const passJson = history.state.data;
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.course = nana;
+  const res = await findMyCourse(state.semester_id);
+  state.data = res.data
 
-    const id = state.course.courseId;
-    console.log("아이디", id);
-    const res = await courseStudentList(id);
-    console.log("냐냐", res);
-
-    if (res.data.length > 0) {
-      state.data = res.data;
-      console.log("스테이트", state.data);
-      return;
-    }
-  }
+  state.result = state.data.filter((item, index)=>{
+    return item.status === '승인';
+  })
 });
 
-const attendance = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
+
+const attendance = (id) => {
+  // console.log("넘겨줄 데이터", state.data);
+  // const jsonBody = JSON.stringify(state.data);
 
   router.push({
     path: "/professor/attendance",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
+    query: { id: id } 
   });
 };
 
-const enrollmentGrade = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
+const enrollmentGrade = (id) => {
+  // console.log("넘겨줄 데이터", state.data);
+  // const jsonBody = JSON.stringify(state.data);
 
   router.push({
     path: "/enrollmentgrade",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
+    query: { id: id } 
   });
 };
 
-const state = reactive({
-  courses: [
-    {
-      id: 1,
-      title: "컴퓨터 네트워크",
-      professor: "홍길동",
-      time: "월 9:00-12:00, 수요일 9:00-12:00",
-      credits: "3학점 3시간",
-      semester: "2024년 2학기",
-      classroom: "공학관 101호",
-      students: 25,
-    },
-    {
-      id: 2,
-      title: "데이터구조 및 알고리즘",
-      professor: "김철수",
-      time: "화 13:00-16:00, 목요일 13:00-16:00",
-      credits: "3학점 3시간",
-      semester: "2024년 2학기",
-      classroom: "공학관 102호",
-      students: 30,
-    },
-  ],
-});
 
 const handleStudentManagement = (courseId) => {
   console.log(`학생 관리: ${courseId}`);
@@ -112,24 +65,21 @@ const handleAttendanceManagement = (courseId) => {
 
     <div class="search-bar">
       <div class="search-input">
-        <input type="text" placeholder="강의명을 검색하세요" />
-        <button class="search-btn">🔍</button>
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" placeholder="강의 이름 검색" />
       </div>
     </div>
 
     <div class="course-list">
-      <div v-for="course in state.courses" :key="course.id" class="course-card">
+      <div v-for="course in state.result" :key="course.courseId" class="course-card">
         <div class="course-header">
-          <span class="course-number">{{
-            String(course.id).padStart(2, "0")
-          }}</span>
           <h3 class="course-title">{{ course.title }}</h3>
         </div>
 
         <div class="course-info">
           <div class="info-row">
             <span class="label">담당교수:</span>
-            <span class="value">{{ course.professor }}</span>
+            <span class="value">{{ userStore.userName }}</span>
           </div>
           <div class="info-row">
             <span class="label">강의시간:</span>
@@ -137,7 +87,7 @@ const handleAttendanceManagement = (courseId) => {
           </div>
           <div class="info-row">
             <span class="label">학점:</span>
-            <span class="value">{{ course.credits }}</span>
+            <span class="value">{{ course.credit }}</span>
           </div>
           <div class="info-row">
             <span class="label">학기:</span>
@@ -149,17 +99,17 @@ const handleAttendanceManagement = (courseId) => {
           </div>
           <div class="info-row">
             <span class="label">수강인원:</span>
-            <span class="value student-number">{{ course.students }}명</span>
+            <span class="value student-number">{{ course.courseStudent }}명</span>
           </div>
         </div>
 
         <!-- 버튼 -->
         <div class="course-actions">
-          <button class="btn btn-success me-2" @click="attendance">
+          <button class="btn btn-success me-2" @click="attendance(course.courseId)">
             <i class="bi bi-people-fill me-1"></i> 출석부 작성
           </button>
 
-          <button class="btn btn-primary" @click="enrollmentGrade">
+          <button class="btn btn-primary" @click="enrollmentGrade(course.courseId)">
             <i class="bi bi-pen me-1"></i> 성적입력 및 정정
           </button>
         </div>
@@ -195,21 +145,37 @@ const handleAttendanceManagement = (courseId) => {
 }
 
 .search-bar {
-  margin-bottom: 30px;
+  margin: 20px 0;
 }
-
 .search-input {
   position: relative;
   max-width: 400px;
+  background: #F8F9FA;
+  border-radius: 12px;
+  box-shadow: none;
+  border: 1px solid #E9ECEF;
 }
-
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 16px;
+  z-index: 1;
+}
 .search-input input {
   width: 100%;
-  padding: 12px 45px 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 16px 16px 16px 48px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
   outline: none;
+  background: transparent;
+  box-sizing: border-box;
+}
+.search-input input::placeholder {
+  color: #999;
 }
 
 .search-input input:focus {
@@ -217,17 +183,6 @@ const handleAttendanceManagement = (courseId) => {
   box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
 }
 
-.search-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #666;
-}
 
 .course-list {
   display: flex;
