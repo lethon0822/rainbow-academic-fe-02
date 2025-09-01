@@ -20,6 +20,7 @@ export const useUserStore = defineStore("user", {
     loginId: "",
     userRole: "",
     semesterId: 0,
+    deptName: "",
   }),
   persist: true, // 옵션: 새로고침 후에도 유지하고 싶으면
 });
