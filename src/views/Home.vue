@@ -2,6 +2,9 @@
 import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
 import Notices from "@/components/common/Notices.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 </script>
 
 <template>
@@ -19,12 +22,9 @@ import Notices from "@/components/common/Notices.vue";
       <div class="router">
         <router-view />
         <WaveLoader />
+        <Notices v-if="route.path === '/'" />
       </div>
     </div>
-  </div>
-
-  <div id="notices-root">
-    <Notices />
   </div>
 </template>
 
