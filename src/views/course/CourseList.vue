@@ -11,6 +11,8 @@ const years = ref([]);
 const courseList = ref([]); // 전체 강의 목록
 
 onMounted(async () => {
+
+  // 학과, 연도 불러오기 
   const departmentRes = await getDepartments();
   console.log(departmentRes.data);
   departments.value = departmentRes.data;
@@ -18,6 +20,15 @@ onMounted(async () => {
   const yearRes = await getYears();
   console.log(yearRes.data);
   years.value = yearRes.data;
+
+  // 개설 강의 조회
+  const defaultFilters = {
+    year: new Date().getFullYear(),
+  };
+
+  const courseListRes = await getCourseListByFilter(defaultFilters);
+  courseList.value = courseListRes.data;
+
 });
 
 const handleSearch = async (filters) => {
@@ -52,8 +63,6 @@ console.log("courseListRes.data:", courseListRes.data);
       professorName: true,
       semester: true,
     }"
-    @enroll="handleEnroll"
-    @cancel="handleCancel"
   ></CourseTable>
 </template>
 
