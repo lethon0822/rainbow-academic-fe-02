@@ -1,6 +1,6 @@
 <script setup>
-import ApprovalFilterBar from '@/components/staff/ApprovalFilterBar.vue';
-import ApprovalTable from '@/components/staff/ApprovalTable.vue';
+import ApprovalFilterBar from "@/components/staff/ApprovalFilterBar.vue";
+import ApprovalTable from "@/components/staff/ApprovalTable.vue";
 </script>
 
 <template>
@@ -20,7 +20,7 @@ import ApprovalTable from '@/components/staff/ApprovalTable.vue';
 }
 .page-title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 600px;
   margin: 8px 0 -100px;
 }
 

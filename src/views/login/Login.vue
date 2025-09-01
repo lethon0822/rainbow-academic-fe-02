@@ -40,7 +40,13 @@ const submit = async () => {
         userRole: res.data.userRole ?? '',
         loginId: res.data.loginId ?? '',
         semesterId: res.data.semesterId ?? '',
+<<<<<<< HEAD
       });
+=======
+        deptName: res.data.deptName ?? '',
+      })
+      
+>>>>>>> c6e2fce4127ed599599774c61b0ae1332df3f906
 
       // (선택) 전역 로그인 플래그
       // const accountStore = useAccountStore()

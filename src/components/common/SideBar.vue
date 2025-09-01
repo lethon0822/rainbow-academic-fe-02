@@ -166,7 +166,7 @@ watch(
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/profile/test" class="router-link">
+            <router-link to="/profile" class="router-link">
               학적기본사항관리
             </router-link>
           </li>
@@ -175,8 +175,13 @@ watch(
               개인정보변경
             </router-link>
           </li>
-          <li>
-            <router-link to="#" class="router-link"> 휴·복학신청 </router-link>
+
+         
+          <li v-if="userStore.userRole == 'student'">
+            <router-link to="/application" class="router-link"> 휴·복학신청 </router-link>
+          </li>
+          <li v-if="userStore.userRole == 'professor'">
+            <router-link to="/application" class="router-link"> 휴·복직신청 </router-link>
           </li>
         </ul>
       </li>
