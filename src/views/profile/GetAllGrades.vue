@@ -11,11 +11,9 @@ const departments = ref([]);
 const years = ref([]);
 const courseList = ref([]);
 
-// 검색 필터 상태 (필요하다면 AcademicFilterBar에 바인딩)
 const filters = ref({
-  year: null,
-  semester: null,
-  grade: null,
+  semester: "",
+  grade: "",
   semesterId: 0,
 });
 
@@ -27,7 +25,7 @@ onMounted(async () => {
     const yearRes = await getYears();
     years.value = yearRes.data;
 
-    // 초기 데이터 로드 시 기본 필터 값으로 조회
+    // 초기 데이터 조회 (초기 필터값 넣기)
     await handleSearch(filters.value);
   } catch (e) {
     console.error("초기 데이터 로드 실패", e);
@@ -35,20 +33,34 @@ onMounted(async () => {
 });
 
 const handleSearch = async (searchFilters) => {
-  filters.value = searchFilters; // 필터 상태 업데이트
-  console.log("검색 필터:", searchFilters);
+  // searchFilters의 값을 보정해서 null 처리해주기
+  filters.value.semester = searchFilters.semester || null;
+  filters.value.grade = searchFilters.grade || null;
+  filters.value.semesterId = searchFilters.semesterId;
+
+  console.log("검색 필터:", filters.value);
+
   try {
     const res = await GradesbyCourse({
-      semester: searchFilters.semester,
-      grade: searchFilters.grade,
-      semesterId: searchFilters.semesterId,
+      semester: filters.value.semester,
+      grade: filters.value.grade,
+      semesterId: filters.value.semesterId,
     });
     console.log("API 응답:", res.data);
-    courseList.value = res.data; // status 필터 제거
+    courseList.value = res.data;
   } catch (error) {
     console.error("강의 목록 조회 실패", error);
   }
 };
+
+console.log(
+  "요청 값:",
+  JSON.stringify({
+    semester: filters.value.semester,
+    grade: filters.value.grade,
+    semesterId: filters.value.semesterId,
+  })
+);
 </script>
 
 <template>
@@ -56,7 +68,6 @@ const handleSearch = async (searchFilters) => {
     <h1 class="page-title">영구 성적조회</h1>
 
     <AcademicFilterBar
-      :state="true"
       :departments="departments"
       :years="years"
       @search="handleSearch"

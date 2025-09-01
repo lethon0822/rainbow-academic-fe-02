@@ -47,7 +47,6 @@ const imagePreview = ref(null);
 const fileInput = ref(null);
 const currentProfileImage = ref(null); // 세션 저장용 프로필 이미지
 
-
 // 8 그래프 데이터 8
 const chartRef = ref(null);
 let chartInstance = null;
