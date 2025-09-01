@@ -6,7 +6,7 @@ import GradeTable from "@/components/profile/GradeTable.vue";
 
 // 영구 성적 조회는 GradeService에서
 import { GradesbyCourse } from "@/services/GradeService";
-// 학과, 연도 조회는 CourseService에서
+// 학기 조회는 CourseService에서
 import { getDepartments, getYears } from "@/services/CourseService";
 
 const departments = ref([]);
@@ -30,8 +30,9 @@ const handleSearch = async (filters) => {
   try {
     const res = await GradesbyCourse({
       year: filters.year,
-      semester: filters.grade,
-      semesterId: filters.semesterId || 0,
+      semester: filters.semester,
+      grade: filters.grade,
+      semesterId: filters.semesterId || 0, // 필요하다면
     });
     courseList.value = res.data.filter((course) => course.status === "승인");
   } catch (error) {
@@ -65,7 +66,7 @@ const handleSearch = async (filters) => {
 }
 .page-title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 600px;
   margin: 8px 0 -100px;
 }
 </style>

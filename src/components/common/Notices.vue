@@ -286,247 +286,244 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="notices">
-    <!-- 공지사항 내용 -->
-    <div class="notice-page">
-      <!-- 메인 컨텐츠 -->
-      <main class="main-content">
-        <div class="content-container">
-          <!-- 페이지 제목 -->
-          <div class="page-title-section">
-            <h1 class="page-title">공지사항</h1>
-            <p class="page-description">중요한 소식과 업데이트를 확인하세요</p>
-          </div>
-
-          <!-- 검색 및 필터 영역 -->
-          <div class="search-filter-section">
-            <div class="search-area">
-              <input
-                v-model="searchKeyword"
-                type="text"
-                placeholder="제목 또는 내용으로 검색..."
-                class="search-input"
-              />
-              <button class="search-btn">🔍</button>
-            </div>
-
-            <div class="filter-area">
-              <select v-model="filterType" class="filter-select">
-                <option value="all">전체</option>
-                <option value="important">중요 공지</option>
-                <option value="normal">일반 공지</option>
-              </select>
-              <button class="reset-btn" @click="resetFilters">초기화</button>
-              <button class="write-btn" @click="openWriteModal">글쓰기</button>
-            </div>
-          </div>
-
-          <!-- 공지사항 목록 -->
-          <div class="notice-board">
-            <div class="notice-table">
-              <div class="table-header">
-                <span class="col-num">번호</span>
-                <span class="col-title">제목</span>
-                <span class="col-author">작성자</span>
-                <span class="col-date">등록일</span>
-                <span class="col-views">조회</span>
-                <span class="col-actions">관리</span>
-              </div>
-
-              <div class="table-body">
-                <div
-                  v-for="(notice, index) in paginatedNotices"
-                  :key="notice.id"
-                  class="table-row"
-                  :class="{ important: notice.isImportant }"
-                >
-                  <span class="col-num">{{
-                    filteredNotices.length -
-                    ((currentPage - 1) * itemsPerPage + index)
-                  }}</span>
-                  <div class="col-title" @click="viewNotice(notice)">
-                    <span v-if="notice.isImportant" class="important-badge"
-                      >중요</span
-                    >
-                    <span class="notice-text">{{ notice.title }}</span>
-                  </div>
-                  <span class="col-author">{{ notice.author }}</span>
-                  <span class="col-date">{{ notice.date }}</span>
-                  <span class="col-views">{{ notice.views }}</span>
-                  <div class="col-actions">
-                    <button
-                      class="action-btn edit-btn"
-                      @click="openEditModal(notice)"
-                    >
-                      수정
-                    </button>
-                    <button
-                      class="action-btn delete-btn"
-                      @click="deleteNotice(notice.id)"
-                    >
-                      삭제
-                    </button>
-                  </div>
-                </div>
-
-                <!-- 빈 상태 -->
-                <div v-if="paginatedNotices.length === 0" class="empty-state">
-                  <p>
-                    {{
-                      searchKeyword
-                        ? "검색 결과가 없습니다."
-                        : "등록된 공지사항이 없습니다."
-                    }}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- 페이지네이션 -->
-            <div class="pagination-section" v-if="totalPages > 1">
-              <div class="pagination">
-                <button
-                  class="page-btn"
-                  @click="changePage(currentPage - 1)"
-                  :disabled="currentPage === 1"
-                >
-                  ‹
-                </button>
-
-                <button
-                  v-for="page in Math.min(totalPages, 5)"
-                  :key="page"
-                  class="page-btn"
-                  :class="{ active: currentPage === page }"
-                  @click="changePage(page)"
-                >
-                  {{ page }}
-                </button>
-
-                <button
-                  class="page-btn"
-                  @click="changePage(currentPage + 1)"
-                  :disabled="currentPage === totalPages"
-                >
-                  ›
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-
-    <!-- 글쓰기/수정 모달 -->
-    <div v-if="showModal" class="modal-overlay" @click="closeModal">
-      <div class="modal-content write-modal" @click.stop>
-        <div class="modal-header">
-          <h3>{{ editMode ? "공지사항 수정" : "새 공지사항 작성" }}</h3>
-          <button class="close-btn" @click="closeModal">×</button>
+  <div class="notice-page">
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+      <div class="content-container">
+        <!-- 페이지 제목 -->
+        <div class="page-title-section">
+          <h1 class="page-title">공지사항</h1>
+          <p class="page-description">중요한 소식과 업데이트를 확인하세요</p>
         </div>
 
-        <div class="modal-body">
-          <div class="form-row">
-            <div class="form-group">
-              <label>작성자</label>
-              <input
-                v-model="form.author"
-                type="text"
-                placeholder="작성자명을 입력하세요"
-                class="form-input"
-              />
-            </div>
-            <div class="form-group checkbox-group">
-              <label class="checkbox-label">
-                <input
-                  v-model="form.isImportant"
-                  type="checkbox"
-                  class="form-checkbox"
-                />
-                중요 공지사항
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>제목</label>
+        <!-- 검색 및 필터 영역 -->
+        <div class="search-filter-section">
+          <div class="search-area">
             <input
-              v-model="form.title"
+              v-model="searchKeyword"
               type="text"
-              placeholder="제목을 입력하세요"
+              placeholder="제목 또는 내용으로 검색..."
+              class="search-input"
+            />
+            <button class="search-btn">🔍</button>
+          </div>
+
+          <div class="filter-area">
+            <select v-model="filterType" class="filter-select">
+              <option value="all">전체</option>
+              <option value="important">중요 공지</option>
+              <option value="normal">일반 공지</option>
+            </select>
+            <button class="reset-btn" @click="resetFilters">초기화</button>
+            <button class="write-btn" @click="openWriteModal">글쓰기</button>
+          </div>
+        </div>
+
+        <!-- 공지사항 목록 -->
+        <div class="notice-board">
+          <div class="notice-table">
+            <div class="table-header">
+              <span class="col-num">번호</span>
+              <span class="col-title">제목</span>
+              <span class="col-author">작성자</span>
+              <span class="col-date">등록일</span>
+              <span class="col-views">조회</span>
+              <span class="col-actions">관리</span>
+            </div>
+
+            <div class="table-body">
+              <div
+                v-for="(notice, index) in paginatedNotices"
+                :key="notice.id"
+                class="table-row"
+                :class="{ important: notice.isImportant }"
+              >
+                <span class="col-num">{{
+                  filteredNotices.length -
+                  ((currentPage - 1) * itemsPerPage + index)
+                }}</span>
+                <div class="col-title" @click="viewNotice(notice)">
+                  <span v-if="notice.isImportant" class="important-badge"
+                    >중요</span
+                  >
+                  <span class="notice-text">{{ notice.title }}</span>
+                </div>
+                <span class="col-author">{{ notice.author }}</span>
+                <span class="col-date">{{ notice.date }}</span>
+                <span class="col-views">{{ notice.views }}</span>
+                <div class="col-actions">
+                  <button
+                    class="action-btn edit-btn"
+                    @click="openEditModal(notice)"
+                  >
+                    수정
+                  </button>
+                  <button
+                    class="action-btn delete-btn"
+                    @click="deleteNotice(notice.id)"
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
+
+              <!-- 빈 상태 -->
+              <div v-if="paginatedNotices.length === 0" class="empty-state">
+                <p>
+                  {{
+                    searchKeyword
+                      ? "검색 결과가 없습니다."
+                      : "등록된 공지사항이 없습니다."
+                  }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 페이지네이션 -->
+          <div class="pagination-section" v-if="totalPages > 1">
+            <div class="pagination">
+              <button
+                class="page-btn"
+                @click="changePage(currentPage - 1)"
+                :disabled="currentPage === 1"
+              >
+                ‹
+              </button>
+
+              <button
+                v-for="page in Math.min(totalPages, 5)"
+                :key="page"
+                class="page-btn"
+                :class="{ active: currentPage === page }"
+                @click="changePage(page)"
+              >
+                {{ page }}
+              </button>
+
+              <button
+                class="page-btn"
+                @click="changePage(currentPage + 1)"
+                :disabled="currentPage === totalPages"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 글쓰기/수정 모달 -->
+  <div v-if="showModal" class="modal-overlay" @click="closeModal">
+    <div class="modal-content write-modal" @click.stop>
+      <div class="modal-header">
+        <h3>{{ editMode ? "공지사항 수정" : "새 공지사항 작성" }}</h3>
+        <button class="close-btn" @click="closeModal">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>작성자</label>
+            <input
+              v-model="form.author"
+              type="text"
+              placeholder="작성자명을 입력하세요"
               class="form-input"
             />
           </div>
-
-          <div class="form-group">
-            <label>내용</label>
-            <textarea
-              v-model="form.content"
-              placeholder="내용을 입력하세요"
-              class="form-textarea"
-              rows="12"
-            ></textarea>
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input
+                v-model="form.isImportant"
+                type="checkbox"
+                class="form-checkbox"
+              />
+              중요 공지사항
+            </label>
           </div>
         </div>
 
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="closeModal">취소</button>
-          <button class="btn btn-primary" @click="saveNotice">
-            {{ editMode ? "수정 완료" : "작성 완료" }}
-          </button>
+        <div class="form-group">
+          <label>제목</label>
+          <input
+            v-model="form.title"
+            type="text"
+            placeholder="제목을 입력하세요"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>내용</label>
+          <textarea
+            v-model="form.content"
+            placeholder="내용을 입력하세요"
+            class="form-textarea"
+            rows="12"
+          ></textarea>
         </div>
       </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" @click="closeModal">취소</button>
+        <button class="btn btn-primary" @click="saveNotice">
+          {{ editMode ? "수정 완료" : "작성 완료" }}
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- 상세보기 모달 -->
-    <div v-if="showDetailModal" class="modal-overlay" @click="closeModal">
-      <div class="modal-content detail-modal" @click.stop>
-        <div class="modal-header">
-          <div class="detail-title-area">
-            <span v-if="selectedNotice?.isImportant" class="important-badge"
-              >중요</span
-            >
-            <h3>{{ selectedNotice?.title }}</h3>
-          </div>
-          <button class="close-btn" @click="closeModal">×</button>
+  <!-- 상세보기 모달 -->
+  <div v-if="showDetailModal" class="modal-overlay" @click="closeModal">
+    <div class="modal-content detail-modal" @click.stop>
+      <div class="modal-header">
+        <div class="detail-title-area">
+          <span v-if="selectedNotice?.isImportant" class="important-badge"
+            >중요</span
+          >
+          <h3>{{ selectedNotice?.title }}</h3>
         </div>
+        <button class="close-btn" @click="closeModal">×</button>
+      </div>
 
-        <div class="modal-body">
-          <div class="detail-meta">
-            <div class="meta-row">
-              <span class="meta-label">작성자:</span>
-              <span>{{ selectedNotice?.author }}</span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-label">작성일:</span>
-              <span>{{ selectedNotice?.date }}</span>
-            </div>
-            <div class="meta-row">
-              <span class="meta-label">조회수:</span>
-              <span>{{ selectedNotice?.views }}</span>
-            </div>
+      <div class="modal-body">
+        <div class="detail-meta">
+          <div class="meta-row">
+            <span class="meta-label">작성자:</span>
+            <span>{{ selectedNotice?.author }}</span>
           </div>
-          <div class="detail-content">
-            {{ selectedNotice?.content }}
+          <div class="meta-row">
+            <span class="meta-label">작성일:</span>
+            <span>{{ selectedNotice?.date }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">조회수:</span>
+            <span>{{ selectedNotice?.views }}</span>
           </div>
         </div>
+        <div class="detail-content">
+          {{ selectedNotice?.content }}
+        </div>
+      </div>
 
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="closeModal">닫기</button>
-          <div class="detail-actions">
-            <button
-              class="btn btn-primary"
-              @click="openEditModal(selectedNotice)"
-            >
-              수정
-            </button>
-            <button
-              class="btn btn-danger"
-              @click="deleteNotice(selectedNotice.id)"
-            >
-              삭제
-            </button>
-          </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" @click="closeModal">닫기</button>
+        <div class="detail-actions">
+          <button
+            class="btn btn-primary"
+            @click="openEditModal(selectedNotice)"
+          >
+            수정
+          </button>
+          <button
+            class="btn btn-danger"
+            @click="deleteNotice(selectedNotice.id)"
+          >
+            삭제
+          </button>
         </div>
       </div>
     </div>
@@ -534,14 +531,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.notices {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
 .notice-page {
   min-height: 100vh;
 }
@@ -784,7 +773,7 @@ onMounted(() => {
   border-radius: 4px;
   font-size: 11px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 300px;
   transition: background-color 0.2s ease;
 }
 

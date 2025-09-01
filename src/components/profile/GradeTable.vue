@@ -15,18 +15,16 @@ async function fetchPermanentGrades(semesterId) {
     });
 
     courseList.value = res.data.map((item) => ({
-      courseId: item.courseId,
       courseCode: item.courseCode,
-      deptName: item.deptName,
-      title: item.courseTitle,
-      classroom: item.classroom,
-      type: item.category,
+      title: item.title,
+      type: item.type,
       grade: item.grade,
-      time: item.time,
       credit: item.credit,
       rank: item.rank,
       point: item.point,
       professorName: item.professorName,
+      year: item.year,
+      semester: item.semester,
     }));
   } catch (error) {
     console.error("영구 성적 조회 실패", error);

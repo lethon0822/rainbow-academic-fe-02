@@ -166,7 +166,7 @@ watch(
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/profile" class="router-link">
+            <router-link to="/profile/test" class="router-link">
               학적기본사항관리
             </router-link>
           </li>
