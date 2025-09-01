@@ -2,14 +2,16 @@
 import WhiteBox from '@/components/common/WhiteBox.vue';
 import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
 import CourseTable from '@/components/course/CourseTable.vue';
-import { getDepartments, getYears } from '@/services/CourseService';
-import {
-  getCourseListByFilter,
-  getMySugangList,
-} from '@/services/CourseService';
-import { postEnrollCourse, deleteSugangCancel } from '@/services/SugangService';
+import { getDepartments, getYears, getCourseListByFilter } from '@/services/CourseService';
+import { postEnrollCourse, deleteSugangCancel, getMySugangList } from '@/services/SugangService';
 
 import { ref, onMounted, computed } from 'vue';
+// 학기 아이디 피니아에서 가져옴.
+import { useUserStore } from '@/stores/account';
+
+const userStore = useUserStore();
+const semesterId = userStore.semesterId;
+console.log("현재 학기아이디: ", semesterId);
 
 const departments = ref([]);
 const years = ref([]);
@@ -33,10 +35,26 @@ onMounted(async () => {
   const yearRes = await getYears();
   years.value = yearRes.data;
 
-  // 수강 신청한 강의 목록 불러오기
-  const mySugangListRes = await getMySugangList();
-  console.log('나의 수강 내역 백엔드 응답:', mySugangListRes.data);
+  // 1. 내 수강신청 내역 가져오기
+  const mySugangListRes = await getMySugangList(semesterId);
   mySugangList.value = mySugangListRes.data;
+
+  // 2. 개설 강의 조회
+  const defaultFilters = {
+    year: new Date().getFullYear(),
+    semester: 2,
+  };
+  lastFilters.value = { ...defaultFilters };
+
+  const courseListRes = await getCourseListByFilter(defaultFilters);
+
+  // 3. 신청 내역 기준으로 enrolled 표시
+  courseList.value = courseListRes.data.map((course) => {
+    course.enrolled = mySugangList.value.some(
+      (c) => c.courseId === course.courseId
+    );
+    return course;
+  });
 });
 
 // 필터에 따른 개설 강의 목록 조회
@@ -46,14 +64,6 @@ const handleSearch = async (filters) => {
   const courseListRes = await getCourseListByFilter(filters);
   console.log('개설 강의 내역 백엔드 응답:', courseListRes.data);
   courseList.value = courseListRes.data;
-
-  // 이전에 수강 신청한 강의면 초기 조회시 신청 완료 버튼 띄우기 위함
-  courseList.value = courseListRes.data.map((course) => {
-    course.enrolled = mySugangList.value.some(
-      (c) => c.courseId === course.courseId
-    );
-    return course;
-  });
 };
 
 // 수강 신청 처리 함수
@@ -146,7 +156,7 @@ const handleCancel = async (courseId) => {
     :state="true"
     :departments="departments"
     :enrollment="true"
-    :semester="1"
+    :semester="2"
     @search="handleSearch"
   />
 
