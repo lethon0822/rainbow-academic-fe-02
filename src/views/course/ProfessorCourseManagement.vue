@@ -8,23 +8,20 @@ const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 
-
 const state = reactive({
   data: [],
-  result:[],
-  semester_id: userStore.semesterId
+  result: [],
+  semester_id: userStore.semesterId,
 });
-
 
 onMounted(async () => {
   const res = await findMyCourse(state.semester_id);
-  state.data = res.data
+  state.data = res.data;
 
-  state.result = state.data.filter((item, index)=>{
-    return item.status === '승인';
-  })
+  state.result = state.data.filter((item, index) => {
+    return item.status === "승인";
+  });
 });
-
 
 const attendance = (id) => {
   // console.log("넘겨줄 데이터", state.data);
@@ -32,7 +29,7 @@ const attendance = (id) => {
 
   router.push({
     path: "/professor/attendance",
-    query: { id: id } 
+    query: { id: id },
   });
 };
 
@@ -42,10 +39,9 @@ const enrollmentGrade = (id) => {
 
   router.push({
     path: "/enrollmentgrade",
-    query: { id: id } 
+    query: { id: id },
   });
 };
-
 
 const handleStudentManagement = (courseId) => {
   console.log(`학생 관리: ${courseId}`);
@@ -71,7 +67,11 @@ const handleAttendanceManagement = (courseId) => {
     </div>
 
     <div class="course-list">
-      <div v-for="course in state.result" :key="course.courseId" class="course-card">
+      <div
+        v-for="course in state.result"
+        :key="course.courseId"
+        class="course-card"
+      >
         <div class="course-header">
           <h3 class="course-title">{{ course.title }}</h3>
         </div>
@@ -99,17 +99,25 @@ const handleAttendanceManagement = (courseId) => {
           </div>
           <div class="info-row">
             <span class="label">수강인원:</span>
-            <span class="value student-number">{{ course.courseStudent }}명</span>
+            <span class="value student-number"
+              >{{ course.courseStudent }}명</span
+            >
           </div>
         </div>
 
         <!-- 버튼 -->
         <div class="course-actions">
-          <button class="btn btn-success me-2" @click="attendance(course.courseId)">
+          <button
+            class="btn btn-success me-2"
+            @click="attendance(course.courseId)"
+          >
             <i class="bi bi-people-fill me-1"></i> 출석부 작성
           </button>
 
-          <button class="btn btn-primary" @click="enrollmentGrade(course.courseId)">
+          <button
+            class="btn btn-primary"
+            @click="enrollmentGrade(course.courseId)"
+          >
             <i class="bi bi-pen me-1"></i> 성적입력 및 정정
           </button>
         </div>
@@ -133,8 +141,8 @@ const handleAttendanceManagement = (courseId) => {
 }
 
 .header h1 {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 600px;
   color: #333;
   margin-bottom: 8px;
 }
@@ -150,10 +158,10 @@ const handleAttendanceManagement = (courseId) => {
 .search-input {
   position: relative;
   max-width: 400px;
-  background: #F8F9FA;
+  background: #f8f9fa;
   border-radius: 12px;
   box-shadow: none;
-  border: 1px solid #E9ECEF;
+  border: 1px solid #e9ecef;
 }
 .search-icon {
   position: absolute;
@@ -182,7 +190,6 @@ const handleAttendanceManagement = (courseId) => {
   border-color: #4285f4;
   box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
 }
-
 
 .course-list {
   display: flex;

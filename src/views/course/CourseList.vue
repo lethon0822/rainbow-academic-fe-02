@@ -1,18 +1,17 @@
 <script setup>
-import WhiteBox from '@/components/common/WhiteBox.vue';
-import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
-import CourseTable from '@/components/course/CourseTable.vue';
-import { getDepartments, getYears } from '@/services/CourseService';
-import { ref, onMounted } from 'vue';
-import { getCourseListByFilter } from '@/services/CourseService';
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
+import CourseTable from "@/components/course/CourseTable.vue";
+import { getDepartments, getYears } from "@/services/CourseService";
+import { ref, onMounted } from "vue";
+import { getCourseListByFilter } from "@/services/CourseService";
 
 const departments = ref([]);
 const years = ref([]);
 const courseList = ref([]); // 전체 강의 목록
 
 onMounted(async () => {
-
-  // 학과, 연도 불러오기 
+  // 학과, 연도 불러오기
   const departmentRes = await getDepartments();
   console.log(departmentRes.data);
   departments.value = departmentRes.data;
@@ -28,17 +27,16 @@ onMounted(async () => {
 
   const courseListRes = await getCourseListByFilter(defaultFilters);
   courseList.value = courseListRes.data;
-
 });
 
 const handleSearch = async (filters) => {
-  console.log('필터: ', filters);
+  console.log("필터: ", filters);
   const courseListRes = await getCourseListByFilter(filters);
-  console.log('강의조회: ', courseListRes.data);
+  console.log("강의조회: ", courseListRes.data);
   console.log("courseListRes:", courseListRes);
-console.log("courseListRes.data:", courseListRes.data);
+  console.log("courseListRes.data:", courseListRes.data);
   courseList.value = courseListRes.data.filter(
-    (course) => course.status === '승인'
+    (course) => course.status === "승인"
   );
 };
 </script>
@@ -73,7 +71,7 @@ console.log("courseListRes.data:", courseListRes.data);
 }
 .page-title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 600px;
   margin: 8px 0 -100px;
 }
 
