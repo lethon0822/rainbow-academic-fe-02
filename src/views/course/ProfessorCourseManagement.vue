@@ -1,11 +1,10 @@
 <script setup>
 import { reactive, onMounted } from "vue";
-import { courseStudentList, findMyCourse } from "@/services/professorService";
+import { findMyCourse } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const route = useRoute();
 const router = useRouter();
 
 const state = reactive({
