@@ -138,7 +138,7 @@ body,
 #app {
   height: 100%;
   margin: 0;
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
   overflow-x: hidden;
   color: #343a40;
   font-size: 12px;

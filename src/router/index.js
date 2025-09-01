@@ -32,7 +32,7 @@ const router = createRouter({
         },
         {
           path: "/professor/course/:id/students",
-          component: () => import("@/components/course/CourseStudentsList.vue"),
+          component: () => import("@/views/course/ProfessorCourseManagement.vue"),
         },
         {
           path: "/enrollmentgrade",
