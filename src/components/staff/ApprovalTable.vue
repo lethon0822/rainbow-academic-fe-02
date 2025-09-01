@@ -66,8 +66,8 @@ function openModal(approval) {
         </thead>
         <tbody>
           <tr v-for="approval in state.approvalList" :key="approval.id">
-            <td class="year">{{ approval.year }}</td>
-            <td class="semester">{{ approval.semester }}</td>
+            <td class="year">{{ approval.year }}년</td>
+            <td class="semester">{{ approval.semester }}학기</td>
             <td class="userName">{{ approval.userName }}</td>
             <td class="departmentName">{{ approval.departmentName }}</td>
             <td class="approval">{{ approval.approval }}</td>

@@ -18,14 +18,14 @@ async function sendCode() {
   }
 
   try {
-    const res = await sendMail(state.data.email);
+    const res = await sendMail({email: state.data.email});
     if (res && res.status === 200) {
-      alert('이얎ㅂ');
+      alert('성공');
     } else {
-      alert('감히 메일로 장난을ㄹ쳐?');
+      //
     }
   } catch (err) {
-    alert('서버오류');
+    //
   }
 }
 
@@ -37,16 +37,16 @@ async function submitCode() {
   try {
     const res = await confirmCode({
       email: state.data.email,
-      code: state.data.authCode,
+      authCode: state.data.authCode,
     });
     if (res && res.status === 200) {
       // 인증 성공 후 추가 동작 가능
       state.data.renewalTap = true;
     } else {
-      alert('인증번호로 장난쳐?22');
+      // 메세지
     }
   } catch (err) {
-    alert('서버오류');
+    // 메세지
   }
 }
 
@@ -63,7 +63,7 @@ async function renewal() {
     closeModal();
     state.data.renewalTap = true;
   } else {
-    alert('비밀번호 변경 실패');
+    // 메세지
   }
 }
 </script>
