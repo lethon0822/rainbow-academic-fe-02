@@ -25,8 +25,8 @@ const filters = reactive({
 filters.year = year;
 
 const onSearch = () => {
-  if (filters.year < year - 5) {
-    filters.year = year - 5;
+  if (filters.year < year - 4) {
+    filters.year = year - 4;
   }
   emit("search", { ...filters });
 };
