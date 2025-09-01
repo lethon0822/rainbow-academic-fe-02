@@ -112,30 +112,35 @@ watch(
     </div>
 
     <div v-if="props.state" class="filter-group">
-      <label>이수구분</label>
-      <select v-model="filters.type" class="select-input">
-        <option value="">전체</option>
-        <option value="전공">전공</option>
-        <option value="교양">교양</option>
-      </select>
-    </div>
+        <label>이수구분</label>
+        <select v-model="filters.type" class="select-input">
+          <option value="">전체</option>
+          <option value="전공">전공</option>
+          <option value="교양">교양</option>
+        </select>
+      </div>
 
-    <div v-if="props.state" class="filter-group">
-      <label>학과</label>
-      <select
-        v-model="filters.departmentName"
-        :disabled="filters.type === '교양'"
-        class="select-input wide"
-      >
-        <option value="">전체</option>
-        <option
-          v-for="d in props.departments"
-          :key="d.departmentName"
-          :value="d.departmentName"
+      <div v-if="props.state" class="filter-group">
+        <label>학과</label>
+        <select
+          v-model="filters.departmentName"
+          :disabled="filters.type === '교양'"
+          class="select-input wide"
         >
+          <option value="">전체</option>
+
+        <template v-if="filters.type !== '교양'">
+          <option
+            v-for="d in props.departments"
+            :key="d.departmentName"
+            :value="d.departmentName"
+          >
           {{ d.departmentName }}
         </option>
-      </select>
+      </template>
+
+        <option v-else value="교양학부">교양학부</option>
+          </select>
     </div>
 
     <div v-if="props.state" class="filter-group">
