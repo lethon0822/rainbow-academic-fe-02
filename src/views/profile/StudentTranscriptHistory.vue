@@ -1,88 +1,34 @@
 <script setup>
-import { reactive, onMounted } from "vue";
-import { courseStudentList } from "@/services/professorService";
+import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/account";
-import { useRoute, useRouter } from "vue-router";
+import { getMyCurrentGrades } from "@/services/GradeService";
 
+const courseList = ref([]);
 const userStore = useUserStore();
-const route = useRoute();
-const router = useRouter();
 
-onMounted(async () => {
-  const passJson = history.state.data;
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.course = nana;
+const show = ref({
+  rank: false,
+  midScore: false,
+  finScore: false,
+  attendanceScore: false,
+  otherScore: true,
+  point: false,
+});
 
-    const id = state.course.courseId;
-    console.log("아이디", id);
-    const res = await courseStudentList(id);
-    console.log("냐냐", res);
-
-    if (res.data.length > 0) {
-      state.data = res.data;
-      console.log("스테이트", state.data);
-      return;
-    }
+async function fetchGrades() {
+  try {
+    const semesterId = userStore.semesterId;
+    const res = await getMyCurrentGrades({ semesterId });
+    console.log("API 응답 데이터:", res.data);
+    courseList.value = res.data;
+  } catch (error) {
+    console.error("성적 조회 실패:", error);
   }
+}
+
+onMounted(() => {
+  fetchGrades();
 });
-
-const attendance = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
-
-  router.push({
-    path: "/professor/attendance",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
-  });
-};
-
-const enrollmentGrade = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
-
-  router.push({
-    path: "/enrollmentgrade",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
-  });
-};
-
-const state = reactive({
-  courses: [
-    {
-      id: 1,
-      title: "컴퓨터 과학개론",
-      courseCode: "CS101",
-      score: 60,
-      grade: "A+",
-      attendance: 20,
-      attendanceRate: 20,
-      lateCount: 20,
-      assignments: 0,
-      isCompleted: true,
-    },
-    {
-      id: 2,
-      title: "컴퓨터 네트워크",
-      courseCode: "CS101",
-      isCompleted: false,
-    },
-  ],
-});
-
-const handleStudentManagement = (courseId) => {
-  console.log(`학생 관리: ${courseId}`);
-};
-
-const handleAttendanceManagement = (courseId) => {
-  console.log(`출결관리 및 성적: ${courseId}`);
-};
 </script>
 
 <template>
@@ -103,11 +49,15 @@ const handleAttendanceManagement = (courseId) => {
     </div>
 
     <div class="course-list">
-      <div v-for="course in state.courses" :key="course.id" class="course-card">
+      <div
+        v-for="(course, index) in courseList"
+        :key="course.courseCode"
+        class="course-card"
+      >
         <div class="course-header">
           <div class="course-info">
             <span class="course-number">{{
-              String(course.id).padStart(2, "0")
+              String(index + 1).padStart(2, "0")
             }}</span>
             <span class="course-title">{{ course.title }}</span>
             <span class="course-divider">|</span>
@@ -115,49 +65,47 @@ const handleAttendanceManagement = (courseId) => {
           </div>
           <div class="course-actions">
             <button v-if="course.isCompleted" class="btn btn-secondary">
-              <i class="bi bi-pen me-1"></i>
-              강의 평가 완료
+              <i class="bi bi-pen me-1"></i> 강의 평가 완료
             </button>
             <button v-else class="btn btn-danger">
-              <i class="bi bi-pen me-1"></i>
-              강의 평가
+              <i class="bi bi-pen me-1"></i> 강의 평가
             </button>
           </div>
         </div>
 
         <div v-if="course.isCompleted" class="grade-stats">
-          <div class="stat-item">
+          <div class="stat-item" v-if="show.rank">
             <span class="stat-label">점수</span>
-            <span class="stat-value">{{ course.score }}</span>
+            <span class="stat-value">{{ course.rank ?? "-" }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" v-if="show.point">
             <span class="stat-label">평점</span>
-            <span class="stat-value grade">{{ course.grade }}</span>
+            <span class="stat-value grade">{{ course.point ?? "-" }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" v-if="show.attendanceScore">
             <span class="stat-label">출석</span>
-            <span class="stat-value">{{ course.attendance }}</span>
+            <span class="stat-value">{{ course.attendanceScore ?? "-" }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" v-if="show.midScore">
             <span class="stat-label">중간고사</span>
-            <span class="stat-value">{{ course.attendanceRate }}</span>
+            <span class="stat-value">{{ course.midScore ?? "-" }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" v-if="show.finScore">
             <span class="stat-label">기말고사</span>
-            <span class="stat-value">{{ course.lateCount }}</span>
+            <span class="stat-value">{{ course.finScore ?? "-" }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" v-if="show.otherScore">
             <span class="stat-label">기타</span>
-            <span class="stat-value">{{ course.assignments }}</span>
+            <span class="stat-value">{{ course.otherScore ?? "-" }}</span>
           </div>
         </div>
 
         <div v-else class="warning-message">
           <i class="bi bi-exclamation-triangle text-danger me-2"></i>
-          <span class="text-danger"
-            >강의 평가 미완료로 성적 조회가 제한됩니다. 평가를 먼저 완료해
-            주세요.</span
-          >
+          <span class="text-danger">
+            강의 평가 미완료로 성적 조회가 제한됩니다. 평가를 먼저 완료해
+            주세요.
+          </span>
         </div>
       </div>
     </div>
@@ -180,7 +128,6 @@ const handleAttendanceManagement = (courseId) => {
   margin-bottom: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
-
 }
 
 .header-card h1 {
