@@ -253,7 +253,7 @@ watch(
           <ul>
             <!-- 라우팅처리 -->
             <li>
-              <router-link to="#" class="router-link">졸업자가진단</router-link>
+              <router-link to="/graduation" class="router-link">졸업자가진단</router-link>
             </li>
           </ul>
         </li>
