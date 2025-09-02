@@ -1,11 +1,11 @@
 <!-- 강의 신청 현황  -->
 <script setup>
-import WhiteBox from '@/components/common/WhiteBox.vue';
-import SearchFilterBar from '@/components/common/SearchFilterBar.vue';
-import CourseTable from '@/components/course/CourseTable.vue';
-import { findMyCourse } from '@/services/professorService';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
+import CourseTable from "@/components/course/CourseTable.vue";
+import { findMyCourse } from "@/services/professorService";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const courseList = ref([]);
 const router = useRouter();
@@ -27,7 +27,7 @@ const myCourse = async (filters) => {
 };
 
 const move = () => {
-  router.push('/professor/course/registration');
+  router.push("/professor/course/registration");
 };
 </script>
 <template>

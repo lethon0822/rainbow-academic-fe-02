@@ -25,8 +25,8 @@ const filters = reactive({
 filters.year = year;
 
 const onSearch = () => {
-  if (filters.year < year - 5) {
-    filters.year = year - 5;
+  if (filters.year < year - 4) {
+    filters.year = year - 4;
   }
   emit("search", { ...filters });
 };
@@ -112,22 +112,22 @@ watch(
     </div>
 
     <div v-if="props.state" class="filter-group">
-        <label>이수구분</label>
-        <select v-model="filters.type" class="select-input">
-          <option value="">전체</option>
-          <option value="전공">전공</option>
-          <option value="교양">교양</option>
-        </select>
-      </div>
+      <label>이수구분</label>
+      <select v-model="filters.type" class="select-input">
+        <option value="">전체</option>
+        <option value="전공">전공</option>
+        <option value="교양">교양</option>
+      </select>
+    </div>
 
-      <div v-if="props.state" class="filter-group">
-        <label>학과</label>
-        <select
-          v-model="filters.departmentName"
-          :disabled="filters.type === '교양'"
-          class="select-input wide"
-        >
-          <option value="">전체</option>
+    <div v-if="props.state" class="filter-group">
+      <label>학과</label>
+      <select
+        v-model="filters.departmentName"
+        :disabled="filters.type === '교양'"
+        class="select-input wide"
+      >
+        <option value="">전체</option>
 
         <template v-if="filters.type !== '교양'">
           <option
@@ -135,20 +135,21 @@ watch(
             :key="d.departmentName"
             :value="d.departmentName"
           >
-          {{ d.departmentName }}
-        </option>
-      </template>
+            {{ d.departmentName }}
+          </option>
+        </template>
 
         <option v-else value="교양학부">교양학부</option>
-          </select>
+      </select>
     </div>
 
     <div v-if="props.state" class="filter-group">
       <label>학년</label>
-      <select 
-          v-model="filters.grade" 
-          :disabled="filters.type === '교양'"
-          class="select-input">
+      <select
+        v-model="filters.grade"
+        :disabled="filters.type === '교양'"
+        class="select-input"
+      >
         <option value="">전체</option>
         <option value="1">1학년</option>
         <option value="2">2학년</option>
@@ -178,7 +179,7 @@ watch(
   padding: 6px 29px;
   background-color: #fff;
   border-radius: 8px;
-  border: 0.2 solid #74747480;
+  border: 0.2px solid #74747480;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
   margin-left: 75px;

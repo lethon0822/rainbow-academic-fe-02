@@ -1,6 +1,18 @@
 <!-- EnrollmentGradeView.vue -->
 <script setup>
 import { reactive, computed, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { courseStudentList } from "@/services/professorService";
+import axios from "axios";
+
+
+const route = useRoute(); // route.query.id >> 강의 아이디 
+
+// onMount할 때 통신 하면 됩니다 
+// courseStudentList는 학생 조회 api입니다 인자로 courseId를 받습니다 
+
+
+
 
 /** 가중치 (필요 시 조정) */
 const W = { att: 0.10, mid: 0.30, fin: 0.40, etc: 0.20 };

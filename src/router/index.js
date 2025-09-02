@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -36,6 +36,12 @@ const router = createRouter({
           props: true,
         },
         //components
+        //common
+        {
+          path: "/notice",
+          component: () => import("@/components/common/Notices.vue"),
+        },
+
         //course
         {
           path: '/professor/attendance',
@@ -71,6 +77,11 @@ const router = createRouter({
         },
 
         //views
+        //application
+        {
+          path: "/application",
+          component: () => import("@/views/Application.vue"),
+        },
         //course
         {
           path: '/course/history',
@@ -138,6 +149,13 @@ const router = createRouter({
           path: '/grade/current',
           component: () =>
             import('@/views/profile/StudentTranscriptHistory.vue'),
+        },
+
+        // 졸업 자가 진단 
+        {
+          path: "/graduation",
+          component: () =>
+            import("@/views/graduation/Graduation.vue"),
         },
       ],
     },

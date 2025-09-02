@@ -1,52 +1,39 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import axios from "axios";
-import { useUserStore } from "@/stores/user";
+import { ref, onMounted } from "vue";
+import { useUserStore } from "@/stores/account";
+import { GradesbyCourse } from "@/services/GradeService";
 
+// 성적 데이터 상태
 const courseList = ref([]);
 
+// 사용자 스토어 (로그인된 사용자 정보 및 semesterId 가져오기 위함)
 const userStore = useUserStore();
-const semesterId = ref(userStore.semester); // 필요하면 수정
 
-async function fetchPermanentGrades(semesterId) {
+// 테이블 높이 기본값
+const maxHeight = "600px";
+
+// API 호출 함수
+async function fetchGrades() {
   try {
-    const res = await axios.get("/student/grade/permanent", {
-      params: { semesterId },
-    });
+    const semesterId = userStore.semesterId;
+    const res = await GradesbyCourse({ semesterId });
 
-    courseList.value = res.data.map((item) => ({
-      courseId: item.courseId,
-      courseCode: item.courseCode,
-      deptName: item.deptName,
-      title: item.courseTitle,
-      classroom: item.classroom,
-      type: item.category,
-      grade: item.grade,
-      time: item.time,
-      credit: item.credit,
-      rank: item.rank,
-      point: item.point,
-      professorName: item.professorName,
-    }));
+    console.log("API 응답 데이터:", JSON.stringify(res.data, null, 2));
+    courseList.value = res.data;
   } catch (error) {
-    console.error("영구 성적 조회 실패", error);
+    console.error("성적 조회 실패:", error);
+    courseList.value = []; // 실패 시 빈 배열로 초기화
   }
 }
 
+// 컴포넌트 마운트 시 데이터 가져오기
 onMounted(() => {
-  fetchPermanentGrades(semesterId.value);
-});
-
-// semesterId가 변경될 때 재조회가 필요하면 watch 사용
-watch(semesterId, (newVal) => {
-  if (newVal) {
-    fetchPermanentGrades(newVal);
-  }
+  fetchGrades();
 });
 </script>
 
 <template>
-  <div class="table-container">
+  <div class="table-container" :style="{ maxHeight: maxHeight }">
     <div class="table-wrapper">
       <table>
         <thead>
@@ -54,27 +41,27 @@ watch(semesterId, (newVal) => {
             <th>연도</th>
             <th>학기</th>
             <th>이수구분</th>
-            <th>학년</th>
-            <th>담당교수</th>
             <th>과목코드</th>
-            <th>교과목명</th>
+            <th>과목명</th>
+            <th>담당교수</th>
+            <th>수강학년</th>
             <th>학점</th>
             <th>등급</th>
             <th>평점</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="course in courseList" :key="course.courseId">
+          <tr v-for="course in courseList" :key="course.courseCode">
             <td>{{ course.year }}</td>
             <td>{{ course.semester }}</td>
             <td>{{ course.type }}</td>
-            <td>{{ course.grade }}학년</td>
-            <td>{{ course.professorName }}</td>
             <td>{{ course.courseCode }}</td>
             <td>{{ course.title }}</td>
+            <td>{{ course.professorName }}</td>
+            <td>{{ course.grade }}학년</td>
             <td>{{ course.credit }}</td>
             <td>{{ course.rank }}</td>
-            <td>{{ course.point?.toFixed(2) ?? "-" }}</td>
+            <td>{{ course.point }}</td>
           </tr>
         </tbody>
       </table>

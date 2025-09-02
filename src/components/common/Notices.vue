@@ -604,7 +604,7 @@ const changePage = (p) => (currentPage.value = p);
   border-radius: 4px;
   font-size: 11px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 300px;
   transition: background-color 0.2s ease;
 }
 

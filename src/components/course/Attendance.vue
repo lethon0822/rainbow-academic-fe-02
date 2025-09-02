@@ -1,29 +1,42 @@
 <!-- AttendanceView.vue -->
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { courseStudentList } from "@/services/professorService";
 import WhiteBox from "@/components/common/WhiteBox.vue";
+import axios from "axios";
+
 
 const router = useRouter();
+const route = useRoute();
 
 /* 상단 컨트롤 */
 const attendDate = ref(new Date().toISOString().slice(0, 10));
 const search = ref("");
-const filter = ref("전체");
+const filter = ref("전체"); // 전체/출석/결석/지각/병가/경조사
 const allChecked = ref(false);
 const isLoading = ref(false);
 
 /* 전달 데이터 */
 const state = reactive({
-  data: [], // [{ enrollmentId, loginId, userName, gradeYear, departmentName, status, note, checked }]
-  courseId: "",
+  data: [], //
+  courseId:route.query.id
 });
 
-/* 상태 옵션 */
+/* 상태 옵션 - attendanceOptions로 이름 통일 */
 const attendanceOptions = [
-  { value: "출석", label: "출석", icon: "bi bi-check-circle-fill", cls: "success" },
-  { value: "지각", label: "지각", icon: "bi bi-alarm-fill", cls: "warning" },
+  {
+    value: "출석",
+    label: "출석",
+    icon: "bi bi-check-circle-fill",
+    cls: "success",
+  },
+  {
+    value: "지각",
+    label: "지각",
+    icon: "bi bi bi-alarm-fill",
+    cls: "warning",
+  },
   { value: "결석", label: "결석", icon: "bi bi-x-circle-fill", cls: "danger" },
   { value: "병가", label: "병가", icon: "bi bi-emoji-dizzy-fill", cls: "info" },
   { value: "경조사", label: "경조사", icon: "bi bi-flower1", cls: "neutral" },
@@ -32,54 +45,64 @@ const attendanceOptions = [
 /* 상태 → 배지 메타 */
 const statusMeta = (st) => {
   switch (st) {
-    case "출석": return { label: "출석", cls: "success", icon: "bi bi-check-circle-fill" };
-    case "결석": return { label: "결석", cls: "danger", icon: "bi bi-x-circle-fill" };
-    case "지각": return { label: "지각", cls: "warning", icon: "bi bi-alarm-fill" };
-    case "병가": return { label: "병가", cls: "info", icon: "bi bi-emoji-dizzy-fill" };
-    case "경조사": return { label: "경조사", cls: "neutral", icon: "bi bi-flower1" };
-    default: return { label: st || "미지정", cls: "neutral", icon: "bi bi-question-circle" };
+    case "출석":
+      return { label: "출석", cls: "success", icon: "bi bi-check-circle-fill" };
+    case "결석":
+      return { label: "결석", cls: "danger", icon: "bi bi-x-circle-fill" };
+    case "지각":
+      return {
+        label: "지각",
+        cls: "warning",
+        icon: "bi bi-alarm-fill",
+      };
+    case "병가":
+      return { label: "병가", cls: "info", icon: "bi bi-emoji-dizzy-fill" };
+    case "경조사":
+      return { label: "경조사", cls: "neutral", icon: "bi bi-flower1" };
+    default:
+      return {
+        label: st || "미지정",
+        cls: "neutral",
+        icon: "bi bi-question-circle",
+      };
   }
 };
 
-/* 초기화 */
-onMounted(() => {
-  const passJson = history.state?.data;
-  const passid = history.state?.id;
 
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.data = nana.map((s) => ({
-      ...s,
-      status: s.status ?? "결석",
-      note: s.note ?? "",
-      checked: false,
-    }));
-  } else {
-    // 🔥 더미데이터 (DB 기반: login_id + user_name)
-    state.data = [
-      { enrollmentId: 1, loginId: "20001", userName: "신민영", gradeYear: 1, departmentName: "컴퓨터공학과", status: "결석", note: "", checked: false },
-      { enrollmentId: 2, loginId: "20002", userName: "배형원", gradeYear: 1, departmentName: "컴퓨터공학과", status: "결석", note: "", checked: false },
-      { enrollmentId: 3, loginId: "20003", userName: "심광훈", gradeYear: 1, departmentName: "컴퓨터공학과", status: "결석", note: "", checked: false },
-      { enrollmentId: 4, loginId: "20004", userName: "성광준", gradeYear: 1, departmentName: "컴퓨터공학과", status: "결석", note: "", checked: false },
-      { enrollmentId: 5, loginId: "20005", userName: "유영환", gradeYear: 1, departmentName: "컴퓨터공학과", status: "결석", note: "", checked: false },
-    ];
-  }
+onMounted(async() => {
+  const res = await courseStudentList(state.courseId)
+  console.log('알이에쓰:', res)
 
-  if (passid) state.courseId = JSON.parse(passid);
+  state.data = res.data
+
+  // const passJson = history.state?.data;
+  // const passid = history.state?.id;
+
+  state.data = res.data.map(student => ({
+    ...student,
+    checked: false,        // 새 속성 추가
+    status: student.status ?? "결석", // 필요하면 다른 기본값도 넣기
+    note: student.note ?? ""           // 필요하면 note 기본값
+  }));
 });
 
+// 아래 필터 부분 오류 때문에 주석 처리 했습니다 
 /* 필터/검색 */
 const filtered = computed(() => {
   const kw = search.value.trim();
   return state.data.filter((s) => {
-    const okSearch = !kw || String(s.userName ?? "").includes(kw) || String(s.loginId ?? "").includes(kw);
+    const okSearch =
+      !kw ||
+      String(s.userName ?? "").includes(kw) ||
+      String(s.loginId ?? "").includes(kw);
     const okFilter = filter.value === "전체" || s.status === filter.value;
     return okSearch && okFilter;
   });
 });
 
 /* 전체선택 토글 */
-const toggleAll = () => filtered.value.forEach((s) => (s.checked = allChecked.value));
+const toggleAll = () =>
+  filtered.value.forEach((s) => (s.checked = allChecked.value));
 
 /* 저장 */
 const saveAttendance = async () => {
@@ -96,7 +119,10 @@ const saveAttendance = async () => {
         status: s.status,
         note: s.note,
       };
-      const { data: exists } = await axios.post("/professor/course/check/exist", payload);
+      const { data: exists } = await axios.post(
+        "/professor/course/check/exist",
+        payload
+      );
       if (exists === 0) await axios.post("/professor/course/check", payload);
       else await axios.put("/professor/course/check", payload);
     }
@@ -108,6 +134,41 @@ const saveAttendance = async () => {
   } finally {
     isLoading.value = false;
   }
+};
+
+/* CSV 내보내기 (UTF-8 BOM) */
+const exportCsv = () => {
+  const header = [
+    "학번",
+    "이름",
+    "학년",
+    "학과",
+    "출결상태",
+    "비고",
+    "학기",
+    "일자",
+  ];
+  const rows = state.data.map((s) => [
+    s.loginId ?? "",
+    s.userName ?? "",
+    s.gradeYear ?? s.grade ?? "",
+    s.departmentName ?? "",
+    s.status ?? "",
+    s.note ?? "",
+    s.semester ?? "",
+    attendDate.value,
+  ]);
+
+  const csvContent =
+    "\uFEFF" + [header, ...rows].map((r) => r.join(",")).join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `attendance_${state.courseId}_${attendDate.value}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 };
 </script>
 
@@ -178,12 +239,12 @@ const saveAttendance = async () => {
           </thead>
 
           <tbody>
-            <tr v-for="s in filtered" :key="s.enrollmentId">
+            <tr v-for="s in state.data" :key="s.enrollmentId">
               <td><input type="checkbox" v-model="s.checked" /></td>
-              <td>{{ s.loginId }}</td>
+              <td>{{ s.loginId}}</td>
               <td>{{ s.userName }}</td>
-              <td>{{ s.gradeYear ?? s.grade }}</td>
-              <td class="left-cell">{{ s.departmentName }}</td>
+              <td>{{ s.grade }}</td>
+              <td class="left-cell">{{ s.deptName }}</td>
 
               <!-- 현재 상태 배지 -->
               <td>

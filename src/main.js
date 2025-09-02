@@ -2,6 +2,8 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
+import "@/assets/global.css"; //폰트
+
 import App from "./App.vue";
 import router from "./router";
 import BootstrapVue3 from "bootstrap-vue-3";
