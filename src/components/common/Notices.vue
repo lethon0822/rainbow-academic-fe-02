@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, ref, computed, watch } from "vue";
+import { ref, computed, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-// 공지사항 관리
 const notices = ref([
   {
     id: 1,
@@ -105,55 +105,15 @@ const notices = ref([
   },
 ]);
 
-// 검색 및 필터링
 const searchKeyword = ref("");
-const filterType = ref("all"); // all, important, normal
-
-// 필터링된 공지사항
-const filteredNotices = computed(() => {
-  let filtered = notices.value;
-
-  // 검색 필터
-  if (searchKeyword.value.trim()) {
-    filtered = filtered.filter(
-      (notice) =>
-        notice.title
-          .toLowerCase()
-          .includes(searchKeyword.value.toLowerCase()) ||
-        notice.content.toLowerCase().includes(searchKeyword.value.toLowerCase())
-    );
-  }
-
-  // 중요도 필터
-  if (filterType.value === "important") {
-    filtered = filtered.filter((notice) => notice.isImportant);
-  } else if (filterType.value === "normal") {
-    filtered = filtered.filter((notice) => !notice.isImportant);
-  }
-
-  return filtered;
-});
-
-// 페이지네이션
+const filterType = ref("all");
 const currentPage = ref(1);
 const itemsPerPage = 5;
-const totalPages = computed(() =>
-  Math.ceil(filteredNotices.value.length / itemsPerPage)
-);
-const paginatedNotices = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  return filteredNotices.value.slice(start, end);
-});
-
-// 모달 및 폼 상태
-const showModal = ref(false);
-const showDetailModal = ref(false);
+const showModal = ref(false);   // ✅ 모달 상태
 const editMode = ref(false);
 const selectedNotice = ref(null);
-const nextId = ref(6);
+const nextId = ref(11);
 
-// 폼 데이터
 const form = ref({
   title: "",
   content: "",
@@ -161,153 +121,152 @@ const form = ref({
   author: "관리자",
 });
 
-// 상세보기
-const viewNotice = (notice) => {
-  selectedNotice.value = { ...notice };
-  // 조회수 증가
-  const originalNotice = notices.value.find((n) => n.id === notice.id);
-  if (originalNotice) {
-    originalNotice.views += 1;
-  }
-  showDetailModal.value = true;
-};
+const route = useRoute();
+const router = useRouter();
 
-// 새 글 작성 모달 열기
+const filteredNotices = computed(() => {
+  let filtered = notices.value;
+  if (searchKeyword.value.trim()) {
+    filtered = filtered.filter(
+      (n) =>
+        n.title.toLowerCase().includes(searchKeyword.value.toLowerCase()) ||
+        n.content.toLowerCase().includes(searchKeyword.value.toLowerCase())
+    );
+  }
+  if (filterType.value === "important") {
+    filtered = filtered.filter((n) => n.isImportant);
+  } else if (filterType.value === "normal") {
+    filtered = filtered.filter((n) => !n.isImportant);
+  }
+  return filtered;
+});
+
+const totalPages = computed(() =>
+  Math.ceil(filteredNotices.value.length / itemsPerPage)
+);
+
+const paginatedNotices = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  return filteredNotices.value.slice(start, start + itemsPerPage);
+});
+
+const viewNotice = (n) => router.push(`/notice/${n.id}`);
+
+watch(
+  () => route.params.id,
+  (id) => {
+    if (id) {
+      selectedNotice.value = notices.value.find((n) => n.id === parseInt(id));
+    } else {
+      selectedNotice.value = null;
+    }
+  },
+  { immediate: true }
+);
+
+// ✅ 글쓰기 버튼
 const openWriteModal = () => {
-  form.value = {
-    title: "",
-    content: "",
-    isImportant: false,
-    author: "관리자",
-  };
+  form.value = { title: "", content: "", isImportant: false, author: "관리자" };
   editMode.value = false;
   showModal.value = true;
 };
 
-// 수정 모달 열기
-const openEditModal = (notice) => {
-  form.value = {
-    title: notice.title,
-    content: notice.content,
-    isImportant: notice.isImportant,
-    author: notice.author || "관리자",
-  };
-  selectedNotice.value = notice;
+// ✅ 수정 버튼
+const openEditModal = (n) => {
+  form.value = { ...n };
+  selectedNotice.value = n;
   editMode.value = true;
-  showDetailModal.value = false; // 상세보기 모달 닫기
   showModal.value = true;
 };
 
-// 저장 (생성/수정)
+// ✅ 저장 (글쓰기/수정 반영)
 const saveNotice = () => {
   if (!form.value.title.trim() || !form.value.content.trim()) {
     alert("제목과 내용을 입력해주세요.");
     return;
   }
-
   if (editMode.value) {
-    // 수정
-    const index = notices.value.findIndex(
-      (n) => n.id === selectedNotice.value.id
-    );
-    if (index !== -1) {
-      notices.value[index] = {
-        ...notices.value[index],
-        title: form.value.title,
-        content: form.value.content,
-        isImportant: form.value.isImportant,
-        author: form.value.author,
-      };
-    }
+    const idx = notices.value.findIndex((n) => n.id === selectedNotice.value.id);
+    if (idx !== -1) notices.value[idx] = { ...notices.value[idx], ...form.value };
+    alert("수정 완료");
   } else {
-    // 새 글 작성
-    const newNotice = {
+    notices.value.unshift({
       id: nextId.value++,
-      title: form.value.title,
-      content: form.value.content,
-      isImportant: form.value.isImportant,
+      ...form.value,
       date: new Date().toISOString().split("T")[0],
       views: 0,
-      author: form.value.author,
-    };
-    notices.value.unshift(newNotice);
+    });
+    alert("작성 완료");
   }
-
   closeModal();
-  alert(editMode.value ? "수정되었습니다." : "작성되었습니다.");
 };
 
-// 삭제
-const deleteNotice = (noticeId) => {
+// ✅ 삭제 버튼
+const deleteNotice = (id) => {
   if (confirm("정말 삭제하시겠습니까?")) {
-    notices.value = notices.value.filter((n) => n.id !== noticeId);
-    if (showDetailModal.value && selectedNotice.value?.id === noticeId) {
-      showDetailModal.value = false;
-    }
-    alert("삭제되었습니다.");
+    notices.value = notices.value.filter((n) => n.id !== id);
+    router.push("/notice");
   }
 };
 
-// 모달 닫기
 const closeModal = () => {
   showModal.value = false;
-  showDetailModal.value = false;
-  selectedNotice.value = null;
-  form.value = {
-    title: "",
-    content: "",
-    isImportant: false,
-    author: "관리자",
-  };
+  form.value = { title: "", content: "", isImportant: false, author: "관리자" };
 };
 
-// 페이지 변경
-const changePage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page;
-  }
-};
-
-// 검색 및 필터 초기화
+// ✅ 초기화 버튼
 const resetFilters = () => {
   searchKeyword.value = "";
   filterType.value = "all";
   currentPage.value = 1;
 };
-
-// 검색/필터 변경시 페이지 초기화
-watch([searchKeyword, filterType], () => {
-  currentPage.value = 1;
-});
-
-onMounted(() => {
-  // 초기 로딩 작업
-});
+const changePage = (p) => (currentPage.value = p);
 </script>
 
 <template>
   <div class="notice-page">
-    <!-- 메인 컨텐츠 -->
-    <main class="main-content">
+    <!-- 상세 -->
+    <div v-if="route.params.id && selectedNotice" class="content-container">
+      <div class="page-title-section">
+        <h1 class="page-title">공지사항</h1>
+        <p class="page-description">중요한 소식과 업데이트를 확인하세요</p>
+      </div>
+      <h2 class="detail-title">{{ selectedNotice.title }}</h2>
+
+      <div class="detail-meta">
+        <span>작성자: {{ selectedNotice.author }}</span>
+        <span>작성일: {{ selectedNotice.date }}</span>
+        <span>조회수: {{ selectedNotice.views }}</span>
+      </div>
+
+      <div class="detail-content">{{ selectedNotice.content }}</div>
+
+      <div class="detail-actions">
+        <button class="btn btn-secondary" @click="router.push('/notice')">
+          목록으로
+        </button>
+        <button class="btn btn-primary" @click="openEditModal(selectedNotice)">
+          수정
+        </button>
+        <button class="btn btn-danger" @click="deleteNotice(selectedNotice.id)">
+          삭제
+        </button>
+      </div>
+    </div>
+
+    <!-- 목록 -->
+    <main v-else class="main-content">
       <div class="content-container">
-        <!-- 페이지 제목 -->
         <div class="page-title-section">
           <h1 class="page-title">공지사항</h1>
           <p class="page-description">중요한 소식과 업데이트를 확인하세요</p>
         </div>
 
-        <!-- 검색 및 필터 영역 -->
+        <!-- 검색 -->
         <div class="search-filter-section">
           <div class="search-area">
-            <input
-              v-model="searchKeyword"
-              type="text"
-              placeholder="제목 또는 내용으로 검색..."
-              class="search-input"
-            />
-            <button class="search-btn">🔍</button>
+            <input v-model="searchKeyword" placeholder="검색..." class="search-input" />
           </div>
-
           <div class="filter-area">
             <select v-model="filterType" class="filter-select">
               <option value="all">전체</option>
@@ -319,216 +278,87 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- 공지사항 목록 -->
+        <!-- 테이블 -->
         <div class="notice-board">
-          <div class="notice-table">
-            <div class="table-header">
-              <span class="col-num">번호</span>
-              <span class="col-title">제목</span>
-              <span class="col-author">작성자</span>
-              <span class="col-date">등록일</span>
-              <span class="col-views">조회</span>
-              <span class="col-actions">관리</span>
-            </div>
-
-            <div class="table-body">
-              <div
-                v-for="(notice, index) in paginatedNotices"
-                :key="notice.id"
-                class="table-row"
-                :class="{ important: notice.isImportant }"
-              >
-                <span class="col-num">{{
-                  filteredNotices.length -
-                  ((currentPage - 1) * itemsPerPage + index)
-                }}</span>
-                <div class="col-title" @click="viewNotice(notice)">
-                  <span v-if="notice.isImportant" class="important-badge"
-                    >중요</span
-                  >
-                  <span class="notice-text">{{ notice.title }}</span>
-                </div>
-                <span class="col-author">{{ notice.author }}</span>
-                <span class="col-date">{{ notice.date }}</span>
-                <span class="col-views">{{ notice.views }}</span>
-                <div class="col-actions">
-                  <button
-                    class="action-btn edit-btn"
-                    @click="openEditModal(notice)"
-                  >
-                    수정
-                  </button>
-                  <button
-                    class="action-btn delete-btn"
-                    @click="deleteNotice(notice.id)"
-                  >
-                    삭제
-                  </button>
-                </div>
+          <div class="table-header">
+            <span>번호</span><span>제목</span><span>작성자</span>
+            <span>등록일</span><span>조회</span><span>관리</span>
+          </div>
+          <div class="table-body">
+            <div v-for="(n,i) in paginatedNotices" :key="n.id" class="table-row">
+              <span>{{ filteredNotices.length - ((currentPage - 1) * itemsPerPage + i) }}</span>
+              <div class="col-title" @click="viewNotice(n)">
+                <span v-if="n.isImportant" class="important-badge">중요</span>
+                {{ n.title }}
               </div>
-
-              <!-- 빈 상태 -->
-              <div v-if="paginatedNotices.length === 0" class="empty-state">
-                <p>
-                  {{
-                    searchKeyword
-                      ? "검색 결과가 없습니다."
-                      : "등록된 공지사항이 없습니다."
-                  }}
-                </p>
+              <span>{{ n.author }}</span>
+              <span>{{ n.date }}</span>
+              <span>{{ n.views }}</span>
+              <div class="col-actions">
+                <button class="action-btn edit-btn" @click="openEditModal(n)">수정</button>
+                <button class="action-btn delete-btn" @click="deleteNotice(n.id)">삭제</button>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- 페이지네이션 -->
-          <div class="pagination-section" v-if="totalPages > 1">
-            <div class="pagination">
-              <button
-                class="page-btn"
-                @click="changePage(currentPage - 1)"
-                :disabled="currentPage === 1"
-              >
-                ‹
-              </button>
-
-              <button
-                v-for="page in Math.min(totalPages, 5)"
-                :key="page"
-                class="page-btn"
-                :class="{ active: currentPage === page }"
-                @click="changePage(page)"
-              >
-                {{ page }}
-              </button>
-
-              <button
-                class="page-btn"
-                @click="changePage(currentPage + 1)"
-                :disabled="currentPage === totalPages"
-              >
-                ›
-              </button>
-            </div>
-          </div>
+        <!-- 페이지네이션 -->
+        <div v-if="totalPages > 1" class="pagination">
+          <button @click="changePage(currentPage - 1)" :disabled="currentPage===1">‹</button>
+          <button v-for="p in totalPages" :key="p" @click="changePage(p)" :class="{ active: currentPage===p }">
+            {{ p }}
+          </button>
+          <button @click="changePage(currentPage + 1)" :disabled="currentPage===totalPages">›</button>
         </div>
       </div>
     </main>
-  </div>
 
-  <!-- 글쓰기/수정 모달 -->
-  <div v-if="showModal" class="modal-overlay" @click="closeModal">
-    <div class="modal-content write-modal" @click.stop>
-      <div class="modal-header">
-        <h3>{{ editMode ? "공지사항 수정" : "새 공지사항 작성" }}</h3>
-        <button class="close-btn" @click="closeModal">×</button>
-      </div>
+    <!-- ✅ 글쓰기/수정 모달 -->
+    <div v-if="showModal" class="modal-overlay" @click="closeModal">
+      <div class="modal-content write-modal" @click.stop>
+        <div class="modal-header">
+          <h3>{{ editMode ? "공지사항 수정" : "새 공지사항 작성" }}</h3>
+          <button class="close-btn" @click="closeModal">×</button>
+        </div>
 
-      <div class="modal-body">
-        <div class="form-row">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>작성자</label>
+              <input v-model="form.author" type="text" class="form-input" />
+            </div>
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input v-model="form.isImportant" type="checkbox" class="form-checkbox" />
+                중요 공지사항
+              </label>
+            </div>
+          </div>
+
           <div class="form-group">
-            <label>작성자</label>
-            <input
-              v-model="form.author"
-              type="text"
-              placeholder="작성자명을 입력하세요"
-              class="form-input"
-            />
+            <label>제목</label>
+            <input v-model="form.title" type="text" class="form-input" />
           </div>
-          <div class="form-group checkbox-group">
-            <label class="checkbox-label">
-              <input
-                v-model="form.isImportant"
-                type="checkbox"
-                class="form-checkbox"
-              />
-              중요 공지사항
-            </label>
+
+          <div class="form-group">
+            <label>내용</label>
+            <textarea v-model="form.content" class="form-textarea" rows="12"></textarea>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>제목</label>
-          <input
-            v-model="form.title"
-            type="text"
-            placeholder="제목을 입력하세요"
-            class="form-input"
-          />
-        </div>
-
-        <div class="form-group">
-          <label>내용</label>
-          <textarea
-            v-model="form.content"
-            placeholder="내용을 입력하세요"
-            class="form-textarea"
-            rows="12"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" @click="closeModal">취소</button>
-        <button class="btn btn-primary" @click="saveNotice">
-          {{ editMode ? "수정 완료" : "작성 완료" }}
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 상세보기 모달 -->
-  <div v-if="showDetailModal" class="modal-overlay" @click="closeModal">
-    <div class="modal-content detail-modal" @click.stop>
-      <div class="modal-header">
-        <div class="detail-title-area">
-          <span v-if="selectedNotice?.isImportant" class="important-badge"
-            >중요</span
-          >
-          <h3>{{ selectedNotice?.title }}</h3>
-        </div>
-        <button class="close-btn" @click="closeModal">×</button>
-      </div>
-
-      <div class="modal-body">
-        <div class="detail-meta">
-          <div class="meta-row">
-            <span class="meta-label">작성자:</span>
-            <span>{{ selectedNotice?.author }}</span>
-          </div>
-          <div class="meta-row">
-            <span class="meta-label">작성일:</span>
-            <span>{{ selectedNotice?.date }}</span>
-          </div>
-          <div class="meta-row">
-            <span class="meta-label">조회수:</span>
-            <span>{{ selectedNotice?.views }}</span>
-          </div>
-        </div>
-        <div class="detail-content">
-          {{ selectedNotice?.content }}
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-secondary" @click="closeModal">닫기</button>
-        <div class="detail-actions">
-          <button
-            class="btn btn-primary"
-            @click="openEditModal(selectedNotice)"
-          >
-            수정
-          </button>
-          <button
-            class="btn btn-danger"
-            @click="deleteNotice(selectedNotice.id)"
-          >
-            삭제
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="closeModal">취소</button>
+          <button class="btn btn-primary" @click="saveNotice">
+            {{ editMode ? "수정 완료" : "작성 완료" }}
           </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+
+
 
 <style scoped>
 .notice-page {
@@ -547,6 +377,7 @@ onMounted(() => {
 
 .page-title-section {
   text-align: center;
+  margin-top: 80px;
   margin-bottom: 40px;
 }
 
@@ -1084,4 +915,22 @@ onMounted(() => {
   border-radius: 8px;
   border: 1px solid #e9ecef;
 }
+
+.page-title {
+  margin-bottom: 50px; /* 제목 간격 확보 */
+}
+.detail-actions {
+  margin-top: 30px; /* 버튼을 조금 아래로 */
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-primary { background: #007bff; color: #fff; }
+.btn-danger { background: #dc3545; color: #fff; }
+.btn-secondary { background: #6c757d; color: #fff; }
 </style>

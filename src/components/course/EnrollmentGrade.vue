@@ -1,7 +1,6 @@
 <!-- EnrollmentGradeView.vue -->
 <script setup>
 import { reactive, computed, onMounted, ref } from "vue";
-import axios from "axios";
 
 /** 가중치 (필요 시 조정) */
 const W = { att: 0.10, mid: 0.30, fin: 0.40, etc: 0.20 };
@@ -9,12 +8,11 @@ const W = { att: 0.10, mid: 0.30, fin: 0.40, etc: 0.20 };
 const st = reactive({
   q: "",
   allChecked: false,
-  courseId: "",
+  courseId: "101",
   rows: [],
   loading: true,
   error: ""
 });
-
 
 const isSaving = ref(false);
 
@@ -22,7 +20,7 @@ const isSaving = ref(false);
 const toNum = v => Number.isFinite(+v) ? +v : 0;
 const clip100 = v => Math.min(100, Math.max(0, toNum(v)));
 
-/** 자동계산: 출결평가·중간·기말·기타 → 총점/등급/평점 */
+/** 자동계산 */
 const calc = (r) => {
   r.attendanceEval = clip100(r.attendanceEval);
   r.midterm        = clip100(r.midterm);
@@ -35,7 +33,7 @@ const calc = (r) => {
     r.finalExam      * W.fin +
     r.etcScore       * W.etc;
 
-  r.total = total; // 0~100
+  r.total = total;
   r.grade = total >= 95 ? "A+" :
             total >= 90 ? "A"  :
             total >= 85 ? "B+" :
@@ -46,52 +44,27 @@ const calc = (r) => {
   r.gpa   = { "A+":4.5, A:4.0, "B+":3.5, B:3.0, "C+":2.5, C:2.0, D:1.0, F:0 }[r.grade];
 };
 
-onMounted(async () => {
+onMounted(() => {
   try {
-    const passId   = history.state?.id;
-    const passJson = history.state?.data;
-    if (passId) st.courseId = JSON.parse(passId);
+    //  하드코딩된 학생 데이터 (학번 + 이름 중심) * DB에 학생이 안 불러와서 더미데이터로 넣음
+    st.rows = [
+      { enrollmentId: 1, loginId: "20001", userName: "신민영", gradeYear: 1, departmentName: "컴퓨터공학과",
+        attendanceDays: 0, absence: 0, attendanceEval: 0, midterm: 0, finalExam: 0, etcScore: 0,
+        total: 0, grade: "F", gpa: 0, checked: false },
+      { enrollmentId: 2, loginId: "20002", userName: "배형원", gradeYear: 1, departmentName: "컴퓨터공학과",
+        attendanceDays: 0, absence: 0, attendanceEval: 0, midterm: 0, finalExam: 0, etcScore: 0,
+        total: 0, grade: "F", gpa: 0, checked: false },
+      { enrollmentId: 3, loginId: "20003", userName: "심광훈", gradeYear: 1, departmentName: "컴퓨터공학과",
+        attendanceDays: 0, absence: 0, attendanceEval: 0, midterm: 0, finalExam: 0, etcScore: 0,
+        total: 0, grade: "F", gpa: 0, checked: false },
+      { enrollmentId: 4, loginId: "20004", userName: "성광준", gradeYear: 1, departmentName: "컴퓨터공학과",
+        attendanceDays: 0, absence: 0, attendanceEval: 0, midterm: 0, finalExam: 0, etcScore: 0,
+        total: 0, grade: "F", gpa: 0, checked: false },
+      { enrollmentId: 5, loginId: "20005", userName: "유영환", gradeYear: 1, departmentName: "컴퓨터공학과",
+        attendanceDays: 0, absence: 0, attendanceEval: 0, midterm: 0, finalExam: 0, etcScore: 0,
+        total: 0, grade: "F", gpa: 0, checked: false },
+    ];
 
-    // 1) history.state.data 우선
-    if (passJson) {
-      const base = JSON.parse(passJson);
-      st.rows = base.map(x => ({
-        ...x,
-        attendanceDays: x.attendanceDays ?? 0,
-        absence:        x.absence ?? 0,
-        attendanceEval: x.attendanceEval ?? 0,
-        midterm:        x.midterm ?? 0,
-        finalExam:      x.finalExam ?? 0,
-        etcScore:       x.etcScore ?? x.assignment ?? 0,
-        total: 0, grade: "", gpa: 0,
-        checked: false
-      }));
-    }
-
-    // 2) API 조회
-    if (st.courseId) {
-      try {
-        const { data } = await axios.get(`/api/professor/course/grade/students?courseId=${st.courseId}`);
-        if (Array.isArray(data)) {
-          st.rows = data.map(x => ({
-            ...x,
-            attendanceDays: x.attendanceDays ?? 0,
-            absence:        x.absence ?? 0,
-            attendanceEval: x.attendanceEval ?? 0,
-            midterm:        x.midterm ?? 0,
-            finalExam:      x.finalExam ?? 0,
-            etcScore:       x.etcScore ?? x.assignment ?? 0,
-            total: 0, grade: "", gpa: 0,
-            checked: false
-          }));
-          console.log("학생 데이터 로드됨:", st.rows); 
-        }
-      } catch (err) {
-        console.error("학생 목록 API 오류:", err);
-      }
-    }
-
-    // 초기 계산
     st.rows.forEach(calc);
   } catch (e) {
     st.error = "학생 목록을 불러오지 못했습니다.";
@@ -114,49 +87,31 @@ const filtered = computed(() => {
 /** 전체선택 */
 const toggleAll = () => filtered.value.forEach(r => (r.checked = st.allChecked));
 
-/* =========================================
-    성적 저장 (선택된 학생만)
-   ========================================= */
+/* 선택 저장 - 임시 더미 (API 연결X) */
 async function saveSelected() {
   const selected = st.rows.filter(r => r.checked);
   if (selected.length === 0) {
     alert("수정할 학생을 선택하세요.");
     return;
   }
-
-  isSaving.value = true;
-
-  try {
-    const toPost = [];
-    const toPut = [];
-
-    for (const r of selected) {
-      const midScore = Math.round(Number(r.midterm) ?? 0);
-      const finScore = Math.round(Number(r.finalExam) ?? 0);
-      const rank     = r.grade ?? "F";
-
-      if (r.scoreId) {
-        toPut.push({ scoreId: r.scoreId, midScore, finScore, rank });
-      } else {
-        toPost.push({ enrollmentId: r.enrollmentId, midScore, finScore, rank });
-      }
-    }
-
-    if (toPost.length) {
-      await axios.post("/professor/course/grade", toPost);
-    }
-    if (toPut.length) {
-      await axios.put("/professor/course/grade", toPut);
-    }
-
-    alert("선택한 학생 성적이 저장되었습니다!");
-  } catch (err) {
-    console.error("[성적 저장 실패]", err?.response?.status, err?.response?.data);
-    alert(`성적 저장 중 오류: ${err?.response?.data?.message ?? ""}`);
-  } finally {
-    isSaving.value = false;
+  alert("선택한 학생 성적 저장 (하드코딩 모드)");
+}
+// 행 초기화 ( 수정 버튼 클릭 시 )
+function resetRow(r) {
+  if (confirm(`${r.userName} 학생의 성적을 초기화하시겠습니까?`)) {
+    r.attendanceDays = 0;
+    r.absence        = 0;
+    r.attendanceEval = 0;
+    r.midterm        = 0;
+    r.finalExam      = 0;
+    r.etcScore       = 0;
+    r.total          = 0;
+    r.grade          = "F";
+    r.gpa            = 0;
+    r.checked        = false;
   }
 }
+
 /** CSV 내보내기 */
 function exportCsv() {
   const header = [
@@ -169,7 +124,7 @@ function exportCsv() {
   const rows = st.rows.map(r => [
     r.loginId ?? "",
     r.userName ?? "",
-    r.gradeYear ?? r.grade ?? "",
+    r.gradeYear ?? "",
     r.departmentName ?? "",
     r.attendanceDays ?? 0,
     r.absence ?? 0,
@@ -256,7 +211,7 @@ function exportCsv() {
               <td><input type="checkbox" v-model="r.checked" /></td>
               <td>{{ r.loginId }}</td>
               <td>{{ r.userName }}</td>
-              <td>{{ r.gradeYear }}</td> <!-- 학년 -->
+              <td>{{ r.gradeYear }}</td>
               <td class="left-cell">{{ r.departmentName }}</td>
               <td><input class="num" type="number" min="0" v-model.number="r.attendanceDays" /></td>
               <td><input class="num" type="number" min="0" v-model.number="r.absence" /></td>
@@ -266,10 +221,9 @@ function exportCsv() {
               <td><input class="num" type="number" min="0" max="100" v-model.number="r.etcScore" @input="calc(r)" /></td>
               <td>{{ r.total.toFixed(1) }}</td>
               <td>{{ r.total.toFixed(1) }}</td>
-              <td>{{ r.grade }}</td> <!-- 성적 등급 -->
+              <td>{{ r.grade }}</td>
               <td>{{ r.gpa.toFixed(1) }}</td>
-              <td><button class="btn btn-gray w-full">수정</button></td>
-              
+              <td><button class="btn btn-gray w-full" @click="resetRow(r)">수정</button></td>
             </tr>
           </tbody>
         </table>
@@ -278,7 +232,6 @@ function exportCsv() {
     </div>
   </div>
 </template>
-
 
 <style scoped>
 /* 레이아웃/타이틀 */
@@ -298,7 +251,6 @@ function exportCsv() {
 .btn { height:34px; padding:0 12px; border-radius:6px; border:0; cursor:pointer; font-weight:600; }
 .btn-light  { background:#eaf2ee; color:#0d5c3e; }
 .btn-primary{ background:#1e90ff; color:#fff; }
-.btn-green  { background:#0d5c3e; color:#fff; }
 .btn-gray   { background:#e5e7eb; color:#111827; }
 .w-full { width:100%; }
 
@@ -340,9 +292,6 @@ function exportCsv() {
 }
 .tbl tbody td:last-child { box-shadow: inset 0 1px #e5e7eb; }
 
-/* 포커스 outline 제거 */
-.tbl thead input[type="checkbox"]:focus,
-.tbl thead button:focus { outline: none !important; box-shadow: none !important; }
 .state { padding:18px; color:#475569; }
 .state.error { color:#b91c1c; }
 </style>
