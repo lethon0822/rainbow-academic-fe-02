@@ -1,69 +1,35 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { inject } from "vue";
-import axios from "axios";
+import { ref, onMounted } from "vue";
+import { useUserStore } from "@/stores/account";
+import { GradesbyCourse } from "@/services/GradeService";
 
-const props = defineProps({
-  courseList: {
-    type: Array,
-    default: () => [],
-  },
-  maxHeight: {
-    type: String,
-    default: "700px",
-  },
-  show: {
-    type: Object,
-    default: () => ({
-      professorName: false,
-      remStd: false,
-      enroll: false,
-      cancel: false,
-      deptName: true,
-      setting: false,
-      modify: false,
-      approve: false,
-      check: false,
-    }),
-  },
-});
-const emit = defineEmits(["enroll", "cancel", "check"]);
+// 성적 데이터 상태
+const courseList = ref([]);
 
-const change = (status) => {
-  if (status === "거부") return "gray";
-  if (status === "승인") return "blue";
-  return "red";
-};
+// 사용자 스토어 (로그인된 사용자 정보 및 semesterId 가져오기 위함)
+const userStore = useUserStore();
 
-const openModal = inject("openModal");
-const openLink = (id) => {
-  if (openModal) openModal(id);
-};
+// 테이블 높이 기본값
+const maxHeight = "600px";
 
-const router = useRouter();
-const send = (id, json) => {
-  const jsonBody = JSON.stringify(json);
-  router.push({
-    path: `/professor/course/${id}/students`,
-    state: { data: jsonBody },
-  });
-};
-
-const patchCourseStatus = async (courseId, status) => {
+// API 호출 함수
+async function fetchGrades() {
   try {
-    const payload = { courseId, status };
-    const res = await axios.patch("/staff/approval/course", payload);
-    if (res.status === 200) {
-      alert(`강의가 ${status} 처리되었습니다.`);
-      const target = props.courseList.find((c) => c.courseId === courseId);
-      if (target) target.status = status;
-    } else {
-      alert("승인/거부 실패 (서버 응답 오류)");
-    }
-  } catch (err) {
-    alert("처리 중 오류가 발생했습니다.");
+    const semesterId = userStore.semesterId;
+    const res = await GradesbyCourse({ semesterId });
+
+    console.log("API 응답 데이터:", JSON.stringify(res.data, null, 2));
+    courseList.value = res.data;
+  } catch (error) {
+    console.error("성적 조회 실패:", error);
+    courseList.value = []; // 실패 시 빈 배열로 초기화
   }
-};
+}
+
+// 컴포넌트 마운트 시 데이터 가져오기
+onMounted(() => {
+  fetchGrades();
+});
 </script>
 
 <template>
