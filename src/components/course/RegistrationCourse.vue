@@ -240,124 +240,11 @@ const back = () => {
 
    
 
-    <!-- <div class="container">
-      <form @submit.prevent="submit">
-        <div class="table d-flex top">
-          <div class="table-title">교과목명</div>
-          <div class="table-content">
-            <input
-              type="text"
-              name="title"
-              v-model="state.form.title"
-              required
-            />
-          </div>
-          <div class="table-title">수강인원</div>
-          <div class="table-content">
-            <input type="number" v-model="state.form.maxStd" required />
-          </div>
-        </div>
-        <div class="table d-flex">
-          <div class="table-title">교과구분</div>
-          <div class="table-content">
-            <select v-model="state.form.type" required>
-              <option>전공필수</option>
-              <option>전공선택</option>
-              <option>교양필수</option>
-              <option>교양선택</option>
-            </select>
-          </div>
-          <div class="table-title">학과명</div>
-          <div class="table-content">
-            <span v-if="state.form.type === '교양'"> 교양학부 </span>
-            <span v-else> {{ state.form.deptName }}</span>
-          </div>
-        </div>
-        <div class="table d-flex">
-          <div class="table-title">이수학점</div>
-          <div class="table-content">
-            <input type="number" max="3" v-model="state.form.credit" required />
-          </div>
-          <div class="table-title">학기</div>
-          <div class="table-content">
-            <select v-model="state.form.semester" required>
-              <option value="1">1학기</option>
-              <option value="2">2학기</option>
-            </select>
-          </div>
-        </div>
-        <div class="table d-flex">
-          <div class="table-title">강의시간</div>
-          <div class="table-content">
-            <input type="text" v-model="state.form.time" required />
-          </div>
-          <div class="table-title">강의실</div>
-          <div class="table-content">
-            <input type="text" v-model="state.form.classroom" required />
-          </div>
-        </div>
-
-        <div class="table d-flex last">
-          <div class="table-title">수강인원</div>
-          <div class="table-content">
-            <input type="number" v-model="state.form.maxStd" required />
-          </div>
-          <div class="table-title">수강대상</div>
-          <template v-if="state.form.type==='전공필수'|| '전공선택'">
-            <div class="table-content">
-              <select v-model="state.form.grade" required>
-                <option value="1">1학년</option>
-                <option value="2">2학년</option>
-                <option value="3">3학년</option>
-                <option value="4">4학년</option>
-              </select>
-            </div>
-          </template>
-          <template v-else>
-            <div class="table-content">
-              <select v-model="state.form.grade" class="fix" disabled>
-                <option value="5">수강희망자</option>
-              </select>
-            </div> -->
-          <!-- </template>
-          
-        </div> -->
-
-
-        <!-- <p>강의 계획서</p>
-        <div class="table d-flex top">
-          <div class="table-title">교재</div>
-          <div class="table-content">
-            <input type="text" v-model="state.form.textBook" />
-          </div>
-        </div>
-        <div class="table d-flex detail">
-          <div class="table-title">강의목표</div>
-          <div class="table-content">
-            <textarea type="text" v-model="state.form.goal"></textarea>
-          </div>
-        </div>
-        <div class="table d-flex detail last">
-          <div class="table-title">주차별계획</div>
-          <div class="table-content">
-            <textarea type="text" v-model="state.form.weekPlan"></textarea>
-          </div>
-        </div>
-        <div class="button">
-          <button class="btn btn-light mt-3" @click.stop="back" >
-            취소
-          </button>
-          <button class="btn btn-primary mt-3">
-            {{ props.id > 0 ? "수정" : "제출" }}
-          </button>
-        </div> -->
-      <!-- </form>
-    </div> -->
+    
  
 
 <style scoped lang="scss">
 
-//2025-8-22`
 
    .container {
    border: 2px solid #ccc;   /* 테두리 */
@@ -366,11 +253,12 @@ const back = () => {
    margin: 20px auto;        /* 바깥 여백 */
    max-width: 1320px;         /* 최대 너비 */
    background: #fdfdfd; 
-   height: auto;   
+   max-height: 1000px;   
    position: relative;
    min-height: 1000px; 
    margin-left: 100px; 
    overflow-y: auto;
+   
    } 
 
   
@@ -381,45 +269,46 @@ const back = () => {
         padding: 0;
     }
     
-    h1 {
+  h1 {
         margin-bottom: 20px;
-    }
+  }
     
-    .fform-group {
-      position: absolute; 
-      left: 100px;
+  .fform-group {
+      position: fixed; 
+      left: 485px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
 
-    .fform-group2{
-      position: absolute;
-      left: 650px;
+  .fform-group2 {
+      position: fixed;
+      left: 1030px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group3 {
-      position: absolute;
-      left: 100px;
-      bottom:240px;
-      max-width: 1090px;
-      min-width: 1090px;
+      position: fixed;
+      top: 700px;
+      left: 485px;
+      
+      width: 1080px;
+      display: flex;
       flex-direction: column;
     }
 
     .fform-group4 {
       
-      position: absolute;
+      position: fixed;
       border: #9e9e9e;
       display: grid;
-      left: 400px;
-      bottom:70px;
+      left: 780px;
+      top:1150px;
       max-width: 200px;
       min-width: 200px;
-        // flex-direction: column;
+      
       height: 210px;
       grid-template-columns: repeat(5, 1fr);
       grid-gap: 20px;
@@ -444,7 +333,7 @@ const back = () => {
        text-align: center;     /* 텍스트 중앙 정렬 */
        border: 1px solid #ccc;
        border-radius: 8px;     /* 선택: 모서리 둥글게 */
-       left: 100px;
+       
     }
 
     .form-group select{
@@ -485,7 +374,7 @@ const back = () => {
       }
       
      .fform-group4 input {
-  display: block;              /* 블록 형태 */
+                /* 블록 형태 */
   width: 100%;                 /* 기본 input이랑 맞춤 */
   background-color: #f0f0f0;   /* 회색 배경 */
   border: 1px solid #f0f0f0;
@@ -550,7 +439,7 @@ const back = () => {
   height: 10px;               /* 높이 확보 */
   background-color:#f5f5f5
   }
-//2025-8-22
+
 
 .table1 {
   border: 1px solid #B7B7B7;
@@ -668,4 +557,6 @@ i{
   border: none;
   
 }
+
+
 </style>
