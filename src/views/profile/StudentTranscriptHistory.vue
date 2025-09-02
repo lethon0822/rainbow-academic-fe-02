@@ -2,24 +2,16 @@
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/account";
 import { getMyCurrentGrades } from "@/services/GradeService";
+import { useRouter } from "vue-router";
 
 const courseList = ref([]);
+const router = useRouter();
 const userStore = useUserStore();
-
-const show = ref({
-  rank: false,
-  midScore: false,
-  finScore: false,
-  attendanceScore: false,
-  otherScore: true,
-  point: false,
-});
 
 async function fetchGrades() {
   try {
     const semesterId = userStore.semesterId;
     const res = await getMyCurrentGrades({ semesterId });
-    console.log("API 응답 데이터:", res.data);
     courseList.value = res.data;
   } catch (error) {
     console.error("성적 조회 실패:", error);
@@ -29,6 +21,11 @@ async function fetchGrades() {
 onMounted(() => {
   fetchGrades();
 });
+
+// courseId를 받아서 설문 페이지로 이동
+const goToSurvey = (courseId) => {
+  router.push({ path: "/course/survey", query: { courseId } });
+};
 </script>
 
 <template>
@@ -64,10 +61,22 @@ onMounted(() => {
             <span class="course-code">{{ course.courseCode }}</span>
           </div>
           <div class="course-actions">
-            <button v-if="course.isCompleted" class="btn btn-secondary">
+            <button
+              v-if="course.enrollment?.status === '수강완료'"
+              class="btn btn-secondary"
+            >
               <i class="bi bi-pen me-1"></i> 강의 평가 완료
             </button>
-            <button v-else class="btn btn-danger">
+            <button
+              v-else
+              class="btn btn-danger"
+              @click="
+                () => {
+                  console.log('courseId:', course.courseId);
+                  goToSurvey(course.courseId);
+                }
+              "
+            >
               <i class="bi bi-pen me-1"></i> 강의 평가
             </button>
           </div>
@@ -246,7 +255,7 @@ onMounted(() => {
   justify-content: center;
   background-color: #6c757d;
   color: white;
-  margin-right: 600px;
+  margin-right: 590px;
   width: 120px;
   height: 36px;
 }
@@ -257,7 +266,7 @@ onMounted(() => {
   justify-content: center;
   background-color: #dc3545;
   color: white;
-  margin-right: 600px;
+  margin-right: 590px;
   width: 120px;
   height: 36px;
 }

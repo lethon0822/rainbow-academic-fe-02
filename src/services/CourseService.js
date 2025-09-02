@@ -1,10 +1,10 @@
 import axios from "./httpRequester";
 const path = "/course";
 
-//searchFilter 학과 가져오는 용도 
+//searchFilter 학과 가져오는 용도
 export const getDepartments = () => {
-    return axios.get(`${path}/filter/department`).catch(e => e.response);
-}
+  return axios.get(`${path}/filter/department`).catch((e) => e.response);
+};
 
 //searchFilter 연도 가져오는 용도
 export const getYears = () => {
@@ -18,8 +18,10 @@ export const getCourseListByFilter = (filters) => {
   });
 };
 
-
 // 강의조회
 export const loadCourse = (course_id) => {
-  return axios.get(`/course/${course_id}`, course_id).catch((e) => e.response);
+  if (!course_id) {
+    return Promise.reject(new Error("course_id가 필요합니다."));
+  }
+  return axios.get(`/course/${course_id}`).catch((e) => e.response);
 };
