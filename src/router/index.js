@@ -139,6 +139,13 @@ const router = createRouter({
           component: () =>
             import("@/views/profile/StudentTranscriptHistory.vue"),
         },
+
+        // 졸업 자가 진단 
+        {
+          path: "/graduation",
+          component: () =>
+            import("@/views/graduation/Graduation.vue"),
+        },
       ],
     },
   ],
