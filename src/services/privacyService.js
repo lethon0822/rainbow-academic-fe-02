@@ -8,3 +8,7 @@ export const getPrivacy = () => {
 export const putPrivacy = (jsonBody) => {
   return axios.put('/account/privacy', jsonBody).catch(e => e.response);
 };
+
+export const putPwd = (jsonBody) => {
+  return axios.put('/account/renewal', jsonBody).catch(e => e.response);
+};
