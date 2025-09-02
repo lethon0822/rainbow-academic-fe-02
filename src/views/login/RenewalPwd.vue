@@ -51,7 +51,7 @@ async function submitCode() {
 }
 
 async function renewal() {
-  if (!pwd.data.renewalPwd === pwd.data.confirmPwd) {
+  if (!state.data.renewalPwd === state.data.confirmPwd) {
     return;
   }
   const res = await renewalPwd({
@@ -61,7 +61,7 @@ async function renewal() {
 
   if (res && res.status === 200) {
     closeModal();
-    state.data.renewalTap = true;
+    state.data.renewalTap = false;
   } else {
     // 메세지
   }
