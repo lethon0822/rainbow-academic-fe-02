@@ -176,7 +176,7 @@ const submitSurvey = async () => {
       await axios.post("/student/course/survey", surveyData);
       submitted.value = true;
       alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
-      router.push("/profile");
+      router.push("/grade/current");
     } catch (error) {
       console.error("설문 제출 실패:", error);
       if (error.response?.status === 401) {
