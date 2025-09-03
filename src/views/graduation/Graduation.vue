@@ -2,8 +2,8 @@
 import { reactive, ref } from "vue";
 import { graduationDiagnoses } from "@/services/graduationService";
 
-const isLoading = ref(false); // 로딩 상태
-const isDone = ref(false); // 분석 완료 여부
+const isLoading = ref(false);
+const isDone = ref(false);
 
 const state = reactive({
   graduation: {
@@ -18,7 +18,6 @@ const state = reactive({
     totalCompletedCredits: 0,
     totalShortageCredits: 0,
     graduationResult: "",
-
     details:
       "본 자가진단은 시뮬레이션 이수 학점을 기준으로 졸업 요건 충족 여부를 판단합니다.\n" +
       "전공필수, 전공선택, 교양필수, 교양선택, 총이수학점을 기준으로 자동 계산됩니다.\n" +
@@ -29,10 +28,10 @@ const state = reactive({
 async function startSimulation() {
   isLoading.value = true;
   try {
-    // 실제 호출 대신 2초 대기
-    await new Promise(resolve => setTimeout(resolve, 700));
-    const res = await graduationDiagnoses();
-    console.log("res.data:", res.data);
+    const [res] = await Promise.all([
+      graduationDiagnoses(),
+      new Promise(resolve => setTimeout(resolve, 700))
+    ]);
     state.graduation = res.data;
     isDone.value = true;
   } catch (err) {
@@ -40,13 +39,45 @@ async function startSimulation() {
   } finally {
     isLoading.value = false;
   }
-  
+  // 테스트용
+  // state.graduation.generalElectiveCredits = 100;
+  // state.graduation.shortageGeneralElectiveCredits = 0;
+  // state.graduation.graduationResult='졸업 요건 달성';
+  // state.graduation.details='축하합니다. 졸업 요건을 모두 충족하였습니다.';
 }
+
+// 카드 설정 배열
+const cardConfig = [
+  {
+    label: "전공필수",
+    earned: "majorRequiredCredits",
+    shortage: "shortageMajorRequiredCredits",
+    total: 36,
+  },
+  {
+    label: "전공선택",
+    earned: "majorElectiveCredits",
+    shortage: "shortageMajorElectiveCredits",
+    total: 34,
+  },
+  {
+    label: "교양필수",
+    earned: "generalRequiredCredits",
+    shortage: "shortageGeneralRequiredCredits",
+    total: 15,
+  },
+  {
+    label: "교양선택",
+    earned: "generalElectiveCredits",
+    shortage: "shortageGeneralElectiveCredits",
+    total: 15,
+  },
+];
 </script>
 
 <template>
   <div class="graduation-check">
-    <!-- 버튼 -->
+    <!-- 상단 -->
     <div class="section-box header-box">
       <h2>졸업 자가진단</h2>
       <p class="desc">
@@ -55,159 +86,69 @@ async function startSimulation() {
         확인할 수 있는 프로그램입니다.
       </p>
       <button class="btn-green" @click="startSimulation" :disabled="isLoading">
-  <span v-if="isLoading" class="loader"></span>
-  {{ isLoading ? "분석중..." : isDone ? "분석완료" : "시뮬레이션 시작" }}
-</button>
-
+        <span v-if="isLoading" class="loader"></span>
+        {{ isLoading ? "분석중..." : isDone ? "분석완료" : "시뮬레이션 시작" }}
+      </button>
     </div>
 
     <!-- 졸업 요건 현황 -->
     <div class="section-box">
       <h3 class="section-title">졸업 요건 현황</h3>
 
-      <!-- 카드 4개 -->
+      <!-- 카드 반복 -->
       <div class="grid-4">
-        <!-- 전공필수 -->
-        <div class="stat-card">
-          <p class="stat-label">전공필수</p>
-          <div class="progress">
-            <div
-              class="progress-bar"
-              :style="{
-                width: isDone
-                  ? (state.graduation.majorRequiredCredits / 36) * 100 + '%'
-                  : '0%',
-              }"
-            ></div>
-          </div>
-          <div class="stat-row">
-            <p class="stat-desc">
-              {{ isDone ? state.graduation.majorRequiredCredits : "ㅡ" }} /
-              {{ isDone ? 36 : "ㅡ" }}
-            </p>
-            <p
-              class="status"
+        <div class="stat-card" v-for="c in cardConfig" :key="c.label">
+          <div class="card-header">
+            <p class="stat-label">{{ c.label }}</p>
+            <span
+              class="badge"
               :class="{
-                ok: isDone && state.graduation.shortageMajorRequiredCredits === 0,
-                danger: isDone && state.graduation.shortageMajorRequiredCredits > 0,
-                pending: !isDone,
+                complete: isDone && state.graduation[c.shortage] === 0,
+                danger: isDone && state.graduation[c.shortage] > 0
               }"
             >
               {{
                 isDone
-                  ? state.graduation.shortageMajorRequiredCredits > 0
-                    ? state.graduation.shortageMajorRequiredCredits + "학점 부족"
-                    : "달성 완료"
-                  : "분석 전"
+                  ? state.graduation[c.shortage] > 0
+                    ? ((state.graduation[c.earned] / c.total) * 100).toFixed(1) + '%'
+                    : '완료'
+                  : ''
               }}
-            </p>
+            </span>
           </div>
-        </div>
 
-        <!-- 전공선택 -->
-        <div class="stat-card">
-          <p class="stat-label">전공선택</p>
+          <!-- 프로그레스바 -->
           <div class="progress">
             <div
               class="progress-bar"
+              :class="{
+                complete: isDone && state.graduation[c.earned] >= c.total
+              }"
               :style="{
                 width: isDone
-                  ? (state.graduation.majorElectiveCredits / 34) * 100 + '%'
+                  ? (state.graduation[c.earned] / c.total) * 100 + '%'
                   : '0%',
               }"
             ></div>
           </div>
-          <div class="stat-row">
-            <p class="stat-desc">
-              {{ isDone ? state.graduation.majorElectiveCredits : "ㅡ" }} /
-              {{ isDone ? 34 : "ㅡ" }}
-            </p>
-            <p
-              class="status"
-              :class="{
-                ok: isDone && state.graduation.shortageMajorElectiveCredits === 0,
-                danger: isDone && state.graduation.shortageMajorElectiveCredits > 0,
-                pending: !isDone,
-              }"
-            >
-              {{
-                isDone
-                  ? state.graduation.shortageMajorElectiveCredits > 0
-                    ? state.graduation.shortageMajorElectiveCredits + "학점 부족"
-                    : "달성 완료"
-                  : "분석 전"
-              }}
-            </p>
-          </div>
-        </div>
 
-        <!-- 교양필수 -->
-        <div class="stat-card">
-          <p class="stat-label">교양필수</p>
-          <div class="progress">
-            <div
-              class="progress-bar"
-              :style="{
-                width: isDone
-                  ? (state.graduation.generalRequiredCredits / 15) * 100 + '%'
-                  : '0%',
-              }"
-            ></div>
-          </div>
-          <div class="stat-row">
-            <p class="stat-desc">
-              {{ isDone ? state.graduation.generalRequiredCredits : "ㅡ" }} /
-              {{ isDone ? 15 : "ㅡ" }}
-            </p>
-            <p
-              class="status"
-              :class="{
-                ok: isDone && state.graduation.shortageGeneralRequiredCredits === 0,
-                danger: isDone && state.graduation.shortageGeneralRequiredCredits > 0,
-                pending: !isDone,
-              }"
-            >
-              {{
-                isDone
-                  ? state.graduation.shortageGeneralRequiredCredits > 0
-                    ? state.graduation.shortageGeneralRequiredCredits + "학점 부족"
-                    : "달성 완료"
-                  : "분석 전"
-              }}
-            </p>
-          </div>
-        </div>
 
-        <!-- 교양선택 -->
-        <div class="stat-card">
-          <p class="stat-label">교양선택</p>
-          <div class="progress">
-            <div
-              class="progress-bar"
-              :style="{
-                width: isDone
-                  ? (state.graduation.generalElectiveCredits / 15) * 100 + '%'
-                  : '0%',
-              }"
-            ></div>
-          </div>
+          <!-- 하단 -->
           <div class="stat-row">
             <p class="stat-desc">
-              {{ isDone ? state.graduation.generalElectiveCredits : "ㅡ" }} /
-              {{ isDone ? 15 : "ㅡ" }}
+              {{ isDone ? state.graduation[c.earned] : "ㅡ" }} / {{ isDone ? c.total : "ㅡ" }}학점
             </p>
             <p
               class="status"
               :class="{
-                ok: isDone && state.graduation.shortageGeneralElectiveCredits === 0,
-                danger: isDone && state.graduation.shortageGeneralElectiveCredits > 0,
-                pending: !isDone,
+                danger: isDone && state.graduation[c.shortage] > 0,
+                ok: isDone && state.graduation[c.shortage] === 0
               }"
             >
               {{
                 isDone
-                  ? state.graduation.shortageGeneralElectiveCredits > 0
-                    ? state.graduation.shortageGeneralElectiveCredits + "학점 부족"
+                  ? state.graduation[c.shortage] > 0
+                    ? state.graduation[c.shortage] + "학점 부족"
                     : "달성 완료"
                   : "분석 전"
               }}
@@ -223,42 +164,44 @@ async function startSimulation() {
           <div
             class="progress-bar total-progress-bar"
             :style="{
-              width:
-                (state.graduation.totalCompletedCredits / 140) * 100 + '%',
+              width: (state.graduation.totalCompletedCredits / 130) * 100 + '%',
             }"
           ></div>
         </div>
         <div class="progress-text" v-if="isDone">
-          {{ state.graduation.totalCompletedCredits }}학점 취득 / 140학점 졸업 ({{
-            ((state.graduation.totalCompletedCredits / 140) * 100).toFixed(1)
+          {{ state.graduation.totalCompletedCredits }} / 130학점 ({{
+            ((state.graduation.totalCompletedCredits / 130) * 100).toFixed(1)
           }}% 달성)
         </div>
         <div class="progress-text" v-else>분석 전</div>
       </div>
 
       <!-- 결과 메시지 -->
-<div v-if="isDone">
-  <!-- 졸업 가능 -->
-  <div v-if="state.graduation.graduationResult === '졸업 요건 달성'" class="alert-success">
-    <div class="ad-result">{{ state.graduation.graduationResult }}</div>
-    {{ state.graduation.details }}
-  </div>
-
-  <!-- 졸업 불가 -->
-  <div v-else class="alert-danger">
-    <div class="ad-result">{{ state.graduation.graduationResult }}</div>
-    {{ state.graduation.details }}
-  </div>
-</div>
+      <div v-if="isDone">
+        <div
+          v-if="state.graduation.graduationResult === '졸업 요건 달성'"
+          class="alert-success"
+        >
+          <div class="ad-result">{{ state.graduation.graduationResult }}</div>
+          {{ state.graduation.details }}
+        </div>
+        <div v-else class="alert-danger">
+          <div class="ad-result">{{ state.graduation.graduationResult }}</div>
+          {{ state.graduation.details }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+/* 부모 컨테이너 */
 .graduation-check {
   margin: 0 73px 0 75px;
   padding: 20px;
 }
+
+/* 공통 박스 */
 .section-box {
   background: #fff;
   border-radius: 10px;
@@ -266,12 +209,14 @@ async function startSimulation() {
   margin-bottom: 30px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.06);
 }
+
 .header-box {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
 }
+
 .desc {
   font-size: 14px;
   color: #374151;
@@ -279,23 +224,7 @@ async function startSimulation() {
   margin: 0;
 }
 
-.loader {
-  border: 2px solid #f3f3f3; /* 옅은 회색 */
-  border-top: 2px solid #198754; /* 초록색 */
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
-  animation: spin 0.8s linear infinite;
-  display: inline-block;
-  margin-right: 6px; /* 글자랑 간격 */
-  vertical-align: middle;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
+/* 버튼 & 로딩 */
 .btn-green {
   background: #198754;
   color: white;
@@ -308,31 +237,69 @@ async function startSimulation() {
   opacity: 0.7;
   cursor: not-allowed;
 }
-.section-title {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 16px;
+
+.loader {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #198754;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: middle;
 }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 카드 그리드 */
 .grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
+
+/* 카드 하나 */
 .stat-card {
   background: #f9fafb;
   border-radius: 8px;
   padding: 14px;
-  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 160px;
 }
+
+/* 카드 상단 (제목 + 뱃지) */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .stat-label {
   font-weight: 600;
-  margin-bottom: 6px;
   font-size: 15px;
 }
+
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 15px;
+  padding: 10px 14px;
+}
+.badge.complete {
+  background: #ccf5d0; 
+  color: #166534;
+}
+.badge.danger {
+  background: #FFE5B4; 
+  color: #b91c1c;
+}
+
+/* -- 프로그레스 바 --  */
 .progress {
   background: #e5e7eb;
   border-radius: 6px;
@@ -340,11 +307,20 @@ async function startSimulation() {
   margin: 8px 0;
   overflow: hidden;
 }
-.progress-bar {
-  background: #38a169;
+.progress-bar { /*아직 100프로 달성 아닐 때는 주황색*/
+  background: linear-gradient(90deg, #febe3a, #ff8c00);
   height: 100%;
-  transition: width 0.5s ease;
+  transition: width 0.8s ease;
 }
+
+.progress-bar.complete { /*100프로 달성하면 초록색*/
+  background: linear-gradient(90deg, #71d17a, #198754);  
+  height: 100%;
+  transition: width 5.0s ease, background 1s ease;
+}
+
+
+/* 카드 하단 (설명 + 상태) */
 .stat-row {
   display: flex;
   justify-content: space-between;
@@ -365,33 +341,29 @@ async function startSimulation() {
 }
 .status.danger {
   color: #DC3545;
-
 }
 .status.pending {
   color: #6C757D;
-
 }
+
+/* -- 전체 진행률 -- */
 .progress-container {
   margin: 30px 0 20px;
-  text-align: center;
 }
 .progress-title {
   font-size: 17px;
   font-weight: 600;
-  color: #374151;
   margin-bottom: 10px;
-  text-align: left;
 }
 .progress.total-progress {
   height: 14px;
   border-radius: 7px;
   background-color: #e5e7eb;
-  overflow: hidden;
 }
 .total-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #febe3a, #ff8c00);
-  transition: width 0.6s ease;
+  transition: width 0.8s ease;
 }
 .progress-text {
   margin-top: 6px;
@@ -400,23 +372,24 @@ async function startSimulation() {
   text-align: center;
 }
 
+/* 결과 메시지 */
 .alert-success {
   margin-top: 20px;
   padding: 12px;
-  background: #dcfce7;       
-  color: #166534;           
+  background: #dcfce7;
+  color: #166534;
   border: 1px solid #16a34a;
   border-radius: 6px;
   font-size: 15px;
   text-align: center;
   white-space: pre-line;
 }
-
 .alert-danger {
   margin-top: 20px;
   padding: 12px;
   background: #fee2e2;
   color: #b91c1c;
+  border: 1px solid #fca5a5;
   border-radius: 6px;
   font-size: 15px;
   text-align: center;
@@ -427,6 +400,7 @@ async function startSimulation() {
   font-size: 30px;
   font-weight: 700;
 }
+
 
 
 </style>

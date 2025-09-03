@@ -3,25 +3,30 @@ import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
 import Notices from "@/components/common/Notices.vue";
 import { useRoute } from "vue-router";
+import { ref } from "vue";
 
 const route = useRoute();
+const isMenuOpen = ref(false);
+
+const toggleMenuOpen = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 </script>
 
 <template>
   <div>
-    <Header />
-  </div>
+    <Header @toggle-menu="toggleMenuOpen" />
 
-  <div class="d-flex main">
-    <div class="sidebar">
+    <div class="d-flex main">
+      <SideBar :is-menu-open="isMenuOpen" />
       <div class="dummy"></div>
       <SideBar />
-    </div>
 
-    <div class="content d-flex">
-      <div class="router">
-        <router-view />
-        <Notices v-if="route.path === '/'" />
+      <div class="content d-flex">
+        <div class="router">
+          <router-view />
+          <Notices v-if="route.path === '/'" />
+        </div>
       </div>
     </div>
   </div>
@@ -41,7 +46,10 @@ const route = useRoute();
 .content {
   flex: 1;
 }
-.router {
-  min-width: 1580px;
+
+@media (min-width: 1024px) {
+  .router {
+    min-width: 1580px;
+  }
 }
 </style>
