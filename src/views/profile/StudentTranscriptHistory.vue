@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useUserStore } from "@/stores/account";
 import { getMyCurrentGrades } from "@/services/GradeService";
 import { useRouter } from "vue-router";
 
 const courseList = ref([]);
+const searchTerm = ref("");
 const router = useRouter();
 const userStore = useUserStore();
 
@@ -13,6 +14,7 @@ async function fetchGrades() {
     const semesterId = userStore.semesterId;
     const res = await getMyCurrentGrades({ semesterId });
     courseList.value = res.data;
+    console.log("성적 데이터 원본:", JSON.stringify(res.data, null, 2));
   } catch (error) {
     console.error("성적 조회 실패:", error);
   }
@@ -22,9 +24,24 @@ onMounted(() => {
   fetchGrades();
 });
 
-// courseId를 받아서 설문 페이지로 이동
+const filteredCourses = computed(() => {
+  if (!searchTerm.value) return courseList.value;
+  return courseList.value.filter((course) =>
+    course.title.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
+
 const goToSurvey = (courseId) => {
   router.push({ path: "/course/survey", query: { courseId } });
+};
+
+// 수정된 강의평가 완료 여부 확인 함수
+const isEvaluationCompleted = (course) => {
+  return !!course.evScore || course.evScore === 0; // 0점도 평가 완료로 인정하고 싶다면
+};
+
+const canViewGrades = (course) => {
+  return isEvaluationCompleted(course);
 };
 </script>
 
@@ -40,14 +57,14 @@ const goToSurvey = (courseId) => {
       <div class="search-bar">
         <div class="search-input">
           <i class="bi bi-search search-icon"></i>
-          <input type="text" placeholder="강의이름 검색" />
+          <input type="text" placeholder="강의이름 검색" v-model="searchTerm" />
         </div>
       </div>
     </div>
 
     <div class="course-list">
       <div
-        v-for="(course, index) in courseList"
+        v-for="(course, index) in filteredCourses"
         :key="course.courseCode"
         class="course-card"
       >
@@ -62,53 +79,55 @@ const goToSurvey = (courseId) => {
           </div>
           <div class="course-actions">
             <button
-              v-if="course.enrollment?.status === '수강완료'"
+              v-if="isEvaluationCompleted(course)"
               class="btn btn-secondary"
+              disabled
             >
-              <i class="bi bi-pen me-1"></i> 강의 평가 완료
+              <i class="bi bi-check-circle me-1"></i> 강의 평가 완료
             </button>
             <button
               v-else
               class="btn btn-danger"
-              @click="
-                () => {
-                  console.log('courseId:', course.courseId);
-                  goToSurvey(course.courseId);
-                }
-              "
+              @click="goToSurvey(course.courseId)"
             >
               <i class="bi bi-pen me-1"></i> 강의 평가
             </button>
           </div>
         </div>
 
-        <div v-if="course.isCompleted" class="grade-stats">
-          <div class="stat-item" v-if="show.rank">
+        <!-- 성적 표시 부분 - 강의평가 완료된 경우만 표시 -->
+        <div v-if="canViewGrades(course)" class="grade-stats">
+          <div class="stat-item">
             <span class="stat-label">점수</span>
-            <span class="stat-value">{{ course.rank ?? "-" }}</span>
+            <span class="stat-value">{{
+              course.rank ?? course.totalScore ?? "-"
+            }}</span>
           </div>
-          <div class="stat-item" v-if="show.point">
+          <div class="stat-item">
             <span class="stat-label">평점</span>
-            <span class="stat-value grade">{{ course.point ?? "-" }}</span>
+            <span class="stat-value grade">{{
+              course.point ?? course.grade ?? "-"
+            }}</span>
           </div>
-          <div class="stat-item" v-if="show.attendanceScore">
+          <div class="stat-item">
             <span class="stat-label">출석</span>
             <span class="stat-value">{{ course.attendanceScore ?? "-" }}</span>
           </div>
-          <div class="stat-item" v-if="show.midScore">
+          <div class="stat-item">
             <span class="stat-label">중간고사</span>
             <span class="stat-value">{{ course.midScore ?? "-" }}</span>
           </div>
-          <div class="stat-item" v-if="show.finScore">
+          <div class="stat-item">
             <span class="stat-label">기말고사</span>
             <span class="stat-value">{{ course.finScore ?? "-" }}</span>
           </div>
-          <div class="stat-item" v-if="show.otherScore">
+          <div class="stat-item">
             <span class="stat-label">기타</span>
             <span class="stat-value">{{ course.otherScore ?? "-" }}</span>
           </div>
         </div>
 
+        <!-- 강의평가 미완료 시 경고 메시지 -->
         <div v-else class="warning-message">
           <i class="bi bi-exclamation-triangle text-danger me-2"></i>
           <span class="text-danger">
@@ -258,6 +277,8 @@ const goToSurvey = (courseId) => {
   margin-right: 590px;
   width: 120px;
   height: 36px;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .btn-danger {

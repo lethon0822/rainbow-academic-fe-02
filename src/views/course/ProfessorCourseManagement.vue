@@ -275,12 +275,12 @@ const handleAttendanceManagement = (courseId) => {
 
 .course-actions {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 20px;
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 10px 210px;
   border: none;
   border-radius: 6px;
   font-size: 14px;
