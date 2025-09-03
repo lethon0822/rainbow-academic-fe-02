@@ -7,6 +7,7 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 import { useUserStore } from "@/stores/account";
 import { professorDept } from "@/services/professorService"
+
 const props = defineProps({
   id: Number,
 });
@@ -202,6 +203,7 @@ const back = () => {
           <input
             type="text"
             id="assignment"
+            
             v-model="state.form.assignment"
             placeholder="0%"
             disabled
