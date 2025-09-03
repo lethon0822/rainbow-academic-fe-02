@@ -84,6 +84,7 @@ const back = () => {
     </div>
 
     <div class="container">
+      <div class="form-row">
       <div class="fform-group">
         <div class="form-group">
           <label for="title">교과목명</label>
@@ -144,7 +145,7 @@ const back = () => {
           <input type="text" id="classroom" v-model="state.form.classroom" />
         </div>
       </div>
-
+    </div>
       <div class="fform-group3">
         <div class="form-group">
           <label for="textBook">교재정보</label>
