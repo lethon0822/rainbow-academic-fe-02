@@ -6,7 +6,6 @@ import { courseStudentList } from "@/services/professorService";
 import WhiteBox from "@/components/common/WhiteBox.vue";
 import axios from "axios";
 
-
 const router = useRouter();
 const route = useRoute();
 
@@ -20,7 +19,7 @@ const isLoading = ref(false);
 /* 전달 데이터 */
 const state = reactive({
   data: [], //
-  courseId:route.query.id
+  courseId: route.query.id,
 });
 
 /* 상태 옵션 - attendanceOptions로 이름 통일 */
@@ -39,7 +38,12 @@ const attendanceOptions = [
   },
   { value: "결석", label: "결석", icon: "bi bi-x-circle-fill", cls: "danger" },
   { value: "병가", label: "병가", icon: "bi bi-emoji-dizzy-fill", cls: "info" },
-  { value: "경조사", label: "경조사", icon: "bi bi-flower1", cls: "neutral" },
+  {
+    value: "경조사",
+    label: "경조사",
+    icon: "bi bi-people-fill",
+    cls: "neutral",
+  },
 ];
 
 /* 상태 → 배지 메타 */
@@ -58,7 +62,7 @@ const statusMeta = (st) => {
     case "병가":
       return { label: "병가", cls: "info", icon: "bi bi-emoji-dizzy-fill" };
     case "경조사":
-      return { label: "경조사", cls: "neutral", icon: "bi bi-flower1" };
+      return { label: "경조사", cls: "neutral", icon: "bi bi-people-fill" };
     default:
       return {
         label: st || "미지정",
@@ -68,25 +72,24 @@ const statusMeta = (st) => {
   }
 };
 
+onMounted(async () => {
+  const res = await courseStudentList(state.courseId);
+  console.log("알이에쓰:", res);
 
-onMounted(async() => {
-  const res = await courseStudentList(state.courseId)
-  console.log('알이에쓰:', res)
-
-  state.data = res.data
+  state.data = res.data;
 
   // const passJson = history.state?.data;
   // const passid = history.state?.id;
 
-  state.data = res.data.map(student => ({
+  state.data = res.data.map((student) => ({
     ...student,
-    checked: false,        // 새 속성 추가
+    checked: false, // 새 속성 추가
     status: student.status ?? "결석", // 필요하면 다른 기본값도 넣기
-    note: student.note ?? ""           // 필요하면 note 기본값
+    note: student.note ?? "", // 필요하면 note 기본값
   }));
 });
 
-// 아래 필터 부분 오류 때문에 주석 처리 했습니다 
+// 아래 필터 부분 오류 때문에 주석 처리 했습니다
 /* 필터/검색 */
 const filtered = computed(() => {
   const kw = search.value.trim();
@@ -241,7 +244,7 @@ const exportCsv = () => {
           <tbody>
             <tr v-for="s in state.data" :key="s.enrollmentId">
               <td><input type="checkbox" v-model="s.checked" /></td>
-              <td>{{ s.loginId}}</td>
+              <td>{{ s.loginId }}</td>
               <td>{{ s.userName }}</td>
               <td>{{ s.grade }}</td>
               <td class="left-cell">{{ s.deptName }}</td>
