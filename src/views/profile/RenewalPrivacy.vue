@@ -3,24 +3,24 @@ import {
   sendEmailCode as sendEmailCodeApi,
   verifyEmailCode as verifyEmailCodeApi,
   changePassword as changePasswordApi,
-} from '@/services/accountService';
-import { reactive, computed, watch, onMounted } from 'vue';
-import WhiteBox from '@/components/common/WhiteBox.vue';
-import { sendMail, confirmCode } from '@/services/emailService';
-import { getPrivacy, putPrivacy, putPwd } from '@/services/privacyService';
+} from "@/services/accountService";
+import { reactive, computed, watch, onMounted } from "vue";
+import WhiteBox from "@/components/common/WhiteBox.vue";
+import { sendMail, confirmCode } from "@/services/emailService";
+import { getPrivacy, putPrivacy, putPwd } from "@/services/privacyService";
 
 const state = reactive({
   form: {
-    loginId: '',
-    userName: '',
-    address: '',
-    addDetail: '',
-    phone: '',
-    email: '',
+    loginId: "",
+    userName: "",
+    address: "",
+    addDetail: "",
+    phone: "",
+    email: "",
 
-    authCode: '',
-    newPassword: '',
-    confirmPassword: '',
+    authCode: "",
+    newPassword: "",
+    confirmPassword: "",
     isVerified: false, // ✅ 인증 성공 플래그
   },
   verifiedToken: null, // ✅ 서버가 주는 1회용 토큰
@@ -35,7 +35,7 @@ const canChangePw = computed(() => state.form.isVerified);
 
 function formatPhone(e) {
   let v = (e?.target?.value ?? state.form.phone)
-    .replace(/\D/g, '')
+    .replace(/\D/g, "")
     .slice(0, 11);
   if (v.length < 4) state.form.phone = v;
   else if (v.length < 8) state.form.phone = `${v.slice(0, 3)}-${v.slice(3)}`;
@@ -45,25 +45,25 @@ function formatPhone(e) {
 function sample6_execDaumPostcode() {
   new daum.Postcode({
     oncomplete: function (data) {
-      let addr = ''; // 주소
-      let extraAddr = ''; // 참고항목
+      let addr = ""; // 주소
+      let extraAddr = ""; // 참고항목
 
-      if (data.userSelectedType === 'R') {
+      if (data.userSelectedType === "R") {
         addr = data.roadAddress;
       } else {
         addr = data.jibunAddress;
       }
 
-      if (data.userSelectedType === 'R') {
-        if (data.bname !== '' && /(동|로|가)$/.test(data.bname)) {
+      if (data.userSelectedType === "R") {
+        if (data.bname !== "" && /(동|로|가)$/.test(data.bname)) {
           extraAddr += data.bname;
         }
-        if (data.buildingName !== '' && data.apartment === 'Y') {
+        if (data.buildingName !== "" && data.apartment === "Y") {
           extraAddr +=
-            extraAddr !== '' ? ', ' + data.buildingName : data.buildingName;
+            extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
         }
-        if (extraAddr !== '') {
-          extraAddr = ' (' + extraAddr + ')';
+        if (extraAddr !== "") {
+          extraAddr = " (" + extraAddr + ")";
         }
       }
 
@@ -72,7 +72,7 @@ function sample6_execDaumPostcode() {
       state.form.address = addr + extraAddr;
       // 상세주소 입력칸에 포커스
       setTimeout(() => {
-        document.getElementById('sample6_detailAddress')?.focus();
+        document.getElementById("sample6_detailAddress")?.focus();
       }, 0);
     },
   }).open();
@@ -81,19 +81,19 @@ function sample6_execDaumPostcode() {
 async function saveProfile() {
   const res = putPrivacy(state.form);
   console.log(res);
-  alert('저장되었습니다.');
+  alert("저장되었습니다.");
 }
 
 /** ✅ 이메일로 코드 발송 */
 async function sendCode() {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(state.form.email)) {
-    alert('올바른 이메일을 입력하세요.');
+    alert("올바른 이메일을 입력하세요.");
     return;
   }
   try {
     const res = await sendMail({ email: state.form.email });
     if (res && res.status === 200) {
-      alert('등록된 이메일로 인증번호가 전송되었습니다.');
+      alert("등록된 이메일로 인증번호가 전송되었습니다.");
     } else {
       //
     }
@@ -105,7 +105,7 @@ async function sendCode() {
 /** ✅ 코드 검증 → verifiedToken 수령 */
 async function verifyCode() {
   if (!/^\d{6}$/.test(state.form.authCode)) {
-    alert('6자리 숫자를 입력하세요.');
+    alert("6자리 숫자를 입력하세요.");
     return;
   }
 
@@ -115,40 +115,43 @@ async function verifyCode() {
       authCode: state.form.authCode,
     });
     if (res && res.status === 200) {
-      alert('인증 성공');
+      alert("인증 성공");
       // 인증 성공 후 추가 동작 가능
       state.form.isVerified = true;
     } else {
-      alert('인증 실패');
+      alert("인증 실패");
       // 메세지
     }
   } catch (err) {
-    alert('인증 실패22');
+    alert("인증 실패22");
     // 메세지
   }
 }
 
 /** ✅ 비번 변경 (서버에 verifiedToken 제출) */
 async function changePasswordClick() {
-  if (!canChangePw.value && state.form.newPassword !== state.form.confirmPassword) {
+  if (
+    !canChangePw.value &&
+    state.form.newPassword !== state.form.confirmPassword
+  ) {
     return;
   }
   try {
-    const res = await putPwd({jsonBody: state.form.newPassword});
+    const res = await putPwd({ jsonBody: state.form.newPassword });
     if (res && res.status === 200) {
-      alert('비밀번호가 변경되었습니다.');
+      alert("비밀번호가 변경되었습니다.");
       // 필요하면 폼 초기화
-      state.form.newPassword = '';
-      state.form.confirmPassword = '';
-      state.form.authCode = '';
+      state.form.newPassword = "";
+      state.form.confirmPassword = "";
+      state.form.authCode = "";
       state.form.isVerified = false;
       state.verifiedToken = null;
     } else {
-      alert('비밀번호 변경에 실패했습니다.');
+      alert("비밀번호 변경에 실패했습니다.");
     }
   } catch (err) {
     console.error(err);
-    alert('비밀번호 변경 중 오류가 발생했습니다.');
+    alert("비밀번호 변경 중 오류가 발생했습니다.");
   }
 }
 
@@ -302,9 +305,9 @@ watch(
 <style scoped>
 /* 브라우저 기본 외형 제거 (특히 사파리/크롬) */
 .input,
-input[type='text'],
-input[type='number'],
-input[type='search'] {
+input[type="text"],
+input[type="number"],
+input[type="search"] {
   -webkit-appearance: none;
   appearance: none;
 }
@@ -322,12 +325,15 @@ input[type='search'] {
 }
 /* 페이지 */
 .page {
-  padding: 16px 24px 48px;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px 0px 24px 5px;
 }
+
 .page-title {
   font-size: 22px;
-  font-weight: 600px;
-  margin: 8px 0 16px;
+  font-weight: 600;
+  margin: 8px 0 16px 28px;
 }
 
 /* WhiteBox 공통 + 변형 */
