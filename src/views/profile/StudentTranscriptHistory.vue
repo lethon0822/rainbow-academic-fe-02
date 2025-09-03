@@ -142,11 +142,10 @@ const canViewGrades = (course) => {
 
 <style scoped>
 .container {
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 16px;
-  min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 100%;
+  min-width: 320px;
+  padding: 16px 24px 24px 50px;
+  box-sizing: border-box;
 }
 
 .header-card {
@@ -350,6 +349,7 @@ const canViewGrades = (course) => {
 /* 모바일 (해상도 480px ~ 767px) */
 @media all and (max-width: 767px) {
   .container {
+    width: 100%;
     padding: 12px;
   }
 
@@ -409,6 +409,7 @@ const canViewGrades = (course) => {
 /* 테블릿 (해상도 768px ~ 1023px) */
 @media all and (min-width: 768px) and (max-width: 1023px) {
   .container {
+    width: 100%;
     padding: 20px 24px;
   }
 
