@@ -20,13 +20,13 @@ const state = reactive({
   checked:true
 
 })
-console.log("학과번호:", props.dept.deptId)
+
 
 onMounted(async()=>{
   if (!props.dept) return;
   const res = await deptGetHead(props.dept.deptId)
   state.professor = res.data
-  console.log('알이에스:', res.data)
+  console.log("aiai:", state.professor)
   console.log
 })
 
@@ -42,7 +42,8 @@ const change = (select)=>{
 
 const update = async() =>{
   try {
-    if(state.checked===false){
+    if(state.checked === false){
+      
       await deptPatch(state.form.deptId);
     } else {
       await deptPut(state.form);
@@ -90,7 +91,7 @@ const close = () => {
       <div class="box">
         <label class="code" for="d-head">학과장명</label>
         <select name="headName" id="d-head" class="d-head" v-model="state.form.headProfId">
-          <option  v-for="proItem in state.professor" :value="proItem.userId">{{ proItem.userName }}</option>
+          <option  v-for="proItem in state.professor" :key="proItem.userId" :value="proItem.userId">{{ proItem.userName }}</option>
         </select>
       </div>
 

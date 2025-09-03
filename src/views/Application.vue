@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, reactive } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/account'
 // API
@@ -12,8 +12,13 @@ const userStore = useUserStore()
 const { semesterId } = storeToRefs(userStore)
 
 // (있다면 사용, 없으면 하이픈 표시)
+const state = reactive({
+  profile:{
+    studentNumber: userStore.studentNumber ?? userStore.loginId ?? '-'
+  }
+})
 const studentNumber = computed(() => userStore.studentNumber ?? userStore.loginId ?? '-')
-const deptName = computed(() => userStore.deptName ?? userStore.state.deptName ?? '-')
+const deptName = computed(() => userStore.deptName ?? userStore.deptName ?? '-')
 
 // ===== 상단 폼 상태 =====
 const appType = ref('LEAVE')                 // 'LEAVE' | 'RETURN'  (휴/복학 토글)
