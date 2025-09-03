@@ -1,10 +1,7 @@
 <script setup>
-import { reactive, provide, onMounted, watch } from "vue";
+import { reactive, provide, } from "vue";
 import CourseDetail from "@/components/course/CourseDetail.vue";
-import { useAccountStore } from "@/stores/account";
 import { useLoadingStore } from "@/stores/loading";
-import { check } from "@/services/accountService";
-import { useRoute, useRouter } from "vue-router";
 
 
 const show = reactive({
@@ -21,110 +18,31 @@ const openModal = (id) => {
 
 provide("openModal", openModal);
 
-const route = useRoute();
-const account = useAccountStore();
 const loading = useLoadingStore();
-const router = useRouter();
 
-// 초기 로딩 상태 관리
-const isInitializing = reactive({ value: true });
 
-// 로그인 여부 확인
-const checkAccount = async () => {
-  try {
-    const res = await check();
-    if (res === undefined || res.status !== 200) {
-      account.setChecked(false);
-      account.setLoggedIn(false);
-      return false;
-    }
-    account.setChecked(true);
-    account.setLoggedIn(res.data > 0);
-    return res.data > 0;
-  } catch (error) {
-    console.error("Account check failed:", error);
-    account.setChecked(false);
-    account.setLoggedIn(false);
-    return false;
-  }
-};
-
-// 초기화 및 라우팅 처리
-const initializeApp = async () => {
-  //loading.showLoading();
-
-  const isLoggedIn = await checkAccount();
-  isInitializing.value = false;
-
-  // 현재 경로가 /login이 아닌 경우에만 리다이렉션 처리
-  if (route.path === "/login") {
-    // 로그인 페이지에서 이미 로그인된 경우 홈으로 리다이렉션
-    if (isLoggedIn) {
-      router.push("/");
-    }
-  } else {
-    // 다른 페이지에서 로그인되지 않은 경우 로그인 페이지로 리다이렉션
-    if (!isLoggedIn) {
-      router.push("/login");
-    }
-  }
-
-  //loading.hideLoading();
-};
-
-onMounted(() => {
-  initializeApp();
-});
-
-// 라우트 변경 감지
-watch(
-  () => route.path,
-  async (newPath) => {
-    // 초기화 중이 아닐 때만 체크
-    if (!isInitializing.value) {
-      //loading.showLoading();
-
-      const isLoggedIn = await checkAccount();
-      // 로그인 페이지가 아닌데 로그인되지 않은 경우
-      if (newPath !== "/login" && !isLoggedIn) {
-        router.push("/login");
-      }
-      // 로그인 페이지인데 이미 로그인된 경우
-      else if (newPath === "/login" && isLoggedIn) {
-        router.push("/");
-      }
-
-      // 약간의 딜레이 후 로딩 종료 (자연스러운 UX를 위해)
-      setTimeout(() => {
-        //loading.hideLoading();
-      }, 500);
-    }
-  }
-);
 </script>
 
 <template>
   <div>
     <!-- 전역 로딩 오버레이 -->
-    <div
-      v-if="loading.isLoading || isInitializing.value"
-      class="loading-overlay"
-    >
+    <div v-if="loading.isLoading" class="loading-overlay">
       <div class="loading-content"></div>
     </div>
-    <div v-show="!isInitializing.value && !loading.isLoading">
-      <template v-if="show.modal">
-        <div class="black-bg" @click="show.modal = false">
-          <div class="cover">
-            <div class="white-bg" @click.stop>
-              <i class="bi bi-x close-icon" @click="show.modal = false"></i>
-              <CourseDetail :id="show.id" />
-            </div>
+
+    <!-- 상세 모달 -->
+    <template v-if="show.modal">
+      <div class="black-bg" @click="show.modal = false">
+        <div class="cover">
+          <div class="white-bg" @click.stop>
+            <i class="bi bi-x close-icon" @click="show.modal = false"></i>
+            <CourseDetail :id="show.id" />
           </div>
         </div>
-      </template>
-      <router-view />
-    </div>
+      </div>
+    </template>
+
+    <router-view />
   </div>
 </template>
 

@@ -2,7 +2,7 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import WhiteBox from '@/components/common/WhiteBox.vue'
 import { getMemberList } from '@/services/memberService'
-import { deptGet } from '@/services/deptManageService'
+import { deptGet } from '@/services/DeptManageService'
 
 const depts = ref([
   { id: '', name: '전체' },

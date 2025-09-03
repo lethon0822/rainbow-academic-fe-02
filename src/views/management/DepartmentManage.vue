@@ -1,7 +1,7 @@
 <script setup>
 import whiteBox from '@/components/common/WhiteBox.vue';
 import { reactive, onMounted, watch } from 'vue';
-import { deptGet, deptPost } from '@/services/deptManageService';
+import { deptGet, deptPost } from '@/services/DeptManageService';
 import DeptUpdateModal from '@/components/management/DeptUpdateModal.vue';
 
 const state = reactive({
