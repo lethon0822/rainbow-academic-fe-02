@@ -192,7 +192,7 @@ main,
 
 .logout-icon {
   display: none;
-  font-size: 22px;
+  font-size: 25px;
   color: white;
   cursor: pointer;
   padding: 6px;
