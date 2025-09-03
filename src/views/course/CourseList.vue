@@ -67,12 +67,12 @@ const handleSearch = async (filters) => {
 <style scoped>
 /* 페이지 */
 .page {
-  padding: 16px 24px 48px;
+  padding: 20px 24px 5px;
 }
 .page-title {
   font-size: 22px;
-  font-weight: 600px;
-  margin: 8px 0 -100px;
+  font-weight: 600;
+  margin: 8px 0 16px 50px;
 }
 
 .profile-wrapper {

@@ -62,9 +62,8 @@ const rows = ref([])
 const filters = reactive({
   deptId: '',
   status: '',      // 재학/휴학/졸업 등
-  gender: '',      // 교수 전용: M/F or 남/여
   grade: '',       // 학생 전용: 1~4
-  q: '',
+  keyword: '',
   searchBy: 'all', // all | name | loginId | email
 })
 
@@ -80,7 +79,7 @@ async function load() {
       userRole: role.value, 
       deptId: filters.deptId !== '' ? Number(filters.deptId) : undefined, 
       status: filters.status || undefined,
-      q: filters.q || undefined,
+      keyword: filters.keyword || undefined,
       searchBy: filters.searchBy !== 'all' ? filters.searchBy : undefined,
     }
     if (isStudent.value && filters.grade) {
@@ -108,7 +107,7 @@ function setRole(r) {
   filters.grade = ''
   filters.status = ''
 }
-function clearQ(){ filters.q = '' }
+function clearQ(){ filters.keyword = '' }
 
 watch([role, () => filters.deptId, () => filters.status, () => filters.gender, () => filters.grade], load)
 onMounted(async () => {
@@ -162,13 +161,13 @@ onMounted(async () => {
               <option value="email">이메일</option>
             </select>
             <input
-              v-model="filters.q"
+              v-model="filters.keyword"
               type="text"
               class="inp w240"
               :placeholder="isStudent ? '이름 또는 학번 검색' : '이름 또는 아이디 검색'"
               @keyup.enter="load"
             />
-            <button class="ghost" v-if="filters.q" @click="clearQ">지움</button>
+            <button class="ghost" v-if="filters.keyword" @click="clearQ">지움</button>
           </div>
 
           <button class="primary" @click="load">조회</button>

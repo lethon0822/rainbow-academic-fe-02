@@ -1,50 +1,16 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import axios from "axios";
-import { useUserStore } from "@/stores/user";
+import { defineProps } from "vue";
 
-const courseList = ref([]);
-
-const userStore = useUserStore();
-const semesterId = ref(userStore.semester); // 필요하면 수정
-
-async function fetchPermanentGrades(semesterId) {
-  try {
-    const res = await axios.get("/student/grade/permanent", {
-      params: { semesterId },
-    });
-
-    courseList.value = res.data.map((item) => ({
-      courseCode: item.courseCode,
-      title: item.title,
-      type: item.type,
-      grade: item.grade,
-      credit: item.credit,
-      rank: item.rank,
-      point: item.point,
-      professorName: item.professorName,
-      year: item.year,
-      semester: item.semester,
-    }));
-  } catch (error) {
-    console.error("영구 성적 조회 실패", error);
-  }
-}
-
-onMounted(() => {
-  fetchPermanentGrades(semesterId.value);
-});
-
-// semesterId가 변경될 때 재조회가 필요하면 watch 사용
-watch(semesterId, (newVal) => {
-  if (newVal) {
-    fetchPermanentGrades(newVal);
-  }
+const props = defineProps({
+  courseList: {
+    type: Array,
+    required: true,
+  },
 });
 </script>
 
 <template>
-  <div class="table-container">
+  <div class="table-container" :style="{ maxHeight: '600px' }">
     <div class="table-wrapper">
       <table>
         <thead>
@@ -52,27 +18,27 @@ watch(semesterId, (newVal) => {
             <th>연도</th>
             <th>학기</th>
             <th>이수구분</th>
-            <th>학년</th>
-            <th>담당교수</th>
             <th>과목코드</th>
-            <th>교과목명</th>
+            <th>과목명</th>
+            <th>담당교수</th>
+            <th>학년</th>
             <th>학점</th>
             <th>등급</th>
             <th>평점</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="course in courseList" :key="course.courseId">
+          <tr v-for="course in courseList" :key="course.courseCode">
             <td>{{ course.year }}</td>
             <td>{{ course.semester }}</td>
             <td>{{ course.type }}</td>
-            <td>{{ course.grade }}학년</td>
-            <td>{{ course.professorName }}</td>
             <td>{{ course.courseCode }}</td>
             <td>{{ course.title }}</td>
+            <td>{{ course.professorName }}</td>
+            <td>{{ course.grade }}학년</td>
             <td>{{ course.credit }}</td>
             <td>{{ course.rank }}</td>
-            <td>{{ course.point?.toFixed(2) ?? "-" }}</td>
+            <td>{{ course.point }}</td>
           </tr>
         </tbody>
       </table>

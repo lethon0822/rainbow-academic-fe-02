@@ -2,6 +2,10 @@
 import { ref, nextTick, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/account";
+import { toRef } from "vue";
+defineProps({
+  isMenuOpen: Boolean,
+});
 
 const accordian = ref(null);
 const route = useRoute();
@@ -159,14 +163,14 @@ watch(
 </script>
 
 <template>
-  <div id="accordian" ref="accordian">
+  <div class="accordian" :class="{ open: isMenuOpen }" ref="accordian">
     <ul>
       <!-- 학적 -->
       <li class="menu-hakjeok">
         <a href="javascript:void(0);">학적</a>
         <ul>
           <li>
-            <router-link to="/profile/test" class="router-link">
+            <router-link to="/profile" class="router-link">
               학적기본사항관리
             </router-link>
           </li>
@@ -176,12 +180,15 @@ watch(
             </router-link>
           </li>
 
-         
           <li v-if="userStore.userRole == 'student'">
-            <router-link to="/application" class="router-link"> 휴·복학신청 </router-link>
+            <router-link to="/application" class="router-link">
+              휴·복학신청
+            </router-link>
           </li>
           <li v-if="userStore.userRole == 'professor'">
-            <router-link to="/application" class="router-link"> 휴·복직신청 </router-link>
+            <router-link to="/application" class="router-link">
+              휴·복직신청
+            </router-link>
           </li>
         </ul>
       </li>
@@ -253,7 +260,9 @@ watch(
           <ul>
             <!-- 라우팅처리 -->
             <li>
-              <router-link to="#" class="router-link">졸업자가진단</router-link>
+              <router-link to="/graduation" class="router-link"
+                >졸업자가진단</router-link
+              >
             </li>
           </ul>
         </li>
@@ -323,7 +332,7 @@ body {
   background-color: #fff;
 }
 
-#accordian {
+.accordian {
   position: fixed;
   top: 60px;
   left: 0;
@@ -336,32 +345,32 @@ body {
 }
 
 /* 스크롤바 */
-#accordian::-webkit-scrollbar {
+.accordian::-webkit-scrollbar {
   width: 5px;
   height: 8px;
 }
-#accordian::-webkit-scrollbar-track {
+.accordian::-webkit-scrollbar-track {
   background-color: #e4e4e4;
 }
-#accordian::-webkit-scrollbar-thumb {
+.accordian::-webkit-scrollbar-thumb {
   background: #0089ff;
   transition: 0.5s;
 }
-#accordian::-webkit-scrollbar-thumb:hover {
+.accordian::-webkit-scrollbar-thumb:hover {
   background: #d5b14c;
 }
 
 /* 메뉴 기본 스타일 */
-#accordian ul {
+.accordian ul {
   list-style: none;
 }
 
-#accordian ul li {
+.accordian ul li {
   list-style: none;
   position: relative;
 }
 
-#accordian ul li > a {
+.accordian ul li > a {
   color: #343a40;
   background-color: white;
   text-decoration: none;
@@ -378,13 +387,13 @@ body {
 }
 
 /* 상위 메뉴 노란색 배경 */
-#accordian li.menu-sugang > a,
-#accordian li.menu-hakjeok > a,
-#accordian li.menu-gangui > a,
-#accordian li.menu-etc > a,
-#accordian li.menu-score > a,
-#accordian li.menu-management > a,
-#accordian li.menu-graduate > a {
+.accordian li.menu-sugang > a,
+.accordian li.menu-hakjeok > a,
+.accordian li.menu-gangui > a,
+.accordian li.menu-etc > a,
+.accordian li.menu-score > a,
+.accordian li.menu-management > a,
+.accordian li.menu-graduate > a {
   background-color: #fff;
   color: #343a40;
   outline: 1px solid #d9d9d9;
@@ -392,7 +401,7 @@ body {
 }
 
 /* 하위 메뉴 */
-#accordian ul li ul {
+.accordian ul li ul {
   display: none;
   margin: 0;
   position: relative;
@@ -401,13 +410,13 @@ body {
 }
 
 /* 활성화된 하위 메뉴 보이기 */
-#accordian ul li.active > ul.show-dropdown {
+.accordian ul li.active > ul.show-dropdown {
   border-bottom: 1px solid #d9d9d9;
   display: block;
 }
 
 /* 하위 메뉴 링크 스타일 */
-#accordian ul li ul li a {
+.accordian ul li ul li a {
   background-color: #f8f9fa !important;
   color: #343a40;
 
@@ -417,15 +426,15 @@ body {
 }
 
 /* 하위 메뉴 활성화시에도 배경색 흰색 유지 */
-#accordian ul li ul li.active > a,
-#accordian ul li ul li > a.active {
+.accordian ul li ul li.active > a,
+.accordian ul li ul li > a.active {
   background-color: #e9f5e8 !important;
   color: #00664f;
   box-shadow: none !important;
 }
 
 /* 메뉴 화살표 */
-#accordian a:not(:only-child):after {
+.accordian a:not(:only-child):after {
   content: "\f105";
   position: absolute;
   right: 20px;
@@ -437,12 +446,12 @@ body {
 }
 
 /* 활성 메뉴 화살표 회전 */
-#accordian li.active > a:not(:only-child):after {
+.accordian li.active > a:not(:only-child):after {
   transform: rotate(90deg);
 }
 
 /* 상위 메뉴 아닌 활성 메뉴 배경 투명 처리 */
-/* #accordian
+/* .accordian
   li:not(.menu-sugang):not(.menu-hakjeok):not(.menu-etc):not(.menu-gangui):not(
     .menu-score
   ).active
@@ -452,9 +461,24 @@ body {
  } */
 
 /* 하위 메뉴 링크 포커스, 호버 시 배경색 유지 */
-#accordian ul li ul li a:hover,
-#accordian ul li ul li a:focus {
+.accordian ul li ul li a:hover,
+.accordian ul li ul li a:focus {
   background-color: #e9f5e8 !important;
   color: #00664f;
+}
+
+@media (max-width: 1023px) {
+  .accordian {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    height: calc(100vh - 60px);
+    background: white;
+    z-index: 999;
+  }
+  .accordian.open {
+    display: block;
+  }
 }
 </style>

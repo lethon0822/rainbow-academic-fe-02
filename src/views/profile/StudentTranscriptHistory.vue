@@ -1,87 +1,47 @@
 <script setup>
-import { reactive, onMounted } from "vue";
-import { courseStudentList } from "@/services/professorService";
+import { ref, onMounted, computed } from "vue";
 import { useUserStore } from "@/stores/account";
-import { useRoute, useRouter } from "vue-router";
+import { getMyCurrentGrades } from "@/services/GradeService";
+import { useRouter } from "vue-router";
 
-const userStore = useUserStore();
-const route = useRoute();
+const courseList = ref([]);
+const searchTerm = ref("");
 const router = useRouter();
+const userStore = useUserStore();
 
-onMounted(async () => {
-  const passJson = history.state.data;
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.course = nana;
-
-    const id = state.course.courseId;
-    console.log("아이디", id);
-    const res = await courseStudentList(id);
-    console.log("냐냐", res);
-
-    if (res.data.length > 0) {
-      state.data = res.data;
-      console.log("스테이트", state.data);
-      return;
-    }
+async function fetchGrades() {
+  try {
+    const semesterId = userStore.semesterId;
+    const res = await getMyCurrentGrades({ semesterId });
+    courseList.value = res.data;
+    console.log("성적 데이터 원본:", JSON.stringify(res.data, null, 2));
+  } catch (error) {
+    console.error("성적 조회 실패:", error);
   }
+}
+
+onMounted(() => {
+  fetchGrades();
 });
 
-const attendance = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
-
-  router.push({
-    path: "/professor/attendance",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
-  });
-};
-
-const enrollmentGrade = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
-
-  router.push({
-    path: "/enrollmentgrade",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
-  });
-};
-
-const state = reactive({
-  courses: [
-    {
-      id: 1,
-      title: "컴퓨터 과학개론",
-      courseCode: "CS101",
-      score: 60,
-      grade: "A+",
-      attendance: 20,
-      attendanceRate: 20,
-      lateCount: 20,
-      assignments: 0,
-      isCompleted: true,
-    },
-    {
-      id: 2,
-      title: "컴퓨터 네트워크",
-      courseCode: "CS101",
-      isCompleted: false,
-    },
-  ],
+const filteredCourses = computed(() => {
+  if (!searchTerm.value) return courseList.value;
+  return courseList.value.filter((course) =>
+    course.title.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
 });
 
-const handleStudentManagement = (courseId) => {
-  console.log(`학생 관리: ${courseId}`);
+const goToSurvey = (courseId) => {
+  router.push({ path: "/course/survey", query: { courseId } });
 };
 
-const handleAttendanceManagement = (courseId) => {
-  console.log(`출결관리 및 성적: ${courseId}`);
+// 수정된 강의평가 완료 여부 확인 함수
+const isEvaluationCompleted = (course) => {
+  return !!course.evScore || course.evScore === 0; // 0점도 평가 완료로 인정하고 싶다면
+};
+
+const canViewGrades = (course) => {
+  return isEvaluationCompleted(course);
 };
 </script>
 
@@ -97,67 +57,83 @@ const handleAttendanceManagement = (courseId) => {
       <div class="search-bar">
         <div class="search-input">
           <i class="bi bi-search search-icon"></i>
-          <input type="text" placeholder="강의이름 검색" />
+          <input type="text" placeholder="강의이름 검색" v-model="searchTerm" />
         </div>
       </div>
     </div>
 
     <div class="course-list">
-      <div v-for="course in state.courses" :key="course.id" class="course-card">
+      <div
+        v-for="(course, index) in filteredCourses"
+        :key="course.courseCode"
+        class="course-card"
+      >
         <div class="course-header">
           <div class="course-info">
             <span class="course-number">{{
-              String(course.id).padStart(2, "0")
+              String(index + 1).padStart(2, "0")
             }}</span>
             <span class="course-title">{{ course.title }}</span>
             <span class="course-divider">|</span>
             <span class="course-code">{{ course.courseCode }}</span>
-          </div>
-          <div class="course-actions">
-            <button v-if="course.isCompleted" class="btn btn-secondary">
-              <i class="bi bi-pen me-1"></i>
-              강의 평가 완료
-            </button>
-            <button v-else class="btn btn-danger">
-              <i class="bi bi-pen me-1"></i>
-              강의 평가
-            </button>
+            <div class="course-actions">
+              <button
+                v-if="isEvaluationCompleted(course)"
+                class="btn btn-secondary"
+                disabled
+              >
+                <i class="bi bi-check-circle me-1"></i> 강의 평가 완료
+              </button>
+              <button
+                v-else
+                class="btn btn-danger"
+                @click="goToSurvey(course.courseId)"
+              >
+                <i class="bi bi-pen me-1"></i> 강의 평가
+              </button>
+            </div>
           </div>
         </div>
 
-        <div v-if="course.isCompleted" class="grade-stats">
+        <!-- 성적 표시 부분 - 강의평가 완료된 경우만 표시 -->
+        <div v-if="canViewGrades(course)" class="grade-stats">
           <div class="stat-item">
             <span class="stat-label">점수</span>
-            <span class="stat-value">{{ course.score }}</span>
+            <span class="stat-value">{{
+              course.point ?? course.grade ?? "-"
+            }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">평점</span>
-            <span class="stat-value grade">{{ course.grade }}</span>
+            <span class="stat-value grade">{{
+              course.rank ?? course.totalScore ?? "-"
+            }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">출석</span>
-            <span class="stat-value">{{ course.attendance }}</span>
+            <span class="stat-value">{{ course.attendanceScore ?? "-" }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">중간고사</span>
-            <span class="stat-value">{{ course.attendanceRate }}</span>
+            <span class="stat-value">{{ course.midScore ?? "-" }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">기말고사</span>
-            <span class="stat-value">{{ course.lateCount }}</span>
+            <span class="stat-value">{{ course.finScore ?? "-" }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">기타</span>
-            <span class="stat-value">{{ course.assignments }}</span>
+            <span class="stat-value">{{ course.otherScore ?? "-" }}</span>
           </div>
         </div>
 
+        <!-- 강의평가 미완료 시 경고 메시지 -->
         <div v-else class="warning-message">
           <i class="bi bi-exclamation-triangle text-danger me-2"></i>
-          <span class="text-danger"
-            >강의 평가 미완료로 성적 조회가 제한됩니다. 평가를 먼저 완료해
-            주세요.</span
-          >
+          <span class="text-danger">
+            강의 평가 미완료로 성적 조회가 제한됩니다. 평가를 먼저 완료해
+            주세요.
+          </span>
         </div>
       </div>
     </div>
@@ -166,21 +142,19 @@ const handleAttendanceManagement = (courseId) => {
 
 <style scoped>
 .container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 24px;
-  min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 100%;
+  min-width: 320px;
+  padding: 16px 24px 24px 50px;
+  box-sizing: border-box;
 }
 
 .header-card {
   background: white;
-  padding: 24px;
+  padding: 16px;
   border-radius: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
-
 }
 
 .header-card h1 {
@@ -194,6 +168,7 @@ const handleAttendanceManagement = (courseId) => {
   color: #666;
   font-size: 13px;
   margin: 0 0 16px 0;
+  line-height: 1.4;
 }
 
 .search-bar {
@@ -202,7 +177,7 @@ const handleAttendanceManagement = (courseId) => {
 
 .search-input {
   position: relative;
-  max-width: 400px;
+  max-width: 100%;
 }
 
 .search-icon {
@@ -217,10 +192,10 @@ const handleAttendanceManagement = (courseId) => {
 
 .search-input input {
   width: 100%;
-  padding: 10px 12px 10px 35px;
+  padding: 12px 12px 12px 35px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
   background: white;
   box-sizing: border-box;
@@ -233,7 +208,7 @@ const handleAttendanceManagement = (courseId) => {
 .course-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .course-card {
@@ -246,100 +221,100 @@ const handleAttendanceManagement = (courseId) => {
 
 .course-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
   border-bottom: 1px solid #f0f0f0;
   border-radius: 8px 8px 0 0;
 }
 
 .course-info {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .course-number {
   font-weight: 600;
   color: #333;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .course-title {
   font-weight: 600;
   color: #333;
   font-size: 14px;
+  word-break: break-word;
 }
 
 .course-divider {
   color: #999;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .course-code {
   color: #666;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.course-actions {
+  align-self: flex-start;
 }
 
 .btn {
-  padding: 6px 12px;
+  padding: 8px 12px;
   font-size: 12px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   font-weight: 500;
+  width: 120px;
+  height: 36px;
+  white-space: nowrap;
 }
 
 .btn-secondary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #6c757d;
   color: white;
-  margin-right: 600px;
-  width: 120px;
-  height: 36px;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .btn-danger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #dc3545;
   color: white;
-  margin-right: 600px;
-  width: 120px;
-  height: 36px;
 }
 
 .grade-stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 19px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 20px 16px;
   background: #f8f9fa;
-  gap: 40px;
   border-radius: 0 0 8px 8px;
 }
 
 .stat-item {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  text-align: center;
 }
 
 .stat-label {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   font-weight: 500;
 }
 
 .stat-value {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #333;
 }
@@ -352,10 +327,11 @@ const handleAttendanceManagement = (courseId) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 19px;
+  padding: 20px 16px;
   background: #fff3cd;
-  font-size: 15px;
+  font-size: 13px;
   text-align: center;
+  line-height: 1.4;
 }
 
 .text-danger {
@@ -368,5 +344,221 @@ const handleAttendanceManagement = (courseId) => {
 
 .me-2 {
   margin-right: 0.5rem;
+}
+
+/* 모바일 (해상도 480px ~ 767px) */
+@media all and (max-width: 767px) {
+  .container {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .header-card {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .header-card h1 {
+    font-size: 18px;
+  }
+
+  .header-card p {
+    font-size: 12px;
+  }
+
+  .course-header {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .course-info {
+    gap: 4px;
+  }
+
+  .course-title {
+    font-size: 13px;
+  }
+
+  .btn {
+    width: 100px;
+    height: 32px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .grade-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 12px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 13px;
+  }
+
+  .warning-message {
+    padding: 16px 12px;
+    font-size: 12px;
+  }
+}
+
+/* 테블릿 (해상도 768px ~ 1023px) */
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: 100%;
+    padding: 20px 24px;
+  }
+
+  .header-card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .header-card h1 {
+    font-size: 21px;
+  }
+
+  .search-input {
+    max-width: 350px;
+  }
+
+  .course-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    gap: 16px;
+  }
+
+  .course-info {
+    gap: 8px;
+  }
+
+  .course-title {
+    font-size: 14px;
+  }
+
+  .course-actions {
+    flex-shrink: 0;
+  }
+
+  .grade-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 22px 18px;
+  }
+
+  .stat-item {
+    flex-direction: row;
+    gap: 6px;
+    min-width: 80px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+  }
+
+  .stat-value {
+    font-size: 14px;
+  }
+
+  .warning-message {
+    padding: 22px 18px;
+    font-size: 14px;
+  }
+}
+
+/* PC (해상도 1024px 이상) */
+@media all and (min-width: 1024px) {
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 24px 24px 50px;
+  }
+
+  .header-card {
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .header-card h1 {
+    font-size: 22px;
+  }
+
+  .search-input {
+    max-width: 400px;
+  }
+
+  .search-input input {
+    padding: 10px 12px 10px 35px;
+    font-size: 13px;
+  }
+
+  .course-list {
+    gap: 20px;
+  }
+
+  .course-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
+  .course-info {
+    gap: 8px;
+  }
+
+  .course-number,
+  .course-title,
+  .course-divider,
+  .course-code {
+    font-size: 14px;
+  }
+
+  .course-actions {
+    align-self: auto;
+  }
+
+  .btn {
+    width: 120px;
+    height: 36px;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .grade-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 19px;
+    gap: 40px;
+    flex-wrap: nowrap;
+  }
+
+  .stat-item {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+  }
+
+  .warning-message {
+    padding: 25px 19px;
+    font-size: 15px;
+  }
 }
 </style>

@@ -174,8 +174,7 @@ const handleCancel = async (courseId) => {
       font-size: 20px;
       font-weight: 700;
       color: #343a40;
-      margin-top: 40px;
-      margin-left: 70px;
+      margin: 50px 0px 10px 80px;
     "
   >
     개설 과목 목록
@@ -200,15 +199,19 @@ const handleCancel = async (courseId) => {
         font-size: 20px;
         font-weight: 700;
         color: #343a40;
-        margin-top: 50px;
-        margin-left: 70px;
+        margin: 50px 0px 10px 80px;
       "
     >
       수강신청 내역
     </h5>
     <div
       class="credit-box"
-      style="color: #343a40; margin-top: 60px; margin-right: 80px"
+      style="
+        color: #343a40;
+        font-size: 15px;
+        margin-top: 60px;
+        margin-right: 80px;
+      "
     >
       <span>최대 학점: 18학점</span>
       <span>신청 학점: {{ totalCredit }}학점</span>
@@ -252,11 +255,11 @@ const handleCancel = async (courseId) => {
 
 /* 페이지 */
 .page {
-  padding: 16px 24px 48px;
+  padding: 20px 24px 5px;
 }
 .page-title {
   font-size: 22px;
-  font-weight: 600px;
-  margin: 8px 0 -100px;
+  font-weight: 600;
+  margin: 8px 0 16px 50px;
 }
 </style>

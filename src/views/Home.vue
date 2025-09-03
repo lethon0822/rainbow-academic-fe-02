@@ -3,25 +3,30 @@ import Header from "@/components/common/Header.vue";
 import SideBar from "@/components/common/SideBar.vue";
 import Notices from "@/components/common/Notices.vue";
 import { useRoute } from "vue-router";
+import { ref } from "vue";
 
 const route = useRoute();
+const isMenuOpen = ref(false);
+
+const toggleMenuOpen = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 </script>
 
 <template>
   <div>
-    <Header />
-  </div>
+    <Header @toggle-menu="toggleMenuOpen" />
 
-  <div class="d-flex main">
-    <div class="sidebar">
+    <div class="d-flex main">
+      <SideBar :is-menu-open="isMenuOpen" />
       <div class="dummy"></div>
       <SideBar />
-    </div>
 
-    <div class="content d-flex">
-      <div class="router">
-        <router-view />
-        <Notices v-if="route.path === '/'" />
+      <div class="content d-flex">
+        <div class="router">
+          <router-view />
+          <Notices v-if="route.path === '/'" />
+        </div>
       </div>
     </div>
   </div>
@@ -38,10 +43,27 @@ const route = useRoute();
 .dummy {
   width: 250px;
 }
+
 .content {
   flex: 1;
 }
-.router {
-  min-width: 1580px;
+
+.content:has(.transcript-history-page) {
+  flex: none;
+  width: 100%;
+}
+
+/* 반응형에서 더미 숨김 */
+@media (max-width: 1023px) {
+  .dummy {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .router {
+    width: 100%;
+    max-width: 1580px;
+  }
 }
 </style>

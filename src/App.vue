@@ -3,7 +3,6 @@ import { reactive, provide, } from "vue";
 import CourseDetail from "@/components/course/CourseDetail.vue";
 import { useLoadingStore } from "@/stores/loading";
 
-
 const show = reactive({
   modal: false,
   id: null,

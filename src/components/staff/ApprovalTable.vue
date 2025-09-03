@@ -1,7 +1,6 @@
 <script setup>
-import { getList } from '@/services/Application';
 import { reactive, ref } from 'vue';
-import AppDetail from './AppDetail.vue';
+import { getList } from '@/services/Application';
 
 const state = reactive({
   approvalList: [
@@ -30,20 +29,11 @@ const state = reactive({
       checkDate: '2025-08-29',
       approvalState: '승인',
     },
+
+
   ],
-  // data: {
-  //   id: 0,
-  //   year: 0,
-  //   semester: 0,
-  //   userName: '',
-  //   departmentName: '',
-  //   approval: '',
-  //   reason: '',
-  //   approvalDate: '',
-  //   checkDate: '',
-  //   approvalState: '',
-  // },
 });
+
 
 // 모달 상태
 const showModal = ref(false);
@@ -70,14 +60,14 @@ function openModal(approval) {
             <th class="reason">변동사유</th>
             <th class="approvalDate">신청일자</th>
             <th class="checkDate">접수일자</th>
-            <th class="approvalState">접수여부</th>
+            <th class="approvalState">처리여부</th>
             <th class="button">　</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="approval in state.approvalList" :key="approval.id">
-            <td class="year">{{ approval.year }}</td>
-            <td class="semester">{{ approval.semester }}</td>
+            <td class="year">{{ approval.year }}년</td>
+            <td class="semester">{{ approval.semester }}학기</td>
             <td class="userName">{{ approval.userName }}</td>
             <td class="departmentName">{{ approval.departmentName }}</td>
             <td class="approval">{{ approval.approval }}</td>
@@ -93,11 +83,11 @@ function openModal(approval) {
                   approval.approvalState !== '거부'
                 "
                 @click="openModal(approval)"
-              >
+                class="red">
                 처리하기
               </button>
 
-              <button class="not-pointer" v-else>접수완료</button>
+              <button class="not-pointer gray" v-else>처리완료</button>
             </td>
           </tr>
         </tbody>
@@ -197,7 +187,6 @@ tbody td {
 /* 버튼 */
 button {
   color: white;
-  background-color: #000;
   padding: 6px 12px;
   font-size: 12px;
   border-radius: 4px;
@@ -221,15 +210,15 @@ button {
   justify-content: center;
 }
 .red {
-  color: #d61421;
+  background-color: #d61421;
   font-weight: 600;
 }
 .gray {
-  color: #666;
+  background-color: #666;
   font-weight: 600;
 }
 .blue {
-  color: #2460ce;
+  background-color: #2460ce;
   font-weight: 700;
 }
 

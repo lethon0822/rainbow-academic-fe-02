@@ -12,8 +12,8 @@ const router = createRouter({
 
     // 홈 (보호 라우트)
     {
-      path: "/",
-      component: () => import("@/views/Home.vue"),
+      path: '/',
+      component: () => import('@/views/Home.vue'),
       children: [
         { path: "", redirect: "/notice" }, // 기본 진입시 공지로
         // components/common

@@ -1,8 +1,8 @@
 import axios from './httpRequester';
 
 //
-const path = '/user';
 
-export const fetchUserProfile = () => {
-    return axios.get(`${path}/profile`).catch(e => e.response);
+
+export const getUserProfile = () => {
+    return axios.get('/mypage').catch(e => e.response);
   };

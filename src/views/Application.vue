@@ -1,15 +1,19 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useUserStore } from '@/stores/account'
+import { ref, watch, computed, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/account";
 // API
-import { getNextSemesterId } from '@/services/semesterService'
-import { getScheduleFor } from '@/services/scheduleService'
-import { createApplication, fetchMyApplications, cancelApplication } from '@/services/Application'
+import { getNextSemesterId } from "@/services/semesterService";
+import { getScheduleFor } from "@/services/scheduleService";
+import {
+  createApplication,
+  fetchMyApplications,
+  cancelApplication,
+} from "@/services/Application";
 
 // ===== Pinia =====
-const userStore = useUserStore()
-const { semesterId } = storeToRefs(userStore)
+const userStore = useUserStore();
+const { semesterId } = storeToRefs(userStore);
 
 // (있다면 사용, 없으면 하이픈 표시)
 const studentNumber = computed(() => userStore.studentNumber ?? userStore.loginId ?? '-')
@@ -48,18 +52,18 @@ const typeKo = (t) => {
 
 // schedule에서 날짜 필드 이름이 다를 수 있으니 안전하게 꺼내는 헬퍼
 const getDate = (obj, key) => {
-  if (!obj) return ''
-  return (obj[key] ?? obj[`${key}_datetime`] ?? obj[`${key}Date`] ?? '')
+  if (!obj) return "";
+  return (obj[key] ?? obj[`${key}_datetime`] ?? obj[`${key}Date`] ?? "")
     ?.toString()
-    ?.slice(0, 10)
-}
+    ?.slice(0, 10);
+};
 
 // 다음 학기의 해당 스케줄 조회
 async function resolveNextSchedule() {
-  if (!semesterId.value) return
-  loadingSchedule.value = true
+  if (!semesterId.value) return;
+  loadingSchedule.value = true;
   try {
-    nextSemId.value = await getNextSemesterId(Number(semesterId.value))
+    nextSemId.value = await getNextSemesterId(Number(semesterId.value));
     if (!nextSemId.value) {
       schedule.value = null
       startDate.value = ''
@@ -71,11 +75,11 @@ async function resolveNextSchedule() {
       type: typeKo(appType.value),
     })
   } finally {
-    loadingSchedule.value = false
+    loadingSchedule.value = false;
   }
 }
 
-watch([semesterId, appType], resolveNextSchedule, { immediate: true })
+watch([semesterId, appType], resolveNextSchedule, { immediate: true });
 
 // 스케줄/탭 바뀔 때 date 기본값 채우기
 watch([schedule, () => appType.value], () => {
@@ -127,35 +131,37 @@ async function submit() {
     reason.value = ''
     await loadList()
   } catch (e) {
-    alert(e?.response?.data?.message ?? '신청 중 오류가 발생했습니다.')
+    alert(e?.response?.data?.message ?? "신청 중 오류가 발생했습니다.");
   } finally {
-    submitting.value = false
+    submitting.value = false;
   }
 }
 
 // ===== 하단 목록 =====
-const rows = ref([])
-const statusFilter = ref('') // '' | '처리중' | '승인' | '거부'
-const listLoading = ref(false)
+const rows = ref([]);
+const statusFilter = ref(""); // '' | '처리중' | '승인' | '거부'
+const listLoading = ref(false);
 
 async function loadList() {
-  listLoading.value = true
+  listLoading.value = true;
   try {
-    const { data } = await fetchMyApplications(statusFilter.value ? { status: statusFilter.value } : undefined)
-    rows.value = data ?? []
+    const { data } = await fetchMyApplications(
+      statusFilter.value ? { status: statusFilter.value } : undefined
+    );
+    rows.value = data ?? [];
   } finally {
-    listLoading.value = false
+    listLoading.value = false;
   }
 }
-onMounted(loadList)
+onMounted(loadList);
 
 async function onCancel(appId) {
-  if (!confirm('신청을 취소하시겠습니까?')) return
+  if (!confirm("신청을 취소하시겠습니까?")) return;
   try {
-    await cancelApplication(appId)
-    await loadList()
+    await cancelApplication(appId);
+    await loadList();
   } catch (e) {
-    alert(e?.response?.data?.message ?? '취소 중 오류가 발생했습니다.')
+    alert(e?.response?.data?.message ?? "취소 중 오류가 발생했습니다.");
   }
 }
 
@@ -187,10 +193,10 @@ console.log('[schedule]', schedule.value)
 
     <div class="form-grid">
       <label>학번</label>
-      <input :value="studentNumber" readonly>
+      <input :value="studentNumber" readonly />
 
       <label>학과</label>
-      <input :value="deptName" readonly>
+      <input :value="deptName" readonly />
 
       <label>신청 구분</label>
       <div class="toggle">
@@ -221,11 +227,17 @@ console.log('[schedule]', schedule.value)
       </div>
 
       <label>상세 사유</label>
-      <textarea v-model="reason" rows="3" placeholder="구체적인 사유를 입력하세요"></textarea>
+      <textarea
+        v-model="reason"
+        rows="3"
+        placeholder="구체적인 사유를 입력하세요"
+      ></textarea>
     </div>
 
     <div class="actions">
-      <button class="primary" :disabled="!canSubmit" @click="submit">신청 제출</button>
+      <button class="primary" :disabled="!canSubmit" @click="submit">
+        신청 제출
+      </button>
     </div>
   </div>
 
@@ -264,15 +276,23 @@ console.log('[schedule]', schedule.value)
           </tr>
           <tr v-for="r in rows" :key="r.appId">
             <td>{{ r.year }}</td>
-            <td>{{ r.semester === '1' ? '1학기' : '2학기' }}</td>
+            <td>{{ r.semester === "1" ? "1학기" : "2학기" }}</td>
             <td>{{ shortType(r.scheduleType) }}</td>
             <td>{{ r.reason || '-' }}</td>
             <td>{{ r.deptName || '-' }}</td>
             <td>{{ formatDate(r.submittedAt) }}</td>
             <td>{{ formatDate(r.submittedAt) }}</td>
-            <td><span :class="statusClass(r.status)">{{ r.status }}</span></td>
             <td>
-              <button v-if="r.status === '처리중'" class="danger ghost" @click="onCancel(r.appId)">취소하기</button>
+              <span :class="statusClass(r.status)">{{ r.status }}</span>
+            </td>
+            <td>
+              <button
+                v-if="r.status === '처리중'"
+                class="danger ghost"
+                @click="onCancel(r.appId)"
+              >
+                취소하기
+              </button>
               <span v-else class="muted">처리완료</span>
             </td>
           </tr>
@@ -283,25 +303,57 @@ console.log('[schedule]', schedule.value)
 </template>
 
 <style scoped>
-.page-title{font-size:22px;font-weight:800;margin:4px 0 8px}
-.desc{color:#666;margin:0 0 18px}
+.page-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 4px 0 8px;
+}
+.desc {
+  color: #666;
+  margin: 0 0 18px;
+}
 
-.white-box{
-  background:#fff; padding:24px; margin:16px 0; border-radius:12px;
-  box-shadow:0 2px 12px rgba(0,0,0,.06)
+.white-box {
+  background: #fff;
+  padding: 24px;
+  margin: 16px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 /* ===== 폼 ===== */
-.form-grid{
-  display:grid;
+.form-grid {
+  display: grid;
   grid-template-columns: 100px minmax(200px, 1fr);
-  gap:12px 16px;
-  align-items:center;
+  gap: 12px 16px;
+  align-items: center;
 }
-.form-grid input, .form-grid textarea, .form-grid select{
-  width:100%; box-sizing:border-box;
-  border:1px solid #e5e7eb; border-radius:10px; padding:10px 12px; font-size:14px;
-  background:#fff; outline:none;
+.form-grid input,
+.form-grid textarea,
+.form-grid select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+}
+.form-grid input:read-only {
+  background: #f9fafb;
+}
+.form-grid textarea {
+  resize: vertical;
+}
+.inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.muted {
+  color: #9ca3af;
+  font-size: 12px;
 }
 .form-grid input:read-only{background:#f9fafb}
 .form-grid input:disabled{background:#f5f5f5; color:#9ca3af} /* 비활성화 시 시각적 처리 */
@@ -309,30 +361,106 @@ console.log('[schedule]', schedule.value)
 .inline{display:flex; align-items:center; gap:8px}
 .muted{color:#9ca3af; font-size:12px}
 
-.toggle{display:flex; gap:8px}
-.toggle button{
-  border:1px solid #e5e7eb; background:#f3f4f6; padding:8px 14px; border-radius:10px; cursor:pointer
+.toggle {
+  display: flex;
+  gap: 8px;
 }
-.toggle button.on{background:#3BBEFF; border-color:#3BBEFF; color:#fff}
+.toggle button {
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.toggle button.on {
+  background: #3bbeff;
+  border-color: #3bbeff;
+  color: #fff;
+}
 
 /* ===== 액션 ===== */
-.actions{display:flex; justify-content:center; margin-top:16px}
-button.primary{background:#3BBEFF; border:none; color:#fff; padding:10px 18px; border-radius:10px; cursor:pointer; font-weight:700}
-button.primary:disabled{opacity:.6; cursor:not-allowed}
-button.ghost{background:#f3f4f6; border:none; padding:8px 14px; border-radius:10px; cursor:pointer}
-button.danger{border:1px solid #ef4444; color:#ef4444; background:#fff; border-radius:10px; padding:6px 10px}
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+button.primary {
+  background: #3bbeff;
+  border: none;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+button.primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+button.ghost {
+  background: #f3f4f6;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+button.danger {
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
 
 /* ===== 목록 ===== */
-.list-head{display:flex; justify-content:flex-end; gap:10px; margin-bottom:12px}
-.table-wrap.loading{opacity:.6; pointer-events:none}
-table.grid{width:100%; border-collapse:collapse}
-.grid th, .grid td{border-top:1px solid #eee; padding:10px 8px; text-align:center; font-size:14px}
-.grid thead th{background:#fafafa; font-weight:700}
-.grid .empty{padding:28px 0; color:#888}
+.list-head {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.table-wrap.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+table.grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+.grid th,
+.grid td {
+  border-top: 1px solid #eee;
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 14px;
+}
+.grid thead th {
+  background: #fafafa;
+  font-weight: 700;
+}
+.grid .empty {
+  padding: 28px 0;
+  color: #888;
+}
 
 /* 상태 뱃지 */
-.badge{display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; font-weight:700}
-.badge.pending{background:#f3f4f6; color:#6b7280}
-.badge.ok{background:#e7f7ec; color:#15803d}
-.badge.reject{background:#fee2e2; color:#b91c1c}
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.badge.pending {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+.badge.ok {
+  background: #e7f7ec;
+  color: #15803d;
+}
+.badge.reject {
+  background: #fee2e2;
+  color: #b91c1c;
+}
 </style>

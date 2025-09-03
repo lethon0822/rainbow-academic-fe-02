@@ -1,11 +1,10 @@
 <script setup>
 import { reactive, onMounted } from "vue";
-import { courseStudentList, findMyCourse } from "@/services/professorService";
+import { findMyCourse } from "@/services/professorService";
 import { useUserStore } from "@/stores/account";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const route = useRoute();
 const router = useRouter();
 
 const state = reactive({
@@ -276,12 +275,12 @@ const handleAttendanceManagement = (courseId) => {
 
 .course-actions {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 20px;
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 10px 210px;
   border: none;
   border-radius: 6px;
   font-size: 14px;

@@ -1,35 +1,20 @@
 <script setup>
-//설문지
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 
+const props = defineProps({
+  courseId: String,
+  enrollments: Array,
+});
+
+// --- Reactive state ---
 const userId = ref(null);
 const isUserLoading = ref(true);
 const router = useRouter();
+const route = useRoute();
 
-const props = defineProps({
-  courseId: String,
-});
-
-// 현재 로그인된 사용자 ID 가져오기
-const fetchCurrentUser = async () => {
-  try {
-    const response = await axios.get("/account/check");
-    userId.value = response.data;
-    console.log("현재 사용자 ID:", userId.value);
-  } catch (error) {
-    console.error("사용자 정보 로드 실패:", error);
-    // 로그인이 필요한 경우
-    if (error.response?.status === 401 || !error.response?.data) {
-      alert("로그인이 필요합니다.");
-      // 로그인 페이지로 리다이렉트하는 로직 추가 가능
-      // this.$router.push('/login')
-    }
-  } finally {
-    isUserLoading.value = false;
-  }
-};
+const courseId = ref(props.courseId || route.query.courseId || "");
 
 const totalQuestions = 5;
 const answers = ref({
@@ -43,19 +28,23 @@ const progress = ref(0);
 const submitted = ref(false);
 const additionalOpinion = ref("");
 const currentStep = ref(1);
-const route = useRoute();
-const courseId = ref(props.courseId || route.query.courseId || "");
 
-// 강의 정보 관련 상태 추가
 const courseInfo = ref({
-  course_name: "",
-  professor_name: "",
-  credits: "",
+  courseId: null,
+  title: "",
+  credit: "",
+  professorName: "",
+  type: "",
+  classroom: "",
+  year: "",
+  semester: "",
   evaluation_date: "",
 });
+
 const isLoading = ref(true);
 const loadError = ref(null);
 
+// --- 질문과 평가 항목 ---
 const questions = [
   { number: 1, question: "수업내용이 체계적으로 구성되었다." },
   { number: 2, question: "교수의 강의 진행 속도가 적절하다." },
@@ -75,12 +64,27 @@ const ratings = [
   { label: "매우 그렇다", value: 5 },
 ];
 
-// 강의 정보 조회 API 함수
-const loadCourse = (course_id) => {
-  return axios.get(`/course/${course_id}`).catch((e) => e.response);
+// --- 사용자 정보 조회 ---
+const fetchCurrentUser = async () => {
+  try {
+    const response = await axios.get("/account/check");
+    userId.value = response.data;
+    console.log("현재 사용자 ID:", userId.value);
+  } catch (error) {
+    console.error("사용자 정보 로드 실패:", error);
+    if (error.response?.status === 401 || !error.response?.data) {
+      alert("로그인이 필요합니다.");
+      // 로그인 페이지로 이동 로직 추가 가능
+    }
+  } finally {
+    isUserLoading.value = false;
+  }
 };
 
-// 강의 정보 로드 함수 (CourseFilterRes 모델에 맞춤)
+// --- 강의 정보 조회 ---
+const loadCourse = (course_id) =>
+  axios.get(`/course/${course_id}`).catch((e) => e.response);
+
 const fetchCourseInfo = async () => {
   try {
     isLoading.value = true;
@@ -90,10 +94,9 @@ const fetchCourseInfo = async () => {
 
     if (response && response.data) {
       const data = response.data;
-
       courseInfo.value = {
-        courseId: data.courseId,
-        title: data.title || data.title || "과목명 정보 없음",
+        courseId: data.courseId || null,
+        title: data.title || "과목명 정보 없음",
         credit: data.credit !== undefined ? data.credit : "학점 정보 없음",
         professorName: data.userName || "교수명 정보 없음",
         type: data.type || "이수구분 정보 없음",
@@ -109,8 +112,6 @@ const fetchCourseInfo = async () => {
     console.error("강의 정보 로드 실패:", error);
     loadError.value =
       error.message || "강의 정보를 불러오는 중 오류가 발생했습니다.";
-
-    // 오류 발생 시 기본값 설정
     courseInfo.value = {
       courseId: null,
       title: "강의 정보 로드 실패",
@@ -127,6 +128,7 @@ const fetchCourseInfo = async () => {
   }
 };
 
+// --- 프로그레스 업데이트 ---
 const updateProgress = () => {
   const answeredCount = Object.values(answers.value).filter(
     (v) => v !== null
@@ -134,25 +136,22 @@ const updateProgress = () => {
   progress.value = Math.round((answeredCount / totalQuestions) * 100);
 };
 
+// --- 답변 업데이트 ---
 const updateAnswer = (value) => {
   answers.value["q" + currentStep.value] = value;
   updateProgress();
 };
 
+// --- 단계 이동 ---
 const nextStep = () => {
-  if (currentStep.value < totalQuestions + 1) {
-    currentStep.value++;
-  }
+  if (currentStep.value < totalQuestions + 1) currentStep.value++;
 };
-
 const prevStep = () => {
-  if (currentStep.value > 1) {
-    currentStep.value--;
-  }
+  if (currentStep.value > 1) currentStep.value--;
 };
 
+// --- 설문 제출 ---
 const submitSurvey = async () => {
-  // 사용자 ID 확인
   if (!userId.value) {
     alert("사용자 인증이 필요합니다. 다시 로그인해주세요.");
     return;
@@ -164,8 +163,10 @@ const submitSurvey = async () => {
       answersArray.reduce((sum, score) => sum + score, 0) / answersArray.length
     );
 
+    // enrollmentId 제거하고 userId 추가
     const surveyData = {
       courseId: parseInt(courseId.value),
+      userId: userId.value,
       review: additionalOpinion.value,
       evScore: averageScore,
     };
@@ -173,10 +174,10 @@ const submitSurvey = async () => {
     console.log("설문 결과:", surveyData);
 
     try {
-      await axios.post("/student/course/survey", surveyData);
+      await axios.put("/student/course/survey", surveyData);
       submitted.value = true;
       alert("설문이 성공적으로 제출되었습니다!\n소중한 의견 감사합니다.");
-      router.push("/profile");
+      router.push("/grade/current");
     } catch (error) {
       console.error("설문 제출 실패:", error);
       if (error.response?.status === 401) {
@@ -189,6 +190,8 @@ const submitSurvey = async () => {
     alert("모든 필수 항목에 답변해주세요.");
   }
 };
+
+// --- 폼 리셋 ---
 const resetForm = () => {
   if (confirm("작성한 내용이 모두 삭제됩니다. 계속하시겠습니까?")) {
     Object.keys(answers.value).forEach((key) => (answers.value[key] = null));
@@ -199,21 +202,20 @@ const resetForm = () => {
   }
 };
 
-const canProceedToNext = computed(() => {
-  return answers.value["q" + currentStep.value] !== null;
-});
+// --- computed ---
+const canProceedToNext = computed(
+  () => answers.value["q" + currentStep.value] !== null
+);
+const allQuestionsAnswered = computed(() =>
+  Object.values(answers.value).every((v) => v !== null)
+);
 
-const allQuestionsAnswered = computed(() => {
-  return Object.values(answers.value).every((v) => v !== null);
-});
-
+// --- 마운트 시 초기 데이터 로드 ---
 onMounted(async () => {
   updateProgress();
-  // 사용자 정보와 강의 정보 병렬로 로드
   await Promise.all([fetchCurrentUser(), fetchCourseInfo()]);
 });
 </script>
-
 <template>
   <div class="survey-container">
     <!-- 설문 헤더 -->

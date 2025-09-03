@@ -4,16 +4,17 @@ import {
   verifyEmailCode as verifyEmailCodeApi,
   changePassword as changePasswordApi,
 } from "@/services/accountService";
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, onMounted } from "vue";
 import WhiteBox from "@/components/common/WhiteBox.vue";
+import { sendMail, confirmCode } from "@/services/emailService";
+import { getPrivacy, putPrivacy, putPwd } from "@/services/privacyService";
 
 const state = reactive({
   form: {
-    studentNumber: "",
-    name: "차은우",
-    zipcode: "",
+    loginId: "",
+    userName: "",
     address: "",
-    detailAddress: "",
+    addDetail: "",
     phone: "",
     email: "",
 
@@ -25,13 +26,12 @@ const state = reactive({
   verifiedToken: null, // ✅ 서버가 주는 1회용 토큰
 });
 
-const canChangePw = computed(
-  () =>
-    !!state.form.newPassword &&
-    state.form.newPassword.length >= 8 &&
-    state.form.newPassword === state.form.confirmPassword &&
-    state.form.isVerified
-);
+onMounted(async () => {
+  const res = await getPrivacy();
+  Object.assign(state.form, res.data);
+});
+
+const canChangePw = computed(() => state.form.isVerified);
 
 function formatPhone(e) {
   let v = (e?.target?.value ?? state.form.phone)
@@ -42,12 +42,45 @@ function formatPhone(e) {
   else state.form.phone = `${v.slice(0, 3)}-${v.slice(3, 7)}-${v.slice(7)}`;
 }
 
-function openZipSearch() {
-  alert("우편번호 검색 팝업을 연결하세요.");
+function sample6_execDaumPostcode() {
+  new daum.Postcode({
+    oncomplete: function (data) {
+      let addr = ""; // 주소
+      let extraAddr = ""; // 참고항목
+
+      if (data.userSelectedType === "R") {
+        addr = data.roadAddress;
+      } else {
+        addr = data.jibunAddress;
+      }
+
+      if (data.userSelectedType === "R") {
+        if (data.bname !== "" && /(동|로|가)$/.test(data.bname)) {
+          extraAddr += data.bname;
+        }
+        if (data.buildingName !== "" && data.apartment === "Y") {
+          extraAddr +=
+            extraAddr !== "" ? ", " + data.buildingName : data.buildingName;
+        }
+        if (extraAddr !== "") {
+          extraAddr = " (" + extraAddr + ")";
+        }
+      }
+
+      // ✅ Vue state에 직접 반영
+      state.form.zipcode = data.zonecode;
+      state.form.address = addr + extraAddr;
+      // 상세주소 입력칸에 포커스
+      setTimeout(() => {
+        document.getElementById("sample6_detailAddress")?.focus();
+      }, 0);
+    },
+  }).open();
 }
 
 async function saveProfile() {
-  console.log("저장 payload:", { ...state.form });
+  const res = putPrivacy(state.form);
+  console.log(res);
   alert("저장되었습니다.");
 }
 
@@ -57,8 +90,16 @@ async function sendCode() {
     alert("올바른 이메일을 입력하세요.");
     return;
   }
-  await sendEmailCodeApi(state.form.email);
-  alert("인증번호가 발송되었습니다.");
+  try {
+    const res = await sendMail({ email: state.form.email });
+    if (res && res.status === 200) {
+      alert("등록된 이메일로 인증번호가 전송되었습니다.");
+    } else {
+      //
+    }
+  } catch (err) {
+    //
+  }
 }
 
 /** ✅ 코드 검증 → verifiedToken 수령 */
@@ -67,26 +108,51 @@ async function verifyCode() {
     alert("6자리 숫자를 입력하세요.");
     return;
   }
+
   try {
-    const { verifiedToken } = await verifyEmailCodeApi(
-      state.form.email,
-      state.form.authCode
-    );
-    state.form.isVerified = true;
-    state.verifiedToken = verifiedToken;
-    alert("인증 성공");
-  } catch (e) {
-    state.form.isVerified = false;
-    state.verifiedToken = null;
-    alert("인증 실패");
+    const res = await confirmCode({
+      email: state.form.email,
+      authCode: state.form.authCode,
+    });
+    if (res && res.status === 200) {
+      alert("인증 성공");
+      // 인증 성공 후 추가 동작 가능
+      state.form.isVerified = true;
+    } else {
+      alert("인증 실패");
+      // 메세지
+    }
+  } catch (err) {
+    alert("인증 실패22");
+    // 메세지
   }
 }
 
 /** ✅ 비번 변경 (서버에 verifiedToken 제출) */
 async function changePasswordClick() {
-  if (!canChangePw.value) return;
-  await changePasswordApi(state.form.newPassword, state.verifiedToken);
-  alert("비밀번호가 변경되었습니다.");
+  if (
+    !canChangePw.value &&
+    state.form.newPassword !== state.form.confirmPassword
+  ) {
+    return;
+  }
+  try {
+    const res = await putPwd({ jsonBody: state.form.newPassword });
+    if (res && res.status === 200) {
+      alert("비밀번호가 변경되었습니다.");
+      // 필요하면 폼 초기화
+      state.form.newPassword = "";
+      state.form.confirmPassword = "";
+      state.form.authCode = "";
+      state.form.isVerified = false;
+      state.verifiedToken = null;
+    } else {
+      alert("비밀번호 변경에 실패했습니다.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("비밀번호 변경 중 오류가 발생했습니다.");
+  }
 }
 
 /** 이메일/코드 변경 시 재인증 요구 */
@@ -115,20 +181,11 @@ watch(
       <div class="grid-2">
         <div class="form-item">
           <label>학번</label>
-          <input
-            class="input"
-            v-model="state.form.studentNumber"
-            placeholder="20001"
-          />
+          <input class="input" v-model="state.form.loginId" />
         </div>
         <div class="form-item">
           <label>이름</label>
-          <input
-            class="input"
-            v-model="state.form.name"
-            placeholder="차은우"
-            readonly
-          />
+          <input class="input" v-model="state.form.userName" />
         </div>
       </div>
     </WhiteBox>
@@ -141,34 +198,24 @@ watch(
         <div class="form-item">
           <label>우편번호</label>
           <div class="hstack">
-            <input
-              class="input"
-              v-model="state.form.zipcode"
-              placeholder="34158"
-            />
-            <button class="btn btn-outline" @click="openZipSearch">
+            <input class="input" v-model="state.form.zipcode" readonly />
+            <button class="btn btn-outline" @click="sample6_execDaumPostcode">
               주소찾기
             </button>
           </div>
         </div>
 
-        <div class="spacer"></div>
-
         <div class="form-item col-2">
           <label>주소</label>
-          <input
-            class="input"
-            v-model="state.form.address"
-            placeholder="전공/교양"
-          />
+          <input class="input" v-model="state.form.address" readonly />
         </div>
 
         <div class="form-item col-2">
           <label>상세주소</label>
           <input
+            id="sample6_detailAddress"
             class="input"
-            v-model="state.form.detailAddress"
-            placeholder="예: 수 1,2,3 & 목 4,5"
+            v-model="state.form.addDetail"
           />
         </div>
 
@@ -178,17 +225,12 @@ watch(
             class="input"
             v-model="state.form.phone"
             @input="formatPhone"
-            placeholder="010-1234-5678"
           />
         </div>
 
         <div class="form-item">
           <label>Email</label>
-          <input
-            class="input"
-            v-model="state.form.email"
-            placeholder="example@univ.ac.kr"
-          />
+          <input class="input" v-model="state.form.email" />
         </div>
       </div>
 
@@ -283,12 +325,15 @@ input[type="search"] {
 }
 /* 페이지 */
 .page {
-  padding: 16px 24px 48px;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px 0px 24px 5px;
 }
+
 .page-title {
   font-size: 22px;
-  font-weight: 600px;
-  margin: 8px 0 16px;
+  font-weight: 600;
+  margin: 8px 0 16px 28px;
 }
 
 /* WhiteBox 공통 + 변형 */
