@@ -24,6 +24,17 @@ const router = createRouter({
       path: '/',
       component: () => import('@/views/Home.vue'),
       children: [
+        //  공지사항 (목록) 여기 추가했음
+        {
+          path: '/notice',
+          component: () => import('@/components/common/Notices.vue'),
+        },
+        //  공지사항 (상세) 여기 추가했음
+        {
+          path: '/notice/:id',
+          component: () => import('@/components/common/Notices.vue'),
+          props: true,
+        },
         //components
         //common
         {
