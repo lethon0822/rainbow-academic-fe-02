@@ -181,14 +181,17 @@ const cardConfig = [
         <div
           v-if="state.graduation.graduationResult === '졸업 요건 달성'"
           class="alert-success"
-        >
+         >
           <div class="ad-result">{{ state.graduation.graduationResult }}</div>
-          {{ state.graduation.details }}
+            {{ state.graduation.details }}
+          </div>
+          <div v-else class="alert-danger">
+            <div class="ad-result">{{ state.graduation.graduationResult }}</div>
+            {{ state.graduation.details }}
+          </div>
         </div>
-        <div v-else class="alert-danger">
-          <div class="ad-result">{{ state.graduation.graduationResult }}</div>
-          {{ state.graduation.details }}
-        </div>
+      <div v-else class="alert-danger">
+        {{ state.graduation.details }}
       </div>
     </div>
   </div>
