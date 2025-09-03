@@ -74,13 +74,12 @@ const back = () => {
 
 
 <template>
+  <div class="box">
   <WhiteBox class="page-wrap" :title="'강의등록'">
-    <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 50px; padding: 10px; box-shadow: 1px 5px 10px #ccc;">
+  <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8;margin: auto; padding: 10px; box-shadow: 1px 5px 10px #ccc; width: 1320px; ">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
       <br/>
-      <span style="font-size: 15px;"
-        >강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span
-      >
+      <span style="font-size: 15px;">강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span>
     </div>
 
     <div class="container">
@@ -235,6 +234,7 @@ const back = () => {
 
     </div>
   </WhiteBox>
+</div>
 </template>
 
     
@@ -247,11 +247,13 @@ const back = () => {
  
 
 <style scoped lang="scss">
-   
+  //.box {background-color: #ccc;}
+  
   .page-wrap { 
     overflow: visible !important; 
-    background:#fdfdfd;
-    min-height: 1265px; }
+    //background:#fdfdfd;
+    min-height: 1265px; 
+  }
     
 
    .container {
@@ -260,11 +262,11 @@ const back = () => {
    padding: 20px;            /* 안쪽 여백 */
    margin: 20px auto;        /* 바깥 여백 */
    max-width: 1320px;         /* 최대 너비 */
-   background: #fdfdfd; 
+   background-color: #fdfdfd; 
    min-height: 1020px;
    position: relative;
   
-   margin-left: 100px; 
+   margin-left: 130px; 
   
    
    } 
@@ -280,6 +282,7 @@ const back = () => {
   
   body { 
     overflow-y: auto;
+//background-color: #ccc;
   }
     
     
