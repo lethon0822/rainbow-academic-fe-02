@@ -100,13 +100,13 @@ const canViewGrades = (course) => {
           <div class="stat-item">
             <span class="stat-label">점수</span>
             <span class="stat-value">{{
-              course.rank ?? course.totalScore ?? "-"
+              course.point ?? course.grade ?? "-"
             }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">평점</span>
             <span class="stat-value grade">{{
-              course.point ?? course.grade ?? "-"
+              course.rank ?? course.totalScore ?? "-"
             }}</span>
           </div>
           <div class="stat-item">
@@ -142,9 +142,9 @@ const canViewGrades = (course) => {
 
 <style scoped>
 .container {
-  max-width: 1000px;
+  max-width: 1500px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 20px 24px 24px 50px;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -159,7 +159,7 @@ const canViewGrades = (course) => {
 }
 
 .header-card h1 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: #333;
   margin-bottom: 8px;
@@ -208,7 +208,7 @@ const canViewGrades = (course) => {
 .course-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
 .course-card {
@@ -274,7 +274,7 @@ const canViewGrades = (course) => {
   justify-content: center;
   background-color: #6c757d;
   color: white;
-  margin-right: 590px;
+  margin-right: 1050px;
   width: 120px;
   height: 36px;
   cursor: not-allowed;
@@ -287,7 +287,7 @@ const canViewGrades = (course) => {
   justify-content: center;
   background-color: #dc3545;
   color: white;
-  margin-right: 590px;
+  margin-right: 1050px;
   width: 120px;
   height: 36px;
 }
@@ -296,7 +296,7 @@ const canViewGrades = (course) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 19px;
+  padding: 25px 19px;
   background: #f8f9fa;
   gap: 40px;
   border-radius: 0 0 8px 8px;
@@ -329,7 +329,7 @@ const canViewGrades = (course) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 19px;
+  padding: 25px 19px;
   background: #fff3cd;
   font-size: 15px;
   text-align: center;
