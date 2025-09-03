@@ -476,6 +476,8 @@ const canViewGrades = (course) => {
 /* PC (해상도 1024px 이상) */
 @media all and (min-width: 1024px) {
   .container {
+    max-width: 1100px;
+    margin: 0 auto;
     padding: 20px 24px 24px 50px;
   }
 
