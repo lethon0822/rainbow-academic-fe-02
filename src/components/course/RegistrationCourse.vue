@@ -73,6 +73,7 @@ const back = () => {
 
 
 <template>
+
   <WhiteBox :title="'강의등록'">
     <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 5px 10px #ccc;">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
@@ -234,6 +235,7 @@ const back = () => {
   </WhiteBox>
 </template>
 
+
     
       
     
@@ -251,22 +253,25 @@ const back = () => {
    border-radius: 8px;       /* 모서리 둥글게 */
    padding: 20px;            /* 안쪽 여백 */
    margin: 20px auto;        /* 바깥 여백 */
-   max-width: 1320px;         /* 최대 너비 */
+     
+     
    background: #fdfdfd; 
-   max-height: 1000px;   
+    
    position: relative;
-   min-height: 1000px; 
+ 
    margin-left: 100px; 
-   overflow-y: auto;
+   
    
    } 
 
   
   body {
+       
         font-family: Arial, sans-serif;
         background-color: #f7f7f7;
         margin: 0;
         padding: 0;
+        overflow-y: scroll;  
     }
     
   h1 {
@@ -274,42 +279,38 @@ const back = () => {
   }
     
   .fform-group {
-      position: fixed; 
-      left: 485px;
+      position: relative; 
+      margin-left: 100px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
 
   .fform-group2 {
-      position: fixed;
-      left: 1030px;
+      position: relative;
+      margin-left: 660px;
+      margin-top: -245px;
       width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group3 {
-      position: fixed;
-      top: 700px;
-      left: 485px;
-      
-      width: 1080px;
+      position: relative;
+      margin-left: 100px;
+      width: 1100px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group4 {
-      
-      position: fixed;
+      margin-left: -400px;
+      position: relative;
       border: #9e9e9e;
       display: grid;
       left: 780px;
-      top:1150px;
       max-width: 200px;
       min-width: 200px;
-      
-      height: 210px;
       grid-template-columns: repeat(5, 1fr);
       grid-gap: 20px;
     }
