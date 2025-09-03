@@ -73,11 +73,10 @@ const back = () => {
 
 
 <template>
-
-  <WhiteBox :title="'강의등록'">
-    <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 5px 10px #ccc;">
+  <WhiteBox class="page-wrap" :title="'강의등록'">
+    <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 50px; padding: 10px; box-shadow: 1px 5px 10px #ccc;">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
-      <br />
+      <br/>
       <span style="font-size: 15px;"
         >강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span
       >
@@ -235,7 +234,6 @@ const back = () => {
   </WhiteBox>
 </template>
 
-
     
       
     
@@ -246,33 +244,41 @@ const back = () => {
  
 
 <style scoped lang="scss">
-
+   
+  .page-wrap { 
+    overflow: visible !important; 
+    background:#fdfdfd;
+    min-height: 1265px; }
+    
 
    .container {
    border: 2px solid #ccc;   /* 테두리 */
    border-radius: 8px;       /* 모서리 둥글게 */
    padding: 20px;            /* 안쪽 여백 */
    margin: 20px auto;        /* 바깥 여백 */
-     
-     
+   max-width: 1320px;         /* 최대 너비 */
    background: #fdfdfd; 
-    
+   min-height: 1020px;
    position: relative;
- 
+  
    margin-left: 100px; 
-   
+  
    
    } 
 
+
+
+   
+
+  html {
+  height: auto;    /* ❌ 100%, 100vh 쓰면 안 됨 */
+  min-height: 100%;
+  }
   
-  body {
-       
-        font-family: Arial, sans-serif;
-        background-color: #f7f7f7;
-        margin: 0;
-        padding: 0;
-        overflow-y: scroll;  
-    }
+  body { 
+    overflow-y: auto;
+  }
+    
     
   h1 {
         margin-bottom: 20px;
@@ -284,6 +290,7 @@ const back = () => {
       width: 540px;
       display: flex;
       flex-direction: column;
+      margin-top: 50px;
     }
 
   .fform-group2 {
