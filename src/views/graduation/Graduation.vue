@@ -39,10 +39,11 @@ async function startSimulation() {
   } finally {
     isLoading.value = false;
   }
-  state.graduation.generalElectiveCredits = 100;
-  state.graduation.shortageGeneralElectiveCredits = 0;
-  state.graduation.graduationResult='졸업 요건 달성';
-  state.graduation.details='축하합니다. 졸업 요건을 모두 충족하였습니다.';
+  // 테스트용
+  // state.graduation.generalElectiveCredits = 100;
+  // state.graduation.shortageGeneralElectiveCredits = 0;
+  // state.graduation.graduationResult='졸업 요건 달성';
+  // state.graduation.details='축하합니다. 졸업 요건을 모두 충족하였습니다.';
 }
 
 // 카드 설정 배열
