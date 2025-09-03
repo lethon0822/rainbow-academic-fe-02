@@ -43,13 +43,27 @@ const toggleMenuOpen = () => {
 .dummy {
   width: 250px;
 }
+
 .content {
   flex: 1;
 }
 
+.content:has(.transcript-history-page) {
+  flex: none;
+  width: 100%;
+}
+
+/* 반응형에서 더미 숨김 */
+@media (max-width: 1023px) {
+  .dummy {
+    display: none;
+  }
+}
+
 @media (min-width: 1024px) {
   .router {
-    min-width: 1580px;
+    width: 100%;
+    max-width: 1580px;
   }
 }
 </style>
