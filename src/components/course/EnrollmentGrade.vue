@@ -122,7 +122,7 @@ function resetRow(r) {
     r.finalExam      = 0;
     r.etcScore       = 0;
     r.total          = 0;
-    r.score          = "F";
+    r.grade          = "F";
     r.gpa            = 0;
     r.checked        = false;
   }
