@@ -1,39 +1,16 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useUserStore } from "@/stores/account";
-import { GradesbyCourse } from "@/services/GradeService";
+import { defineProps } from "vue";
 
-// 성적 데이터 상태
-const courseList = ref([]);
-
-// 사용자 스토어 (로그인된 사용자 정보 및 semesterId 가져오기 위함)
-const userStore = useUserStore();
-
-// 테이블 높이 기본값
-const maxHeight = "600px";
-
-// API 호출 함수
-async function fetchGrades() {
-  try {
-    const semesterId = userStore.semesterId;
-    const res = await GradesbyCourse({ semesterId });
-
-    console.log("API 응답 데이터:", JSON.stringify(res.data, null, 2));
-    courseList.value = res.data;
-  } catch (error) {
-    console.error("성적 조회 실패:", error);
-    courseList.value = []; // 실패 시 빈 배열로 초기화
-  }
-}
-
-// 컴포넌트 마운트 시 데이터 가져오기
-onMounted(() => {
-  fetchGrades();
+const props = defineProps({
+  courseList: {
+    type: Array,
+    required: true,
+  },
 });
 </script>
 
 <template>
-  <div class="table-container" :style="{ maxHeight: maxHeight }">
+  <div class="table-container" :style="{ maxHeight: '600px' }">
     <div class="table-wrapper">
       <table>
         <thead>
@@ -44,7 +21,7 @@ onMounted(() => {
             <th>과목코드</th>
             <th>과목명</th>
             <th>담당교수</th>
-            <th>수강학년</th>
+            <th>학년</th>
             <th>학점</th>
             <th>등급</th>
             <th>평점</th>

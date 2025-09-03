@@ -3,9 +3,9 @@ import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 
-// --- Props에서 courseId 받기 ---
 const props = defineProps({
   courseId: String,
+  enrollments: Array,
 });
 
 // --- Reactive state ---
@@ -43,7 +43,6 @@ const courseInfo = ref({
 
 const isLoading = ref(true);
 const loadError = ref(null);
-const enrollmentId = ref(null);
 
 // --- 질문과 평가 항목 ---
 const questions = [
@@ -65,7 +64,7 @@ const ratings = [
   { label: "매우 그렇다", value: 5 },
 ];
 
-// --- 함수: 사용자 정보 조회 ---
+// --- 사용자 정보 조회 ---
 const fetchCurrentUser = async () => {
   try {
     const response = await axios.get("/account/check");
@@ -75,14 +74,14 @@ const fetchCurrentUser = async () => {
     console.error("사용자 정보 로드 실패:", error);
     if (error.response?.status === 401 || !error.response?.data) {
       alert("로그인이 필요합니다.");
-      // 로그인 페이지로 이동 로직 필요 시 여기에 추가
+      // 로그인 페이지로 이동 로직 추가 가능
     }
   } finally {
     isUserLoading.value = false;
   }
 };
 
-// --- 함수: 강의 정보 조회 ---
+// --- 강의 정보 조회 ---
 const loadCourse = (course_id) =>
   axios.get(`/course/${course_id}`).catch((e) => e.response);
 
@@ -129,27 +128,6 @@ const fetchCourseInfo = async () => {
   }
 };
 
-// --- 수강내역에서 enrollmentId 조회 ---
-const fetchEnrollmentId = async () => {
-  try {
-    const url = `/student/course?courseId=${courseId.value}`;
-    console.log("Enrollment API 호출 URL:", url);
-
-    const response = await axios.get(url);
-    const enrollment = response.data.find(
-      (e) => e.courseId === parseInt(courseId.value)
-    );
-    if (enrollment) {
-      enrollmentId.value = enrollment.enrollmentId;
-      console.log("Enrollment ID:", enrollmentId.value);
-    } else {
-      console.warn("해당 강의의 수강내역이 없습니다.");
-    }
-  } catch (e) {
-    console.error("수강내역 로드 실패:", e);
-  }
-};
-
 // --- 프로그레스 업데이트 ---
 const updateProgress = () => {
   const answeredCount = Object.values(answers.value).filter(
@@ -166,7 +144,7 @@ const updateAnswer = (value) => {
 
 // --- 단계 이동 ---
 const nextStep = () => {
-  if (currentStep.value < totalQuestions) currentStep.value++;
+  if (currentStep.value < totalQuestions + 1) currentStep.value++;
 };
 const prevStep = () => {
   if (currentStep.value > 1) currentStep.value--;
@@ -184,9 +162,11 @@ const submitSurvey = async () => {
     const averageScore = Math.round(
       answersArray.reduce((sum, score) => sum + score, 0) / answersArray.length
     );
+
+    // enrollmentId 제거하고 userId 추가
     const surveyData = {
-      enrollmentId: enrollmentId.value,
       courseId: parseInt(courseId.value),
+      userId: userId.value,
       review: additionalOpinion.value,
       evScore: averageScore,
     };
@@ -234,10 +214,8 @@ const allQuestionsAnswered = computed(() =>
 onMounted(async () => {
   updateProgress();
   await Promise.all([fetchCurrentUser(), fetchCourseInfo()]);
-  await fetchEnrollmentId();
 });
 </script>
-
 <template>
   <div class="survey-container">
     <!-- 설문 헤더 -->

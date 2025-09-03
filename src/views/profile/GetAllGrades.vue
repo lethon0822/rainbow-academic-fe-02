@@ -1,76 +1,62 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import WhiteBox from "@/components/common/WhiteBox.vue";
+import { ref } from "vue";
+import { useUserStore } from "@/stores/account";
+import { GradesbyCourse } from "@/services/GradeService";
+
 import AcademicFilterBar from "@/components/common/AcademicFilterBar.vue";
 import GradeTable from "@/components/profile/GradeTable.vue";
-
-import { GradesbyCourse } from "@/services/GradeService";
-import { useUserStore } from "@/stores/account";
 
 const courseList = ref([]);
 const userStore = useUserStore();
 
+// 필터 상태
 const filters = ref({
-  semester: "",
-  grade: "",
-  semesterId: 0, // userStore에서 가져올 기본값
+  semesterId: userStore.semesterId || null,
+  grade: null,
+  semester: null,
 });
 
-onMounted(async () => {
+// 성적 조회
+async function fetchGrades() {
   try {
-    // userStore에서 현재 semesterId 가져오기
-    filters.value.semesterId = userStore.semesterId || 0;
+    const params = {};
+    if (filters.value.semesterId) params.semesterId = filters.value.semesterId;
+    if (filters.value.grade) params.grade = parseInt(filters.value.grade);
+    if (filters.value.semester)
+      params.semester = parseInt(filters.value.semester);
 
-    // 초기 데이터 로드
-    await handleSearch(filters.value);
-  } catch (e) {
-    console.error("초기 데이터 로드 실패", e);
-  }
-});
-
-const handleSearch = async (searchFilters) => {
-  console.log("handleSearch 호출됨:", searchFilters);
-
-  // 필터 업데이트 - semesterId는 userStore 값 유지
-  filters.value = {
-    semester: searchFilters.semester || null,
-    grade: searchFilters.grade || null,
-    semesterId: userStore.semesterId || 0,
-  };
-
-  console.log("최종 검색 필터:", filters.value);
-
-  try {
-    const apiParams = {
-      semesterId: filters.value.semesterId,
-    };
-
-    // null이 아닌 값만 API 파라미터에 추가
-    if (filters.value.semester) {
-      apiParams.semester = parseInt(filters.value.semester);
-    }
-    if (filters.value.grade) {
-      apiParams.grade = parseInt(filters.value.grade);
-    }
-
-    console.log("API 호출 파라미터:", apiParams);
-
-    const res = await GradesbyCourse(apiParams);
+    console.log("API 호출 파라미터:", params);
+    const res = await GradesbyCourse(params);
     console.log("API 응답:", res.data);
     courseList.value = res.data;
-  } catch (error) {
-    console.error("강의 목록 조회 실패", error);
+  } catch (e) {
+    console.error("성적 조회 실패", e);
     courseList.value = [];
   }
-};
+}
+
+// AcademicFilterBar에서 필터 변경 시 호출
+function handleSearch(searchParams) {
+  console.log("handleSearch 호출됨:", searchParams);
+
+  const req = searchParams.req || {};
+  filters.value = {
+    semesterId: userStore.semesterId || null,
+    grade: req.grade || null,
+    semester: req.semester || null,
+  };
+
+  fetchGrades();
+}
+
+// 최초 로드시 데이터 불러오기
+fetchGrades();
 </script>
 
 <template>
   <div class="page">
     <h1 class="page-title">영구 성적조회</h1>
-
     <AcademicFilterBar @search="handleSearch" />
-
     <GradeTable :courseList="courseList" />
   </div>
 </template>

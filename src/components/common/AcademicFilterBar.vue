@@ -1,7 +1,9 @@
 <script setup>
 import { reactive, watch } from "vue";
+import { useUserStore } from "@/stores/account";
 
 const emit = defineEmits(["search"]);
+const userStore = useUserStore();
 
 const filters = reactive({
   semester: "",
@@ -17,9 +19,9 @@ const gradeOptions = [
 ];
 
 const semesterOptions = [
-  { semester: "", label: "전체" },
-  { semester: "1", label: "1학기" },
-  { semester: "2", label: "2학기" },
+  { value: "", label: "전체" },
+  { value: "1", label: "1학기" },
+  { value: "2", label: "2학기" },
 ];
 
 watch(
@@ -36,11 +38,14 @@ const selectGrade = (grade) => {
 
 const emitSearch = () => {
   const searchData = {
-    semester: filters.semester === "" ? null : filters.semester,
-    grade: filters.grade === "" ? null : filters.grade,
+    userId: userStore.userId,
+    req: {
+      semesterId: filters.semester === "" ? null : filters.semester,
+      grade: filters.grade === "" ? null : filters.grade,
+      semester: filters.semester === "" ? null : filters.semester,
+    },
   };
-
-  console.log("AcademicFilterBar에서 emit하는 데이터:", searchData);
+  console.log("API 호출 파라미터:", searchData.req);
   emit("search", searchData);
 };
 </script>
@@ -63,8 +68,8 @@ const emitSearch = () => {
       <select v-model="filters.semester" class="select-input">
         <option
           v-for="option in semesterOptions"
-          :key="option.semester"
-          :value="option.semester"
+          :key="option.value"
+          :value="option.value"
         >
           {{ option.label }}
         </option>
