@@ -1,7 +1,7 @@
 import axios from "./httpRequester";
 
-export const getList = (param) => {
-  return axios.get("/api/staff/approval", {param}).catch((e) => e.response);
+export const getList = (params) => {
+  return axios.get("/api/staff/approval", { params }).catch((e) => e.response);
 };
 
 export const decicdeApp = (param) => {

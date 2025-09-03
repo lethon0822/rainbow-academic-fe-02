@@ -1,87 +1,47 @@
 <script setup>
-import { reactive, onMounted } from "vue";
-import { courseStudentList } from "@/services/professorService";
+import { ref, onMounted, computed } from "vue";
 import { useUserStore } from "@/stores/account";
-import { useRoute, useRouter } from "vue-router";
+import { getMyCurrentGrades } from "@/services/GradeService";
+import { useRouter } from "vue-router";
 
-const userStore = useUserStore();
-const route = useRoute();
+const courseList = ref([]);
+const searchTerm = ref("");
 const router = useRouter();
+const userStore = useUserStore();
 
-onMounted(async () => {
-  const passJson = history.state.data;
-  if (passJson) {
-    const nana = JSON.parse(passJson);
-    state.course = nana;
-
-    const id = state.course.courseId;
-    console.log("아이디", id);
-    const res = await courseStudentList(id);
-    console.log("냐냐", res);
-
-    if (res.data.length > 0) {
-      state.data = res.data;
-      console.log("스테이트", state.data);
-      return;
-    }
+async function fetchGrades() {
+  try {
+    const semesterId = userStore.semesterId;
+    const res = await getMyCurrentGrades({ semesterId });
+    courseList.value = res.data;
+    console.log("성적 데이터 원본:", JSON.stringify(res.data, null, 2));
+  } catch (error) {
+    console.error("성적 조회 실패:", error);
   }
+}
+
+onMounted(() => {
+  fetchGrades();
 });
 
-const attendance = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
-
-  router.push({
-    path: "/professor/attendance",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
-  });
-};
-
-const enrollmentGrade = () => {
-  console.log("넘겨줄 데이터", state.data);
-  const jsonBody = JSON.stringify(state.data);
-
-  router.push({
-    path: "/enrollmentgrade",
-    state: {
-      data: jsonBody,
-      id: route.params.id,
-    },
-  });
-};
-
-const state = reactive({
-  courses: [
-    {
-      id: 1,
-      title: "컴퓨터 과학개론",
-      courseCode: "CS101",
-      score: 60,
-      grade: "A+",
-      attendance: 20,
-      attendanceRate: 20,
-      lateCount: 20,
-      assignments: 0,
-      isCompleted: true,
-    },
-    {
-      id: 2,
-      title: "컴퓨터 네트워크",
-      courseCode: "CS101",
-      isCompleted: false,
-    },
-  ],
+const filteredCourses = computed(() => {
+  if (!searchTerm.value) return courseList.value;
+  return courseList.value.filter((course) =>
+    course.title.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
 });
 
-const handleStudentManagement = (courseId) => {
-  console.log(`학생 관리: ${courseId}`);
+const goToSurvey = (courseId) => {
+  router.push({ path: "/course/survey", query: { courseId } });
 };
 
-const handleAttendanceManagement = (courseId) => {
-  console.log(`출결관리 및 성적: ${courseId}`);
+// 수정된 강의평가 완료 여부 확인 함수
+const isEvaluationCompleted = (course) => {
+  return !!course.evScore || course.evScore === 0; // 0점도 평가 완료로 인정하고 싶다면
+};
+
+const canViewGrades = (course) => {
+  return isEvaluationCompleted(course);
 };
 </script>
 
@@ -97,67 +57,83 @@ const handleAttendanceManagement = (courseId) => {
       <div class="search-bar">
         <div class="search-input">
           <i class="bi bi-search search-icon"></i>
-          <input type="text" placeholder="강의이름 검색" />
+          <input type="text" placeholder="강의이름 검색" v-model="searchTerm" />
         </div>
       </div>
     </div>
 
     <div class="course-list">
-      <div v-for="course in state.courses" :key="course.id" class="course-card">
+      <div
+        v-for="(course, index) in filteredCourses"
+        :key="course.courseCode"
+        class="course-card"
+      >
         <div class="course-header">
           <div class="course-info">
             <span class="course-number">{{
-              String(course.id).padStart(2, "0")
+              String(index + 1).padStart(2, "0")
             }}</span>
             <span class="course-title">{{ course.title }}</span>
             <span class="course-divider">|</span>
             <span class="course-code">{{ course.courseCode }}</span>
           </div>
           <div class="course-actions">
-            <button v-if="course.isCompleted" class="btn btn-secondary">
-              <i class="bi bi-pen me-1"></i>
-              강의 평가 완료
+            <button
+              v-if="isEvaluationCompleted(course)"
+              class="btn btn-secondary"
+              disabled
+            >
+              <i class="bi bi-check-circle me-1"></i> 강의 평가 완료
             </button>
-            <button v-else class="btn btn-danger">
-              <i class="bi bi-pen me-1"></i>
-              강의 평가
+            <button
+              v-else
+              class="btn btn-danger"
+              @click="goToSurvey(course.courseId)"
+            >
+              <i class="bi bi-pen me-1"></i> 강의 평가
             </button>
           </div>
         </div>
 
-        <div v-if="course.isCompleted" class="grade-stats">
+        <!-- 성적 표시 부분 - 강의평가 완료된 경우만 표시 -->
+        <div v-if="canViewGrades(course)" class="grade-stats">
           <div class="stat-item">
             <span class="stat-label">점수</span>
-            <span class="stat-value">{{ course.score }}</span>
+            <span class="stat-value">{{
+              course.rank ?? course.totalScore ?? "-"
+            }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">평점</span>
-            <span class="stat-value grade">{{ course.grade }}</span>
+            <span class="stat-value grade">{{
+              course.point ?? course.grade ?? "-"
+            }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">출석</span>
-            <span class="stat-value">{{ course.attendance }}</span>
+            <span class="stat-value">{{ course.attendanceScore ?? "-" }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">중간고사</span>
-            <span class="stat-value">{{ course.attendanceRate }}</span>
+            <span class="stat-value">{{ course.midScore ?? "-" }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">기말고사</span>
-            <span class="stat-value">{{ course.lateCount }}</span>
+            <span class="stat-value">{{ course.finScore ?? "-" }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">기타</span>
-            <span class="stat-value">{{ course.assignments }}</span>
+            <span class="stat-value">{{ course.otherScore ?? "-" }}</span>
           </div>
         </div>
 
+        <!-- 강의평가 미완료 시 경고 메시지 -->
         <div v-else class="warning-message">
           <i class="bi bi-exclamation-triangle text-danger me-2"></i>
-          <span class="text-danger"
-            >강의 평가 미완료로 성적 조회가 제한됩니다. 평가를 먼저 완료해
-            주세요.</span
-          >
+          <span class="text-danger">
+            강의 평가 미완료로 성적 조회가 제한됩니다. 평가를 먼저 완료해
+            주세요.
+          </span>
         </div>
       </div>
     </div>
@@ -180,7 +156,6 @@ const handleAttendanceManagement = (courseId) => {
   margin-bottom: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
-
 }
 
 .header-card h1 {
@@ -299,9 +274,11 @@ const handleAttendanceManagement = (courseId) => {
   justify-content: center;
   background-color: #6c757d;
   color: white;
-  margin-right: 600px;
+  margin-right: 590px;
   width: 120px;
   height: 36px;
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .btn-danger {
@@ -310,7 +287,7 @@ const handleAttendanceManagement = (courseId) => {
   justify-content: center;
   background-color: #dc3545;
   color: white;
-  margin-right: 600px;
+  margin-right: 590px;
   width: 120px;
   height: 36px;
 }

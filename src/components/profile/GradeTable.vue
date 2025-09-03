@@ -1,73 +1,16 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { inject } from "vue";
-import axios from "axios";
+import { defineProps } from "vue";
 
 const props = defineProps({
   courseList: {
     type: Array,
-    default: () => [],
-  },
-  maxHeight: {
-    type: String,
-    default: "700px",
-  },
-  show: {
-    type: Object,
-    default: () => ({
-      professorName: false,
-      remStd: false,
-      enroll: false,
-      cancel: false,
-      deptName: true,
-      setting: false,
-      modify: false,
-      approve: false,
-      check: false,
-    }),
+    required: true,
   },
 });
-const emit = defineEmits(["enroll", "cancel", "check"]);
-
-const change = (status) => {
-  if (status === "거부") return "gray";
-  if (status === "승인") return "blue";
-  return "red";
-};
-
-const openModal = inject("openModal");
-const openLink = (id) => {
-  if (openModal) openModal(id);
-};
-
-const router = useRouter();
-const send = (id, json) => {
-  const jsonBody = JSON.stringify(json);
-  router.push({
-    path: `/professor/course/${id}/students`,
-    state: { data: jsonBody },
-  });
-};
-
-const patchCourseStatus = async (courseId, status) => {
-  try {
-    const payload = { courseId, status };
-    const res = await axios.patch("/staff/approval/course", payload);
-    if (res.status === 200) {
-      alert(`강의가 ${status} 처리되었습니다.`);
-      const target = props.courseList.find((c) => c.courseId === courseId);
-      if (target) target.status = status;
-    } else {
-      alert("승인/거부 실패 (서버 응답 오류)");
-    }
-  } catch (err) {
-    alert("처리 중 오류가 발생했습니다.");
-  }
-};
 </script>
 
 <template>
-  <div class="table-container" :style="{ maxHeight: maxHeight }">
+  <div class="table-container" :style="{ maxHeight: '600px' }">
     <div class="table-wrapper">
       <table>
         <thead>
@@ -78,7 +21,7 @@ const patchCourseStatus = async (courseId, status) => {
             <th>과목코드</th>
             <th>과목명</th>
             <th>담당교수</th>
-            <th>수강학년</th>
+            <th>학년</th>
             <th>학점</th>
             <th>등급</th>
             <th>평점</th>
