@@ -4,6 +4,9 @@ import { useAccountStore, useUserStore } from "@/stores/account";
 import { logout } from "@/services/accountService";
 import { reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { defineEmits } from "vue";
+
+const emit = defineEmits(["toggle-menu"]);
 
 const state = reactive({
   data: {
@@ -18,6 +21,10 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const account = useAccountStore();
+
+const onHamburgerClick = () => {
+  emit("toggle-menu");
+};
 
 //로그아웃
 const logoutAccount = async () => {
@@ -49,13 +56,27 @@ const logoutAccount = async () => {
       class="navbar navbar-dark text-white shadow-sm"
       style="background-color: #00664f; height: 60px"
     >
+      <button
+        class="hamburger-btn"
+        @click="onHamburgerClick"
+        style="
+          font-size: 28px;
+          background: transparent;
+          border: none;
+          color: white;
+          cursor: pointer;
+        "
+      >
+        ☰
+      </button>
       <div
         class="container-fluid d-flex justify-content-between align-items-center px-4"
+        style="flex: 1"
       >
         <!-- 로고 왼쪽 -->
         <div class="logo d-flex align-items-center" @click="$router.push('/')">
           <img :src="logo" alt="로고 아이콘" height="40" />
-          <span class="systemText" @click="$router.push('/')"
+          <span class="systemText" style="cursor: pointer; margin-left: 10px"
             >학사관리시스템</span
           >
         </div>
@@ -145,5 +166,16 @@ a {
   font-size: 22px;
   font-weight: 500;
   cursor: pointer;
+}
+
+/* 햄버거 버튼 기본 숨김 */
+.hamburger-btn {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .hamburger-btn {
+    display: block;
+  }
 }
 </style>
