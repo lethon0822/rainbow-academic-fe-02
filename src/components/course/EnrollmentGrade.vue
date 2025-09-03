@@ -52,8 +52,11 @@ const calc = (r) => {
 onMounted(async () => {
   try {
     const res = await courseStudentList(st.courseId);
+    console.log("학생 리스트 res: ",res.data);
     st.rows = res.data.map(s => ({
       ...s,
+      deptName: s.deptName ?? 0,
+      gradeYear: s.grade ?? 0, 
       attendanceDays: s.attendanceDays ?? 0,
       absence: s.absence ?? 0,
       attendanceEval: s.attendanceEval ?? 0,
@@ -119,7 +122,7 @@ function resetRow(r) {
     r.finalExam      = 0;
     r.etcScore       = 0;
     r.total          = 0;
-    r.grade          = "F";
+    r.score          = "F";
     r.gpa            = 0;
     r.checked        = false;
   }
@@ -138,7 +141,8 @@ function exportCsv() {
     r.loginId ?? "",
     r.userName ?? "",
     r.gradeYear ?? "",
-    r.departmentName ?? "",
+    r.deptName ?? "",
+    r.gradeYear ?? "",
     r.attendanceDays ?? 0,
     r.absence ?? 0,
     r.attendanceEval ?? 0,
@@ -146,7 +150,7 @@ function exportCsv() {
     r.finalExam ?? 0,
     r.etcScore ?? 0,
     r.total ?? 0,
-    r.grade ?? "",
+    r.grade ?? "F",
     r.gpa ?? 0
   ]);
 
@@ -222,7 +226,7 @@ function exportCsv() {
               <td>{{ r.loginId }}</td>
               <td>{{ r.userName }}</td>
               <td>{{ r.gradeYear }}</td>
-              <td class="left-cell">{{ r.departmentName }}</td>
+              <td class="left-cell">{{ r.deptName }}</td>
               <td><input class="num" type="number" v-model.number="r.attendanceDays" /></td>
               <td><input class="num" type="number" v-model.number="r.absence" /></td>
               <td><input class="num" type="number" v-model.number="r.attendanceEval" @input="calc(r)" /></td>
