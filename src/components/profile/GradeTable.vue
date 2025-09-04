@@ -262,12 +262,10 @@ td.enroll-action {
 }
 
 /* 모바일 */
-
-@media (max-width: 767px) {
+@media all and (max-width: 767px) {
   .table-container {
     min-width: auto;
-    margin: 10px;
-    padding: 15px 15px 0 1px;
+    padding: 15px 10px 0 10px;
   }
 
   /* 기존 컬럼들 숨김 */
@@ -275,16 +273,25 @@ td.enroll-action {
   .semester-col,
   .type-col,
   .courseCode-col,
-
-  .title-col,
-  .professorName-col {
+  .professorName-col,
+  .year-th,
+  .semester-th,
+  .type-th,
+  .courseCode-th,
+  .professorName-th {
     display: none;
   }
 
+  .title-col,
+  .title-th,
   .grade-col,
   .credit-col,
   .rank-col,
-  .point-col {
+  .point-col,
+  .grade-th,
+  .credit-th,
+  .rank-th,
+  .point-th {
     display: table-cell;
   }
 
@@ -300,7 +307,6 @@ td.enroll-action {
 
 /* 테블릿 */
 @media all and (min-width: 768px) and (max-width: 1023px) {
-
   .table-container {
     min-width: auto;
     max-width: 100%;
@@ -318,6 +324,7 @@ td.enroll-action {
     padding: 7px 3px;
   }
 }
+
 /* PC */
 @media all and (min-width: 1024px) {
   .table-container {

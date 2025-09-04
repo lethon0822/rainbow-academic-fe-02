@@ -98,7 +98,7 @@ const canViewGrades = (course) => {
         <!-- 성적 표시 부분 - 강의평가 완료된 경우만 표시 -->
         <div v-if="canViewGrades(course)" class="grade-stats">
           <div class="stat-item">
-            <span class="stat-label">점수</span>
+            <span class="stat-label">학점</span>
             <span class="stat-value">{{
               course.point ?? course.grade ?? "-"
             }}</span>
@@ -477,7 +477,7 @@ const canViewGrades = (course) => {
 /* PC (해상도 1024px 이상) */
 @media all and (min-width: 1024px) {
   .container {
-    max-width: 1100px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 20px 24px 24px 50px;
   }
