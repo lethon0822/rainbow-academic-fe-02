@@ -26,8 +26,7 @@ const router = createRouter({
         { path: "/professor/course/registration", name: "RegistrationCourse", component: () => import("@/components/course/RegistrationCourse.vue") },
         { path: "/professor/course/registration/:id", name: "ModifyCourse", props: true, component: () => import("@/components/course/RegistrationCourse.vue") },
 
-        // profile
-        { path: "/rank", component: () => import("@/views/profile/Profile.vue") },
+       
 
         // views
         { path: "/application", component: () => import("@/views/Application.vue") },
@@ -38,6 +37,10 @@ const router = createRouter({
 
         // enrollment
         { path: "/enrollment", component: () => import("@/views/enrollment/Enrollment.vue") },
+
+        //graduation
+        { path: "/graduation", component: () => import("@/views/graduation/Graduation.vue") },
+
 
         // management
         { path: "/schedule", component: () => import("@/views/management/SchedulePage.vue") },
@@ -54,6 +57,7 @@ const router = createRouter({
         { path: "/profile", component: () => import("@/views/profile/StudentRecord.vue") },
         { path: "/profile/test", component: () => import("@/views/profile/StudentRecord.vue") },
         { path: "/grade/current", component: () => import("@/views/profile/StudentTranscriptHistory.vue") },
+        { path: "/rank", component: () => import("@/views/profile/Profile.vue") },
       ],
     },
   ],

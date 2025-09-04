@@ -14,3 +14,8 @@ export async function getSchedulesByMonth(year, month) {
 export const createSchedule = (payload) => axios.post('/schedule', payload)
 export const updateSchedule = (payload) => axios.put('/schedule', payload)
 export const deleteSchedule = (id)      => axios.delete('/schedule', { params: { id } })
+export const getScheduleFor = async ({ semesterId, type }) => {
+  const res = await axios.get('/schedule', { params: { semesterId, type } });
+  const data = res.data;
+  return Array.isArray(data) ? (data[0] ?? null) : (data ?? null);
+};
