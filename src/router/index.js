@@ -58,10 +58,8 @@ const router = createRouter({
         { path: "/course/survey", name: "CourseEvaluation", component: () => import("@/views/profile/CourseEvaluation.vue") },
         { path: "/grade/permanent", component: () => import("@/views/profile/GetAllGrades.vue") },
         { path: "/renewal/privacy", component: () => import("@/views/profile/RenewalPrivacy.vue") },
-        { path: "/profile", component: () => import("@/views/profile/StudentRecord.vue") },
-        { path: "/profile/test", component: () => import("@/views/profile/StudentRecord.vue") },
         { path: "/grade/current", component: () => import("@/views/profile/StudentTranscriptHistory.vue") },
-        { path: "/rank", component: () => import("@/views/profile/Profile.vue") },
+        { path: "/profile", component: () => import("@/views/profile/Profile.vue") },
       ],
     },
   ],
@@ -77,10 +75,7 @@ router.beforeEach(async (to, from, next) => {
   const account = useAccountStore();
   const isOpen = openPaths.has(to.path);
 
-  console.warn("[nav:start]", to.fullPath, {
-    checked: account.state.checked,
-    loggedIn: account.state.loggedIn,
-  });
+  
 
   if (!account.state.checked) {
     if (!checkingPromise) {
@@ -99,11 +94,7 @@ router.beforeEach(async (to, from, next) => {
     checkingPromise = null;
   }
 
-  console.warn("[nav:after-check]", to.fullPath, {
-    checked: account.state.checked,
-    loggedIn: account.state.loggedIn,
-  });
-
+  
   if (!isOpen && !account.state.loggedIn) return next("/login");
   if (isOpen && account.state.loggedIn)   return next("/");
   return next();
