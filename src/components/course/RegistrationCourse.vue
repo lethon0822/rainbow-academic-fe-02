@@ -7,6 +7,7 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 import { loadCourse } from "@/services/CourseService";
 import { useUserStore } from "@/stores/account";
 import { professorDept } from "@/services/professorService"
+
 const props = defineProps({
   id: Number,
 });
@@ -73,16 +74,24 @@ const back = () => {
 
 
 <template>
-  <WhiteBox :title="'강의등록'">
-    <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: 100px; padding: 10px; box-shadow: 1px 5px 10px #ccc;">
+  <div class="box">
+  <WhiteBox class="page-wrap" :title="'강의등록'">
+  <!-- <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: auto; padding: 15px; box-shadow: 1px 5px 10px #ccc; max-width: 1320px; ">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
-      <br />
-      <span style="font-size: 15px;"
-        >강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span
-      >
-    </div>
+      <br/>
+      <span style="font-size: 15px;">강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span>
+    </div> -->
 
+    <div class="lecture-box">
+      <span class="lecture-title">새로운 강의를 개설해보세요</span>
+      <br />
+      <span class="lecture-subtitle">
+      강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.
+      </span>
+    </div>
+    
     <div class="container">
+      <div class="form-row">
       <div class="fform-group">
         <div class="form-group">
           <label for="title">교과목명</label>
@@ -143,7 +152,7 @@ const back = () => {
           <input type="text" id="classroom" v-model="state.form.classroom" />
         </div>
       </div>
-
+    </div>
       <div class="fform-group3">
         <div class="form-group">
           <label for="textBook">교재정보</label>
@@ -202,6 +211,7 @@ const back = () => {
           <input
             type="text"
             id="assignment"
+            
             v-model="state.form.assignment"
             placeholder="0%"
             disabled
@@ -232,6 +242,7 @@ const back = () => {
 
     </div>
   </WhiteBox>
+</div>
 </template>
 
     
@@ -245,71 +256,101 @@ const back = () => {
 
 <style scoped lang="scss">
 
+.lecture-box {
+  border: 1px solid gray;
+  border-radius: 10px;
+  background-color: #E9F5E8;
+  margin-left: 130px;
+  padding: 15px;
+  box-shadow: 1px 5px 10px #ccc;
+  width: 1320px;
+  position: relative;
+}
+
+.lecture-title {
+  font-size: 20px;
+}
+
+.lecture-subtitle {
+  font-size: 15px;
+}
+
+ .box{
+   background-color: #fdfdfd; 
+ }
+  
+  .page-wrap { 
+    overflow: visible !important; 
+    min-height: 1265px; 
+  }
+    
 
    .container {
-   border: 2px solid #ccc;   /* 테두리 */
+   border: 1px solid #ccc;   
    border-radius: 8px;       /* 모서리 둥글게 */
    padding: 20px;            /* 안쪽 여백 */
    margin: 20px auto;        /* 바깥 여백 */
    max-width: 1320px;         /* 최대 너비 */
-   background: #fdfdfd; 
-   max-height: 1000px;   
+   background-color: #fdfdfd; 
+   min-height: 1020px;
    position: relative;
-   min-height: 1000px; 
-   margin-left: 100px; 
-   overflow-y: auto;
-   
+   margin-left: 130px; 
+   box-shadow: 1px 1px 2px #ccc;
    } 
 
+
+
+   
+
+  html {
+  height: auto;    /* ❌ 100%, 100vh 쓰면 안 됨 */
+ // min-height: 100%;
+  }
   
-  body {
-        font-family: Arial, sans-serif;
-        background-color: #f7f7f7;
-        margin: 0;
-        padding: 0;
-    }
+  body { 
+    overflow-y: auto;
+  }
+    
     
   h1 {
         margin-bottom: 20px;
   }
     
   .fform-group {
-      position: fixed; 
-      left: 485px;
-      width: 540px;
+    
+      position: relative; 
+      margin-left: 100px;
+      max-width: 540px;
       display: flex;
       flex-direction: column;
+      margin-top: 50px;
     }
 
   .fform-group2 {
-      position: fixed;
-      left: 1030px;
-      width: 540px;
+      position: relative;
+      margin-left: 660px;
+      margin-top: -245px;
+      max-width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group3 {
-      position: fixed;
-      top: 700px;
-      left: 485px;
-      
-      width: 1080px;
+      position: relative;
+      margin-left: 100px;
+      max-width: 1100px;
       display: flex;
       flex-direction: column;
     }
 
     .fform-group4 {
-      
-      position: fixed;
+      margin-left: -400px;
+      position: relative;
       border: #9e9e9e;
       display: grid;
       left: 780px;
-      top:1150px;
       max-width: 200px;
-      min-width: 200px;
-      
-      height: 210px;
+      //min-width: 200px;
       grid-template-columns: repeat(5, 1fr);
       grid-gap: 20px;
     }
@@ -345,7 +386,7 @@ const back = () => {
     .form-group label {
       
         display:block;
-        width: 120px;
+        max-width: 120px;
         font-weight: bold;
     }
     .form-group input, 
@@ -363,20 +404,15 @@ const back = () => {
 
       .form-group textarea 
       {
-        
-     
         padding: 6px 10px;
         border: 1px solid #ccc;
         border-radius: 10px;
         height: 200px;
-
-
       }
       
      .fform-group4 input {
-                /* 블록 형태 */
-  width: 100%;                 /* 기본 input이랑 맞춤 */
-  background-color: #f0f0f0;   /* 회색 배경 */
+  max-width: 100%;                
+  background-color: #f0f0f0;   
   border: 1px solid #f0f0f0;
   //color: #333;
   padding: 5px 10px;
@@ -396,7 +432,7 @@ const back = () => {
         padding-left: 0;
     }
     .week-plan li {
-        background: #e0f0d9;
+        background-color: #e0f0d9;
         margin-bottom: 5px;
         padding: 5px 10px;
         border-radius: 5px;
@@ -409,30 +445,29 @@ const back = () => {
        
     }
     button {
-        
-        padding: 8px 20px;
-        margin: 0 5px;
-        border: none;
-        border-radius: 5px;
-        background-color: #2e7d32;
-        color: #fff;
-        cursor: pointer;
+    padding: 8px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2e7d32;
+    color: #fff;
+    cursor: pointer;
     }
-    button.reset {
-        background-color: #9e9e9e;
-    }
-    input, textarea {
-        width: 100%;
-       
-        box-sizing: border-box;
-        outline-color: #A2A2A2;
-     }
-     .percent {
-       width: 100px;
-       height: 200px;
-     }
+  button.reset {
+  background-color: #ccc;
+  }
+  input, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  outline-color: #A2A2A2;
+  }
 
-     #goal {
+ .percent {
+  width: 100px;
+  height: 200px;
+  }
+
+ #goal {
   border: 1px solid #B7B7B7;   
   border-radius: 12px;
   padding: 30px;
@@ -440,8 +475,7 @@ const back = () => {
   background-color:#f5f5f5
   }
 
-
-.table1 {
+ .table1 {
   border: 1px solid #B7B7B7;
   background-color: #fff;
   border-right: 1px solid #fff;
@@ -450,20 +484,20 @@ const back = () => {
   border-bottom: 0.5px;
 }
 
-
-
-.title {
+ .title {
   font-size: 38px;
   font-weight: bold;
   margin-bottom: 10px;
   text-align: left;
-}
+ }
+
 p {
   font-size: 20px;
   font-weight: 400;
   margin-top: 70px;
   margin-bottom: 5px;
 }
+ 
 .table {
   border: 1px solid #B7B7B7;
   background-color: #fff;
@@ -472,17 +506,21 @@ p {
   margin-bottom: 0;
   border-bottom: 0.5px;
 }
+
 select {
   width: 120px;
   background-color: #E2E2E2;
   color: #4D4D4D;
 }
+
 .top {
   border-top: 3px solid #000;
 }
+
 .last {
   border-bottom: 1px solid #B7B7B7;
 }
+
 .table-title {
   width: 150px;
   background-color: #364157;
@@ -492,6 +530,7 @@ select {
   align-content: center;
   font-style: #000;
 }
+
 .table-content {
   background-color: #fff;
   align-content: center;

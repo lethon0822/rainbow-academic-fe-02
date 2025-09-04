@@ -10,12 +10,12 @@ import { useRouter } from "vue-router";
 const courseList = ref([]);
 const router = useRouter();
 
-onMounted(async ()=>{
+// onMounted(async ()=>{
 
-  const res = await findMyCourse();
-  courseList.value = res.data;
+//   const res = await findMyCourse();
+//   courseList.value = res.data;
 
-});
+// });
 
 const myCourse = async (filters) => {
   const json = {
