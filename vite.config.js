@@ -16,8 +16,6 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-        cookieDomainRewrite: 'localhost',
-        secure: false,
       },
       "/student": {
         target: "http://localhost:8080",
