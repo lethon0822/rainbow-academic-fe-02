@@ -55,19 +55,54 @@ fetchGrades();
 
 <template>
   <div class="page">
-    <h1 class="page-title">영구 성적조회</h1>
-    <AcademicFilterBar @search="handleSearch" />
-    <GradeTable :courseList="courseList" />
+    <div class="content-wrapper">
+      <h1 class="page-title">영구 성적조회</h1>
+      <AcademicFilterBar @search="handleSearch" />
+      <GradeTable :courseList="courseList" />
+    </div>
   </div>
 </template>
 
 <style scoped>
 .page {
-  padding: 20px 20px 0px 5px;
+  padding: 20px 24px 5px 50px;
 }
 .page-title {
   font-size: 22px;
   font-weight: 600;
   margin: 8px 0 16px 50px;
+}
+
+/* 모바일 */
+@media (max-width: 1023px) {
+  .page {
+    padding: 15px 10px 0px 10px;
+  }
+
+  .page-title {
+    font-size: 18px;
+    margin: 8px 0 12px 0px;
+  }
+}
+
+/* 태블릿 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .page {
+    padding: 18px 15px 0px 15px;
+  }
+
+  .page-title {
+    font-size: 20px;
+    margin: 8px 0 14px 15px;
+  }
+}
+
+/* PC */
+@media (min-width: 1024px) {
+  .page {
+    padding: 20px 24px 0px 50px;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+  }
 }
 </style>

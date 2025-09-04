@@ -1,6 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue';
-
+import { reactive, ref } from "vue";
 
 const state = reactive({
   approvalList: [
@@ -9,31 +8,28 @@ const state = reactive({
       id: 1,
       year: 2025,
       semester: 1,
-      userName: '김연주',
-      departmentName: '컴퓨터공학과',
-      approval: '휴직',
-      reason: '과목 변경',
-      approvalDate: '2025-08-29',
-      checkDate: '2025-08-30',
-      approvalState: '처리중',
+      userName: "김연주",
+      departmentName: "컴퓨터공학과",
+      approval: "휴직",
+      reason: "과목 변경",
+      approvalDate: "2025-08-29",
+      checkDate: "2025-08-30",
+      approvalState: "처리중",
     },
     {
       id: 2,
       year: 2025,
       semester: 1,
-      userName: '이민호',
-      departmentName: '전자공학과',
-      approval: '휴학',
-      reason: '개인사유',
-      approvalDate: '2025-08-28',
-      checkDate: '2025-08-29',
-      approvalState: '승인',
+      userName: "이민호",
+      departmentName: "전자공학과",
+      approval: "휴학",
+      reason: "개인사유",
+      approvalDate: "2025-08-28",
+      checkDate: "2025-08-29",
+      approvalState: "승인",
     },
-
-
   ],
 });
-
 
 // 모달 상태
 const showModal = ref(false);
@@ -83,7 +79,8 @@ function openModal(approval) {
                   approval.approvalState !== '거부'
                 "
                 @click="openModal(approval)"
-                class="red">
+                class="red"
+              >
                 처리하기
               </button>
 
@@ -145,7 +142,7 @@ thead th {
 
 thead th::before,
 thead th::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
