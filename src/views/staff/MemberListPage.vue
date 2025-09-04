@@ -2,7 +2,7 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import WhiteBox from '@/components/common/WhiteBox.vue'
 import { getMemberList } from '@/services/memberService'
-import { deptGet } from '@/services/deptManageService'
+import { deptGet } from '@/services/DeptManageService'
 
 const depts = ref([
   { id: '', name: '전체' },
@@ -65,6 +65,7 @@ const filters = reactive({
   grade: '',       // 학생 전용: 1~4
   keyword: '',
   searchBy: 'all', // all | name | loginId | email
+  gender:'',
 })
 
 const isStudent = computed(() => role.value === 'student')
@@ -75,23 +76,20 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
+    const roleParam = role.value === 'student' ? 'student' : 'professor'
+
     const params = {
-      userRole: role.value, 
-      deptId: filters.deptId !== '' ? Number(filters.deptId) : undefined, 
+      userRole: roleParam,
+      deptId: filters.deptId !== '' ? Number(filters.deptId) : undefined,
       status: filters.status || undefined,
-      keyword: filters.keyword || undefined,
+      grade: isStudent.value && filters.grade ? Number(filters.grade) : undefined,
+      gender: filters.gender || undefined,
+      q: filters.keyword || undefined,
       searchBy: filters.searchBy !== 'all' ? filters.searchBy : undefined,
-    }
-    if (isStudent.value && filters.grade) {
-      params.grade = Number(filters.grade)
-    }
-    if (filters.gender) {
-   params.gender = filters.gender          // ✅ 역할과 무관하게 항상 포함
     }
 
     const res = await getMemberList(params)
-    // rows.value = res.list ?? res   // 응답 형태에 맞춰 한 줄 선택
-    rows.value = res
+    rows.value = Array.isArray(res) ? res : []
   } catch (e) {
     console.error(e)
     error.value = '목록을 불러오지 못했습니다.'
@@ -221,6 +219,19 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.table-wrap{
+  /* ✅ 화이트박스 안에서만 스크롤 */
+  overflow: auto;
+
+  /* 화면 높이에서 상단 필터/여백을 뺀 나머지 만큼만 높이 부여
+     필요하면 220px 값을 화면에 맞게 조절하세요 */
+  max-height: calc(100vh - 220px);
+
+  /* 스크롤 영역이 줄어들 때 테이블이 깨지지 않도록 */
+  min-height: 0;
+}
+
+/* thead는 이미 sticky라서 스크롤해도 상단에 고정됨 */
 .filters{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
 .chips{ display:flex; gap:8px; }
 .chip{
@@ -238,10 +249,10 @@ onMounted(async () => {
 .w150{ width:150px } .w120{ width:120px } .w240{ width:240px }
 .search-group{ display:flex; gap:6px; align-items:center; }
 .ghost{ background:#f5f5f5; border:none; border-radius:8px; height:34px; padding:0 10px; cursor:pointer; }
-.table-wrap{ min-height:200px; }
+.table-wrap{ min-height:200px; padding-bottom: 16px; }
 .tbl{ width:100%; border-collapse:separate; border-spacing:0; }
-.tbl thead th, tr{ position: sticky; top: 0; z-index: 1; background:#f9fafb; text-align:center; padding:10px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
-.tbl tbody td{ padding:10px; border-bottom:1px solid #f1f1f1; }
+.tbl thead th{ text-align: center; vertical-align: middle; position: sticky; top: 0; z-index: 1; background:#f9fafb; padding:10px; border-top:1px solid #eee; border-bottom:1px solid #eee; }
+.tbl tbody td{ text-align: center; vertical-align: middle; padding:10px; border-bottom:1px solid #f1f1f1; }
 .center{ text-align:center; padding:28px 0; } .dim{ color:#666 } .err{ color:#e53935 } .muted{ color:#777 }
 .ellipsis{ max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 </style>
