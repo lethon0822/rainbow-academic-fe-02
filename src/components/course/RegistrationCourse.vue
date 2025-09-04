@@ -76,7 +76,7 @@ const back = () => {
 <template>
   <div class="box">
   <WhiteBox class="page-wrap" :title="'강의등록'">
-  <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8;margin: auto; padding: 10px; box-shadow: 1px 5px 10px #ccc; width: 1320px; ">
+  <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin:auto; padding: 10px; box-shadow: 1px 5px 10px #ccc; width: 1320px; ">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
       <br/>
       <span style="font-size: 15px;">강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span>
@@ -247,17 +247,18 @@ const back = () => {
  
 
 <style scoped lang="scss">
-  //.box {background-color: #ccc;}
+ .box{
+   background-color: #fdfdfd; 
+ }
   
   .page-wrap { 
     overflow: visible !important; 
-    //background:#fdfdfd;
     min-height: 1265px; 
   }
     
 
    .container {
-   border: 2px solid #ccc;   /* 테두리 */
+   border: 1px solid #ccc;   
    border-radius: 8px;       /* 모서리 둥글게 */
    padding: 20px;            /* 안쪽 여백 */
    margin: 20px auto;        /* 바깥 여백 */
@@ -265,10 +266,7 @@ const back = () => {
    background-color: #fdfdfd; 
    min-height: 1020px;
    position: relative;
-  
    margin-left: 130px; 
-  
-   
    } 
 
 
@@ -282,7 +280,6 @@ const back = () => {
   
   body { 
     overflow-y: auto;
-//background-color: #ccc;
   }
     
     
@@ -291,6 +288,7 @@ const back = () => {
   }
     
   .fform-group {
+    
       position: relative; 
       margin-left: 100px;
       width: 540px;
@@ -377,20 +375,15 @@ const back = () => {
 
       .form-group textarea 
       {
-        
-     
         padding: 6px 10px;
         border: 1px solid #ccc;
         border-radius: 10px;
         height: 200px;
-
-
       }
       
      .fform-group4 input {
-                /* 블록 형태 */
-  width: 100%;                 /* 기본 input이랑 맞춤 */
-  background-color: #f0f0f0;   /* 회색 배경 */
+  width: 100%;                
+  background-color: #f0f0f0;   
   border: 1px solid #f0f0f0;
   //color: #333;
   padding: 5px 10px;
@@ -423,30 +416,29 @@ const back = () => {
        
     }
     button {
-        
-        padding: 8px 20px;
-        margin: 0 5px;
-        border: none;
-        border-radius: 5px;
-        background-color: #2e7d32;
-        color: #fff;
-        cursor: pointer;
+    padding: 8px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2e7d32;
+    color: #fff;
+    cursor: pointer;
     }
-    button.reset {
-        background-color: #9e9e9e;
-    }
-    input, textarea {
-        width: 100%;
-       
-        box-sizing: border-box;
-        outline-color: #A2A2A2;
-     }
-     .percent {
-       width: 100px;
-       height: 200px;
-     }
+  button.reset {
+  background-color: #9e9e9e;
+  }
+  input, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  outline-color: #A2A2A2;
+  }
 
-     #goal {
+ .percent {
+  width: 100px;
+  height: 200px;
+  }
+
+ #goal {
   border: 1px solid #B7B7B7;   
   border-radius: 12px;
   padding: 30px;
@@ -454,8 +446,7 @@ const back = () => {
   background-color:#f5f5f5
   }
 
-
-.table1 {
+ .table1 {
   border: 1px solid #B7B7B7;
   background-color: #fff;
   border-right: 1px solid #fff;
@@ -464,20 +455,20 @@ const back = () => {
   border-bottom: 0.5px;
 }
 
-
-
-.title {
+ .title {
   font-size: 38px;
   font-weight: bold;
   margin-bottom: 10px;
   text-align: left;
-}
+ }
+
 p {
   font-size: 20px;
   font-weight: 400;
   margin-top: 70px;
   margin-bottom: 5px;
 }
+
 .table {
   border: 1px solid #B7B7B7;
   background-color: #fff;
@@ -486,17 +477,21 @@ p {
   margin-bottom: 0;
   border-bottom: 0.5px;
 }
+
 select {
   width: 120px;
   background-color: #E2E2E2;
   color: #4D4D4D;
 }
+
 .top {
   border-top: 3px solid #000;
 }
+
 .last {
   border-bottom: 1px solid #B7B7B7;
 }
+
 .table-title {
   width: 150px;
   background-color: #364157;
@@ -506,6 +501,7 @@ select {
   align-content: center;
   font-style: #000;
 }
+
 .table-content {
   background-color: #fff;
   align-content: center;

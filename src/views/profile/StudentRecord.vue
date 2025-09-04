@@ -1,8 +1,8 @@
 <script setup>
 //학생 프로필 사진
-import { useAccountStore } from "@/stores/account";
+import { useAccountStore, useUserStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
-import { useUserStore } from "@/stores/user";
+
 import { getProfile } from "@/services/GradeService.js";
 import Profile from "@/components/profile/Profile.vue";
 
