@@ -76,22 +76,22 @@ const canViewGrades = (course) => {
             <span class="course-title">{{ course.title }}</span>
             <span class="course-divider">|</span>
             <span class="course-code">{{ course.courseCode }}</span>
-          </div>
-          <div class="course-actions">
-            <button
-              v-if="isEvaluationCompleted(course)"
-              class="btn btn-secondary"
-              disabled
-            >
-              <i class="bi bi-check-circle me-1"></i> 강의 평가 완료
-            </button>
-            <button
-              v-else
-              class="btn btn-danger"
-              @click="goToSurvey(course.courseId)"
-            >
-              <i class="bi bi-pen me-1"></i> 강의 평가
-            </button>
+            <div class="course-actions">
+              <button
+                v-if="isEvaluationCompleted(course)"
+                class="btn btn-secondary"
+                disabled
+              >
+                <i class="bi bi-check-circle me-1"></i> 강의 평가 완료
+              </button>
+              <button
+                v-else
+                class="btn btn-danger"
+                @click="goToSurvey(course.courseId)"
+              >
+                <i class="bi bi-pen me-1"></i> 강의 평가
+              </button>
+            </div>
           </div>
         </div>
 
@@ -100,13 +100,13 @@ const canViewGrades = (course) => {
           <div class="stat-item">
             <span class="stat-label">점수</span>
             <span class="stat-value">{{
-              course.rank ?? course.totalScore ?? "-"
+              course.point ?? course.grade ?? "-"
             }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">평점</span>
             <span class="stat-value grade">{{
-              course.point ?? course.grade ?? "-"
+              course.rank ?? course.totalScore ?? "-"
             }}</span>
           </div>
           <div class="stat-item">
@@ -142,18 +142,17 @@ const canViewGrades = (course) => {
 
 <style scoped>
 .container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 24px;
-  min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  width: 100%;
+  min-width: 320px;
+  padding: 16px 24px 24px 50px;
+  box-sizing: border-box;
 }
 
 .header-card {
   background: white;
-  padding: 24px;
+  padding: 16px;
   border-radius: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #e8e8e8;
 }
@@ -169,6 +168,7 @@ const canViewGrades = (course) => {
   color: #666;
   font-size: 13px;
   margin: 0 0 16px 0;
+  line-height: 1.4;
 }
 
 .search-bar {
@@ -177,7 +177,7 @@ const canViewGrades = (course) => {
 
 .search-input {
   position: relative;
-  max-width: 400px;
+  max-width: 100%;
 }
 
 .search-icon {
@@ -192,10 +192,10 @@ const canViewGrades = (course) => {
 
 .search-input input {
   width: 100%;
-  padding: 10px 12px 10px 35px;
+  padding: 12px 12px 12px 35px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
   background: white;
   box-sizing: border-box;
@@ -208,7 +208,7 @@ const canViewGrades = (course) => {
 .course-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .course-card {
@@ -221,102 +221,100 @@ const canViewGrades = (course) => {
 
 .course-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
   border-bottom: 1px solid #f0f0f0;
   border-radius: 8px 8px 0 0;
 }
 
 .course-info {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .course-number {
   font-weight: 600;
   color: #333;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .course-title {
   font-weight: 600;
   color: #333;
   font-size: 14px;
+  word-break: break-word;
 }
 
 .course-divider {
   color: #999;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .course-code {
   color: #666;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.course-actions {
+  align-self: flex-start;
 }
 
 .btn {
-  padding: 6px 12px;
+  padding: 8px 12px;
   font-size: 12px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   font-weight: 500;
+  width: 120px;
+  height: 36px;
+  white-space: nowrap;
 }
 
 .btn-secondary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #6c757d;
   color: white;
-  margin-right: 590px;
-  width: 120px;
-  height: 36px;
   cursor: not-allowed;
   opacity: 0.8;
 }
 
 .btn-danger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #dc3545;
   color: white;
-  margin-right: 590px;
-  width: 120px;
-  height: 36px;
 }
 
 .grade-stats {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 19px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 20px 16px;
   background: #f8f9fa;
-  gap: 40px;
   border-radius: 0 0 8px 8px;
 }
 
 .stat-item {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+  text-align: center;
 }
 
 .stat-label {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   font-weight: 500;
 }
 
 .stat-value {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #333;
 }
@@ -329,10 +327,11 @@ const canViewGrades = (course) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 19px;
+  padding: 20px 16px;
   background: #fff3cd;
-  font-size: 15px;
+  font-size: 13px;
   text-align: center;
+  line-height: 1.4;
 }
 
 .text-danger {
@@ -345,5 +344,221 @@ const canViewGrades = (course) => {
 
 .me-2 {
   margin-right: 0.5rem;
+}
+
+/* 모바일 (해상도 480px ~ 767px) */
+@media all and (max-width: 767px) {
+  .container {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .header-card {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .header-card h1 {
+    font-size: 18px;
+  }
+
+  .header-card p {
+    font-size: 12px;
+  }
+
+  .course-header {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .course-info {
+    gap: 4px;
+  }
+
+  .course-title {
+    font-size: 13px;
+  }
+
+  .btn {
+    width: 100px;
+    height: 32px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .grade-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 12px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 13px;
+  }
+
+  .warning-message {
+    padding: 16px 12px;
+    font-size: 12px;
+  }
+}
+
+/* 테블릿 (해상도 768px ~ 1023px) */
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: 100%;
+    padding: 20px 24px;
+  }
+
+  .header-card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .header-card h1 {
+    font-size: 21px;
+  }
+
+  .search-input {
+    max-width: 350px;
+  }
+
+  .course-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    gap: 16px;
+  }
+
+  .course-info {
+    gap: 8px;
+  }
+
+  .course-title {
+    font-size: 14px;
+  }
+
+  .course-actions {
+    flex-shrink: 0;
+  }
+
+  .grade-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 22px 18px;
+  }
+
+  .stat-item {
+    flex-direction: row;
+    gap: 6px;
+    min-width: 80px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+  }
+
+  .stat-value {
+    font-size: 14px;
+  }
+
+  .warning-message {
+    padding: 22px 18px;
+    font-size: 14px;
+  }
+}
+
+/* PC (해상도 1024px 이상) */
+@media all and (min-width: 1024px) {
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 24px 24px 50px;
+  }
+
+  .header-card {
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .header-card h1 {
+    font-size: 22px;
+  }
+
+  .search-input {
+    max-width: 400px;
+  }
+
+  .search-input input {
+    padding: 10px 12px 10px 35px;
+    font-size: 13px;
+  }
+
+  .course-list {
+    gap: 20px;
+  }
+
+  .course-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
+  .course-info {
+    gap: 8px;
+  }
+
+  .course-number,
+  .course-title,
+  .course-divider,
+  .course-code {
+    font-size: 14px;
+  }
+
+  .course-actions {
+    align-self: auto;
+  }
+
+  .btn {
+    width: 120px;
+    height: 36px;
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .grade-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 19px;
+    gap: 40px;
+    flex-wrap: nowrap;
+  }
+
+  .stat-item {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+  }
+
+  .warning-message {
+    padding: 25px 19px;
+    font-size: 15px;
+  }
 }
 </style>

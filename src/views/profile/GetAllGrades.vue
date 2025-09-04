@@ -89,11 +89,11 @@ fetchGrades();
 
 <style scoped>
 .page {
-  padding: 16px 24px 48px;
+  padding: 20px 24px 5px;
 }
 .page-title {
   font-size: 22px;
   font-weight: 600;
-  margin: 8px 0 16px;
+  margin: 8px 0 16px 50px;
 }
 </style>
