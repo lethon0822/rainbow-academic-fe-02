@@ -36,9 +36,9 @@ const build = () => {
   matrix.value = rows;
 };
 const fetchMonthMarks = async () => {
-  const { data } = await getSchedulesByMonth(year.value, month.value);
+  const arr = await getSchedulesByMonth(year.value, month.value);
   const map = new Map();
-  data.forEach(it => {
+  arr.forEach(it => {
     // :흰색_확인_표시: 타입 필터 반영
     if (props.selectedTypes.length && !props.selectedTypes.includes(it.scheduleType)) return;
     expandDates(it.startDate, it.endDate).forEach(d => {
@@ -47,7 +47,7 @@ const fetchMonthMarks = async () => {
     });
   });
   marksByDate.value = map;
-  emit('month-loaded', data);
+  emit('month-loaded', arr);
 };
 const prev = () => { month.value===1 ? (month.value=12, year.value--) : month.value--; sync(); };
 const next = () => { month.value===12 ? (month.value=1, year.value++) : month.value++; sync(); };

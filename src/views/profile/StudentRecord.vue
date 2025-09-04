@@ -2,12 +2,11 @@
 //학생 프로필 사진
 import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
-import { useUserStore } from "@/stores/user";
 import { getProfile } from "@/services/GradeService.js";
-import Profile from "@/components/profile/Profile.vue";
+import Profile from "@/views/profile/Profile.vue";
 
 const account = useAccountStore();
-const user = useUserStore();
+
 
 console.log("로그인 상태:", account.state.checked);
 console.log("로그인 아이디:", account.state.loggedIn);
