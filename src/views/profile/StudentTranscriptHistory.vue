@@ -75,15 +75,15 @@ const canViewGrades = (course) => {
             }}</span>
             <span class="course-title">{{ course.title }}</span>
             <span class="course-divider">|</span>
-            <span class="course-code">{{ course.courseCode }}</span>
+            <span class="course-code me-3">{{ course.courseCode }}</span>
             <div class="course-actions">
-              <button
+              <div
                 v-if="isEvaluationCompleted(course)"
-                class="btn btn-secondary"
-                disabled
+                class="d-flex align-items-center"
+                style="color: #00664f; font-weight: 600"
               >
-                <i class="bi bi-check-circle me-1"></i> 강의 평가 완료
-              </button>
+                <i class="bi bi-check-circle-fill me-2"></i> 강의 평가 완료
+              </div>
               <button
                 v-else
                 class="btn btn-danger"
