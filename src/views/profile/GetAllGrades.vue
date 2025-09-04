@@ -56,34 +56,8 @@ fetchGrades();
 <template>
   <div class="page">
     <h1 class="page-title">영구 성적조회</h1>
-<<<<<<< HEAD
-
-    <AcademicFilterBar
-      :state="true"
-      :departments="departments"
-      :years="years"
-      @search="handleSearch"
-    />
-
-    <GradeTable
-      :courseList="courseList"
-      maxHeight="800px"
-      :show="{
-        professorName: true,
-        remStd: true,
-        enroll: false,
-        cancel: false,
-        deptName: true,
-        setting: false,
-        modify: false,
-        approve: false,
-        check: false,
-      }"
-    />
-=======
     <AcademicFilterBar @search="handleSearch" />
     <GradeTable :courseList="courseList" />
->>>>>>> 0a8567768c210cbb1e4c5741064386325173447c
   </div>
 </template>
 
