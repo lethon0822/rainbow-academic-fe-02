@@ -1,5 +1,5 @@
 <script setup>
-import WhiteBox from "@/components/common/WhiteBox.vue";
+
 import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
 import CourseTable from "@/components/course/CourseTable.vue";
 import {
