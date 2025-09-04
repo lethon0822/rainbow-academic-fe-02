@@ -55,8 +55,8 @@ onMounted(async () => {
     console.log("학생 리스트 res: ",res.data);
     st.rows = res.data.map(s => ({
       ...s,
-      deptName: s.deptName ?? 0,
-      gradeYear: s.grade ?? 0, 
+      deptName: s.deptName ?? "",
+      gradeYear: s.grade ?? "",
       attendanceDays: s.attendanceDays ?? 0,
       absence: s.absence ?? 0,
       attendanceEval: s.attendanceEval ?? 0,
@@ -92,7 +92,7 @@ const filtered = computed(() => {
 const toggleAll = () =>
   filtered.value.forEach(r => (r.checked = st.allChecked));
 
-/** 선택 저장 */
+/** ✅ 선택 저장 */
 async function saveSelected() {
   const selected = st.rows.filter(r => r.checked);
   if (selected.length === 0) {
@@ -100,12 +100,57 @@ async function saveSelected() {
     return;
   }
 
+  isSaving.value = true;
+
   try {
-    isSaving.value = true;
-    await axios.put("/professor/course/grade", selected);
-    alert("성적 저장 완료!");
-  } catch (e) {
-    console.error("성적 저장 오류:", e);
+    const toPost = [];
+    const toPut = [];
+
+    for (const r of selected) {
+      const midScore        = Math.round(Number(r.midterm) ?? 0);
+      const finScore        = Math.round(Number(r.finalExam) ?? 0);
+      const attendanceScore = Math.round(Number(r.attendanceEval) ?? 0); // 출결 점수
+      const otherScore      = Math.round(Number(r.etcScore) ?? 0);       // 기타 점수
+      const rank            = r.grade ?? "F";
+
+      if (r.scoreId) {
+        // 수정 (PUT)
+        toPut.push({
+          scoreId: r.scoreId,
+          midScore,
+          finScore,
+          attendanceScore,
+          otherScore,
+          rank,
+          grade: Number(r.grade ?? 0)
+        });
+      } else {
+        // 신규 등록 (POST)
+        toPost.push({
+          enrollmentId: r.enrollmentId,
+          midScore,
+          finScore,
+          attendanceScore,
+          otherScore,
+          rank,
+          grade: Number(r.grade ?? 0)
+        });
+      }
+    }
+
+    console.log("toPost payload:", toPost);
+    console.log("toPut payload:", toPut);
+
+    if (toPost.length) {
+      await axios.post("/professor/course/grade", toPost);
+    }
+    if (toPut.length) {
+      await axios.put("/professor/course/grade", toPut);
+    }
+
+    alert("선택한 학생 성적이 저장되었습니다!");
+  } catch (err) {
+    console.error("성적 저장 오류:", err);
     alert("성적 저장 실패");
   } finally {
     isSaving.value = false;
@@ -142,7 +187,6 @@ function exportCsv() {
     r.userName ?? "",
     r.gradeYear ?? "",
     r.deptName ?? "",
-    r.gradeYear ?? "",
     r.attendanceDays ?? 0,
     r.absence ?? 0,
     r.attendanceEval ?? 0,
@@ -150,7 +194,7 @@ function exportCsv() {
     r.finalExam ?? 0,
     r.etcScore ?? 0,
     r.total ?? 0,
-    r.grade ?? "F",
+    r.grade ?? "",
     r.gpa ?? 0
   ]);
 
@@ -345,6 +389,4 @@ function exportCsv() {
 .tbl tbody td:nth-child(14) { width: 70px; }  /* 평점 */
 .tbl thead th:nth-child(15),
 .tbl tbody td:nth-child(15) { width: 76px; }  /* 수정 버튼 */
-
-
 </style>

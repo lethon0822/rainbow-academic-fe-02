@@ -55,6 +55,9 @@ const toggleMenuOpen = () => {
 
 /* 반응형에서 더미 숨김 */
 @media (max-width: 1023px) {
+  .d-flex {
+    display: block !important;
+  }
   .dummy {
     display: none;
   }
