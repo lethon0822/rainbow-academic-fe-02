@@ -1,8 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { onMounted, watch, ref } from "vue";
-import { useAccountStore } from "@/stores/account";
-import { check } from "@/services/accountService";
+import { ref } from "vue";
 import logo from "@/assets/muji_horizontaLogo.svg";
 import Login from "@/views/login/Login.vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -72,26 +70,9 @@ const notices = ref([
 ]);
 
 const route = useRoute();
-const account = useAccountStore();
 //로그인 여부 확인
-const checkAccount = async () => {
-  const res = await check();
-  if (res === undefined || res.status != 200) {
-    account.setChecked(false);
-    return;
-  }
-  account.setChecked(true);
-  account.setLoggedIn(res.data > 0);
-};
-onMounted(() => {
-  checkAccount();
-});
-watch(
-  () => route.path,
-  () => {
-    checkAccount();
-  }
-);
+
+
 </script>
 
 <template>
