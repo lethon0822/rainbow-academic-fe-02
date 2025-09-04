@@ -16,23 +16,39 @@ const userStore = useUserStore();
 const { semesterId } = storeToRefs(userStore);
 
 // (있다면 사용, 없으면 하이픈 표시)
-const studentNumber = computed(
-  () => userStore.studentNumber ?? userStore.loginId ?? "-"
-);
-const deptName = computed(
-  () => userStore.deptName ?? userStore.state.deptName ?? "-"
-);
+const studentNumber = computed(() => userStore.studentNumber ?? userStore.loginId ?? '-')
+const deptName = computed(() => userStore.deptName ?? userStore.state?.deptName ?? '-') // 안전하게
+
+// 사용자 역할 판정(학생/그 외)
+const isStudent = computed(() => {
+  const r = (userStore.userRole || '').toString().toLowerCase()
+  return r.includes('student') || r.includes('학생')
+})
+
+// UI 라벨/제목
+const pageTitle   = computed(() => (isStudent.value ? '휴·복학 신청' : '휴·복직 신청'))
+const leaveLabel  = computed(() => (isStudent.value ? '휴학' : '휴직'))
+const returnLabel = computed(() => (isStudent.value ? '복학' : '복직'))
+const endDateHint = computed(() => `${leaveLabel.value}인 경우`)
 
 // ===== 상단 폼 상태 =====
-const appType = ref("LEAVE"); // 'LEAVE' | 'RETURN'  (휴/복학 토글)
-const reason = ref(""); // 간단 사유
-const nextSemId = ref(null);
-const schedule = ref(null); // { scheduleId, startDate, endDate }
-const loadingSchedule = ref(false);
-const submitting = ref(false);
+const appType = ref('LEAVE')                 // 'LEAVE' | 'RETURN'  (휴/복학 또는 휴/복직)
+const reason = ref('')                       // 간단 사유
+const nextSemId = ref(null)
+const schedule = ref(null)                   // { scheduleId, startDate, endDate }
+const loadingSchedule = ref(false)
+const submitting = ref(false)
+const isReturn = computed(() => appType.value === 'RETURN') // 복학/복직 여부
 
-// 영어→DB 한글 타입 맵핑 (DB: '휴학신청' | '복학신청')
-const typeKo = (t) => (t === "LEAVE" ? "휴학신청" : "복학신청");
+// 날짜 선택 상태
+const startDate = ref('') // YYYY-MM-DD
+const endDate   = ref('') // YYYY-MM-DD
+
+// 영어 → 백엔드 타입(한글) 맵핑
+const typeKo = (t) => {
+  if (isStudent.value) return t === 'LEAVE' ? '휴학신청' : '복학신청'
+  return t === 'LEAVE' ? '휴직신청' : '복직신청'
+}
 
 // schedule에서 날짜 필드 이름이 다를 수 있으니 안전하게 꺼내는 헬퍼
 const getDate = (obj, key) => {
@@ -49,14 +65,15 @@ async function resolveNextSchedule() {
   try {
     nextSemId.value = await getNextSemesterId(Number(semesterId.value));
     if (!nextSemId.value) {
-      schedule.value = null;
-      return;
+      schedule.value = null
+      startDate.value = ''
+      endDate.value = ''
+      return
     }
-    // 백엔드가 '휴학신청/복학신청'을 기대하므로 변환해서 전달
     schedule.value = await getScheduleFor({
       semesterId: nextSemId.value,
       type: typeKo(appType.value),
-    });
+    })
   } finally {
     loadingSchedule.value = false;
   }
@@ -64,22 +81,55 @@ async function resolveNextSchedule() {
 
 watch([semesterId, appType], resolveNextSchedule, { immediate: true });
 
-const canSubmit = computed(
-  () => !!(schedule.value && schedule.value.scheduleId) && !submitting.value
-);
+// 스케줄/탭 바뀔 때 date 기본값 채우기
+watch([schedule, () => appType.value], () => {
+  if (!schedule.value) { startDate.value = ''; endDate.value = ''; return }
+  startDate.value = getDate(schedule.value, 'startDate') || ''
+  endDate.value   = getDate(schedule.value, 'endDate')   || ''
+}, { immediate: true })
+
+// 복학/복직이면 종료일 비활성 + 값 비우기
+watch(isReturn, (v) => { if (v) endDate.value = '' })
+
+// 날짜 선택 범위(스케줄 기간으로 제한)
+const dateBounds = computed(() => {
+  const s = schedule.value
+  const min = getDate(s, 'startDate') || ''
+  const max = getDate(s, 'endDate')   || ''
+  return { minStart: min, maxStart: max || undefined, minEnd: min, maxEnd: max || undefined }
+})
+
+// 제출 가능 조건(스케줄 + 시작일 + [휴학/휴직이면 종료일])
+const canSubmit = computed(() => {
+  if (!schedule.value?.scheduleId || submitting.value) return false
+  if (!startDate.value) return false
+  if (!isReturn.value && !endDate.value) return false
+  return true
+})
+
 
 // 신청
 async function submit() {
-  if (!canSubmit.value) return;
-  submitting.value = true;
+  if (!canSubmit.value) return
+
+  // 휴학/휴직에서 종료일이 시작일보다 앞이면 경고
+  if (!isReturn.value && startDate.value && endDate.value && endDate.value < startDate.value) {
+    alert('종료일은 시작일 이후여야 합니다.')
+    return
+  }
+
+  submitting.value = true
   try {
-    await createApplication({
+    const payload = {
       scheduleId: schedule.value.scheduleId,
       reason: reason.value?.trim() || null,
-    });
-    alert("신청이 접수되었습니다.");
-    reason.value = "";
-    await loadList();
+      startDate: startDate.value || null,
+      endDate:   isReturn.value ? null : (endDate.value || null),
+    }
+    await createApplication(payload)
+    alert('신청이 접수되었습니다.')
+    reason.value = ''
+    await loadList()
   } catch (e) {
     alert(e?.response?.data?.message ?? "신청 중 오류가 발생했습니다.");
   } finally {
@@ -116,27 +166,30 @@ async function onCancel(appId) {
 }
 
 // 라벨/뱃지/날짜 포맷
-const shortType = (scheduleType) =>
-  scheduleType === "휴학신청"
-    ? "휴학"
-    : scheduleType === "복학신청"
-    ? "복학"
-    : scheduleType;
-const formatDate = (v) => (v ? v.toString().slice(0, 10) : "-");
+const shortType = (scheduleType) => {
+  switch (scheduleType) {
+    case '휴학신청': return '휴학'
+    case '복학신청': return '복학'
+    case '휴직신청': return '휴직'
+    case '복직신청': return '복직'
+    default: return scheduleType
+  }
+}
+const formatDate = (v) => (v ? v.toString().slice(0, 10) : '-')
 const statusClass = (s) => ({
-  "badge pending": s === "처리중",
-  "badge ok": s === "승인",
-  "badge reject": s === "거부",
-});
+  'badge pending': s === '처리중',
+  'badge ok': s === '승인',
+  'badge reject': s === '거부'
+})
+
+console.log('[nextSemId]', nextSemId.value)
+console.log('[schedule]', schedule.value)
 </script>
 
 <template>
   <div class="white-box">
-    <h2 class="page-title">휴·복학 신청</h2>
-    <p class="desc">
-      신청서를 작성한 후, [제출] 버튼을 눌러주세요. 제출이 완료되면 아래에 신청
-      내역이 조회 됩니다.
-    </p>
+    <h2 class="page-title">{{ pageTitle }}</h2>
+    <p class="desc">신청서를 작성한 후, [제출] 버튼을 눌러주세요. 제출이 완료되면 아래에 신청 내역이 조회 됩니다.</p>
 
     <div class="form-grid">
       <label>학번</label>
@@ -147,31 +200,30 @@ const statusClass = (s) => ({
 
       <label>신청 구분</label>
       <div class="toggle">
-        <button
-          type="button"
-          :class="{ on: appType === 'LEAVE' }"
-          @click="appType = 'LEAVE'"
-        >
-          휴학
-        </button>
-        <button
-          type="button"
-          :class="{ on: appType === 'RETURN' }"
-          @click="appType = 'RETURN'"
-        >
-          복학
-        </button>
+        <button type="button" :class="{ on: appType === 'LEAVE' }" @click="appType = 'LEAVE'">{{ leaveLabel }}</button>
+        <button type="button" :class="{ on: appType === 'RETURN' }" @click="appType = 'RETURN'">{{ returnLabel }}</button>
       </div>
 
       <label>시작일</label>
       <div class="inline">
-        <input :value="getDate(schedule, 'startDate')" readonly />
+        <input
+          type="date"
+          v-model="startDate"
+          :min="dateBounds.minStart || undefined"
+          :max="dateBounds.maxStart || undefined"
+        />
         <span class="muted" v-if="loadingSchedule">불러오는 중…</span>
       </div>
 
-      <label>종료일 (휴학인 경우)</label>
+      <label>종료일 ({{ endDateHint }})</label>
       <div class="inline">
-        <input :value="getDate(schedule, 'endDate')" readonly />
+        <input
+          type="date"
+          v-model="endDate"
+          :min="dateBounds.minEnd || startDate"
+          :max="dateBounds.maxEnd || undefined"
+          :disabled="isReturn"
+        />
       </div>
 
       <label>상세 사유</label>
@@ -226,11 +278,9 @@ const statusClass = (s) => ({
             <td>{{ r.year }}</td>
             <td>{{ r.semester === "1" ? "1학기" : "2학기" }}</td>
             <td>{{ shortType(r.scheduleType) }}</td>
-            <td>{{ r.reason || "-" }}</td>
-            <!-- 변경: 행에서 내려온 학과명 사용 -->
-            <td>{{ r.deptName || "-" }}</td>
+            <td>{{ r.reason || '-' }}</td>
+            <td>{{ r.deptName || '-' }}</td>
             <td>{{ formatDate(r.submittedAt) }}</td>
-            <!-- 현재 스키마에 received_at이 없으므로 submittedAt 재사용 -->
             <td>{{ formatDate(r.submittedAt) }}</td>
             <td>
               <span :class="statusClass(r.status)">{{ r.status }}</span>
@@ -305,6 +355,11 @@ const statusClass = (s) => ({
   color: #9ca3af;
   font-size: 12px;
 }
+.form-grid input:read-only{background:#f9fafb}
+.form-grid input:disabled{background:#f5f5f5; color:#9ca3af} /* 비활성화 시 시각적 처리 */
+.form-grid textarea{resize:vertical}
+.inline{display:flex; align-items:center; gap:8px}
+.muted{color:#9ca3af; font-size:12px}
 
 .toggle {
   display: flex;
