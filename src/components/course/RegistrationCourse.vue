@@ -263,8 +263,7 @@ const back = () => {
   margin-left: 130px;
   padding: 15px;
   box-shadow: 1px 5px 10px #ccc;
-  max-width: 84%;
-
+  width: 1320px;
   position: relative;
 }
 
@@ -296,6 +295,7 @@ const back = () => {
    min-height: 1020px;
    position: relative;
    margin-left: 130px; 
+   box-shadow: 1px 1px 2px #ccc;
    } 
 
 
@@ -304,7 +304,7 @@ const back = () => {
 
   html {
   height: auto;    /* ❌ 100%, 100vh 쓰면 안 됨 */
-  min-height: 100%;
+ // min-height: 100%;
   }
   
   body { 
