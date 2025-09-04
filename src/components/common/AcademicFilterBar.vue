@@ -57,7 +57,13 @@ const emitSearch = () => {
         v-for="option in gradeOptions"
         :key="option.value"
         @click="selectGrade(option.value)"
-        :class="['grade-btn', { active: filters.grade === option.value }]"
+        :class="[
+          'grade-btn',
+          {
+            active: filters.grade === option.value,
+            'hide-on-mobile': option.value === '',
+          },
+        ]"
       >
         {{ option.label }}
       </button>
@@ -89,8 +95,8 @@ const emitSearch = () => {
   border: 0.2px solid #74747480;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
-  margin-left: 50px;
-  margin-right: 50px;
+  margin-left: 107px;
+  margin-right: 106px;
 }
 
 .filter-group {
@@ -169,5 +175,46 @@ const emitSearch = () => {
 
 .select-input:hover {
   border-color: #cbd5e1;
+}
+
+/* 모바일 */
+@media all and (max-width: 767px) {
+  .filter-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 6px 10px;
+    gap: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .grade-buttons button {
+    margin-right: 4px; /* 버튼 간 살짝 간격 */
+  }
+
+  .filter-group {
+    display: none !important;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+/* 테블릿 */
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  .filter-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 6px 10px;
+    margin-left: 15px;
+    margin-right: -15px;
+  }
+}
+
+/* PC */
+@media all and (min-width: 1024px) {
 }
 </style>

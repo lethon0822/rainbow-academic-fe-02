@@ -15,16 +15,16 @@ const props = defineProps({
       <table>
         <thead>
           <tr>
-            <th>연도</th>
-            <th>학기</th>
-            <th>이수구분</th>
-            <th>과목코드</th>
-            <th>과목명</th>
-            <th>담당교수</th>
-            <th>학년</th>
-            <th>학점</th>
-            <th>등급</th>
-            <th>평점</th>
+            <th class="year-th">연도</th>
+            <th class="semester-th">학기</th>
+            <th class="type-th">이수구분</th>
+            <th class="courseCode-th">과목코드</th>
+            <th class="title-th">과목명</th>
+            <th class="professorName-th">담당교수</th>
+            <th class="grade-th">학년</th>
+            <th class="credit-th">학점</th>
+            <th class="rank-th">등급</th>
+            <th class="point-th">평점</th>
           </tr>
         </thead>
         <tbody>
@@ -51,20 +51,22 @@ const props = defineProps({
   margin: 20px auto;
   border-radius: 8px;
   width: 100%;
-  max-width: 1430px;
-  min-width: 1350px;
-  border: 0.2 solid #74747480;
+  max-width: 1430px; /* 최대 너비 제한 */
+  border: 0.2px solid #74747480;
   position: relative;
   background-color: white;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   padding: 25px 25px 0 25px;
+
+  /* 넘칠 경우 가로 스크롤 가능하도록 */
+  overflow-x: auto;
 }
 
 .table-wrapper {
   max-height: 600px;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto; /* hidden → auto */
   position: relative;
   scrollbar-width: thin;
   scrollbar-color: #cdcdcd #f0f0f0;
@@ -74,8 +76,8 @@ table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  table-layout: auto;
 }
+
 thead {
   color: #333;
   background-color: #f8f9fa;
@@ -260,11 +262,10 @@ td.enroll-action {
 }
 
 /* 모바일 */
-@media (max-width: 767px) {
+@media all and (max-width: 767px) {
   .table-container {
     min-width: auto;
-    margin: 10px;
-    padding: 15px 15px 0 1px;
+    padding: 15px 10px 0 10px;
   }
 
   /* 기존 컬럼들 숨김 */
@@ -272,15 +273,25 @@ td.enroll-action {
   .semester-col,
   .type-col,
   .courseCode-col,
-  .title-col,
-  .professorName-col {
+  .professorName-col,
+  .year-th,
+  .semester-th,
+  .type-th,
+  .courseCode-th,
+  .professorName-th {
     display: none;
   }
 
+  .title-col,
+  .title-th,
   .grade-col,
   .credit-col,
   .rank-col,
-  .point-col {
+  .point-col,
+  .grade-th,
+  .credit-th,
+  .rank-th,
+  .point-th {
     display: table-cell;
   }
 
@@ -294,7 +305,8 @@ td.enroll-action {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+/* 테블릿 */
+@media all and (min-width: 768px) and (max-width: 1023px) {
   .table-container {
     min-width: auto;
     max-width: 100%;
@@ -310,6 +322,16 @@ td.enroll-action {
   tbody td {
     font-size: 12px;
     padding: 7px 3px;
+  }
+}
+
+/* PC */
+@media all and (min-width: 1024px) {
+  .table-container {
+    min-width: auto; /* 또는 제거 */
+    max-width: 1430px;
+    width: 90%; /* 화면 너비에 맞게 가변적 */
+    margin: 20px auto; /* 중앙 정렬 유지 */
   }
 }
 </style>
