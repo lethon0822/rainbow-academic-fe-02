@@ -432,7 +432,7 @@ const back = () => {
         padding-left: 0;
     }
     .week-plan li {
-        background: #e0f0d9;
+        background-color: #e0f0d9;
         margin-bottom: 5px;
         padding: 5px 10px;
         border-radius: 5px;
@@ -454,7 +454,7 @@ const back = () => {
     cursor: pointer;
     }
   button.reset {
-  background-color: #9e9e9e;
+  background-color: #ccc;
   }
   input, textarea {
   width: 100%;
