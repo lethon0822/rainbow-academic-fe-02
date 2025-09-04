@@ -76,12 +76,20 @@ const back = () => {
 <template>
   <div class="box">
   <WhiteBox class="page-wrap" :title="'강의등록'">
-  <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin:auto; padding: 10px; box-shadow: 1px 5px 10px #ccc; width: 1320px; ">
+  <!-- <div style="border: 1px solid gray; border-radius: 10px; background-color: #E9F5E8; margin: auto; padding: 15px; box-shadow: 1px 5px 10px #ccc; max-width: 1320px; ">
       <span style="font-size: 20px;">새로운 강의를 개설해보세요</span>
       <br/>
       <span style="font-size: 15px;">강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.</span>
-    </div>
+    </div> -->
 
+    <div class="lecture-box">
+      <span class="lecture-title">새로운 강의를 개설해보세요</span>
+      <br />
+      <span class="lecture-subtitle">
+      강의계획서와 함께 강의정보를 입력하시면 개설신청이 완료됩니다.
+      </span>
+    </div>
+    
     <div class="container">
       <div class="form-row">
       <div class="fform-group">
@@ -247,6 +255,26 @@ const back = () => {
  
 
 <style scoped lang="scss">
+
+.lecture-box {
+  border: 1px solid gray;
+  border-radius: 10px;
+  background-color: #E9F5E8;
+  margin-left: 130px;
+  padding: 15px;
+  box-shadow: 1px 5px 10px #ccc;
+  width: 85%;
+  position: relative;
+}
+
+.lecture-title {
+  font-size: 20px;
+}
+
+.lecture-subtitle {
+  font-size: 15px;
+}
+
  .box{
    background-color: #fdfdfd; 
  }
@@ -291,7 +319,7 @@ const back = () => {
     
       position: relative; 
       margin-left: 100px;
-      width: 540px;
+      max-width: 540px;
       display: flex;
       flex-direction: column;
       margin-top: 50px;
@@ -301,7 +329,7 @@ const back = () => {
       position: relative;
       margin-left: 660px;
       margin-top: -245px;
-      width: 540px;
+      max-width: 540px;
       display: flex;
       flex-direction: column;
     }
@@ -309,7 +337,7 @@ const back = () => {
     .fform-group3 {
       position: relative;
       margin-left: 100px;
-      width: 1100px;
+      max-width: 1100px;
       display: flex;
       flex-direction: column;
     }
@@ -321,7 +349,7 @@ const back = () => {
       display: grid;
       left: 780px;
       max-width: 200px;
-      min-width: 200px;
+      //min-width: 200px;
       grid-template-columns: repeat(5, 1fr);
       grid-gap: 20px;
     }
@@ -357,7 +385,7 @@ const back = () => {
     .form-group label {
       
         display:block;
-        width: 120px;
+        max-width: 120px;
         font-weight: bold;
     }
     .form-group input, 
@@ -382,7 +410,7 @@ const back = () => {
       }
       
      .fform-group4 input {
-  width: 100%;                
+  max-width: 100%;                
   background-color: #f0f0f0;   
   border: 1px solid #f0f0f0;
   //color: #333;
@@ -468,7 +496,7 @@ p {
   margin-top: 70px;
   margin-bottom: 5px;
 }
-
+ 
 .table {
   border: 1px solid #B7B7B7;
   background-color: #fff;
