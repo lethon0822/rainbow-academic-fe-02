@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import { useAccountStore } from "@/stores/account";
 import { check } from "@/services/accountService";
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+
     // 로그인 관련 공개 라우트
     { path: "/login",   component: () => import("@/views/login/LoginPage.vue") },
     { path: "/id",      component: () => import("@/views/login/Id.vue") },
@@ -15,6 +18,7 @@ const router = createRouter({
       path: "/",
       component: () => import("@/views/Home.vue"),
       children: [
+
         { path: "", redirect: "/notice" }, // 기본 진입시 공지로
         // components/common
         { path: "/notice", component: () => import("@/components/common/Notices.vue") },
