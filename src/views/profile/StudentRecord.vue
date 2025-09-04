@@ -3,7 +3,7 @@
 import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
 import { getProfile } from "@/services/GradeService.js";
-import Profile from "@/components/profile/Profile.vue";
+import Profile from "@/views/profile/Profile.vue";
 
 const account = useAccountStore();
 
