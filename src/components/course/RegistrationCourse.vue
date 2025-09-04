@@ -263,7 +263,8 @@ const back = () => {
   margin-left: 130px;
   padding: 15px;
   box-shadow: 1px 5px 10px #ccc;
-  width: 85%;
+  max-width: 84%;
+
   position: relative;
 }
 
