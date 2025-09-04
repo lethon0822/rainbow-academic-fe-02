@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
-import { getList } from '@/services/Application';
+
 
 const state = reactive({
   approvalList: [

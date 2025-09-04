@@ -27,7 +27,7 @@ const router = createRouter({
         { path: "/professor/course/registration/:id", name: "ModifyCourse", props: true, component: () => import("@/components/course/RegistrationCourse.vue") },
 
         // profile
-        { path: "/rank", component: () => import("@/components/profile/Profile.vue") },
+        { path: "/rank", component: () => import("@/views/profile/Profile.vue") },
 
         // views
         { path: "/application", component: () => import("@/views/Application.vue") },
