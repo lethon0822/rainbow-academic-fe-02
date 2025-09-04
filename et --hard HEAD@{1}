@@ -1,0 +1,84 @@
+[33mf865deb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mnavy[m[33m)[m HEAD@{0}: pull origin main: Merge made by the 'ort' strategy.
+[33mf5e58c8[m HEAD@{1}: commit: pull
+[33mfbc4718[m HEAD@{2}: reset: moving to HEAD^
+[33m01300ad[m HEAD@{3}: pull origin main: Merge made by the 'ort' strategy.
+[33mfbc4718[m HEAD@{4}: commit: css 작업중
+[33m5b95cf2[m HEAD@{5}: pull origin main: Merge made by the 'ort' strategy.
+[33ma44a0ec[m HEAD@{6}: commit: profile 됩니다
+[33m84e1c92[m HEAD@{7}: commit: flex 해냈다
+[33m52a1e7c[m HEAD@{8}: commit: css 필요하지만 일단 헤더 반응형 완료
+[33m9c81f61[m HEAD@{9}: pull origin main: Merge made by the 'ort' strategy.
+[33m54ebcf0[m HEAD@{10}: commit: pull용
+[33mab9db31[m HEAD@{11}: commit: 햄버거 버튼 적용중
+[33mf5e04b6[m HEAD@{12}: pull origin main: Fast-forward
+[33m7fa4827[m HEAD@{13}: pull origin main: Fast-forward
+[33m5c54a77[m[33m ([m[1;32mnew-pr-branch[m[33m)[m HEAD@{14}: merge new-pr-branch: Fast-forward
+[33m8da24a2[m HEAD@{15}: checkout: moving from new-pr-branch to navy
+[33m5c54a77[m[33m ([m[1;32mnew-pr-branch[m[33m)[m HEAD@{16}: commit: css 변경
+[33m8da24a2[m HEAD@{17}: checkout: moving from navy to new-pr-branch
+[33m8da24a2[m HEAD@{18}: checkout: moving from navy to navy
+[33m8da24a2[m HEAD@{19}: commit: 영구성적조회 완료
+[33mf93b76e[m HEAD@{20}: commit: 금학기 성적 조회 완료
+[33md90a061[m HEAD@{21}: pull origin main: Merge made by the 'ort' strategy.
+[33m34f5d70[m HEAD@{22}: commit: 설문지 넣는 거 하고 있음
+[33m26397e7[m HEAD@{23}: commit: 금학기 성적조회 설문평가 연결
+[33m68e8f1b[m HEAD@{24}: commit (merge): Merge branch 'main' of https://github.com/lethon0822/rainbow-academic-fe-02 into navy
+[33m507a8fe[m HEAD@{25}: commit: 성적조회 더미데이터 기다리는 중
+[33me5209d7[m HEAD@{26}: commit (merge): git용
+[33m8ebb510[m HEAD@{27}: commit: git커밋
+[33m3b810e3[m HEAD@{28}: commit: 하드코딩 아님
+[33m144469e[m HEAD@{29}: commit: user 지움
+[33m2330b12[m HEAD@{30}: pull origin main: Fast-forward
+[33m2639b22[m HEAD@{31}: commit: 폰트헤더들 굵기 600으로 변경
+[33mf188bf0[m HEAD@{32}: pull origin main: Merge made by the 'ort' strategy.
+[33mc230663[m HEAD@{33}: commit: 폰트 전체화
+[33m1a459a9[m HEAD@{34}: pull origin main: Merge made by the 'ort' strategy.
+[33m4689c41[m HEAD@{35}: commit: 성적 조회 하는 중
+[33m95223a8[m HEAD@{36}: commit: 최종의 최종의 최종 수정
+[33mafb926e[m HEAD@{37}: commit: 공지사항 사이드바 고쳐놓음
+[33mebf9e8d[m HEAD@{38}: commit: 공지사항 home
+[33m5dc6b13[m HEAD@{39}: commit: 로그인 수정
+[33ma7ac3e3[m HEAD@{40}: pull origin main: Merge made by the 'ort' strategy.
+[33mdde3d14[m HEAD@{41}: commit: 공지사항 추가
+[33m8722d6b[m HEAD@{42}: commit (merge): 작업중
+[33m903979d[m HEAD@{43}: reset: moving to HEAD
+[33m903979d[m HEAD@{44}: pull origin main: Merge made by the 'ort' strategy.
+[33mdb75242[m HEAD@{45}: commit: 성적조회
+[33m0f63c05[m HEAD@{46}: pull origin main: Fast-forward
+[33m391700b[m HEAD@{47}: pull origin main: Fast-forward
+[33m979a49d[m HEAD@{48}: commit: 프로필 안 나오는 사항 수정
+[33maf4d688[m HEAD@{49}: pull origin main: Merge made by the 'ort' strategy.
+[33mbac1e46[m HEAD@{50}: pull origin main: Merge made by the 'ort' strategy.
+[33mc5f1e12[m HEAD@{51}: commit: 조회 하는 중
+[33m4faaef2[m HEAD@{52}: pull origin main: Fast-forward
+[33m62f4ee1[m HEAD@{53}: commit: 프로필 탭들 삭제함
+[33m46b8e7c[m HEAD@{54}: commit: 주석처리
+[33m8ccc517[m HEAD@{55}: pull origin main: Merge made by the 'ort' strategy.
+[33mdb9e000[m HEAD@{56}: commit: 로딩 주석처리함
+[33mc6529a9[m HEAD@{57}: commit: 로딩바 넣음
+[33m20ffcf5[m HEAD@{58}: commit: 강의 관리 시스템 중
+[33m3679901[m HEAD@{59}: commit: 다시 강의계획서 수정
+[33m5a1f92e[m HEAD@{60}: commit: 강의계획서 수정
+[33mc91e146[m HEAD@{61}: commit: 출석부 이모콘 변경
+[33m3d81bba[m HEAD@{62}: pull origin main: Merge made by the 'ort' strategy.
+[33m8e6a555[m HEAD@{63}: pull origin main: Merge made by the 'ort' strategy.
+[33m931b7bd[m HEAD@{64}: commit: 출석부 라디오
+[33mec88efd[m HEAD@{65}: pull origin main: Merge made by the 'ort' strategy.
+[33m395c821[m HEAD@{66}: commit: 디자인 대략 수정
+[33m9ccdc03[m HEAD@{67}: pull origin main: Fast-forward
+[33mad69dd7[m HEAD@{68}: commit: padding 변경
+[33ma04df76[m HEAD@{69}: commit: CourseTable 수정
+[33mca3baaa[m HEAD@{70}: pull origin main: Fast-forward
+[33mb57b9ad[m HEAD@{71}: commit: 모달창
+[33m73a59a4[m HEAD@{72}: pull origin main: Merge made by the 'ort' strategy.
+[33m207f699[m HEAD@{73}: pull origin main: Merge made by the 'ort' strategy.
+[33me57c9b0[m HEAD@{74}: commit: 차트 넣음
+[33mdd8189f[m HEAD@{75}: pull origin main: Merge made by the 'ort' strategy.
+[33m1dd27ee[m HEAD@{76}: commit: 프로필 css 완료
+[33m5fcda71[m HEAD@{77}: pull origin main: Merge made by the 'ort' strategy.
+[33ma58a507[m HEAD@{78}: pull origin main: Merge made by the 'ort' strategy.
+[33m1524b6c[m HEAD@{79}: commit: 프로필 하는중
+[33ma806e81[m HEAD@{80}: commit: 프로필 작업중
+[33mcc71b7c[m HEAD@{81}: pull origin main: Fast-forward
+[33mcab0422[m HEAD@{82}: checkout: moving from main to navy
+[33maef1e42[m[33m ([m[1;32mmain[m[33m)[m HEAD@{83}: clone: from https://github.com/lethon0822/rainbow-academic-fe-02.git
