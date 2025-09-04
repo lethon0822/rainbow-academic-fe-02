@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted } from 'vue';
 import Modal from '../common/Modal.vue';
-import { deptGetHead, deptPatch, deptPut} from '@/services/deptManageService';
+import { deptGetHead, deptPatch, deptPut} from '@/services/DeptManageService';
 
 const props = defineProps({
   dept: Object
