@@ -6,9 +6,11 @@ import CourseTable from "@/components/course/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/account";
 
 const courseList = ref([]);
 const router = useRouter();
+
 
 // onMounted(async ()=>{
 
