@@ -51,10 +51,14 @@ async function submitCode() {
 }
 
 const emit = defineEmits(["close"]);
+const close = () => {
+  emit("close");
+};
 
 async function renewal() {
   if (state.data.renewalPwd !== state.data.confirmPwd) {
     alert("두 비밀번호 일치 안한다")
+    return;
   }
   const res = await renewalPwd({
     email: state.data.email,          
@@ -62,12 +66,11 @@ async function renewal() {
   });
 
   if (res && res.status === 200) {
-    console.log("emit 시작~");
-    emit("close");
-    console.log("emit 끝~");
+    alert("비밀번호가 변경되었습니다.");
+    close();
     return;
   } else {
-    // 메세지
+    alert("비밀번호 변경 실패")
   }
 }
 

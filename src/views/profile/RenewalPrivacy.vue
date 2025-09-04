@@ -1,13 +1,8 @@
 <script setup>
-import {
-  sendEmailCode as sendEmailCodeApi,
-  verifyEmailCode as verifyEmailCodeApi,
-  changePassword as changePasswordApi,
-} from "@/services/accountService";
 import { reactive, computed, watch, onMounted } from "vue";
 import WhiteBox from "@/components/common/WhiteBox.vue";
 import { sendMail, confirmCode } from "@/services/emailService";
-import { getPrivacy, putPrivacy, putPwd } from "@/services/privacyService";
+import { getPrivacy, putPrivacy } from "@/services/privacyService";
 
 const state = reactive({
   form: {

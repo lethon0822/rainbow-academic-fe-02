@@ -41,7 +41,7 @@ const submit = async () => {
         loginId: res.data.loginId ?? '',
         semesterId: res.data.semesterId ?? '',
         deptName: res.data.deptName ?? '',
-      })
+      });
 
       // (선택) 전역 로그인 플래그
       // const accountStore = useAccountStore()
@@ -108,7 +108,10 @@ const submit = async () => {
         >
       </div>
       <Modal v-if="isModalOpen" @close="closeModal">
-        <component :is="modalContent === 'id' ? Id : RenewalPwd" />
+        <component
+          :is="modalContent === 'id' ? Id : RenewalPwd"
+          @close="closeModal"
+        />
       </Modal>
     </div>
   </div>
