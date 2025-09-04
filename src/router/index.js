@@ -75,10 +75,7 @@ router.beforeEach(async (to, from, next) => {
   const account = useAccountStore();
   const isOpen = openPaths.has(to.path);
 
-  console.warn("[nav:start]", to.fullPath, {
-    checked: account.state.checked,
-    loggedIn: account.state.loggedIn,
-  });
+  
 
   if (!account.state.checked) {
     if (!checkingPromise) {
@@ -97,11 +94,7 @@ router.beforeEach(async (to, from, next) => {
     checkingPromise = null;
   }
 
-  console.warn("[nav:after-check]", to.fullPath, {
-    checked: account.state.checked,
-    loggedIn: account.state.loggedIn,
-  });
-
+  
   if (!isOpen && !account.state.loggedIn) return next("/login");
   if (isOpen && account.state.loggedIn)   return next("/");
   return next();
