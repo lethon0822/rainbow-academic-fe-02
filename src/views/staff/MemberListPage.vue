@@ -168,7 +168,10 @@ onMounted(async () => {
             <button class="ghost" v-if="filters.keyword" @click="clearQ">지움</button>
           </div>
 
-          <button class="primary" @click="load">조회</button>
+          <button class="btn btn-success" @click="load">
+            <i class="bi bi-search"></i>
+            조회
+          </button>
         </div>
       </div>
     </template>
@@ -181,7 +184,7 @@ onMounted(async () => {
       <table v-else class="tbl">
         <thead>
           <tr>
-            <th style="width:140px">아이디</th>
+            <th style="width:140px">{{ role === "student" ? "학번" : "사번" }}</th>
             <th style="width:140px">이름</th>
             <th>학과</th>
             <th style="width:140px">{{ roleLabel }} 정보</th>
@@ -236,12 +239,15 @@ onMounted(async () => {
   border:1px solid #E5E7EB; border-radius:999px; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#111;
 }
+
+.bi-search{
+  color: #fff;
+}
 .chip.on{ background:#EAF6FF; border-color:#BFE7FF; }
 .right{ display:flex; gap:8px; align-items:center; }
 .inp{ height:34px; padding:0 10px; border:1px solid #E5E7EB; border-radius:8px; }
 .w150{ width:150px } .w120{ width:120px } .w240{ width:240px }
 .search-group{ display:flex; gap:6px; align-items:center; }
-.primary{ background:#3BBEFF; color:#fff; border:none; border-radius:8px; height:34px; padding:0 12px; cursor:pointer; font-weight:700; }
 .ghost{ background:#f5f5f5; border:none; border-radius:8px; height:34px; padding:0 10px; cursor:pointer; }
 .table-wrap{ min-height:200px; padding-bottom: 16px; }
 .tbl{ width:100%; border-collapse:separate; border-spacing:0; }

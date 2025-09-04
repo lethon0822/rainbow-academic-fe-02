@@ -35,22 +35,51 @@ const toggleMenuOpen = () => {
 <style lang="scss" scoped>
 .main {
   margin-top: 60px;
+  height: calc(100vh - 60px); /* 헤더 빼고 꽉 채움 */
+  overflow: hidden; /* 부모 스크롤 막음 */
+  display: flex;
 }
+
 .sidebar {
   width: 250px;
   box-sizing: border-box;
 }
+
 .dummy {
   width: 250px;
 }
 
 .content {
   flex: 1;
+  overflow: hidden;
+  display: flex;
 }
 
 .content:has(.transcript-history-page) {
   flex: none;
   width: 100%;
+}
+
+.router {
+  flex: 1;
+  overflow-y: overlay;
+  height: 100%;
+}
+
+.router::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+
+.router::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.3);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.router::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* 반응형에서 더미 숨김 */
@@ -66,7 +95,6 @@ const toggleMenuOpen = () => {
 @media (min-width: 1024px) {
   .router {
     width: 100%;
-    max-width: 1580px;
   }
 }
 </style>

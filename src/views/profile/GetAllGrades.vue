@@ -63,7 +63,7 @@ fetchGrades();
 
 <style scoped>
 .page {
-  padding: 20px 24px 5px;
+  padding: 20px 20px 0px 5px;
 }
 .page-title {
   font-size: 22px;
