@@ -93,7 +93,7 @@ const emitSearch = () => {
   padding: 6px 20px;
   background-color: #fff;
   border-radius: 8px;
-  border: 0.2px solid #74747480;
+  border: 0px solid #74747480;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
   max-width: 1200px;
