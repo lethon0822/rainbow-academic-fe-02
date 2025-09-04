@@ -4,18 +4,18 @@ import WhiteBox from "@/components/common/WhiteBox.vue";
 import SearchFilterBar from "@/components/common/SearchFilterBar.vue";
 import CourseTable from "@/components/course/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const courseList = ref([]);
 const router = useRouter();
 
-// onMounted(async ()=>{
+onMounted(async ()=>{
 
-// const yearRes = await getYears();
-// years.value = yearRes.data;
+  const res = await findMyCourse();
+  courseList.value = res.data;
 
-// });
+});
 
 const myCourse = async (filters) => {
   const json = {
