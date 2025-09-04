@@ -88,15 +88,18 @@ const emitSearch = () => {
 .filter-bar {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 40px;
-  padding: 6px 29px;
+  padding: 6px 20px;
   background-color: #fff;
   border-radius: 8px;
   border: 0.2px solid #74747480;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
-  margin-left: 107px;
-  margin-right: 106px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-group {
@@ -116,6 +119,7 @@ const emitSearch = () => {
 .grade-buttons {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .grade-btn {
@@ -130,6 +134,8 @@ const emitSearch = () => {
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 0;
 }
 
 .grade-btn:hover {
@@ -151,7 +157,7 @@ const emitSearch = () => {
 
 .select-input {
   height: 36px;
-  padding: 8px 12px;
+  padding: 8px 32px 8px 12px;
   font-size: 14px;
   border: 1px solid #e2e8f0;
   border-radius: 6px;
@@ -165,7 +171,6 @@ const emitSearch = () => {
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 16px;
-  padding-right: 32px;
 }
 
 .select-input:focus {
@@ -180,21 +185,24 @@ const emitSearch = () => {
 /* 모바일 */
 @media all and (max-width: 767px) {
   .filter-bar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 6px 10px;
-    gap: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    gap: 8px;
+    padding: 15px 10px;
   }
 
-  .grade-buttons button {
-    margin-right: 4px; /* 버튼 간 살짝 간격 */
+  .grade-buttons {
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .grade-btn {
+    padding: 0 12px;
+    font-size: 13px;
+    height: 34px;
   }
 
   .filter-group {
-    display: none !important;
+    display: none;
   }
 
   .hide-on-mobile {
@@ -202,19 +210,30 @@ const emitSearch = () => {
   }
 }
 
-/* 테블릿 */
+/* 태블릿 */
 @media all and (min-width: 768px) and (max-width: 1023px) {
   .filter-bar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 6px 10px;
-    margin-left: 15px;
-    margin-right: -15px;
+    margin: 15px;
+    max-width: 100%;
+  }
+
+  .grade-buttons {
+    gap: 6px;
+  }
+
+  .grade-btn {
+    padding: 0 14px;
   }
 }
 
 /* PC */
 @media all and (min-width: 1024px) {
+  .filter-bar {
+    gap: 40px;
+    padding: 6px 25px;
+    max-width: 1430px;
+    width: 90%;
+    margin: 20px auto;
+  }
 }
 </style>
