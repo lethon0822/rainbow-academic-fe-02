@@ -1,11 +1,11 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { login } from '@/services/accountService';
-import { useUserStore /*, useAccountStore*/ } from '@/stores/account';
-import Modal from '@/components/common/Modal.vue';
-import Id from '@/views/login/Id.vue';
-import RenewalPwd from '@/views/login/RenewalPwd.vue';
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { login,check } from '@/services/accountService'
+import { useUserStore , useAccountStore} from '@/stores/account'
+import Modal from '@/components/common/Modal.vue'
+import Id from '@/views/login/Id.vue'
+import RenewalPwd from '@/views/login/RenewalPwd.vue'
 
 const router = useRouter();
 
@@ -41,16 +41,21 @@ const submit = async () => {
         loginId: res.data.loginId ?? '',
         semesterId: res.data.semesterId ?? '',
         deptName: res.data.deptName ?? '',
-      });
-
-      // (선택) 전역 로그인 플래그
-      // const accountStore = useAccountStore()
-      // accountStore.setLoggedIn(true)
-      // accountStore.setChecked(true)
+      })
+      // 1) 서버에 세션/컨텍스트가 정말 살아있는지 확정
+      const chk = await check(); // 200 기대
+      const ok = chk?.status === 200
+      //(선택) 전역 로그인 플래그
+      const accountStore = useAccountStore()
+      accountStore.setLoggedIn(ok)
+      accountStore.setChecked(true)
 
       // 비밀번호는 즉시 비우기
-      state.form.password = '';
-
+      state.form.password = ''
+      if (!ok) {
+        alert('세션 확인에 실패했습니다. 다시 시도해주세요.')
+        return
+      }
       // 목록 페이지로
       await router.replace({ path: '/' });
       return;

@@ -2,6 +2,7 @@
 //학생 프로필 사진
 import { useAccountStore } from "@/stores/account";
 import { ref, onMounted } from "vue";
+import { getProfile } from "@/services/GradeService.js";
 import Profile from "@/components/profile/Profile.vue";
 
 const account = useAccountStore();
