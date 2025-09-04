@@ -51,21 +51,22 @@ async function submitCode() {
 }
 
 async function renewal() {
-  if (!state.data.renewalPwd === state.data.confirmPwd) {
-    return;
+  if (state.data.renewalPwd !== state.data.confirmPwd) {
+    alert("두 비밀번호 일치 안한다")
   }
   const res = await renewalPwd({
-    renewalPwd: state.data.renewalPwd,
-    confirmPwd: state.data.confirmPwd,
+    email: state.data.email,          
+    password: state.data.renewalPwd, 
   });
 
   if (res && res.status === 200) {
-    closeModal();
-    state.data.renewalTap = false;
+    return;
   } else {
     // 메세지
   }
 }
+
+
 </script>
 
 <template>
