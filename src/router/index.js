@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import { useAccountStore } from "@/stores/account";
 import { check } from "@/services/accountService";
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+
     // 로그인 관련 공개 라우트
     { path: "/login",   component: () => import("@/views/login/LoginPage.vue") },
     { path: "/id",      component: () => import("@/views/login/Id.vue") },
@@ -15,6 +18,7 @@ const router = createRouter({
       path: "/",
       component: () => import("@/views/Home.vue"),
       children: [
+
         { path: "", redirect: "/notice" }, // 기본 진입시 공지로
         // components/common
         { path: "/notice", component: () => import("@/components/common/Notices.vue") },
@@ -26,8 +30,7 @@ const router = createRouter({
         { path: "/professor/course/registration", name: "RegistrationCourse", component: () => import("@/components/course/RegistrationCourse.vue") },
         { path: "/professor/course/registration/:id", name: "ModifyCourse", props: true, component: () => import("@/components/course/RegistrationCourse.vue") },
 
-        // profile
-        { path: "/rank", component: () => import("@/views/profile/Profile.vue") },
+       
 
         // views
         { path: "/application", component: () => import("@/views/Application.vue") },
@@ -38,6 +41,10 @@ const router = createRouter({
 
         // enrollment
         { path: "/enrollment", component: () => import("@/views/enrollment/Enrollment.vue") },
+
+        //graduation
+        { path: "/graduation", component: () => import("@/views/graduation/Graduation.vue") },
+
 
         // management
         { path: "/schedule", component: () => import("@/views/management/SchedulePage.vue") },
@@ -51,9 +58,8 @@ const router = createRouter({
         { path: "/course/survey", name: "CourseEvaluation", component: () => import("@/views/profile/CourseEvaluation.vue") },
         { path: "/grade/permanent", component: () => import("@/views/profile/GetAllGrades.vue") },
         { path: "/renewal/privacy", component: () => import("@/views/profile/RenewalPrivacy.vue") },
-        { path: "/profile", component: () => import("@/views/profile/StudentRecord.vue") },
-        { path: "/profile/test", component: () => import("@/views/profile/StudentRecord.vue") },
         { path: "/grade/current", component: () => import("@/views/profile/StudentTranscriptHistory.vue") },
+        { path: "/profile", component: () => import("@/views/profile/Profile.vue") },
       ],
     },
   ],
