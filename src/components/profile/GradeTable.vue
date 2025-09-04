@@ -29,16 +29,16 @@ const props = defineProps({
         </thead>
         <tbody>
           <tr v-for="course in courseList" :key="course.courseCode">
-            <td>{{ course.year }}</td>
-            <td>{{ course.semester }}</td>
-            <td>{{ course.type }}</td>
-            <td>{{ course.courseCode }}</td>
-            <td>{{ course.title }}</td>
-            <td>{{ course.professorName }}</td>
-            <td>{{ course.grade }}학년</td>
-            <td>{{ course.credit }}</td>
-            <td>{{ course.rank }}</td>
-            <td>{{ course.point }}</td>
+            <td class="year-col">{{ course.year }}</td>
+            <td class="semester-col">{{ course.semester }}</td>
+            <td class="type-col">{{ course.type }}</td>
+            <td class="courseCode-col">{{ course.courseCode }}</td>
+            <td class="title-col">{{ course.title }}</td>
+            <td class="professorName-col">{{ course.professorName }}</td>
+            <td class="grade-col">{{ course.grade }}학년</td>
+            <td class="credit-col">{{ course.credit }}</td>
+            <td class="rank-col">{{ course.rank }}</td>
+            <td class="point-col">{{ course.point }}</td>
           </tr>
         </tbody>
       </table>
@@ -257,5 +257,59 @@ td.remStd {
 td.enroll-action {
   width: 120px;
   text-align: center;
+}
+
+/* 모바일 */
+@media (max-width: 767px) {
+  .table-container {
+    min-width: auto;
+    margin: 10px;
+    padding: 15px 15px 0 1px;
+  }
+
+  /* 기존 컬럼들 숨김 */
+  .year-col,
+  .semester-col,
+  .type-col,
+  .courseCode-col,
+  .title-col,
+  .professorName-col {
+    display: none;
+  }
+
+  .grade-col,
+  .credit-col,
+  .rank-col,
+  .point-col {
+    display: table-cell;
+  }
+
+  thead th {
+    font-size: 12px;
+    padding: 10px 2px;
+  }
+  tbody td {
+    font-size: 11px;
+    padding: 6px 2px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .table-container {
+    min-width: auto;
+    max-width: 100%;
+    margin: 15px;
+    padding: 20px 20px 0 20px;
+  }
+
+  thead th {
+    font-size: 13px;
+    padding: 11px 3px;
+  }
+
+  tbody td {
+    font-size: 12px;
+    padding: 7px 3px;
+  }
 }
 </style>
