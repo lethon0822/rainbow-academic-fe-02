@@ -6,31 +6,31 @@ import CourseTable from "@/components/course/CourseTable.vue";
 import { findMyCourse } from "@/services/professorService";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/account";
+
 
 const courseList = ref([]);
 const router = useRouter();
 
 
-// onMounted(async ()=>{
+onMounted(async ()=>{
+  const res = await findMyCourse();
+  console.log('마마',res)
+  courseList.value = res.data;
 
-//   const res = await findMyCourse();
-//   courseList.value = res.data;
+});
 
-// });
+const myCourse = async (filters) => {
+  const json = {
+    year: filters.year,
+    semester: filters.semester,
+  };
+  const res = await findMyCourse(json);
+  courseList.value = res.data;
+};
 
-// const myCourse = async (filters) => {
-//   const json = {
-//     year: filters.year,
-//     semester: filters.semester,
-//   };
-//   const res = await findMyCourse(json);
-//   courseList.value = res.data;
-// };
-
-// const move = () => {
-//   router.push("/professor/course/registration");
-// };
+const move = () => {
+  router.push("/professor/course/registration");
+};
 </script>
 <template>
   <WhiteBox :title="'강의개설신청 및 신청현황조회'">
