@@ -17,18 +17,6 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
-      '/student': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-      },
-      '/account': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-      },
-      '/professor': {
-        target: 'http://localhost:8080/api',
-        changeOrigin: true,
-      },
     },
   },
 });

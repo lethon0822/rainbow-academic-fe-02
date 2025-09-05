@@ -7,15 +7,17 @@ import { findMyCourse } from "@/services/professorService";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
+
 const courseList = ref([]);
 const router = useRouter();
 
-// onMounted(async ()=>{
 
-//   const res = await findMyCourse();
-//   courseList.value = res.data;
+onMounted(async ()=>{
+  const res = await findMyCourse();
+  console.log('마마',res)
+  courseList.value = res.data;
 
-// });
+});
 
 const myCourse = async (filters) => {
   const json = {

@@ -10,11 +10,15 @@ const router = useRouter();
 const state = reactive({
   data: [],
   result: [],
-  semester_id: userStore.semesterId,
+  sid: userStore.semesterId,
 });
 
 onMounted(async () => {
-  const res = await findMyCourse(state.semester_id);
+  const json = {
+    "sid":state.sid
+  }
+  const res = await findMyCourse(json);
+  console.log("믹",res)
   state.data = res.data;
 
   state.result = state.data.filter((item, index) => {

@@ -63,11 +63,11 @@ const submit = async () => {
     alert("오류 발생. 잠시 후 다시 실행해주십시오.");
     return;
   }
-  router.push("/professor/course/status");
+  router.push("/professor/course/state");
 };
 const back = () => {
   if(!confirm('제출하시겠습니까?')){
-    router.push('/professor/course/status')
+    router.push('/professor/course/state')
     return};
 }
 </script>
