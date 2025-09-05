@@ -40,7 +40,7 @@ async function submitCode() {
       authCode: state.data.authCode,
     });
     if (res && res.status === 200) {
-      // 인증 성공 후 추가 동작 가능
+      alert("인증이 완료되었습니다. 새로운 비밀번호를 설정해주세요.");
       state.data.renewalTap = true;
     } else {
       // 메세지
@@ -50,22 +50,31 @@ async function submitCode() {
   }
 }
 
+const emit = defineEmits(["close"]);
+const close = () => {
+  emit("close");
+};
+
 async function renewal() {
-  if (!state.data.renewalPwd === state.data.confirmPwd) {
+  if (state.data.renewalPwd !== state.data.confirmPwd) {
+    alert("두 비밀번호 일치 안한다")
     return;
   }
   const res = await renewalPwd({
-    renewalPwd: state.data.renewalPwd,
-    confirmPwd: state.data.confirmPwd,
+    email: state.data.email,          
+    password: state.data.renewalPwd, 
   });
 
   if (res && res.status === 200) {
-    closeModal();
-    state.data.renewalTap = false;
+    alert("비밀번호가 변경되었습니다.");
+    close();
+    return;
   } else {
-    // 메세지
+    alert("비밀번호 변경 실패")
   }
 }
+
+
 </script>
 
 <template>
@@ -128,7 +137,7 @@ async function renewal() {
           요청
         />
       </div>
-      <button class="w-100 h6 btn py-3 mt-3 btn-primary" @click="renewal">
+      <button class="w-100 h6 btn py-3 mt-3 btn-primary" @click="renewal" >
         확인
       </button>
     </div>
