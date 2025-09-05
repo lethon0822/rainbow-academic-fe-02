@@ -54,67 +54,137 @@ fetchGrades();
 </script>
 
 <template>
-  <div class="page">
-    <div class="content-wrapper">
-      <h1 class="page-title">영구 성적조회</h1>
-      <AcademicFilterBar @search="handleSearch" />
+  <div class="container">
+    <div class="header-card">
+      <h1>영구 성적조회</h1>
+      <p>전체 학기별, 과목별 성적을 조회할 수 있습니다.</p>
+
+      <div class="filter-section">
+        <AcademicFilterBar @search="handleSearch" />
+      </div>
+    </div>
+
+    <div class="content-section">
       <GradeTable :courseList="courseList" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.page {
-  /* 페이지 전체의 좌우 여백을 담당하는 컨테이너 */
-  padding: 0;
-  margin: 0 auto;
+.container {
+  width: 100%;
+  min-width: 320px;
+  padding: 16px 24px 24px 50px;
+  box-sizing: border-box;
 }
 
-.content-wrapper {
-  /* 모든 콘텐츠를 감싸는 핵심 컨테이너 */
-  /* 여기에 최대 너비와 패딩을 설정합니다. */
-  max-width: 1400px; /* 원하는 만큼 더 넓게 설정 (예: 1400px, 1600px 등) */
-  margin: 0 auto; /* 중앙 정렬 */
-  padding: 20px 50px; /* 제목과 콘텐츠의 좌우 여백을 통일 */
+.header-card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
 }
 
-/* 제목 스타일 */
-.page-title {
+.header-card h1 {
   font-size: 22px;
   font-weight: 600;
-  /* 부모인 .content-wrapper의 패딩을 따르기 위해 좌우 마진은 0으로 설정 */
-  margin: 25px -25px 16px;
+  color: #343a40;
+  margin-bottom: 8px;
+}
+
+.header-card p {
+  color: #666;
+  font-size: 13px;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
+
+.filter-section {
+  margin-top: 16px;
+}
+
+.filter-section :deep(.filter-bar),
+.filter-section :deep(.academic-filter-bar) {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* 모바일 */
-@media (max-width: 1023px) {
-  .page {
-    padding: 15px 10px 0px 10px;
+@media all and (max-width: 767px) {
+  .container {
+    width: 100%;
+    padding: 12px;
   }
 
-  .page-title {
+  .header-card {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .header-card h1 {
     font-size: 18px;
-    margin: 8px 0 12px 0px;
+  }
+
+  .header-card p {
+    font-size: 12px;
+  }
+
+  .content-section {
+    gap: 14px;
   }
 }
 
 /* 태블릿 */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .page {
-    padding: 18px 15px 0px 15px;
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: 100%;
+    padding: 20px 24px;
   }
 
-  .page-title {
-    font-size: 20px;
-    margin: 8px 0 14px 15px;
+  .header-card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .header-card h1 {
+    font-size: 21px;
+  }
+
+  .content-section {
+    gap: 20px;
   }
 }
 
-/* PC (1024px 이상) */
-@media (min-width: 1024px) {
-  .content-wrapper {
-    padding: 20px 50px;
-    /* max-width는 위에서 이미 정의했으므로 중복해서 작성할 필요 없음 */
+/* PC */
+@media all and (min-width: 1024px) {
+  .container {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px 24px 24px 50px;
+  }
+
+  .header-card {
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .header-card h1 {
+    font-size: 22px;
+  }
+
+  .content-section {
+    gap: 24px;
   }
 }
 </style>

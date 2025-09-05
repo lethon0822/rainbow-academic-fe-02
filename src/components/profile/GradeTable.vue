@@ -48,23 +48,22 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .table-container {
-  margin: 20px 0; /* 좌우 마진을 0으로 설정 */
   border-radius: 8px;
-  width: 100%; /* 부모 컨테이너에 꽉 차게 */
+  width: 100%;
   border: 0.2px solid #74747480;
   position: relative;
   background-color: white;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   padding: 25px 25px 0 25px;
-
+  margin: 0; /* 모든 해상도에서 마진 제거 */
   overflow-x: auto;
 }
 
 .table-wrapper {
   max-height: 600px;
   overflow-y: auto;
-  overflow-x: auto; /* hidden → auto */
+  overflow-x: auto;
   position: relative;
   scrollbar-width: thin;
   scrollbar-color: #cdcdcd #f0f0f0;
@@ -80,6 +79,7 @@ thead {
   color: #333;
   background-color: #f8f9fa;
 }
+
 thead th {
   position: sticky;
   top: 0;
@@ -114,19 +114,23 @@ tbody {
   color: black;
   background-color: white;
 }
+
 tbody tr {
   border-bottom: 1px solid #747474;
   height: 40px;
   background-color: white;
 }
+
 tbody tr:hover {
   background-color: #f8f9fa;
 }
+
 tbody td {
   padding: 8px 4px;
   border-right: none;
   font-size: 13px;
 }
+
 thead th,
 tbody td {
   color: #343a40;
@@ -176,9 +180,11 @@ button.cancel-btn:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
 .link:hover {
   color: #1f53b5;
 }
+
 .setting {
   padding-top: 2px;
   display: flex;
@@ -187,14 +193,17 @@ button.cancel-btn:hover {
   color: #fff;
   justify-content: center;
 }
+
 .red {
   color: #d61421;
   font-weight: 600;
 }
+
 .gray {
   color: #666;
   font-weight: 600;
 }
+
 .blue {
   color: #2460ce;
   font-weight: 700;
@@ -208,6 +217,7 @@ button.cancel-btn:hover {
 .status {
   width: 120px;
 }
+
 .button {
   width: 150px;
 }
@@ -259,7 +269,7 @@ td.enroll-action {
   text-align: center;
 }
 
-/* 모바일 */
+/* 모바일 (767px 이하) */
 @media all and (max-width: 767px) {
   .table-container {
     min-width: auto;
@@ -297,18 +307,18 @@ td.enroll-action {
     font-size: 12px;
     padding: 10px 2px;
   }
+
   tbody td {
     font-size: 11px;
     padding: 6px 2px;
   }
 }
 
-/* 테블릿 */
-@media all and (min-width: 768px) and (max-width: 1023px) {
+/* 태블릿 (768px ~ 959px) */
+@media all and (min-width: 768px) and (max-width: 959px) {
   .table-container {
     min-width: auto;
     max-width: 100%;
-    margin: 15px;
     padding: 20px 20px 0 20px;
   }
 
@@ -323,12 +333,11 @@ td.enroll-action {
   }
 }
 
-/* PC */
-@media all and (min-width: 1024px) {
+/* PC (960px 이상) */
+@media all and (min-width: 960px) {
   .table-container {
     min-width: auto;
-    width: 100%; /* 부모 컨테이너 너비에 맞춤 */
-    margin: 20px 0; /* 좌우 마진 0 유지 */
+    width: 100%;
   }
 }
 </style>
