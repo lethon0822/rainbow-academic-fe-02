@@ -34,8 +34,8 @@ const router = createRouter({
         // views
         { path: "/application", component: () => import("@/views/Application.vue") },
         { path: "/course/history", component: () => import("@/views/course/CourseList.vue") },
-        { path: "/course/management", component: () => import("@/views/course/ProfessorCourseManagement.vue") },
-        { path: "/professor/course/setting", component: () => import("@/views/course/ProfessorCourseStatus.vue") },
+        { path: "/professor/course/management", component: () => import("@/views/course/ProfessorCourseManagement.vue") },
+        { path: "/professor/course/state", component: () => import("@/views/course/ProfessorCourseStatus.vue") },
         { path: "/professor/survey/check", component: () => import("@/views/course/SurveyResultCheck.vue") },
 
         // enrollment
