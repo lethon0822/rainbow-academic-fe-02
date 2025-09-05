@@ -48,10 +48,9 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .table-container {
-  margin: 20px auto;
+  margin: 20px 0; /* 좌우 마진을 0으로 설정 */
   border-radius: 8px;
-  width: 100%;
-  max-width: 1430px; /* 최대 너비 제한 */
+  width: 100%; /* 부모 컨테이너에 꽉 차게 */
   border: 0.2px solid #74747480;
   position: relative;
   background-color: white;
@@ -59,7 +58,6 @@ const props = defineProps({
   overflow: hidden;
   padding: 25px 25px 0 25px;
 
-  /* 넘칠 경우 가로 스크롤 가능하도록 */
   overflow-x: auto;
 }
 
@@ -328,10 +326,9 @@ td.enroll-action {
 /* PC */
 @media all and (min-width: 1024px) {
   .table-container {
-    min-width: auto; /* 또는 제거 */
-    max-width: 1430px;
-    width: 90%; /* 화면 너비에 맞게 가변적 */
-    margin: 20px auto; /* 중앙 정렬 유지 */
+    min-width: auto;
+    width: 100%; /* 부모 컨테이너 너비에 맞춤 */
+    margin: 20px 0; /* 좌우 마진 0 유지 */
   }
 }
 </style>

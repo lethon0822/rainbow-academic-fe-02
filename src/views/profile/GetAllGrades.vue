@@ -65,12 +65,25 @@ fetchGrades();
 
 <style scoped>
 .page {
-  padding: 20px 24px 5px 50px;
+  /* 페이지 전체의 좌우 여백을 담당하는 컨테이너 */
+  padding: 0;
+  margin: 0 auto;
 }
+
+.content-wrapper {
+  /* 모든 콘텐츠를 감싸는 핵심 컨테이너 */
+  /* 여기에 최대 너비와 패딩을 설정합니다. */
+  max-width: 1400px; /* 원하는 만큼 더 넓게 설정 (예: 1400px, 1600px 등) */
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 20px 50px; /* 제목과 콘텐츠의 좌우 여백을 통일 */
+}
+
+/* 제목 스타일 */
 .page-title {
   font-size: 22px;
   font-weight: 600;
-  margin: 8px 0 16px 50px;
+  /* 부모인 .content-wrapper의 패딩을 따르기 위해 좌우 마진은 0으로 설정 */
+  margin: 25px -25px 16px;
 }
 
 /* 모바일 */
@@ -97,12 +110,11 @@ fetchGrades();
   }
 }
 
-/* PC */
+/* PC (1024px 이상) */
 @media (min-width: 1024px) {
-  .page {
-    padding: 20px 24px 0px 50px;
-    /* max-width: 1200px; */
-    margin: 0 auto;
+  .content-wrapper {
+    padding: 20px 50px;
+    /* max-width는 위에서 이미 정의했으므로 중복해서 작성할 필요 없음 */
   }
 }
 </style>
