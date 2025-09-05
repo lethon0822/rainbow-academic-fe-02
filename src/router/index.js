@@ -25,7 +25,6 @@ const router = createRouter({
 
         // course
         { path: "/professor/attendance", component: () => import("@/components/course/Attendance.vue") },
-        { path: "/professor/course/:id/students", component: () => import("@/views/course/ProfessorCourseManagement.vue") },
         { path: "/enrollmentgrade", component: () => import("@/components/course/EnrollmentGrade.vue") },
         { path: "/professor/course/registration", name: "RegistrationCourse", component: () => import("@/components/course/RegistrationCourse.vue") },
         { path: "/professor/course/registration/:id", name: "ModifyCourse", props: true, component: () => import("@/components/course/RegistrationCourse.vue") },
@@ -35,8 +34,8 @@ const router = createRouter({
         // views
         { path: "/application", component: () => import("@/views/Application.vue") },
         { path: "/course/history", component: () => import("@/views/course/CourseList.vue") },
-        { path: "/professor/course/management", component: () => import("@/views/course/ProfessorCourseManagement.vue") },
-        { path: "/professor/course/status", component: () => import("@/views/course/ProfessorCourseStatus.vue") },
+        { path: "/course/management", component: () => import("@/views/course/ProfessorCourseManagement.vue") },
+        { path: "/professor/course/setting", component: () => import("@/views/course/ProfessorCourseStatus.vue") },
         { path: "/professor/survey/check", component: () => import("@/views/course/SurveyResultCheck.vue") },
 
         // enrollment
