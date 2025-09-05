@@ -217,12 +217,12 @@ watch(
             >
           </li>
           <li v-if="userStore.userRole == 'professor'">
-            <router-link to="/professor/course/status" class="router-link"
+            <router-link to="/professor/course/setting" class="router-link"
               >강의개설신청 및 신청현황조회</router-link
             >
           </li>
           <li v-if="userStore.userRole == 'professor'">
-            <router-link to="/professor/course/management" class="router-link"
+            <router-link to="/course/management" class="router-link"
               >강의관리</router-link
             >
           </li>
