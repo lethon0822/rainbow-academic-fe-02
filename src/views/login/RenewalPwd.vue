@@ -49,12 +49,10 @@ async function submitCode() {
   }
 }
 
-
 const emit = defineEmits(["close"]);
 const close = () => {
   emit("close");
 };
-
 
 async function renewal() {
   if (state.data.renewalPwd !== state.data.confirmPwd) {
