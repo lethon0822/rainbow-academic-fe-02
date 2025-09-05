@@ -158,9 +158,9 @@ const canViewGrades = (course) => {
 }
 
 .header-card h1 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  color: #333;
+  color: #343a40;
   margin-bottom: 8px;
 }
 
